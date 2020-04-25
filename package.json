@@ -1,0 +1,19 @@
+{
+  "name": "blitzar",
+  "version": "0.0.0",
+  "description": "A syncing solution that auto-connects any DB/API with your local store and has blitzing fast optimistic-UI built in. ⚡",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "ava"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mesqueeb/blitzar.git"
+  },
+  "author": "Luca Ban - Mesqueeb",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mesqueeb/blitzar/issues"
+  },
+  "homepage": "https://github.com/mesqueeb/blitzar#readme"
+}
