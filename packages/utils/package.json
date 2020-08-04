@@ -1,0 +1,36 @@
+{
+  "name": "@blitzar/utils",
+  "version": "0.0.0",
+  "description": "Blitzar utils",
+  "author": "Luca Ban - Mesqueeb",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "ava"
+  },
+  "dependencies": {
+    "commafy-anything": "^1.1.3",
+    "flatten-anything": "^2.0.2",
+    "is-what": "^3.11.0",
+    "nestify-anything": "^1.0.0",
+    "quasar": "^1.12.13",
+    "vue": "^2.6.11"
+  },
+  "keywords": [
+    "blitzar"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/mesqueeb/blitzar#readme",
+  "bugs": {
+    "url": "https://github.com/mesqueeb/blitzar/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mesqueeb/blitzar.git"
+  },
+  "ava": {
+    "require": [
+      "@babel/register",
+      "esm"
+    ]
+  }
+}

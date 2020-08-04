@@ -4,16 +4,44 @@
   "description": "A Vue component collection for blitzing fast prototyping ⚡",
   "main": "dist/index.js",
   "scripts": {
-    "test": "ava"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/mesqueeb/blitzar.git"
+    "audit": "lerna-audit",
+    "dev": "cd packages/dev && npm run dev",
+    "test": "lerna run test",
+    "build": "lerna run build",
+    "publish": "lerna publish",
+    "dependencies-install": "npm i && lerna bootstrap",
+    "dependencies-update-all": "ncu --semverLevel major -u && lerna exec 'ncu --semverLevel major -u' && npm run dependencies-install",
+    "dependencies-check-for-updates": "ncu --semverLevel major && lerna exec 'ncu --semverLevel major'",
+    "dependencies-reinstall-all": "rimraf node_modules && lerna clean -y && npm run dependencies-install"
   },
   "author": "Luca Ban - Mesqueeb",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/mesqueeb/blitzar/issues"
   },
-  "homepage": "https://github.com/mesqueeb/blitzar#readme"
+  "homepage": "https://github.com/mesqueeb/blitzar#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mesqueeb/blitzar.git"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.11.0",
+    "@babel/register": "^7.10.5",
+    "@types/node": "^14.0.27",
+    "@typescript-eslint/eslint-plugin": "^3.7.1",
+    "@typescript-eslint/parser": "^3.7.1",
+    "ava": "^3.11.1",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^7.6.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-loader": "^4.0.2",
+    "eslint-plugin-vue": "^6.2.2",
+    "esm": "^3.2.25",
+    "lerna": "^3.22.1",
+    "node-sass": "^4.14.1",
+    "npm-check-updates": "^7.0.2",
+    "prettier": "^2.0.5",
+    "rimraf": "^3.0.2",
+    "rollup": "^2.23.0"
+  }
 }

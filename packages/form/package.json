@@ -1,0 +1,41 @@
+{
+  "name": "@blitzar/form",
+  "version": "0.0.0",
+  "description": "Blitzar form component",
+  "author": "Luca Ban - Mesqueeb",
+  "main": "src/index.js",
+  "scripts": {},
+  "dependencies": {
+    "@blitzar/utils": "^0.0.0",
+    "case-anything": "^1.1.1",
+    "copy-anything": "^2.0.1",
+    "is-what": "^3.11.0",
+    "merge-anything": "^3.0.5",
+    "nestify-anything": "^1.0.0",
+    "quasar": "^1.12.12",
+    "snarkdown": "^1.2.2"
+  },
+  "keywords": [
+    "blitzar",
+    "quasar-easy-forms",
+    "quasar-easy-form",
+    "easy-forms",
+    "easy-form",
+    "vue-form",
+    "form",
+    "form-component",
+    "form-builder",
+    "form-generator",
+    "schema-form",
+    "vue"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/mesqueeb/blitzar#readme",
+  "bugs": {
+    "url": "https://github.com/mesqueeb/blitzar/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mesqueeb/blitzar.git"
+  }
+}
