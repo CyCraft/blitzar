@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./packages",
+    "strict": true,
+    "target": "es6",
+    "types": ["node"]
+  },
+  "exclude": ["/dist", "node_modules"]
+}

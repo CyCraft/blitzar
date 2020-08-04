@@ -1,7 +1,7 @@
 {
   "name": "blitzar",
   "version": "0.0.0",
-  "description": "A syncing solution that auto-connects any DB/API with your local store and has blitzing fast optimistic-UI built in. ⚡",
+  "description": "A Vue component collection for blitzing fast prototyping ⚡",
   "main": "dist/index.js",
   "scripts": {
     "test": "ava"
