@@ -1,43 +1,22 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
-    <q-header elevated>
-      <q-toolbar>
-        <q-btn
-          flat
-          dense
-          round
-          icon="menu"
-          aria-label="Menu"
-          @click="leftDrawerOpen = !leftDrawerOpen"
-        />
-
-        <q-toolbar-title>
-          Quasar App
-        </q-toolbar-title>
-
-        <div>Quasar v{{ $q.version }}</div>
-      </q-toolbar>
+  <q-layout view="HHH Lpr fff">
+    <q-header style="background: white; padding: 0.7rem 1.5rem" bordered class="row items-center">
+      <q-btn
+        class="xs"
+        dense
+        icon="menu"
+        color="black"
+        flat
+        @click="() => (leftDrawerOpen = !leftDrawerOpen)"
+      />
+      <div class="q-ml-md text-h6 text-black">Blitzar ⚡️</div>
     </q-header>
-
-    <q-drawer
-      v-model="leftDrawerOpen"
-      show-if-above
-      bordered
-      content-class="bg-grey-1"
-    >
-      <q-list>
-        <q-item-label
-          header
-          class="text-grey-8"
-        >
-          Essential Links
-        </q-item-label>
-        <EssentialLink
-          v-for="link in essentialLinks"
-          :key="link.title"
-          v-bind="link"
-        />
-      </q-list>
+    <q-drawer v-model="leftDrawerOpen" show-if-above bordered :width="260" :breakpoint="600">
+      <div class="q-pa-md q-gutter-md" style="border: thin solid #eee">
+        <AnchorLink href="https://github.com/mesqueeb/blitzar" content="Changelog" external />
+        <AnchorLink href="https://github.com/mesqueeb/blitzar" content="Github" external />
+      </div>
+      <router-link v-for="link in pageNames" :key="link" :to="link">{{link}}</router-link>
     </q-drawer>
 
     <q-page-container>
@@ -48,62 +27,23 @@
 
 <script lang="ts">
 import EssentialLink from 'components/EssentialLink.vue'
+import AnchorLink from 'components/AnchorLink.vue'
 
-const linksData = [
-  {
-    title: 'Docs',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: 'https://quasar.dev'
-  },
-  {
-    title: 'Github',
-    caption: 'github.com/quasarframework',
-    icon: 'code',
-    link: 'https://github.com/quasarframework'
-  },
-  {
-    title: 'Discord Chat Channel',
-    caption: 'chat.quasar.dev',
-    icon: 'chat',
-    link: 'https://chat.quasar.dev'
-  },
-  {
-    title: 'Forum',
-    caption: 'forum.quasar.dev',
-    icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev'
-  },
-  {
-    title: 'Twitter',
-    caption: '@quasarframework',
-    icon: 'rss_feed',
-    link: 'https://twitter.quasar.dev'
-  },
-  {
-    title: 'Facebook',
-    caption: '@QuasarFramework',
-    icon: 'public',
-    link: 'https://facebook.quasar.dev'
-  },
-  {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
-    icon: 'favorite',
-    link: 'https://awesome.quasar.dev'
-  }
-];
+// @ts-ignore
+const links = require.context('../pages/content').keys()
+const pageNames = [...new Set(links.map((l) => l.replace('./', '').replace('.vue', '')))]
+console.log(`links → `, links)
+console.log(`pageNames → `, pageNames)
 
-import { defineComponent, ref } from '@vue/composition-api';
+import { defineComponent, ref } from '@vue/composition-api'
 
 export default defineComponent({
   name: 'MainLayout',
-  components: { EssentialLink },
+  components: { EssentialLink, AnchorLink },
   setup() {
-    const leftDrawerOpen = ref(false);
-    const essentialLinks = ref(linksData);
+    const leftDrawerOpen = ref(true)
 
-    return {leftDrawerOpen, essentialLinks}
-  }
-});
+    return { leftDrawerOpen, pageNames }
+  },
+})
 </script>

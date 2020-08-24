@@ -12,7 +12,7 @@
     "is-what": "^3.11.0",
     "merge-anything": "^3.0.5",
     "nestify-anything": "^1.0.0",
-    "quasar": "^1.12.13",
+    "quasar": "^1.13.1",
     "snarkdown": "^1.2.2"
   },
   "keywords": [

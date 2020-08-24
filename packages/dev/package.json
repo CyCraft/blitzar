@@ -13,14 +13,14 @@
   "dependencies": {
     "@blitzar/form": "^0.0.0",
     "@blitzar/utils": "^0.0.0",
-    "@quasar/extras": "^1.9.3",
+    "@quasar/extras": "^1.9.4",
     "copy-anything": "^2.0.1",
     "core-js": "^3.6.5",
-    "planetar": "^0.1.3",
-    "quasar": "^1.12.13"
+    "planetar": "^0.3.0",
+    "quasar": "^1.13.1"
   },
   "devDependencies": {
-    "@quasar/app": "^2.0.6",
+    "@quasar/app": "^2.0.8",
     "babel-eslint": "^10.1.0",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.11.0",

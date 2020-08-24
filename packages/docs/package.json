@@ -12,16 +12,19 @@
   },
   "dependencies": {
     "@blitzar/form": "^0.0.0",
-    "@quasar/extras": "^1.9.3",
+    "@blitzar/utils": "^0.0.0",
+    "@quasar/extras": "^1.9.4",
     "@vue/composition-api": "^0.6.7",
+    "copy-anything": "^2.0.1",
     "core-js": "^3.6.5",
-    "quasar": "^1.12.13"
+    "planetar": "^0.3.0",
+    "quasar": "^1.13.1"
   },
   "devDependencies": {
-    "@quasar/app": "^2.0.6",
+    "@quasar/app": "^2.0.8",
     "@types/node": "^10.17.28",
-    "@typescript-eslint/eslint-plugin": "^3.8.0",
-    "@typescript-eslint/parser": "^3.8.0",
+    "@typescript-eslint/eslint-plugin": "^3.9.1",
+    "@typescript-eslint/parser": "^3.9.1",
     "babel-eslint": "^10.1.0",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.11.0",

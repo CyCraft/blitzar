@@ -417,15 +417,19 @@ export default {
     },
     langCalculated() {
       const { getEvaluatedPropOrAttr } = this
-      const lang = getEvaluatedPropOrAttr('lang')
-      return merge(defaultLang(), lang)
+      const defaults = defaultLang() || {}
+      const lang = getEvaluatedPropOrAttr('lang') || {}
+      return merge(defaults, lang)
     },
     rulesCalculated() {
       const { getEvaluatedPropOrAttr, langCalculated } = this
       const required = getEvaluatedPropOrAttr('required')
       const rules = getEvaluatedPropOrAttr('rules')
-      const requiredRule = createRequiredRule(langCalculated['requiredField'])
-      return required ? [requiredRule, ...rules] : rules
+      if (required) {
+        const requiredRule = createRequiredRule(langCalculated['requiredField'])
+        return [requiredRule, ...rules]
+      }
+      return rules
     },
     eventsCalculated() {
       const { getEvaluatedPropOrAttr } = this

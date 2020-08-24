@@ -12,8 +12,8 @@
     "flatten-anything": "^2.0.2",
     "is-what": "^3.11.0",
     "nestify-anything": "^1.0.0",
-    "quasar": "^1.12.13",
-    "vue": "^2.6.11"
+    "quasar": "^1.13.1",
+    "vue": "^2.6.12"
   },
   "keywords": [
     "blitzar"
