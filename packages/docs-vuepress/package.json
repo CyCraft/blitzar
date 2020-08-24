@@ -1,0 +1,33 @@
+{
+  "name": "docs-vuepress",
+  "version": "0.0.1",
+  "description": "Blitzar documentation",
+  "main": "index.js",
+  "author": "Luca Ban - Mesqueeb",
+  "scripts": {
+    "dev": "vuepress dev src",
+    "build": "vuepress build src"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@quasar/extras": "^1.9.4",
+    "@vuepress/plugin-register-components": "^1.5.4",
+    "fibers": "^5.0.0",
+    "node-sass": "^4.14.1",
+    "quasar": "^1.13.1",
+    "sass": "^1.26.10",
+    "sass-loader": "^9.0.3",
+    "vuepress": "^1.5.4"
+  },
+  "homepage": "https://github.com/mesqueeb/blitzar#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mesqueeb/blitzar.git"
+  },
+  "dependencies": {
+    "@blitzar/form": "^0.0.0",
+    "@blitzar/utils": "^0.0.0",
+    "copy-anything": "^2.0.1",
+    "planetar": "^0.3.1"
+  }
+}
