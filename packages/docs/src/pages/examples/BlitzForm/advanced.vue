@@ -48,7 +48,7 @@ const schema = [
   },
   {
     id: 'stamina',
-    span: 1,
+    span: 2,
     component: 'QSlider',
     label: 'Stamina',
     default: 50,
