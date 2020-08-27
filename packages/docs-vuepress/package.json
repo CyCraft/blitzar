@@ -9,7 +9,7 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@quasar/extras": "^1.9.4",
+    "@quasar/extras": "^1.9.5",
     "@vuepress/plugin-register-components": "^1.5.4",
     "fibers": "^5.0.0",
     "node-sass": "^4.14.1",

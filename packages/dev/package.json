@@ -13,7 +13,7 @@
   "dependencies": {
     "@blitzar/form": "^0.0.0",
     "@blitzar/utils": "^0.0.0",
-    "@quasar/extras": "^1.9.4",
+    "@quasar/extras": "^1.9.5",
     "copy-anything": "^2.0.1",
     "core-js": "^3.6.5",
     "planetar": "^0.3.1",
