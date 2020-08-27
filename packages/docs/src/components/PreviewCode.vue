@@ -1,7 +1,6 @@
 <template>
   <div class="preview-code q-mt-xl">
-    <pre class="language-js"><code>/** {{ comment }} */
-{{ code }}</code></pre>
+    <pre class="language-js"><code>{{ comment ? `/** ${comment} */\n` : '' }}<slot /></code></pre>
   </div>
 </template>
 
@@ -11,12 +10,13 @@
 // .preview-code
 </style>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from '@vue/composition-api'
+
+export default defineComponent({
   name: 'PreviewCode',
   props: {
     comment: String,
-    code: String,
   },
-}
+})
 </script>

@@ -7,6 +7,16 @@ export function createRequiredRule(requiredFieldErrorMsg) {
 }
 
 /**
+ * @typedef ValidationResultField
+ * @type {boolean | (string | boolean)[]}
+ */
+
+/**
+ * @typedef ValidationResultForm
+ * @type {{ [fieldId: string]: ValidationResultField }}
+ */
+
+/**
  * Validates a field data based on its blueprint
  *
  * @export
@@ -50,6 +60,7 @@ export function validateFormPerSchema(formData, schema, lang) {
   const formDataFlatCurrent = flattenPerSchema(formData, schema)
   const formDataFlat = { ...formDataFlatEmpty, ...formDataFlatCurrent }
   const resultPerField = Object.entries(formDataFlat).reduce((carry, [fieldId, fieldValue]) => {
+    if (fieldId === 'undefined') return carry
     const blueprint = schemaObject[fieldId]
     const context = { formData, formDataFlat, lang }
     carry[fieldId] = !blueprint || validateFieldPerSchema(fieldValue, blueprint, context)

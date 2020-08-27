@@ -8,6 +8,7 @@
   "scripts": {
     "lint": "eslint --ext .js,.ts,.vue ./",
     "dev": "quasar dev",
+    "build": "quasar build",
     "test": "echo \"No test specified\" && exit 0"
   },
   "dependencies": {
@@ -15,10 +16,12 @@
     "@blitzar/utils": "^0.0.0",
     "@quasar/extras": "^1.9.4",
     "@vue/composition-api": "^0.6.7",
+    "case-anything": "^1.1.1",
     "copy-anything": "^2.0.1",
     "core-js": "^3.6.5",
     "planetar": "^0.3.1",
-    "quasar": "^1.13.1"
+    "quasar": "^1.13.1",
+    "vue-scrollactive": "^0.9.3"
   },
   "devDependencies": {
     "@quasar/app": "^2.0.8",

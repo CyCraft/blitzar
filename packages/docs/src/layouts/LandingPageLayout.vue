@@ -13,10 +13,14 @@
     </q-header>
     <q-drawer v-model="leftDrawerOpen" show-if-above bordered :width="260" :breakpoint="600">
       <div class="q-pa-md q-gutter-md" style="border: thin solid #eee">
-        <AnchorLink href="https://github.com/mesqueeb/blitzar" content="Changelog" external />
+        <AnchorLink
+          href="https://github.com/mesqueeb/blitzar/releases"
+          content="Changelog"
+          external
+        />
         <AnchorLink href="https://github.com/mesqueeb/blitzar" content="Github" external />
+        <RouteLink content="To docs" to="/docs" />
       </div>
-      <router-link v-for="link in pageNames" :key="link" :to="link">{{link}}</router-link>
     </q-drawer>
 
     <q-page-container>
@@ -26,24 +30,21 @@
 </template>
 
 <script lang="ts">
-import EssentialLink from 'components/EssentialLink.vue'
 import AnchorLink from 'components/AnchorLink.vue'
-
-// @ts-ignore
-const links = require.context('../pages/content').keys()
-const pageNames = [...new Set(links.map((l) => l.replace('./', '').replace('.vue', '')))]
-console.log(`links → `, links)
-console.log(`pageNames → `, pageNames)
-
+import RouteLink from 'components/RouteLink.vue'
 import { defineComponent, ref } from '@vue/composition-api'
+import { spaceCase } from 'case-anything'
 
 export default defineComponent({
   name: 'MainLayout',
-  components: { EssentialLink, AnchorLink },
+  components: { AnchorLink, RouteLink },
   setup() {
     const leftDrawerOpen = ref(true)
 
-    return { leftDrawerOpen, pageNames }
+    return { leftDrawerOpen }
+  },
+  methods: {
+    spaceCase,
   },
 })
 </script>

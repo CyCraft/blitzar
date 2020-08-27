@@ -1,7 +1,7 @@
 <template>
   <div>
     <EasyForm :schema="schema" v-model="formData" />
-    <PreviewCode comment="formData" :code="formData" />
+    <PreviewCode comment="formData">{{ formData }}</PreviewCode>
   </div>
 </template>
 
@@ -43,7 +43,7 @@ const schema = [
 /**
 `&#60;EasyForm /&#62;` is a component that allows you to easily create forms by passing an object with a schema on how you want the form to look. By merely passing a schema array you can easily generate entire forms! No more writing clunky HTML forms! 🎉
 
-#### **Schema**
+## Schema
 
 The schema of an EasyForm is an array of objects that usually looks something like this:
 Eg.:
@@ -59,7 +59,7 @@ Eg.:
 
 Besides 'id', 'label' and 'component' there are many more props you can pass: subLabel; required; labelPosition; fieldClasses; componentClasses; parseValue; parseInput; events and many more.
 
-#### **Value/Model**
+## Value/Model
 
 There are several ways to work with the data of an EasyForm.
 

@@ -108,7 +108,7 @@ import {
 } from 'is-what'
 import { merge } from 'merge-anything'
 import { defaultLang } from '../meta/lang'
-import { createRequiredRule } from '../helpers/validation'
+import { createRequiredRule } from '../helpers/validation.js'
 
 function evaluateProp(propValue, componentValue, componentInstance) {
   return isFunction(propValue) ? propValue(componentValue, componentInstance) : propValue

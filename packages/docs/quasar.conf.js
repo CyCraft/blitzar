@@ -45,7 +45,7 @@ module.exports = configure(function (ctx) {
 
     // Full list of options: https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-build
     build: {
-      vueRouterMode: 'hash', // available values: 'hash', 'history'
+      vueRouterMode: 'history',
 
       // transpile: false,
 
@@ -103,7 +103,7 @@ module.exports = configure(function (ctx) {
       // directives: [],
 
       // Quasar plugins
-      plugins: [],
+      plugins: ['Notify'],
     },
 
     // animations: 'all', // --- includes all animations
@@ -120,9 +120,9 @@ module.exports = configure(function (ctx) {
       workboxPluginMode: 'GenerateSW', // 'GenerateSW' or 'InjectManifest'
       workboxOptions: {}, // only for GenerateSW
       manifest: {
-        name: `Blitzar docs`,
-        short_name: `Blitzar docs`,
-        description: `A Vue component collection for blitzing fast prototyping ⚡`,
+        name: 'Blitzar docs',
+        short_name: 'Blitzar docs',
+        description: 'A Vue component collection for blitzing fast prototyping ⚡',
         display: 'standalone',
         orientation: 'portrait',
         background_color: '#ffffff',

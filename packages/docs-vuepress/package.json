@@ -5,8 +5,7 @@
   "main": "index.js",
   "author": "Luca Ban - Mesqueeb",
   "scripts": {
-    "dev": "vuepress dev src",
-    "build": "vuepress build src"
+    "dev": "vuepress dev src"
   },
   "license": "MIT",
   "devDependencies": {

@@ -4,8 +4,9 @@
     :href="href"
     :target="external ? '_blank' : ''"
     :rel="external ? 'noopener noreferrer' : ''"
+    v-on="$listeners"
   >
-    {{content}}
+    <slot>{{ content }}</slot>
     <svg
       v-if="external"
       class="_svg q-ml-sm"
@@ -39,8 +40,9 @@
   &._external
     color: black
     font-weight: 600
-    &:hover
-      color: #fbcc5a
+  &:hover,
+  &.is-active
+    color: #fbcc5a !important
   ._svg
     color: #aaa
 </style>

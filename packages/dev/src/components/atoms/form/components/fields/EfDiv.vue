@@ -77,7 +77,7 @@ export default {
   computed: {
     cValue() {
       const { value, valueType, type, dateFormat, options, suffix, prefix, multiple } = this
-      return parseEasyFieldValue(
+      return parseFieldValue(
         value,
         { valueType: valueType || type, dateFormat, options, suffix, prefix, multiple },
         this

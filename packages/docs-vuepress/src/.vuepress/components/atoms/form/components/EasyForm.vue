@@ -112,7 +112,7 @@ export default {
     id: { type: String },
     /**
      * This is the heart of your EasyForm. It's the schema that will defined what fields will be generated.
-     * @example [{id: 'name', component: 'QInput'}]
+     * @example [{id: 'name', label: 'Name', component: 'QInput'}, {id: 'age', label: 'Age', component: 'QInput', type: 'number'}]
      * @category model
      */
     schema: { type: Array, required: true },
