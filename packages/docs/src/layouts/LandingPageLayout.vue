@@ -19,7 +19,7 @@
           external
         />
         <AnchorLink href="https://github.com/mesqueeb/blitzar" content="Github" external />
-        <RouteLink content="To docs" to="/docs" />
+        <RouteLink content="To docs" to="/docs/blitz-form" />
       </div>
     </q-drawer>
 

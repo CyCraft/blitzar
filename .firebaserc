@@ -1,0 +1,20 @@
+{
+  "projects": {
+    "default": "cycraft-ecosystem"
+  },
+  "targets": {
+    "cycraft-ecosystem": {
+      "hosting": {
+        "blitzar": [
+          "blitzar0"
+        ],
+        "planetar": [
+          "planetar"
+        ],
+        "magnetar": [
+          "magnetar"
+        ]
+      }
+    }
+  }
+}

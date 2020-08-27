@@ -1,0 +1,17 @@
+{
+  "hosting": {
+    "target": "blitzar",
+    "public": "packages/docs/dist/spa",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}
