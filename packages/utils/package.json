@@ -19,13 +19,13 @@
     "blitzar"
   ],
   "license": "MIT",
-  "homepage": "https://github.com/mesqueeb/blitzar#readme",
+  "homepage": "https://github.com/cycraft/blitzar#readme",
   "bugs": {
-    "url": "https://github.com/mesqueeb/blitzar/issues"
+    "url": "https://github.com/cycraft/blitzar/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mesqueeb/blitzar.git"
+    "url": "git+https://github.com/cycraft/blitzar.git"
   },
   "ava": {
     "require": [

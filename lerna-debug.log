@@ -6,6 +6,6 @@
 0 silly argv   pkg: 'copy--scope'
 0 silly argv }
 1 notice cli v3.22.1
-2 verbose rootPath /Users/lucaban/ghq/github.com/mesqueeb/blitzar
+2 verbose rootPath /Users/lucaban/ghq/github.com/cycraft/blitzar
 3 error Error: 404 Not Found - GET https://registry.npmjs.org/copy--scope - Not found
-3 error     at /Users/lucaban/ghq/github.com/mesqueeb/blitzar/node_modules/@evocateur/npm-registry-fetch/check-response.js:104:15
+3 error     at /Users/lucaban/ghq/github.com/cycraft/blitzar/node_modules/@evocateur/npm-registry-fetch/check-response.js:104:15

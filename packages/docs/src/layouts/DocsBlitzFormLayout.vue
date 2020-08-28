@@ -14,11 +14,11 @@
     <q-drawer v-model="leftDrawerOpen" show-if-above bordered :width="260" :breakpoint="600">
       <div class="q-pa-md q-gutter-md" style="border: thin solid #eee">
         <AnchorLink
-          href="https://github.com/mesqueeb/blitzar/releases"
+          href="https://github.com/cycraft/blitzar/releases"
           content="Changelog"
           external
         />
-        <AnchorLink href="https://github.com/mesqueeb/blitzar" content="Github" external />
+        <AnchorLink href="https://github.com/cycraft/blitzar" content="Github" external />
       </div>
       <scrollactive class="q-pa-md column q-gutter-md" :offset="80">
         <AnchorLink

@@ -18,10 +18,10 @@
     "sass-loader": "^9.0.3",
     "vuepress": "^1.5.4"
   },
-  "homepage": "https://github.com/mesqueeb/blitzar#readme",
+  "homepage": "https://github.com/cycraft/blitzar#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mesqueeb/blitzar.git"
+    "url": "git+https://github.com/cycraft/blitzar.git"
   },
   "dependencies": {
     "@blitzar/form": "^0.0.0",

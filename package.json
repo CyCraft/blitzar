@@ -24,12 +24,12 @@
   "author": "Luca Ban - Mesqueeb",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/mesqueeb/blitzar/issues"
+    "url": "https://github.com/cycraft/blitzar/issues"
   },
-  "homepage": "https://github.com/mesqueeb/blitzar#readme",
+  "homepage": "https://github.com/cycraft/blitzar#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mesqueeb/blitzar.git"
+    "url": "git+https://github.com/cycraft/blitzar.git"
   },
   "devDependencies": {
     "@types/node": "^14.6.0",
