@@ -1,8 +1,5 @@
 {
   "name": "blitzar",
-  "version": "0.0.0",
-  "description": "A Vue component collection for blitzing fast prototyping ⚡",
-  "main": "dist/index.js",
   "scripts": {
     "audit": "lerna-audit",
     "dev": "npm run prepare && cd packages/dev && npm run dev",
