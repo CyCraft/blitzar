@@ -11,17 +11,6 @@
       />
       <div class="q-ml-md text-h6 text-black">Blitzar ⚡️</div>
     </q-header>
-    <q-drawer v-model="leftDrawerOpen" show-if-above bordered :width="260" :breakpoint="600">
-      <div class="q-pa-md q-gutter-md" style="border: thin solid #eee">
-        <AnchorLink
-          href="https://github.com/cycraft/blitzar/releases"
-          content="Changelog"
-          external
-        />
-        <AnchorLink href="https://github.com/cycraft/blitzar" content="Github" external />
-        <RouteLink content="To docs" to="/docs/blitz-form" />
-      </div>
-    </q-drawer>
 
     <q-page-container>
       <router-view />
@@ -32,19 +21,13 @@
 <script lang="ts">
 import AnchorLink from 'components/AnchorLink.vue'
 import RouteLink from 'components/RouteLink.vue'
-import { defineComponent, ref } from '@vue/composition-api'
-import { spaceCase } from 'case-anything'
+import { defineComponent } from '@vue/composition-api'
 
 export default defineComponent({
   name: 'MainLayout',
   components: { AnchorLink, RouteLink },
   setup() {
-    const leftDrawerOpen = ref(true)
-
-    return { leftDrawerOpen }
-  },
-  methods: {
-    spaceCase,
+    return {}
   },
 })
 </script>

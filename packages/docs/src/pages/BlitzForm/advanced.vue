@@ -14,7 +14,7 @@
 <script>
 import { EasyForm } from '@blitzar/form'
 // All components that are used in the form need to be globally registered.
-import { QInput, QBtnToggle, QSlider, QSelect, QOptionGroup, QToggle } from 'quasar'
+import { QInput, QBtnToggle, QSlider, QSelect, QOptionGroup, QToggle, date } from 'quasar'
 import Vue from 'vue'
 Vue.component('QInput', QInput)
 Vue.component('QBtnToggle', QBtnToggle)
@@ -145,8 +145,7 @@ const schema = [
     component: 'QInput',
     label: 'Date of submission',
     parseInput: (val) => new Date(val),
-    valueType: 'date',
-    dateFormat: 'YYYY/MM/DD', // see `EfDiv` documentation for more info on `dateFormat`
+    parseValue: (val) => date.formatDate(val, 'YYYY/MM/DD'),
     // component props:
     mask: '####/##/##',
     placeholder: 'YYYY/MM/DD',

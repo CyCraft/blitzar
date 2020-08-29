@@ -68,7 +68,7 @@ You can use it like:
 With EfMiniForm you can pass a "schema" just like an EasyForm. The difference is that EfMiniForm is more like a (as the name says) "mini" form. 😃
 
 The "schema" you specify is shown as a single row. New rows are added automatically on user input.`,
-*/
+ */
 export default {
   name: 'EfMiniForm',
   inheritAttrs: false,

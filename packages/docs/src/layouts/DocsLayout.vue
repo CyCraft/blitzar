@@ -9,7 +9,7 @@
         flat
         @click="() => (leftDrawerOpen = !leftDrawerOpen)"
       />
-      <div class="q-ml-md text-h6 text-black">Blitzar ⚡️</div>
+      <div class="q-ml-md text-h6 text-black cursor-pointer" @click="$router.push('/')">Blitzar ⚡️</div>
     </q-header>
     <q-drawer v-model="leftDrawerOpen" show-if-above bordered :width="260" :breakpoint="600">
       <div class="q-pa-md q-gutter-md" style="border: thin solid #eee">
@@ -22,10 +22,10 @@
       </div>
       <scrollactive class="q-pa-md column q-gutter-md" :offset="80">
         <AnchorLink
-          v-for="eg in exampleOrder"
-          :key="eg"
-          :content="spaceCase(pascalCase(eg))"
-          :href="`#${eg}`"
+          v-for="s in pageSections"
+          :key="s"
+          :content="spaceCase(pascalCase(s))"
+          :href="`#${s}`"
           class="text-black scrollactive-item"
         />
         <AnchorLink
@@ -45,25 +45,25 @@
 
 <script lang="ts">
 import AnchorLink from 'components/AnchorLink.vue'
-import { defineComponent, ref } from '@vue/composition-api'
+import { defineComponent, ref, computed } from '@vue/composition-api'
 import { spaceCase, pascalCase } from 'case-anything'
-import { exampleOrderBlitzForm } from '../config/exampleOrder'
+import { routeNamePageSectionsMap } from '../config/pageSections'
 import Vue from 'vue'
 import VueScrollactive from 'vue-scrollactive'
+import { ROUTE_NAMES } from '../router/routes'
 
 Vue.use(VueScrollactive)
 
 export default defineComponent({
   name: 'MainLayout',
   components: { AnchorLink },
-  setup() {
+  setup(props, options) {
     const leftDrawerOpen = ref(true)
 
-    return { leftDrawerOpen, exampleOrder: exampleOrderBlitzForm }
-  },
-  methods: {
-    spaceCase,
-    pascalCase,
+    const routeName = options.root.$route.name as ROUTE_NAMES
+    const pageSections = computed(() => routeNamePageSectionsMap[routeName])
+
+    return { leftDrawerOpen, pageSections, spaceCase, pascalCase }
   },
 })
 </script>

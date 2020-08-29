@@ -23,7 +23,7 @@ EfBtn is a wrapper around QBtn. The only differences are:
 - it defaults to `color: primary` which is nice 😄
 
 All other props/attributes are passed on.`,
-*/
+ */
 export default {
   components: { QBtn },
   name: 'EfBtn',

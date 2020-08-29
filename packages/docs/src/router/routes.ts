@@ -1,5 +1,10 @@
 import { RouteConfig } from 'vue-router'
 
+export enum ROUTE_NAMES {
+  FORM = 'BlitzForm',
+  TABLE = 'BlitzTable',
+}
+
 const routes: RouteConfig[] = [
   {
     path: '/',
@@ -7,13 +12,18 @@ const routes: RouteConfig[] = [
     children: [{ path: '', component: () => import('pages/Index.vue') }],
   },
   {
-    path: '/docs/blitz-form',
-    component: () => import('layouts/DocsBlitzFormLayout.vue'),
+    path: '/docs',
+    component: () => import('layouts/DocsLayout.vue'),
     children: [
       {
-        path: '',
-        props: true,
-        component: () => import('pages/DocsBlitzForm.vue'),
+        path: 'blitz-form',
+        name: ROUTE_NAMES.FORM,
+        component: () => import('pages/DocsPage.vue'),
+      },
+      {
+        path: 'blitz-table',
+        name: ROUTE_NAMES.TABLE,
+        component: () => import('pages/DocsPage.vue'),
       },
     ],
   },
