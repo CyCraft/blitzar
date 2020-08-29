@@ -59,8 +59,8 @@ import BlitzField from '../BlitzField.vue'
 
 BlitzMiniForm is a component that's registered for you; alongside BlitzForm and BlitzField.
 You can use it like:
-- `<BlitzMiniForm />` as standalone
-- `<BlitzField component="BlitzMiniForm" />` inside a field (with label & sublabel)
+- &#60;BlitzMiniForm /&#62; as standalone
+- &#60;BlitzField component="BlitzMiniForm" /&#62; inside a field (with label & sublabel)
 - in a BlitzForm "schema" like so: `component: 'BlitzMiniForm'`
 
 ## description
