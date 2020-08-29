@@ -1,6 +1,6 @@
 {
   "name": "docs-vuepress",
-  "version": "0.0.1",
+  "version": "0.0.0-beta.1",
   "description": "Blitzar documentation",
   "main": "index.js",
   "author": "Luca Ban - Mesqueeb",
@@ -24,8 +24,8 @@
     "url": "git+https://github.com/cycraft/blitzar.git"
   },
   "dependencies": {
-    "@blitzar/form": "^0.0.0",
-    "@blitzar/utils": "^0.0.0",
+    "@blitzar/form": "^0.0.0-beta.1",
+    "@blitzar/utils": "^0.0.0-beta.1",
     "copy-anything": "^2.0.1",
     "planetar": "^0.3.2"
   }
