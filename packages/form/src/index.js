@@ -5,10 +5,9 @@ import EfBtn from './components/fields/EfBtn.vue'
 import EfDiv from './components/fields/EfDiv.vue'
 import EfMiniForm from './components/fields/EfMiniForm.vue'
 
-import dependencyMap from './meta/dependencyMap'
 import { validateFormPerSchema } from './helpers/validation.js'
 
-export { EasyForm, EasyField, EfBtn, EfDiv, EfMiniForm, dependencyMap, validateFormPerSchema }
+export { EasyForm, EasyField, EfBtn, EfDiv, EfMiniForm, validateFormPerSchema }
 
 export default {
   EasyForm,
@@ -18,7 +17,6 @@ export default {
   EfDiv,
   EfMiniForm,
 
-  dependencyMap,
   validateFormPerSchema,
 
   install(Vue) {
