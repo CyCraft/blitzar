@@ -17,6 +17,23 @@
     "quasar": "^1.13.1"
   },
   "license": "MIT",
+  "keywords": [
+    "blitzar",
+    "blitz-table",
+    "data-tables",
+    "data-table",
+    "quasar-easy-tables",
+    "quasar-easy-table",
+    "easy-tables",
+    "easy-table",
+    "vue-table",
+    "table",
+    "table-component",
+    "table-builder",
+    "table-generator",
+    "schema-table",
+    "vue"
+  ],
   "homepage": "https://github.com/cycraft/blitzar#readme",
   "bugs": {
     "url": "https://github.com/cycraft/blitzar/issues"
