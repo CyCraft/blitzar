@@ -1,40 +1,32 @@
 <template>
   <div>
-    <EasyTable :schemaColumns="schemaColumns" :rows="rows" title="My Lessons" :flat="true" />
+    <EasyTable
+      :schemaColumns="schemaColumns"
+      :schemaGrid="schemaColumns"
+      :rows="rows"
+      title="Users"
+      :flat="true"
+    />
   </div>
 </template>
 
 <style lang="stylus" scoped></style>
 
 <script>
-import { EasyTable } from '@blitzar/table'
-// All components that are used in the form need to be globally registered.
-import { QInput } from 'quasar'
-import Vue from 'vue'
-Vue.component('QInput', QInput)
+import { EasyTable } from 'blitzar'
 
 const rows = [
-  { firstName: 'Taylor', lastName: 'Roach' },
-  { firstName: 'Corey', lastName: 'Carson' },
-  { firstName: 'Alden', lastName: 'Cantrell' },
-  { firstName: 'Ezequiel', lastName: 'Davenport' },
-  { firstName: 'Kendrick', lastName: 'Schultz' },
-  { firstName: 'Bradyn', lastName: 'Arroyo' },
-  { firstName: 'Kade', lastName: 'Craig' },
-  { firstName: 'Carissa', lastName: 'Atkinson' },
-  { firstName: 'Zaire', lastName: 'Lambert' },
-  { firstName: 'Alec', lastName: 'Villanueva' },
-  { firstName: 'Sheldon', lastName: 'Rogers' },
-  { firstName: 'Celeste', lastName: 'Trujillo' },
+  { nameFirst: 'Eleanor', nameLast: 'Shellstrop' },
+  { nameFirst: 'Chidi', nameLast: 'Anagonye' },
 ]
 
 const schemaColumns = [
   {
     id: 'fullName',
     label: 'Full name',
-    component: 'QInput',
+    component: 'input',
     parseValue: (val, { formData, fieldInput }) => {
-      const value = `${formData.firstName || ''} ${formData.lastName || ''}`.trim()
+      const value = `${formData.nameFirst || ''} ${formData.nameLast || ''}`.trim()
       fieldInput({ id: 'fullName', value })
       return value
     },

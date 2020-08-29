@@ -7,7 +7,7 @@ import { merge } from 'merge-anything'
 import { QBtn } from 'quasar'
 
 /**
-### usage
+## usage
 
 EfBtn is a component that's registered for you; alongside EasyForm and EasyField.
 You can use it like:
@@ -15,7 +15,7 @@ You can use it like:
 - `<EasyField component="EfBtn" />` inside a field (with label & sublabel)
 - in an EasyForm "schema" like so: `component: 'EfBtn'`
 
-### description
+## description
 
 EfBtn is a wrapper around QBtn. The only differences are:
 

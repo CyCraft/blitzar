@@ -8,7 +8,7 @@
 <style lang="stylus" scoped></style>
 
 <script>
-import { EasyForm } from '@blitzar/form'
+import { EasyForm } from 'blitzar'
 // All components that are used in the form need to be globally registered.
 import { QInput } from 'quasar'
 import Vue from 'vue'
@@ -38,7 +38,7 @@ const schema = [
 ]
 
 /**
-### Update other fields on 'input'
+## Update other fields on 'input'
 
 Here we see an example of one field updating the contents of another on the input event.
 ```js

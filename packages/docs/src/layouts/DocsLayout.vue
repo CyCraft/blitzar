@@ -30,8 +30,8 @@
         />
         <AnchorLink
           key="api"
-          content="Api EasyForm"
-          href="#api-easy-form"
+          :content="`Api ${routeName}`"
+          href="#api-card"
           class="text-black scrollactive-item"
         />
       </scrollactive>
@@ -63,7 +63,7 @@ export default defineComponent({
     const routeName = options.root.$route.name as ROUTE_NAMES
     const pageSections = computed(() => routeNamePageSectionsMap[routeName])
 
-    return { leftDrawerOpen, pageSections, spaceCase, pascalCase }
+    return { leftDrawerOpen, routeName, pageSections, spaceCase, pascalCase }
   },
 })
 </script>

@@ -14,7 +14,7 @@
 <style lang="stylus" scoped></style>
 
 <script>
-import { EasyForm, EfDiv } from '@blitzar/form'
+import { EasyForm, EfDiv } from 'blitzar'
 // All components that are used in the form need to be globally registered.
 import { QInput, QSelect } from 'quasar'
 import Vue from 'vue'

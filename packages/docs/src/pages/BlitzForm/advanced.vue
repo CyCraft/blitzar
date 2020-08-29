@@ -12,7 +12,7 @@
 </style>
 
 <script>
-import { EasyForm } from '@blitzar/form'
+import { EasyForm } from 'blitzar'
 // All components that are used in the form need to be globally registered.
 import { QInput, QBtnToggle, QSlider, QSelect, QOptionGroup, QToggle, date } from 'quasar'
 import Vue from 'vue'

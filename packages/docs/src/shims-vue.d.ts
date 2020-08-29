@@ -3,7 +3,6 @@ declare module '*.vue' {
   import Vue from 'vue'
   export default Vue
 }
-declare module '@blitzar/form'
-declare module '@blitzar/table'
+declare module 'blitzar'
 declare module 'planetar'
 declare module 'vue-scrollactive'

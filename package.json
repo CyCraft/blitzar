@@ -34,7 +34,7 @@
     "url": "git+https://github.com/cycraft/blitzar.git"
   },
   "devDependencies": {
-    "@types/node": "^14.6.1",
+    "@types/node": "^14.6.2",
     "@types/webpack-env": "^1.15.2",
     "ava": "^3.12.1",
     "copyfiles": "^2.3.0",
@@ -43,7 +43,7 @@
     "npm-check-updates": "^7.1.1",
     "prettier": "^2.1.1",
     "rimraf": "^3.0.2",
-    "rollup": "^2.26.6"
+    "rollup": "^2.26.7"
   },
   "dependencies": {}
 }

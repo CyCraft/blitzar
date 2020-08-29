@@ -1,6 +1,7 @@
 <template>
   <div>
     <EasyTable
+      selection="multiple"
       :schemaColumns="schemaColumns"
       :schemaGrid="schemaColumns"
       :rows="rows"
@@ -26,16 +27,11 @@ const schemaColumns = [
 ]
 
 /**
-`<EasyTable />` is Quasar's QTable but with the allows you to define columns & grid-cards via the schema syntax of [EasyForms](/docs/blitz-form).
+By default selection is implemented for both table and grid view, however, every row NEEDS an 'id' prop in order for it to work.
 
-A single schema object describing the fields in your data can be used for:
-- defining the columns of an EasyTable
-- defining the fields to show on each card for the grid-view of the EasyTable
-- an EasyForm to be show in a pop-up on eg. clicking a row
-
-Of course you can also use all of Quasar's QTable props on <EasyTable /> and they will be passed to <QTable />.
-
-See below the interactive demo. You can check the source code, as well as _edit_ any prop and see its effect immidiately!
+CSS can be overwritten with these classes:
+- `.easy-table__grid-item.selected`
+- `.easy-table__row.selected`
  */
 export default {
   components: { EasyTable },

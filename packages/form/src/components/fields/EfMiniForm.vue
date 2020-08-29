@@ -55,7 +55,7 @@ import { isNumber } from 'is-what'
 import EasyField from '../EasyField.vue'
 
 /**
-### usage
+## usage
 
 EfMiniForm is a component that's registered for you; alongside EasyForm and EasyField.
 You can use it like:
@@ -63,7 +63,7 @@ You can use it like:
 - `<EasyField component="EfMiniForm" />` inside a field (with label & sublabel)
 - in an EasyForm "schema" like so: `component: 'EfMiniForm'`
 
-### description
+## description
 
 With EfMiniForm you can pass a "schema" just like an EasyForm. The difference is that EfMiniForm is more like a (as the name says) "mini" form. 😃
 

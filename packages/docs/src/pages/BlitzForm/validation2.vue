@@ -8,7 +8,7 @@
 <style lang="stylus" scoped></style>
 
 <script>
-import { EasyForm, EfBtn, validateFormPerSchema } from '@blitzar/form'
+import { EasyForm, EfBtn, validateFormPerSchema } from 'blitzar'
 // All components that are used in the form need to be globally registered.
 import { QInput, QToggle, Notify } from 'quasar'
 import Vue from 'vue'

@@ -8,7 +8,7 @@
 <style lang="stylus" scoped></style>
 
 <script>
-import { EasyForm, EfBtn } from '@blitzar/form'
+import { EasyForm, EfBtn } from 'blitzar'
 Vue.component('EfBtn', EfBtn)
 // All components that are used in the form need to be globally registered.
 import { QInput, QSelect } from 'quasar'

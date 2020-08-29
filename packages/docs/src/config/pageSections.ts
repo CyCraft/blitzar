@@ -20,5 +20,13 @@ export const routeNamePageSectionsMap: { [key in ROUTE_NAMES]: string[] } = {
     'validation1',
     'validation2',
   ],
-  [ROUTE_NAMES.TABLE]: ['basics', 'computedColumns'],
+  [ROUTE_NAMES.TABLE]: [
+    'basics',
+    'advanced',
+    'computedColumns',
+    'selection',
+    'slots',
+    'editOnButtonClick',
+    'editOnRowClick',
+  ],
 }

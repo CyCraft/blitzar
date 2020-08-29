@@ -11,7 +11,7 @@
 import { parseFieldValue } from '@blitzar/utils'
 
 /**
-### usage
+## usage
 
 EfDiv is a component that's registered for you; alongside EasyForm and EasyField.
 You can use it like:
@@ -19,7 +19,7 @@ You can use it like:
 - `<EasyField component="EfDiv" />` inside a field (with label & sublabel)
 - in an EasyForm "schema" like so: `component: 'EfDiv'`
 
-### description
+## description
 
 EfDiv is used by EasyForms when `mode: 'raw'`. The component shows the raw values of the data inside a simple `<div>`.
 

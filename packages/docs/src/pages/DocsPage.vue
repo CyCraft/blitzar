@@ -1,5 +1,5 @@
 <template>
-  <q-page class="page-docs-blitz-form" padding>
+  <q-page class="page-docs" padding>
     <!-- example card sections -->
     <div v-for="eg in pageSections" :key="routeName + eg" class="mb-xxxl">
       <h1 :id="eg">{{ spaceCase(pascalCase(eg)) }}</h1>
@@ -13,13 +13,13 @@
     </div>
     <!-- api card section -->
     <div class="mb-xxxl">
-      <ApiComponentExample id="api-easy-form" :filePath="filePathToCarbonCopySourceCode" />
+      <ApiComponentExample id="api-card" :filePath="filePathToCarbonCopySourceCode" />
     </div>
   </q-page>
 </template>
 
 <style lang="sass">
-// .page-docs-blitz-form
+// .page-docs
 </style>
 
 <script lang="ts">
