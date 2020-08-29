@@ -54,7 +54,7 @@ Evaluated props will receive 2 params: `(val, context)`.
 The most important props you can access from `context`:
 - `formData` This is the *nested* data of all the fields inside a BlitzForm.
 - `formDataFlat` This is the *flattened* data of all the fields inside a BlitzForm.
-- `mode` The current mode of the BlitzForm. Can be `'view'` | `'edit'` | `'add'` | `raw`
+- `mode` The current mode of the BlitzForm. Can be `'view'` | `'edit'` | `'add'` | `'raw'`
 - `formId` An 'id' of the BlitzForm. This is only present when manually set.
 - Other common Vue props like: `$store`, `$router`, `$q` (for Quasar apps) etc.
 
