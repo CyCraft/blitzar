@@ -1,6 +1,6 @@
 <template>
   <div>
-    <EasyForm :schema="schema" v-model="formData" :columnCount="3" />
+    <BlitzForm :schema="schema" v-model="formData" :columnCount="3" />
     <PreviewCode comment="formData">{{ formData }}</PreviewCode>
   </div>
 </template>
@@ -8,7 +8,7 @@
 <style lang="stylus" scoped></style>
 
 <script>
-import { EasyForm } from 'blitzar'
+import { BlitzForm } from 'blitzar'
 // All components that are used in the form need to be globally registered.
 import { QInput } from 'quasar'
 import Vue from 'vue'
@@ -61,10 +61,10 @@ There are three ways we could create such a field:
 
 So even though the field `fullName` has no `value` at all, it will always stay in sync with the current `formData`.
 
-When implementing a computed field this way however, `fullName` will never have that computed value emitted. This means that it won't be included in the EasyForm events: `@input`, `@field-input` and `@save`. So it's difficult to capture and save this calculated value alongside your other data. See the next tab for another method.
+When implementing a computed field this way however, `fullName` will never have that computed value emitted. This means that it won't be included in the BlitzForm events: `@input`, `@field-input` and `@save`. So it's difficult to capture and save this calculated value alongside your other data. See the next tab for another method.
  */
 export default {
-  components: { EasyForm },
+  components: { BlitzForm },
   data() {
     return { schema, formData: {} }
   },

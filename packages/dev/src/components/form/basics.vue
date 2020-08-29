@@ -1,6 +1,6 @@
 <template>
   <div class="basics">
-    <EasyForm :schema="schema" v-model="value" />
+    <BlitzForm :schema="schema" v-model="value" />
   </div>
 </template>
 
@@ -13,14 +13,14 @@
 <script>
 import vue from 'vue'
 import { QInput, QBtnToggle } from 'quasar'
-import { EasyForm } from '@blitzar/form'
+import { BlitzForm } from '@blitzar/form'
 
 vue.component('QInput', QInput)
 vue.component('QBtnToggle', QBtnToggle)
 
 export default {
   name: 'Basics',
-  components: { EasyForm },
+  components: { BlitzForm },
   data() {
     const schema = [
       {

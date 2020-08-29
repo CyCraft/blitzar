@@ -40,8 +40,8 @@ export default defineComponent({
 
     const filePathToCarbonCopySourceCode = computed(() =>
       routeName === 'BlitzForm'
-        ? 'components/atoms/form/components/EasyForm.vue'
-        : 'components/atoms/table/components/EasyTable.vue'
+        ? 'components/atoms/form/components/BlitzForm.vue'
+        : 'components/atoms/table/components/BlitzTable.vue'
     )
 
     return { routeName, pageSections, spaceCase, pascalCase, filePathToCarbonCopySourceCode }

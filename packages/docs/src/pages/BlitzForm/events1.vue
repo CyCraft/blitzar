@@ -1,6 +1,6 @@
 <template>
   <div>
-    <EasyForm
+    <BlitzForm
       :schema="schema"
       v-model="formData"
       @field-input="logFieldInput"
@@ -13,7 +13,7 @@
 <style lang="stylus" scoped></style>
 
 <script>
-import { EasyForm } from 'blitzar'
+import { BlitzForm } from 'blitzar'
 // All components that are used in the form need to be globally registered.
 import { QInput, Notify } from 'quasar'
 import Vue from 'vue'
@@ -35,16 +35,16 @@ const schema = [
 ]
 
 /**
-For all possible events take a look at the [Api Card](#api-easy-form).
+For all possible events take a look at the [Api Card](#api-blitz-form).
 
-You can listen to the `@input` event on a `<EasyForm />` which will trigger each time the formData is changed. This makes EasyForm usable with v-model.
+You can listen to the `@input` event on a `<BlitzForm />` which will trigger each time the formData is changed. This makes BlitzForm usable with v-model.
 
 There is also an `@field-input` event you can listen to which will trigger every time you type something in a specific field.
 
 Try typing a little in the example below:
  */
 export default {
-  components: { EasyForm },
+  components: { BlitzForm },
   data() {
     return { schema, formData: {} }
   },

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <EasyForm :schema="schema" v-model="formData" :columnCount="2" />
+    <BlitzForm :schema="schema" v-model="formData" :columnCount="2" />
     <PreviewCode comment="formData">{{ formData }}</PreviewCode>
   </div>
 </template>
@@ -8,7 +8,7 @@
 <style lang="stylus" scoped></style>
 
 <script>
-import { EasyForm } from 'blitzar'
+import { BlitzForm } from 'blitzar'
 // All components that are used in the form need to be globally registered.
 import { QToggle } from 'quasar'
 import Vue from 'vue'
@@ -39,7 +39,7 @@ const schema = [
 Eg. `disable: (val, {formData}) => formData.over18`
  */
 export default {
-  components: { EasyForm },
+  components: { BlitzForm },
   data() {
     return { schema, formData: {} }
   },

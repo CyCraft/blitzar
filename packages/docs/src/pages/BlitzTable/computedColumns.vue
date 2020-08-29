@@ -1,6 +1,6 @@
 <template>
   <div>
-    <EasyTable
+    <BlitzTable
       :schemaColumns="schemaColumns"
       :schemaGrid="schemaColumns"
       :rows="rows"
@@ -13,7 +13,7 @@
 <style lang="stylus" scoped></style>
 
 <script>
-import { EasyTable } from 'blitzar'
+import { BlitzTable } from 'blitzar'
 
 const rows = [
   { nameFirst: 'Eleanor', nameLast: 'Shellstrop' },
@@ -39,7 +39,7 @@ This is an example of a table with computed columns. A computed column is when y
 In this example the "full name" is computed on the fly when showing the table and immidiately made "sortable" as well.
  */
 export default {
-  components: { EasyTable },
+  components: { BlitzTable },
   data() {
     return { rows, schemaColumns }
   },

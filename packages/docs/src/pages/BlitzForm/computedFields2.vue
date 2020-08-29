@@ -1,6 +1,6 @@
 <template>
   <div>
-    <EasyForm :schema="schema" v-model="formData" :columnCount="3" />
+    <BlitzForm :schema="schema" v-model="formData" :columnCount="3" />
     <PreviewCode comment="formData">{{ formData }}</PreviewCode>
   </div>
 </template>
@@ -8,7 +8,7 @@
 <style lang="stylus" scoped></style>
 
 <script>
-import { EasyForm } from 'blitzar'
+import { BlitzForm } from 'blitzar'
 // All components that are used in the form need to be globally registered.
 import { QInput } from 'quasar'
 import Vue from 'vue'
@@ -53,7 +53,7 @@ const schema = [
 /**
 ## Update via `fieldInput`
 
-It can be handy to also save the calculated value in your database so you can filter/search/sort on this field. (This is required when using eg. an [EasyTable](https://quasar-easy-tables.web.app) or QTable.)
+It can be handy to also save the calculated value in your database so you can filter/search/sort on this field. (This is required when using eg. an [BlitzTable](https://quasar-blitz-tables.web.app) or QTable.)
 
 In this case we can use the method called `fieldInput()` which is accessible on the context and first explained on the [events documentation page](/events).
 
@@ -90,7 +90,7 @@ This method has pro's and con's though:
 There is also a third way we can create a computed field (see the last tab).
  */
 export default {
-  components: { EasyForm },
+  components: { BlitzForm },
   data() {
     return { schema, formData: {} }
   },

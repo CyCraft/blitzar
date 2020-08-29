@@ -2,7 +2,7 @@ import { isDate, isNumber, isPlainObject, isArray } from 'is-what'
 import commafy from 'commafy-anything'
 
 /**
- * takes a value and returns the parsed value based on an EasyField blueprint provided.
+ * takes a value and returns the parsed value based on a BlitzField blueprint provided.
  *
  * @export
  * @param {*} value any value. In our example blueprint `1` should be returned as `'one'`

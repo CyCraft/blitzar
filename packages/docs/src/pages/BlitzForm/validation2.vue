@@ -1,6 +1,11 @@
 <template>
   <div>
-    <EasyForm :schema="schema" v-model="formData" :columnCount="3" :key="JSON.stringify(formData)" />
+    <BlitzForm
+      :schema="schema"
+      v-model="formData"
+      :columnCount="3"
+      :key="JSON.stringify(formData)"
+    />
     <PreviewCode comment="formData">{{ formData }}</PreviewCode>
   </div>
 </template>
@@ -8,16 +13,16 @@
 <style lang="stylus" scoped></style>
 
 <script>
-import { EasyForm, EfBtn, validateFormPerSchema } from 'blitzar'
+import { BlitzForm, BlitzBtn, validateFormPerSchema } from 'blitzar'
 // All components that are used in the form need to be globally registered.
 import { QInput, QToggle, Notify } from 'quasar'
 import Vue from 'vue'
-Vue.component('EfBtn', EfBtn)
+Vue.component('BlitzBtn', BlitzBtn)
 Vue.component('QInput', QInput)
 Vue.component('QToggle', QToggle)
 
 /**
-There is also the possibility to do programatic validation. EasyForms provides a helper function which can be used without the need of rendering the form at all. It can be used like so:
+There is also the possibility to do programatic validation. BlitzForms provides a helper function which can be used without the need of rendering the form at all. It can be used like so:
 ```js
 import { validateFormPerSchema } from 'blitzar'
 
@@ -25,7 +30,7 @@ validateFormPerSchema(formData, schema)
 ```
  */
 export default {
-  components: { EasyForm },
+  components: { BlitzForm },
   data() {
     const formData = {
       name: undefined,
@@ -34,7 +39,7 @@ export default {
     }
     const schema = [
       {
-        component: 'EfBtn',
+        component: 'BlitzBtn',
         btnLabel: 'validate Programmatically',
         events: {
           click: () => {
@@ -49,7 +54,7 @@ export default {
         },
       },
       {
-        component: 'EfBtn',
+        component: 'BlitzBtn',
         btnLabel: 'Set Form Data',
         events: {
           click: () => {
@@ -60,7 +65,7 @@ export default {
         },
       },
       {
-        component: 'EfBtn',
+        component: 'BlitzBtn',
         btnLabel: 'Clear Form Data',
         events: {
           click: (e) => {

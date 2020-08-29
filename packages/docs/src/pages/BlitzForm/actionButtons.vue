@@ -1,6 +1,6 @@
 <template>
   <div>
-    <EasyForm :schema="schema" v-model="formData" mode="view" :actionButtons="actionButtons" />
+    <BlitzForm :schema="schema" v-model="formData" mode="view" :actionButtons="actionButtons" />
     <PreviewCode comment="formData">{{ formData }}</PreviewCode>
   </div>
 </template>
@@ -8,8 +8,8 @@
 <style lang="stylus" scoped></style>
 
 <script>
-import { EasyForm, EfBtn } from 'blitzar'
-Vue.component('EfBtn', EfBtn)
+import { BlitzForm, BlitzBtn } from 'blitzar'
+Vue.component('BlitzBtn', BlitzBtn)
 // All components that are used in the form need to be globally registered.
 import { QInput, QSelect } from 'quasar'
 import Vue from 'vue'
@@ -42,7 +42,7 @@ const schema = [
 ]
 
 /**
-Action buttons are buttons you would want to add to a form to do things like edit/save/delete etc... You can easily add action buttons like these on the top/bottom or sides of your EasyForm.
+Action buttons are buttons you would want to add to a form to do things like edit/save/delete etc... You can easily add action buttons like these on the top/bottom or sides of your BlitzForm.
 
 Action buttons are set via the prop 'actionButtons'. You can use pre-made action buttons that emit events. You can also overwrite the look of these pre-made buttons. Finally you can also set custom buttons and fields.
 
@@ -61,7 +61,7 @@ When added you will see the buttons like the preview below. They each have a fun
 
 The buttons above emits the events: `@edit`, `@cancel`, `@save`, `@delete`, `@archive`
 
-You can listen for these events on the `<EasyForm />` to use do things like:
+You can listen for these events on the `<BlitzForm />` to use do things like:
 - saving data to a DB when "save" is clicked
 - moving a popup when 'cancel' is clicked
 - clear the form data (`value`) when 'delete' is clicked
@@ -95,12 +95,12 @@ You can overwrite how the pre-made buttons look by providing an object like so:
 
 ## Providing custom buttons & fields
 
-You can also pass custom buttons & fields with a schema. The schema you provide works just like the EasyForm schema.
+You can also pass custom buttons & fields with a schema. The schema you provide works just like the BlitzForm schema.
 
 An example of a custom button could be:
 ```js
 actionButtons: [{
-  component: 'EfBtn',
+  component: 'BlitzBtn',
   btnLabel: 'log the data',
   showCondition: (_, {formData}) => formData.enableLogging,
   events: {
@@ -113,7 +113,7 @@ Being able to show/hide these button based on the `formData` can be very powerfu
 Be sure to check out the "Evaluated Props" and "Events" documentation.
  */
 export default {
-  components: { EasyForm },
+  components: { BlitzForm },
   data() {
     const actionButtons = [
       'delete',
@@ -122,7 +122,7 @@ export default {
       'edit',
       'save',
       {
-        component: 'EfBtn',
+        component: 'BlitzBtn',
         btnLabel: 'log the data (check console)',
         push: true,
         events: {

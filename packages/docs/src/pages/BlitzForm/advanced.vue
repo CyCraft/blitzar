@@ -1,6 +1,6 @@
 <template>
   <div>
-    <EasyForm :schema="schema" v-model="formData" :columnCount="2" gridGap="32px" />
+    <BlitzForm :schema="schema" v-model="formData" :columnCount="2" gridGap="32px" />
     <PreviewCode comment="formData">{{ formData }}</PreviewCode>
   </div>
 </template>
@@ -12,7 +12,7 @@
 </style>
 
 <script>
-import { EasyForm } from 'blitzar'
+import { BlitzForm } from 'blitzar'
 // All components that are used in the form need to be globally registered.
 import { QInput, QBtnToggle, QSlider, QSelect, QOptionGroup, QToggle, date } from 'quasar'
 import Vue from 'vue'
@@ -153,10 +153,10 @@ const schema = [
 ]
 
 /**
- * This is a more advanced example so you can see the full power of EasyForms. All fields you see here are just regular Quasar components.
+ * This is a more advanced example so you can see the full power of BlitzForms. All fields you see here are just regular Quasar components.
  */
 export default {
-  components: { EasyForm },
+  components: { BlitzForm },
   data() {
     return { schema, formData: {} }
   },

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <EasyForm
+    <BlitzForm
       :schema="schema"
       v-model="formData"
       :actionButtons="['edit', 'save']"
@@ -13,7 +13,7 @@
 <style lang="stylus" scoped></style>
 
 <script>
-import { EasyForm } from 'blitzar'
+import { BlitzForm } from 'blitzar'
 // All components that are used in the form need to be globally registered.
 import { QInput, QToggle } from 'quasar'
 import Vue from 'vue'
@@ -50,10 +50,10 @@ const schema = [
 
 Eg. `showCondition: (val, {formData}) => formData.car`
 
-`showCondition` is a special prop that can only be used inside the schema of an EasyForm.
+`showCondition` is a special prop that can only be used inside the schema of a BlitzForm.
  */
 export default {
-  components: { EasyForm },
+  components: { BlitzForm },
   data() {
     return { schema, formData: {} }
   },

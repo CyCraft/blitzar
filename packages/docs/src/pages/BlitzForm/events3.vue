@@ -1,6 +1,6 @@
 <template>
   <div>
-    <EasyForm :schema="schema" v-model="formData" :columnCount="2" />
+    <BlitzForm :schema="schema" v-model="formData" :columnCount="2" />
     <PreviewCode comment="formData">{{ formData }}</PreviewCode>
   </div>
 </template>
@@ -8,7 +8,7 @@
 <style lang="stylus" scoped></style>
 
 <script>
-import { EasyForm } from 'blitzar'
+import { BlitzForm } from 'blitzar'
 // All components that are used in the form need to be globally registered.
 import { QInput } from 'quasar'
 import Vue from 'vue'
@@ -58,7 +58,7 @@ The `fieldInput` function can be used to update other fields inside your form. I
 Be sure to also check the documentation on `Computed Fields` as well.
  */
 export default {
-  components: { EasyForm },
+  components: { BlitzForm },
   data() {
     return { schema, formData: {} }
   },

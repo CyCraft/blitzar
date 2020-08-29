@@ -1,6 +1,6 @@
 <template>
   <div>
-    <EasyForm :schema="schema" v-model="formData" :columnCount="3" />
+    <BlitzForm :schema="schema" v-model="formData" :columnCount="3" />
     <PreviewCode comment="formData">{{ formData }}</PreviewCode>
   </div>
 </template>
@@ -8,7 +8,7 @@
 <style lang="stylus" scoped></style>
 
 <script>
-import { EasyForm } from 'blitzar'
+import { BlitzForm } from 'blitzar'
 // All components that are used in the form need to be globally registered.
 import { QInput } from 'quasar'
 import Vue from 'vue'
@@ -79,7 +79,7 @@ However, keep in mind that also this method has its own pro's and con's:
 - CON: you have to include this "Computed Field" in all forms the user can edit the related fields (and probably with `showCondition: false`)
  */
 export default {
-  components: { EasyForm },
+  components: { BlitzForm },
   data() {
     return { schema, formData: {} }
   },

@@ -11,7 +11,7 @@
         { label: 'all top slots', value: 2 },
       ]"
     />
-    <EasyTable
+    <BlitzTable
       v-if="chosenExample === 0"
       :schemaColumns="schemaColumns"
       :schemaGrid="schemaColumns"
@@ -33,8 +33,8 @@
           </template>
         </QInput>
       </template>
-    </EasyTable>
-    <EasyTable
+    </BlitzTable>
+    <BlitzTable
       v-if="chosenExample === 1"
       :schemaColumns="schemaColumns"
       :schemaGrid="schemaColumns"
@@ -56,8 +56,8 @@
           </template>
         </QInput>
       </template>
-    </EasyTable>
-    <EasyTable
+    </BlitzTable>
+    <BlitzTable
       v-if="chosenExample === 2"
       :schemaColumns="schemaColumns"
       :schemaGrid="schemaColumns"
@@ -78,13 +78,13 @@
       <template v-slot:above-table>
         <div class="_slot-preview">&lt;template v-slot:above-table&gt;&lt;/template&gt;</div>
       </template>
-    </EasyTable>
+    </BlitzTable>
   </div>
 </template>
 
 <style lang="sass">
 .slots-demo
-  .easy-field__label
+  .blitz-field__label
     font-weight: 100
   ._slot-preview
     padding: 1rem
@@ -97,7 +97,7 @@
 </style>
 
 <script>
-import { EasyTable } from 'blitzar'
+import { BlitzTable } from 'blitzar'
 import { QBtnToggle, QIcon, QInput } from 'quasar'
 
 const rows = [
@@ -111,21 +111,21 @@ const schemaColumns = [
 ]
 
 /**
-You can use slots with EasyTable.
+You can use slots with BlitzTable.
 
-## EasyTable specific slots
+## BlitzTable specific slots
 
 - above-nav-row
 - above-table
 
 ## Quasar's QTable slots
 
-You can use all Quasar slots "around" the table. However, EasyTable uses these slots to generate its content: `body` for the rows, `item` for the cards in grid mode.
+You can use all Quasar slots "around" the table. However, BlitzTable uses these slots to generate its content: `body` for the rows, `item` for the cards in grid mode.
 
-If you find yourself in a spot where you also want to use slots for the rows or items, you are probably better off using a regular QTable, perhaps in combination with quasar-easy-forms. Feel free to look at my source code for how I built the EasyTable component.
+If you find yourself in a spot where you also want to use slots for the rows or items, you are probably better off using a regular QTable, perhaps in combination with quasar-blitz-forms. Feel free to look at my source code for how I built the BlitzTable component.
  */
 export default {
-  components: { EasyTable, QBtnToggle, QIcon, QInput },
+  components: { BlitzTable, QBtnToggle, QIcon, QInput },
   data() {
     return {
       chosenExample: 0,

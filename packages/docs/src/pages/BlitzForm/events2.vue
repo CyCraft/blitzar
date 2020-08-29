@@ -1,6 +1,6 @@
 <template>
   <div>
-    <EasyForm :schema="schema" v-model="formData" />
+    <BlitzForm :schema="schema" v-model="formData" />
     <PreviewCode comment="formData">{{ formData }}</PreviewCode>
   </div>
 </template>
@@ -8,7 +8,7 @@
 <style lang="stylus" scoped></style>
 
 <script>
-import { EasyForm } from 'blitzar'
+import { BlitzForm } from 'blitzar'
 // All components that are used in the form need to be globally registered.
 import { QInput, Notify } from 'quasar'
 import Vue from 'vue'
@@ -53,12 +53,12 @@ The benefits of passing your event listeners via the `events` prop are:
 - `context` is the Vue component reference of the form component, you can deconstruct this to access any other properties/values.
 - `context` has useful props like: `$store`, `$router`, `formData`, `formDataFlat`, `mode`, `formId`, ... All of these are explained in the *"Evaluated Props" documentation*, so be sure to check that.
 - `context` has a special function called `fieldInput` which can be used to modify other fields programatically.
-- And all this can be set from inside an `<EasyForm />`'s `schema` so you don't need add anything manually inside your templates.
+- And all this can be set from inside a `<BlitzForm />`'s `schema` so you don't need add anything manually inside your templates.
 
 Phew. That was a bit of a lot of information all at once. 😅 Let's look at an example:
  */
 export default {
-  components: { EasyForm },
+  components: { BlitzForm },
   data() {
     return { schema, formData: {} }
   },

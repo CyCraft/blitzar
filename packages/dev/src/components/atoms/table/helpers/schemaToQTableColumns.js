@@ -20,15 +20,15 @@ export default function schemaToQTableColumns(schema) {
     } = blueprint
     const field = (row) => {
       const value = getProp(row, id)
-      // todo: can I retrieve the EasyField context? should I?
-      const easyFieldContext = { formData: row, fieldInput: () => {} }
+      // todo: can I retrieve the BlitzField context? should I?
+      const blitzFieldContext = { formData: row, fieldInput: () => {} }
       // fieldInput has a chance to be triggered on `parseValue`, and thus needs to be added as fn to make sure it exists on the context but does nothing. We don't want to trigger fieldInput on sorting, therefore it must be an empty fn.
       const valueOrDefaultValue = !isUndefined(value)
         ? value
         : isFunction(df)
-        ? df(row, easyFieldContext)
+        ? df(row, blitzFieldContext)
         : df
-      if (isFunction(parseValue)) return parseValue(valueOrDefaultValue, easyFieldContext)
+      if (isFunction(parseValue)) return parseValue(valueOrDefaultValue, blitzFieldContext)
       return valueOrDefaultValue
     }
     const quasarColumnConfig = {

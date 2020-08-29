@@ -1,6 +1,6 @@
 <template>
   <div>
-    <EasyTable
+    <BlitzTable
       selection="multiple"
       :schemaColumns="schemaColumns"
       :schemaGrid="schemaColumns"
@@ -14,7 +14,7 @@
 <style lang="stylus" scoped></style>
 
 <script>
-import { EasyTable } from 'blitzar'
+import { BlitzTable } from 'blitzar'
 
 const rows = [
   { nameFirst: 'Eleanor', nameLast: 'Shellstrop' },
@@ -30,11 +30,11 @@ const schemaColumns = [
 By default selection is implemented for both table and grid view, however, every row NEEDS an 'id' prop in order for it to work.
 
 CSS can be overwritten with these classes:
-- `.easy-table__grid-item.selected`
-- `.easy-table__row.selected`
+- `.blitz-table__grid-item.selected`
+- `.blitz-table__row.selected`
  */
 export default {
-  components: { EasyTable },
+  components: { BlitzTable },
   data() {
     return { rows, schemaColumns }
   },

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <EasyTable
+    <BlitzTable
       :schemaColumns="schemaColumns"
       :schemaGrid="schemaColumns"
       :rows="rows"
@@ -13,7 +13,7 @@
 <style lang="stylus" scoped></style>
 
 <script>
-import { EasyTable } from 'blitzar'
+import { BlitzTable } from 'blitzar'
 // All components that are used in the form need to be globally registered.
 import { QInput, QSelect } from 'quasar'
 import Vue from 'vue'
@@ -24,7 +24,7 @@ const rows = []
 const schemaColumns = []
 
 export default {
-  components: { EasyTable },
+  components: { BlitzTable },
   data() {
     return { rows, schemaColumns }
   },

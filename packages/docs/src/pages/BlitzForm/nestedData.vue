@@ -1,6 +1,6 @@
 <template>
   <div>
-    <EasyForm
+    <BlitzForm
       :schema="schema"
       :columnCount="3"
       v-model="formData"
@@ -14,7 +14,7 @@
 <style lang="stylus" scoped></style>
 
 <script>
-import { EasyForm } from 'blitzar'
+import { BlitzForm } from 'blitzar'
 // All components that are used in the form need to be globally registered.
 import { Notify, QInput } from 'quasar'
 import Vue from 'vue'
@@ -51,7 +51,7 @@ const schema = [
 ]
 
 /**
-An `<EasyForm />` can use a nested data structure on a flat form schema. When you have a nested data structure you will need to appoint each field ID with dot notation.
+An `<BlitzForm />` can use a nested data structure on a flat form schema. When you have a nested data structure you will need to appoint each field ID with dot notation.
 
 Eg. a field with ID `size.width` points to `{size: {width}}` in your data.
 
@@ -64,7 +64,7 @@ The only thing you need to be careful with is the `@field-input` event:
 Try typing something in the example below:
  */
 export default {
-  components: { EasyForm },
+  components: { BlitzForm },
   data() {
     return { schema, formData: {} }
   },

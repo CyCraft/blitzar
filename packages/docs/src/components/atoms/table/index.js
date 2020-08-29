@@ -1,15 +1,15 @@
-import EasyTable from './components/EasyTable.vue'
+import BlitzTable from './components/BlitzTable.vue'
 
 import schemaToQTableColumns from './helpers/schemaToQTableColumns.js'
 
-export { EasyTable, schemaToQTableColumns }
+export { BlitzTable, schemaToQTableColumns }
 
 export default {
-  EasyTable,
+  BlitzTable,
 
   schemaToQTableColumns,
 
-  install (Vue) {
-    Vue.component(EasyTable.name, EasyTable)
+  install(Vue) {
+    Vue.component(BlitzTable.name, BlitzTable)
   },
 }

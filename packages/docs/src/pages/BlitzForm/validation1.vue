@@ -1,6 +1,6 @@
 <template>
   <div>
-    <EasyForm
+    <BlitzForm
       :schema="schema"
       v-model="formData"
       :actionButtons="['cancel', 'edit', 'save']"
@@ -13,7 +13,7 @@
 <style lang="stylus" scoped></style>
 
 <script>
-import { EasyForm } from 'blitzar'
+import { BlitzForm } from 'blitzar'
 // All components that are used in the form need to be globally registered.
 import { QInput, QToggle } from 'quasar'
 import Vue from 'vue'
@@ -47,10 +47,10 @@ const schema = [
 ]
 
 /**
-EasyForms have validation enabled by default when clicking the save button or when executing `validate` on the EasyForm ref.
+BlitzForms have validation enabled by default when clicking the save button or when executing `validate` on the BlitzForm ref.
  */
 export default {
-  components: { EasyForm },
+  components: { BlitzForm },
   data() {
     return { schema, formData: {} }
   },

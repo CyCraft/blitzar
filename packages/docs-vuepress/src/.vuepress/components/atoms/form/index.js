@@ -1,32 +1,30 @@
-import EasyForm from './components/EasyForm.vue'
-import EasyField from './components/EasyField.vue'
+import BlitzForm from './components/BlitzForm.vue'
+import BlitzField from './components/BlitzField.vue'
 
-import EfBtn from './components/fields/EfBtn.vue'
-import EfDiv from './components/fields/EfDiv.vue'
-import EfMiniForm from './components/fields/EfMiniForm.vue'
+import BlitzBtn from './components/fields/BlitzBtn.vue'
+import BlitzDiv from './components/fields/BlitzDiv.vue'
+import BlitzMiniForm from './components/fields/BlitzMiniForm.vue'
 
-import dependencyMap from './meta/dependencyMap'
 import { validateFormPerSchema } from './helpers/validation.js'
 
-export { EasyForm, EasyField, EfBtn, EfDiv, EfMiniForm, dependencyMap, validateFormPerSchema }
+export { BlitzForm, BlitzField, BlitzBtn, BlitzDiv, BlitzMiniForm, validateFormPerSchema }
 
 export default {
-  EasyForm,
-  EasyField,
+  BlitzForm,
+  BlitzField,
 
-  EfBtn,
-  EfDiv,
-  EfMiniForm,
+  BlitzBtn,
+  BlitzDiv,
+  BlitzMiniForm,
 
-  dependencyMap,
   validateFormPerSchema,
 
   install(Vue) {
-    Vue.component(EasyField.name, EasyField)
-    Vue.component(EasyForm.name, EasyForm)
+    Vue.component(BlitzField.name, BlitzField)
+    Vue.component(BlitzForm.name, BlitzForm)
 
-    Vue.component(EfBtn.name, EfBtn)
-    Vue.component(EfDiv.name, EfDiv)
-    Vue.component(EfMiniForm.name, EfMiniForm)
+    Vue.component(BlitzBtn.name, BlitzBtn)
+    Vue.component(BlitzDiv.name, BlitzDiv)
+    Vue.component(BlitzMiniForm.name, BlitzMiniForm)
   },
 }
