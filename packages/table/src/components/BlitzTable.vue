@@ -146,7 +146,7 @@ import { getProp } from 'path-to-prop'
 import { merge } from 'merge-anything'
 import { flattenArray } from 'flatten-anything'
 import { isPlainObject, isFunction } from 'is-what'
-import { QTable, QTd, QCheckbox, QCard, QIcon, QInput } from 'quasar'
+import { QTable, QTd, QCheckbox, QCard } from 'quasar'
 import { BlitzBtn, BlitzForm } from '@blitzar/form'
 import BlitzRow from './BlitzRow.vue'
 import BlitzCell from './BlitzCell.vue'
@@ -160,8 +160,6 @@ export default {
     QTd,
     QCheckbox,
     QCard,
-    QInput,
-    QIcon,
     BlitzBtn,
     BlitzForm,
     BlitzRow,
