@@ -256,6 +256,14 @@ export default {
      * @category content
      */
     internalErrors: { type: [Boolean, undefined], required: false, default: undefined },
+    /**
+     * Pass the component names (without `.vue`) that have internal error handling.
+     * @type {string[]}
+     */
+    internalErrorsFor: {
+      type: Array,
+      default: () => [],
+    },
   },
   data() {
     const { mode, id, value, schema, lang } = this
@@ -335,9 +343,17 @@ export default {
       }
     },
     cSchema() {
-      const { schema, schemaOverwritableDefaults, schemaForcedDefaults } = this
+      const { schema, schemaOverwritableDefaults, schemaForcedDefaults, internalErrorsFor } = this
       return schema.map((blueprint) => {
-        const blueprintParsed = merge(schemaOverwritableDefaults, blueprint, schemaForcedDefaults)
+        const other = internalErrorsFor.includes(blueprint.component)
+          ? { internalErrors: true }
+          : {}
+        const blueprintParsed = merge(
+          schemaOverwritableDefaults,
+          other,
+          blueprint,
+          schemaForcedDefaults
+        )
         return blueprintParsed
       })
     },
