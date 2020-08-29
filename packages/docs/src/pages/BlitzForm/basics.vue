@@ -65,7 +65,7 @@ There are several ways to work with the data of a BlitzForm.
 
 1. You can pass an empty object as `v-model` (or `:value` & listen to `@input`).<br />In this case BlitzForms will populate an object with the field's `id` as key and the user input as value.
 2. You can listen to the `@field-input` event which triggers every time a field's value changes. It's payload is an object that looks like: `{id, value}`.
-3. You can listen to the `@save` event which is triggered when the form's save button is pressed. It's payload is an object that looks like: `{newData, oldData}`. For more info see the [Action Buttons documentation](/actionButtons).
+3. You can listen to the `@save` event which is triggered when the form's save button is pressed. It's payload is an object that looks like: `{newData, oldData}`. For more info see the [Action Buttons documentation](#actionButtons).
  */
 export default {
   components: { BlitzForm },

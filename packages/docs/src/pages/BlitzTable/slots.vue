@@ -122,7 +122,7 @@ You can use slots with BlitzTable.
 
 You can use all Quasar slots "around" the table. However, BlitzTable uses these slots to generate its content: `body` for the rows, `item` for the cards in grid mode.
 
-If you find yourself in a spot where you also want to use slots for the rows or items, you are probably better off using a regular QTable, perhaps in combination with quasar-blitz-forms. Feel free to look at my source code for how I built the BlitzTable component.
+If you find yourself in a spot where you also want to use slots for the rows or items, you are probably better off using a regular QTable, perhaps in combination with a [BlitzForm](/docs/blitz-form). Feel free to look at my source code for how I built the BlitzTable component.
  */
 export default {
   components: { BlitzTable, QBtnToggle, QIcon, QInput },

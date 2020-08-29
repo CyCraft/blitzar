@@ -53,9 +53,9 @@ const schema = [
 /**
 ## Update via `fieldInput`
 
-It can be handy to also save the calculated value in your database so you can filter/search/sort on this field. (This is required when using eg. an [BlitzTable](https://quasar-blitz-tables.web.app) or QTable.)
+It can be handy to also save the calculated value in your database so you can filter/search/sort on this field. (This is required when using eg. an [BlitzTable](/docs/blitz-table) or QTable.)
 
-In this case we can use the method called `fieldInput()` which is accessible on the context and first explained on the [events documentation page](/events).
+In this case we can use the method called `fieldInput()` which is accessible on the context and first explained on the [events documentation page](#events1).
 
 ```js
 {
