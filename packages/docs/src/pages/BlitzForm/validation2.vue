@@ -1,11 +1,6 @@
 <template>
   <div>
-    <BlitzForm
-      :schema="schema"
-      v-model="formData"
-      :columnCount="3"
-      :key="JSON.stringify(formData)"
-    />
+    <BlitzForm :schema="schema" v-model="formData" :columnCount="3" :key="resetFormCounter" />
     <PreviewCode comment="formData">{{ formData }}</PreviewCode>
   </div>
 </template>
@@ -58,9 +53,10 @@ export default {
         btnLabel: 'Set Form Data',
         events: {
           click: () => {
-            this.formData.name = 'name'
+            this.formData.name = 'Luca Ban'
             this.formData.age = 18
             this.formData.consent = true
+            this.resetFormCounter++
           },
         },
       },
@@ -72,6 +68,7 @@ export default {
             this.formData.name = undefined
             this.formData.age = undefined
             this.formData.consent = undefined
+            this.resetFormCounter++
           },
         },
       },
@@ -97,7 +94,7 @@ export default {
         rules: [(val) => val || 'You must accept our terms'],
       },
     ]
-    return { schema, formData }
+    return { schema, formData, resetFormCounter: 0 }
   },
 }
 </script>

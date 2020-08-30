@@ -51,7 +51,7 @@ const schema = [
 ]
 
 /**
-An &#60;BlitzForm /&#62; can use a nested data structure on a flat form schema. When you have a nested data structure you will need to appoint each field ID with dot notation.
+A &#60;BlitzForm /&#62; can use a nested data structure on a flat form schema. When you have a nested data structure you will need to appoint each field ID with dot notation.
 
 Eg. a field with ID `size.width` points to `{size: {width}}` in your data.
 

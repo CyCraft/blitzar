@@ -191,7 +191,7 @@ const schemaColumns = [
 ]
 
 /**
-Since an &#60;BlitzTable /&#62; is based on the [BlitzForms](/docs/BlitzForm) schema system, it's possible to easily implement stuff like inline editing; popup editing; or show an editable form on a row click.
+Since a &#60;BlitzTable /&#62; is based on the [BlitzForms](/docs/BlitzForm) schema system, it's possible to easily implement stuff like inline editing; popup editing; or show an editable form on a row click.
  */
 export default {
   components: { BlitzTable },
