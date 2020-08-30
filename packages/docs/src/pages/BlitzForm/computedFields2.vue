@@ -85,7 +85,8 @@ This method has pro's and con's though:
 - PRO: you don't need to include the Computed Field (`fullName`) on the form at all
 - CON: this is quite verbose...
 - CON: it cannot be used if you need a computed field _not_ based on other fields (eg. a timestamp returning `new Date()`)
-- CON: you cannot use this method to add a new "caluculated field" at a later time, when your database already has some data
+- CON: when your database already has data, you cannot use this without manually updating what's already in your database
+- CON: if you want to save the computed field to your database, you have to include this computed field in all forms the user can edit this data
 
 There is also a third way we can create a computed field (see the last tab).
  */

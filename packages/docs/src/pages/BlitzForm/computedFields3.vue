@@ -63,9 +63,8 @@ The third way to create a computed field is this:
 Basically you write your logic inside the `parseValue` prop of your computed field, and also trigger a `fieldInput` action from within here.
 
 However, as the more experienced developers will notice...
-:::
-This is the same as introducing a side-effect to a computed property! By design this is discouraged, so isn't this bad?
-:::
+
+> This is the same as introducing a side-effect to a computed property! By design this is discouraged, so isn't this bad?
 
 I say "nay". The reason it is discouraged is because side-effects to computed properties that modify data are impossible to track. In a few months if you don't know why a certain value is being modified, you'll have a hard time finding eventually it was the side-effect from a computed property.
 
@@ -76,7 +75,9 @@ However, keep in mind that also this method has its own pro's and con's:
 - PRO: because it just uses `parseValue` it's less verbose (opposed to listening to input events of other fields)
 - PRO: the logic for this field is contained in its own options object
 - PRO: even if your database already has data, a computed field like this can be added at a later date
-- CON: you have to include this "Computed Field" in all forms the user can edit the related fields (and probably with `showCondition: false`)
+- CON: if you want to save the computed field to your database, you have to include this computed field in all forms the user can edit this data
+
+Hint: add `showCondition: false` if you want to hide the field but still have it save its content in the formData.
  */
 export default {
   components: { BlitzForm },
