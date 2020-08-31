@@ -1,6 +1,6 @@
 {
   "name": "docs",
-  "version": "0.0.0-beta.2",
+  "version": "0.0.0-beta.3",
   "description": "A Vue component collection for blitzing fast prototyping ⚡",
   "productName": "Blitzar docs",
   "author": "Luca Ban - Mesqueeb",
@@ -13,11 +13,11 @@
   },
   "dependencies": {
     "@blitzar/form": "^0.0.0-beta.2",
-    "@blitzar/table": "^0.0.0-beta.2",
+    "@blitzar/table": "^0.0.0-beta.3",
     "@blitzar/utils": "^0.0.0-beta.2",
     "@quasar/extras": "^1.9.5",
     "@vue/composition-api": "^0.6.7",
-    "blitzar": "^0.0.0-beta.2",
+    "blitzar": "^0.0.0-beta.3",
     "case-anything": "^1.1.1",
     "commafy-anything": "^1.1.3",
     "copy-anything": "^2.0.1",

@@ -1,6 +1,6 @@
 {
   "name": "docs-vuepress",
-  "version": "0.0.0-beta.2",
+  "version": "0.0.0-beta.3",
   "description": "Blitzar documentation",
   "main": "index.js",
   "author": "Luca Ban - Mesqueeb",
