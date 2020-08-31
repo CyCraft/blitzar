@@ -4,6 +4,7 @@
     v-bind="quasarProps"
     :selected.sync="cSelected"
     :pagination.sync="pagination"
+    v-on="$listeners"
   >
     <template v-slot:top v-if="usesTopSlot">
       <slot name="above-nav-row" />
