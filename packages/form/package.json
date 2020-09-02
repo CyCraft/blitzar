@@ -7,11 +7,11 @@
   "scripts": {},
   "dependencies": {
     "@blitzar/utils": "^0.0.0-beta.2",
-    "case-anything": "^1.1.1",
+    "case-anything": "^1.1.2",
     "copy-anything": "^2.0.1",
-    "is-what": "^3.11.0",
+    "is-what": "^3.11.2",
     "merge-anything": "^3.0.5",
-    "nestify-anything": "^1.0.0",
+    "nestify-anything": "^1.0.1",
     "quasar": "^1.13.1",
     "snarkdown": "github:mesqueeb/snarkdown#dist"
   },
