@@ -16,7 +16,12 @@
     :style="fieldStyleUsedHere"
   >
     <!-- display: inline -->
-    <div v-if="labelUsedHere" class="blitz-field__label">{{ labelUsedHere }}</div>
+    <div v-if="labelUsedHere || (slots && slots.label)" class="blitz-field__label">
+      {{ labelUsedHere }}
+      <slot name="label">
+        <BlitzH v-if="slots && slots.label" :options="slots.label" />
+      </slot>
+    </div>
     <div v-if="subLabelHtmlUsedHere" class="blitz-field__sub-label" v-html="subLabelHtmlUsedHere" />
     <!-- no component -->
     <template v-if="!component"></template>
@@ -36,7 +41,9 @@
       v-bind="propsAndAttrsToPass"
       v-on="eventsCalculated"
       :style="componentStyleUsedHere"
-    />
+    >
+      <BlitzH v-if="slots && slots.default" :options="slots.default" />
+    </component>
     <QField
       v-else
       v-model="cValue"
@@ -51,7 +58,9 @@
           v-bind="propsAndAttrsToPass"
           v-on="eventsCalculated"
           style="flex: 1"
-        />
+        >
+          <BlitzH v-if="slots && slots.default" :options="slots.default" />
+        </component>
       </template>
     </QField>
   </div>
@@ -107,6 +116,7 @@ import {
   isFullString,
 } from 'is-what'
 import { merge } from 'merge-anything'
+import BlitzH from './BlitzH'
 import { defaultLang } from '../meta/lang'
 import { createRequiredRule } from '../helpers/validation.js'
 
@@ -117,7 +127,7 @@ function evaluateProp(propValue, componentValue, componentInstance) {
 export default {
   name: 'BlitzField',
   inheritAttrs: false,
-  components: { QField },
+  components: { QField, BlitzH },
   props: {
     // prop categories: behavior content general model state style
     // EF props used here:
@@ -205,6 +215,14 @@ export default {
      * @category behavior
      */
     events: { type: Object, default: () => ({}) },
+    /**
+     * An Object with keys for the slot names and an object for values. The object you pass to a slot is itself applied as a `<component is="" />. See the last example below for how it will be applied:
+     * @type {{ label?: string | Record<string, any> | Record<string, any>[], default?: string | Record<string, any> | Record<string, any>[] }}
+     * @example { schema: [ { component: 'MyTooltip', tip: 'hi' } ] }
+     * @example <slot name="label"><component :is="slots.label.component" v-bind="slots.label" /></slot>
+     * @category content
+     */
+    slots: { type: Object },
     /**
      * The text used in the UI, eg. for required fields, etc.
      * @example {requiredField: 'Don\'t forget this field!'}
