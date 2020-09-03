@@ -1,14 +1,14 @@
 {
   "name": "blitzar",
-  "version": "0.0.0-beta.4",
+  "version": "0.0.0-beta.5",
   "description": "A Vue component collection for blitzing fast prototyping ⚡",
   "module": "index.js",
   "main": "index.js",
   "scripts": {},
   "author": "Luca Ban - Mesqueeb",
   "dependencies": {
-    "@blitzar/form": "^0.0.0-beta.4",
-    "@blitzar/table": "^0.0.0-beta.4"
+    "@blitzar/form": "^0.0.0-beta.5",
+    "@blitzar/table": "^0.0.0-beta.5"
   },
   "license": "MIT",
   "homepage": "https://github.com/cycraft/blitzar#readme",

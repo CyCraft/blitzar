@@ -1,6 +1,6 @@
 {
   "name": "dev",
-  "version": "0.0.0-beta.4",
+  "version": "0.0.0-beta.5",
   "description": "Dev",
   "productName": "Quasar App",
   "author": "Luca Ban - Mesqueeb",
@@ -11,7 +11,7 @@
     "test": "echo \"No test specified\" && exit 0"
   },
   "dependencies": {
-    "@blitzar/form": "^0.0.0-beta.4",
+    "@blitzar/form": "^0.0.0-beta.5",
     "@blitzar/utils": "^0.0.0-beta.4",
     "@quasar/extras": "^1.9.5",
     "commafy-anything": "^1.1.3",
