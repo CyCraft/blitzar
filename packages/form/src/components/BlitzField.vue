@@ -33,6 +33,15 @@
       :style="componentStyleUsedHere"
     />
     <!-- raw component -->
+    <input
+      v-else-if="hasInternalOrNoErrors && component === 'input'"
+      v-model="cValue"
+      v-bind="propsAndAttrsToPass"
+      v-on="eventsCalculated"
+      style="flex: 1"
+      :class="['blitz-field__component', ...componentClassesArrayUsedHere]"
+      :style="componentStyleUsedHere"
+    />
     <component
       v-else-if="hasInternalOrNoErrors"
       :is="component"
@@ -52,7 +61,15 @@
       :style="componentStyleUsedHere"
     >
       <template v-slot:control>
+        <input
+          v-if="component === 'input'"
+          v-model="cValue"
+          v-bind="propsAndAttrsToPass"
+          v-on="eventsCalculated"
+          style="flex: 1"
+        />
         <component
+          v-else
           :is="component"
           v-model="cValue"
           v-bind="propsAndAttrsToPass"
@@ -385,6 +402,7 @@ export default {
         return innerValue
       },
       set(val, ...otherArguments) {
+        console.log(`val → `, val)
         const { parseInput, events } = this
         if (isFunction(parseInput)) val = parseInput(val, this)
         if (isFunction(events.input)) events.input(val, this)
