@@ -1,35 +1,33 @@
-<template>
-  <span v-if="typeof options === 'string'">{{ options }}</span>
-  <span v-else>
-    <component
-      v-for="(o ,i) in optionsArray"
-      :key="i"
-      :is="o.component"
-      v-bind="o"
-      v-on="o.events"
-      :class="o.class"
-      :style="o.style"
-    >
-      <slot>
-        <BlitzH v-if="o.slots && o.slots.default" :options="o.slots.default" />
-      </slot>
-    </component>
-  </span>
-</template>
-
 <script>
-import { isArray } from 'is-what'
+import { isArray, isString } from 'is-what'
 /**
  * BlitzH is not yet exposed, because I'm still thinking about the best syntax for everything
  */
 export default {
   name: 'BlitzH',
+  functional: true,
   props: {
     options: { type: [Object, Array, String] },
   },
-  data() {
-    const optionsArray = isArray(this.options) ? this.options : [this.options]
-    return { optionsArray }
+  render(h, ctx) {
+    const optionsArray = isArray(ctx.props.options) ? ctx.props.options : [ctx.props.options]
+    return optionsArray.map((o) => {
+      if (isString(o)) return ctx._v(o)
+      let children
+      if (o.slots && o.slots.default) {
+        children = [h('BlitzH', { props: { options: o.slots.default } })]
+      }
+      return h(
+        o.component,
+        {
+          props: o,
+          on: o.events,
+          class: o.class,
+          style: o.style,
+        },
+        children
+      )
+    })
   },
 }
 </script>

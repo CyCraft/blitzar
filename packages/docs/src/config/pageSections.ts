@@ -4,6 +4,8 @@ export const routeNamePageSectionsMap: { [key in ROUTE_NAMES]: string[] } = {
   [ROUTE_NAMES.FORM]: [
     'basics',
     'advanced',
+    'slots1',
+    'slots2',
     'modes',
     'actionButtons',
     'events1',
@@ -14,12 +16,12 @@ export const routeNamePageSectionsMap: { [key in ROUTE_NAMES]: string[] } = {
     'evaluatedProps2',
     'evaluatedProps3',
     'evaluatedProps4',
+    'evaluatedProps5',
     'computedFields1',
     'computedFields2',
     'computedFields3',
     'validation1',
     'validation2',
-    'slots',
   ],
   [ROUTE_NAMES.TABLE]: [
     'basics',

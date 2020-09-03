@@ -16,10 +16,16 @@
     :style="fieldStyleUsedHere"
   >
     <!-- display: inline -->
-    <div v-if="labelUsedHere || (slots && slots.label)" class="blitz-field__label">
+    <div
+      v-if="labelUsedHere || (getEvaluatedPropOrAttr('slots') && getEvaluatedPropOrAttr('slots').label)"
+      class="blitz-field__label"
+    >
       {{ labelUsedHere }}
       <slot name="label">
-        <BlitzH v-if="slots && slots.label" :options="slots.label" />
+        <BlitzH
+          v-if="getEvaluatedPropOrAttr('slots') && getEvaluatedPropOrAttr('slots').label"
+          :options="getEvaluatedPropOrAttr('slots').label"
+        />
       </slot>
     </div>
     <div v-if="subLabelHtmlUsedHere" class="blitz-field__sub-label" v-html="subLabelHtmlUsedHere" />
@@ -33,6 +39,15 @@
       :style="componentStyleUsedHere"
     />
     <!-- raw component -->
+    <input
+      v-else-if="hasInternalOrNoErrors && component === 'input'"
+      v-model="cValue"
+      v-bind="propsAndAttrsToPass"
+      v-on="eventsCalculated"
+      style="flex: 1"
+      :class="['blitz-field__component', ...componentClassesArrayUsedHere]"
+      :style="componentStyleUsedHere"
+    />
     <component
       v-else-if="hasInternalOrNoErrors"
       :is="component"
@@ -42,7 +57,10 @@
       v-on="eventsCalculated"
       :style="componentStyleUsedHere"
     >
-      <BlitzH v-if="slots && slots.default" :options="slots.default" />
+      <BlitzH
+        v-if="getEvaluatedPropOrAttr('slots') && getEvaluatedPropOrAttr('slots').default"
+        :options="getEvaluatedPropOrAttr('slots').default"
+      />
     </component>
     <QField
       v-else
@@ -52,14 +70,25 @@
       :style="componentStyleUsedHere"
     >
       <template v-slot:control>
+        <input
+          v-if="component === 'input'"
+          v-model="cValue"
+          v-bind="propsAndAttrsToPass"
+          v-on="eventsCalculated"
+          style="flex: 1"
+        />
         <component
+          v-else
           :is="component"
           v-model="cValue"
           v-bind="propsAndAttrsToPass"
           v-on="eventsCalculated"
           style="flex: 1"
         >
-          <BlitzH v-if="slots && slots.default" :options="slots.default" />
+          <BlitzH
+            v-if="getEvaluatedPropOrAttr('slots') && getEvaluatedPropOrAttr('slots').default"
+            :options="getEvaluatedPropOrAttr('slots').default"
+          />
         </component>
       </template>
     </QField>
@@ -222,7 +251,7 @@ export default {
      * @example <slot name="label"><component :is="slots.label.component" v-bind="slots.label" /></slot>
      * @category content
      */
-    slots: { type: Object },
+    slots: { type: [Object, Function] },
     /**
      * The text used in the UI, eg. for required fields, etc.
      * @example {requiredField: 'Don\'t forget this field!'}
