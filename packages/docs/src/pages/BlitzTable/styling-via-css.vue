@@ -121,6 +121,9 @@ That said, if you really want, you can still use the "styling" related props fro
 ## Styling with CSS (recommended)
 
 Check out this example's "style" tab to see how styling is applied!
+
+> Please note that the classes that you _should_ target with CSS, are currently still rough.
+> Improvement of which classes to target is still a WIP while we're in BETA.
  */
 export default {
   components: { BlitzTable },
