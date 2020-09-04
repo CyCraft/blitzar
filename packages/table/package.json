@@ -1,6 +1,6 @@
 {
   "name": "@blitzar/table",
-  "version": "0.0.0-beta.5",
+  "version": "0.0.0-beta.6",
   "author": "Luca Ban - Mesqueeb",
   "description": "Blitzar table component",
   "main": "src/index.js",
