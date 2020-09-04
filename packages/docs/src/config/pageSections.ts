@@ -31,5 +31,6 @@ export const routeNamePageSectionsMap: { [key in ROUTE_NAMES]: string[] } = {
     'slots',
     'editOnButtonClick',
     'editOnRowClick',
+    'styling-via-css',
   ],
 }
