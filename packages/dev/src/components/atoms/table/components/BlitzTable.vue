@@ -25,7 +25,7 @@
     </template>
     <!-- Pass on all scoped slots -->
     <template
-      v-for="slot in Object.keys($scopedSlots).filter(slot => !slot.includes('top'))"
+      v-for="slot in Object.keys($scopedSlots).filter((slot) => !slot.includes('top'))"
       v-slot:[slot]="scope"
     >
       <slot :name="slot" v-bind="scope" />
@@ -68,7 +68,7 @@
           v-for="blueprint in schemaColumns"
           :key="blueprint.id"
           :props="rowProps"
-          @click.native="e => onRowClick(e, rowProps.row)"
+          @click.native="(e) => onRowClick(e, rowProps.row)"
         >
           <!-- requires row, blueprint, value -->
           <BlitzCell
@@ -91,7 +91,7 @@
             ])
           "
           :style="evaluate(cardStyle, gridItemProps)"
-          @click="e => onRowClick(e, gridItemProps.row, 'grid', gridItemProps)"
+          @click="(e) => onRowClick(e, gridItemProps.row, 'grid', gridItemProps)"
         >
           <BlitzForm
             :key="JSON.stringify(gridItemProps.row)"
@@ -123,6 +123,9 @@
     flex-wrap: nowrap
     flex-direction: column
     align-items: stretch
+  &.q-table--grid .q-table__middle
+    min-height: 0
+    margin-bottom: 0
 .blitz-table__nav-row
   display: grid
   justify-content: stretch
