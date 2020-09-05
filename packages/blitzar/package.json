@@ -6,12 +6,29 @@
   "main": "index.js",
   "scripts": {},
   "author": "Luca Ban - Mesqueeb",
+  "homepage": "https://github.com/cycraft/blitzar#readme",
+  "keywords": [
+    "vue-framework",
+    "vue",
+    "vuejs",
+    "component-framework",
+    "prototyping",
+    "fast-prototyping",
+    "data-table",
+    "data-tables",
+    "table-generator",
+    "table-builder",
+    "tables",
+    "form-generator",
+    "form-builder",
+    "forms",
+    "schema"
+  ],
   "dependencies": {
     "@blitzar/form": "^0.0.0-beta.5",
     "@blitzar/table": "^0.0.0-beta.6"
   },
   "license": "MIT",
-  "homepage": "https://github.com/cycraft/blitzar#readme",
   "bugs": "https://github.com/cycraft/blitzar/issues",
   "repository": {
     "type": "git",

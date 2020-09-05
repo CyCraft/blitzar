@@ -23,16 +23,6 @@
     "dep:check-for-updates": "ncu --semverLevel major && lerna exec 'ncu --semverLevel major'",
     "dep:reinstall-all": "rimraf node_modules && lerna clean -y && npm run dep:install"
   },
-  "author": "Luca Ban - Mesqueeb",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/cycraft/blitzar/issues"
-  },
-  "homepage": "https://github.com/cycraft/blitzar#readme",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/cycraft/blitzar.git"
-  },
   "devDependencies": {
     "@types/node": "^14.6.2",
     "@types/webpack-env": "^1.15.2",
@@ -45,5 +35,15 @@
     "rimraf": "^3.0.2",
     "rollup": "^2.26.9"
   },
-  "dependencies": {}
+  "dependencies": {},
+  "author": "Luca Ban - Mesqueeb",
+  "license": "MIT",
+  "homepage": "https://github.com/cycraft/blitzar#readme",
+  "bugs": {
+    "url": "https://github.com/cycraft/blitzar/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cycraft/blitzar.git"
+  }
 }

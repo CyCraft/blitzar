@@ -1,6 +1,6 @@
-# Blitzar ⚡️
+# Blitzar
 
-A Vue component collection for blitzing fast prototyping
+A Vue component collection for blitzing fast prototyping ⚡
 
 ```sh
 npm i blitzar
