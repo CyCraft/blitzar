@@ -1,4 +1,4 @@
-![hero](.media/blitzar-hero.png?raw=true)
+![hero](media/blitzar-hero.png?raw=true)
 
 # Blitzar
 
@@ -10,7 +10,7 @@ npm i blitzar
 
 ## Meet the family
 
-![](.media/familar-hero.png?raw=true)
+![](media/familar-hero.png?raw=true)
 
 - [Magnetar](https://github.com/cycraft/magnetar) 🌟
   > State-management done right with automatic sync to remote databases and services. Framework-agnostic & optimistic-UI built-in
