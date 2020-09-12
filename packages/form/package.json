@@ -32,6 +32,10 @@
     "vue"
   ],
   "license": "MIT",
+  "vetur": {
+    "tags": "vetur/tags.json",
+    "attributes": "vetur/attributes.json"
+  },
   "homepage": "https://github.com/cycraft/blitzar#readme",
   "bugs": {
     "url": "https://github.com/cycraft/blitzar/issues"
