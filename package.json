@@ -1,5 +1,6 @@
 {
   "name": "blitzar",
+  "private": true,
   "scripts": {
     "audit": "lerna-audit",
     "dev": "npm run prepare && cd packages/dev && npm run dev",
@@ -19,8 +20,8 @@
     "copy:table-to-vuepress": "rimraf packages/docs-vuepress/src/.vuepress/components/atoms/table && copyfiles --up 3 'packages/table/src/**/*' packages/docs-vuepress/src/.vuepress/components/atoms/table",
     "copy:table-to-dev": "rimraf packages/dev/src/components/atoms/table && copyfiles --up 3 'packages/table/src/**/*' packages/dev/src/components/atoms/table",
     "dep:install": "npm i && lerna bootstrap",
-    "dep:update-all": "ncu --semverLevel major -u && lerna exec 'ncu --semverLevel major -u' && npm run dep:install",
-    "dep:check-for-updates": "ncu --semverLevel major && lerna exec 'ncu --semverLevel major'",
+    "dep:update-all": "ncu --target minor -u && lerna exec 'ncu --target minor -u' && npm run dep:install",
+    "dep:check-for-updates": "ncu --target minor && lerna exec 'ncu --target minor'",
     "dep:reinstall-all": "rimraf node_modules && lerna clean -y && npm run dep:install"
   },
   "devDependencies": {
@@ -30,7 +31,7 @@
     "copyfiles": "^2.3.0",
     "esm": "^3.2.25",
     "lerna": "^3.22.1",
-    "npm-check-updates": "^7.1.1",
+    "npm-check-updates": "^9.0.1",
     "prettier": "^2.1.1",
     "rimraf": "^3.0.2",
     "rollup": "^2.26.9"
