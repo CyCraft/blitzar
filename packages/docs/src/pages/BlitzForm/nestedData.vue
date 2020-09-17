@@ -11,7 +11,7 @@
   </div>
 </template>
 
-<style lang="stylus" scoped></style>
+<style lang="sass" scoped></style>
 
 <script>
 import { BlitzForm } from 'blitzar'

@@ -10,7 +10,7 @@
   </div>
 </template>
 
-<style lang="stylus" scoped></style>
+<style lang="sass" scoped></style>
 
 <script>
 import DialogWrapper from '../../components/DialogWrapper.vue'

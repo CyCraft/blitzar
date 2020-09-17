@@ -5,7 +5,7 @@
   </div>
 </template>
 
-<style lang="stylus" scoped>
+<style lang="sass" scoped>
 // $
 
 // .component-name
