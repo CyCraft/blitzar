@@ -1,7 +1,7 @@
 <template>
   <q-table
     class="blitz-table"
-    v-bind="quasarProps"
+    v-bind="qTableProps"
     :selected.sync="cSelected"
     :pagination.sync="pagination"
     v-on="$listeners"
@@ -156,6 +156,20 @@ import BlitzRow from './BlitzRow.vue'
 import BlitzCell from './BlitzCell.vue'
 import schemaToQTableColumns from '../helpers/schemaToQTableColumns.js'
 
+/**
+ * @typedef GridCardProps
+ * @type {object}
+ * @property {any} key - Row's key
+ * @property {object} row - Row object
+ * @property {number} rowIndex - Row's index (0 based) in the filtered and sorted table
+ * @property {number} pageIndex - Row's index (0 based) in the current page of the filtered and sorted table
+ * @property {object} cols - Column definitions
+ * @property {object} colsMap - Column mapping (key is column name, value is column object)
+ * @property {boolean} selected - (reactive prop) Is row selected? Can directly be assigned new Boolean value which changes selection state"
+ * @property {boolean} expand - (reactive prop) Is row expanded? Can directly be assigned new Boolean value which changes expanded state"
+ * @property {string} __trClass - Internal prop passed down to QTr (if used)
+ */
+
 export default {
   name: 'BlitzTable',
   inheritAttrs: false,
@@ -238,13 +252,23 @@ export default {
      */
     selected: { type: Array, default: () => [] },
     /**
+     * CSS classes to apply to the card (when in grid mode).
+     * You can pass a function which will be evaluated just like an evaluated prop. The first param passed will be the entire row data. The second is `item` scoped slot object from a QTable.
+     * @type {(rowData: Record<string, any>, gridCardProps: GridCardProps, BlitzTableContext: any) => string | Record<string, any> | (string | Record<string, any>)[]}
+     * @example 'special-class'
+     * @example :card-class="{ 'my-special-class': [Boolean condition] }"
      * @category inherited prop
      */
-    cardClass: {},
+    cardClass: { type: [Function, String, Array, Object] },
     /**
+     * CSS style to apply to the card (when in grid mode).
+     * You can pass a function which will be evaluated just like an evaluated prop. The first param passed will be the entire row data. The second is `item` scoped slot object from a QTable.
+     * @type {(rowData: Record<string, any>, gridCardProps: GridCardProps, BlitzTableContext: any) => string | Record<string, any> | (string | Record<string, any>)[]}
+     * @example 'background-color: #ff0000'
+     * @example :card-style="{ backgroundColor: '#ff0000' }"
      * @category inherited prop
      */
-    cardStyle: {},
+    cardStyle: { type: [Function, String, Array, Object] },
     // Inherited props with different defaults:
     // Modified inherited props:
     /**
@@ -296,15 +320,15 @@ export default {
   },
   computed: {
     selectionMode() {
-      const { quasarProps } = this
-      return quasarProps.selection === 'single' || quasarProps.selection === 'multiple'
+      const { qTableProps } = this
+      return qTableProps.selection === 'single' || qTableProps.selection === 'multiple'
     },
     pagination: {
       get() {
-        return this.quasarProps.pagination || this.defaultPagination
+        return this.qTableProps.pagination || this.defaultPagination
       },
       set(newPagination) {
-        if (this.quasarProps.pagination) {
+        if (this.qTableProps.pagination) {
           return this.$emit('update:pagination', newPagination)
         }
         this.defaultPagination = newPagination
@@ -321,17 +345,24 @@ export default {
         slot['top-right']
       )
     },
-    quasarProps() {
-      return merge(this.$attrs, {
-        // Quasar props with modified behavior:
-        data: this.rows,
-        columns: this.cColumns,
-        rowKey: 'id',
-        grid: this.innerGrid,
-        // Quasar props with modified defaults:
-        // filter: this.$attrs.filter || this.innerFilter,
-        // Quasar props just to pass:
-      })
+    qTableProps() {
+      const propsOnlyUsedInSlots = ['cardStyle', 'cardClass']
+      const propsToNotPass = propsOnlyUsedInSlots
+        .reduce((carry, key) => ({ ...carry, [key]: undefined }), {}) // prettier-ignore
+      return merge(
+        this.$attrs,
+        {
+          // Quasar props with modified behavior:
+          data: this.rows,
+          columns: this.cColumns,
+          rowKey: 'id',
+          grid: this.innerGrid,
+          // Quasar props with modified defaults:
+          // filter: this.$attrs.filter || this.innerFilter,
+          // Quasar props just to pass:
+        },
+        propsToNotPass
+      )
     },
     gridBlitzFormProps() {
       const { gridBlitzFormOptions, schemaGrid } = this

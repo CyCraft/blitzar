@@ -10,9 +10,9 @@
     "case-anything": "^1.1.2",
     "copy-anything": "^2.0.1",
     "is-what": "^3.11.2",
-    "merge-anything": "^3.0.5",
+    "merge-anything": "^3.0.6",
     "nestify-anything": "^1.0.1",
-    "quasar": "^1.13.1",
+    "quasar": "^1.14.0",
     "snarkdown": "github:mesqueeb/snarkdown#dist"
   },
   "keywords": [

@@ -25,16 +25,16 @@
     "dep:reinstall-all": "rimraf node_modules && lerna clean -y && npm run dep:install"
   },
   "devDependencies": {
-    "@types/node": "^14.6.2",
+    "@types/node": "^14.10.3",
     "@types/webpack-env": "^1.15.2",
     "ava": "^3.12.1",
     "copyfiles": "^2.3.0",
     "esm": "^3.2.25",
     "lerna": "^3.22.1",
     "npm-check-updates": "^9.0.1",
-    "prettier": "^2.1.1",
+    "prettier": "^2.1.2",
     "rimraf": "^3.0.2",
-    "rollup": "^2.26.9"
+    "rollup": "^2.27.1"
   },
   "dependencies": {},
   "author": "Luca Ban - Mesqueeb",

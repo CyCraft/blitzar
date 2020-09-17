@@ -158,26 +158,16 @@ import schemaToQTableColumns from '../helpers/schemaToQTableColumns.js'
 
 /**
  * @typedef GridCardProps
- * @type {{
-  /** Row's key * /
-  key: any,
-  /** Row object * /
-  row: object,
-  /** Row's index (0 based) in the filtered and sorted table * /
-  rowIndex: number,
-  /** Row's index (0 based) in the current page of the filtered and sorted table * /
-  pageIndex: number,
-  /** Column definitions * /
-  cols: object,
-  /** Column mapping (key is column name, value is column object) * /
-  colsMap: object,
-  /** (reactive prop) Is row selected? Can directly be assigned new Boolean value which changes selection state" * /
-  selected: boolean,
-  /** (reactive prop) Is row expanded? Can directly be assigned new Boolean value which changes expanded state" * /
-  expand: boolean,
-  /** Internal prop passed down to QTr (if used) * /
-  __trClass: string,
-}}
+ * @type {object}
+ * @property {any} key - Row's key
+ * @property {object} row - Row object
+ * @property {number} rowIndex - Row's index (0 based) in the filtered and sorted table
+ * @property {number} pageIndex - Row's index (0 based) in the current page of the filtered and sorted table
+ * @property {object} cols - Column definitions
+ * @property {object} colsMap - Column mapping (key is column name, value is column object)
+ * @property {boolean} selected - (reactive prop) Is row selected? Can directly be assigned new Boolean value which changes selection state"
+ * @property {boolean} expand - (reactive prop) Is row expanded? Can directly be assigned new Boolean value which changes expanded state"
+ * @property {string} __trClass - Internal prop passed down to QTr (if used)
  */
 
 export default {
@@ -264,7 +254,7 @@ export default {
     /**
      * CSS classes to apply to the card (when in grid mode).
      * You can pass a function which will be evaluated just like an evaluated prop. The first param passed will be the entire row data. The second is `item` scoped slot object from a QTable.
-     * @type {(rowData: Record<string, any>, gridCardProps: GridCardProps, BlitzTableContext: any) => any, string | any[] | Record<string, any>}
+     * @type {(rowData: Record<string, any>, gridCardProps: GridCardProps, BlitzTableContext: any) => string | Record<string, any> | (string | Record<string, any>)[]}
      * @example 'special-class'
      * @example :card-class="{ 'my-special-class': [Boolean condition] }"
      * @category inherited prop
@@ -273,7 +263,7 @@ export default {
     /**
      * CSS style to apply to the card (when in grid mode).
      * You can pass a function which will be evaluated just like an evaluated prop. The first param passed will be the entire row data. The second is `item` scoped slot object from a QTable.
-     * @type {(rowData: Record<string, any>, gridCardProps: GridCardProps, BlitzTableContext: any) => any, string | any[] | Record<string, any>}
+     * @type {(rowData: Record<string, any>, gridCardProps: GridCardProps, BlitzTableContext: any) => string | Record<string, any> | (string | Record<string, any>)[]}
      * @example 'background-color: #ff0000'
      * @example :card-style="{ backgroundColor: '#ff0000' }"
      * @category inherited prop

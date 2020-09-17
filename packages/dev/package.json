@@ -19,16 +19,16 @@
     "core-js": "^3.6.5",
     "flatten-anything": "^2.0.2",
     "is-what": "^3.11.2",
-    "merge-anything": "^3.0.5",
+    "merge-anything": "^3.0.6",
     "nestify-anything": "^1.0.1",
     "path-to-prop": "^1.0.0",
-    "planetar": "^0.3.6",
-    "quasar": "^1.13.1"
+    "planetar": "^0.4.3",
+    "quasar": "^1.14.0"
   },
   "devDependencies": {
-    "@quasar/app": "^2.0.8",
+    "@quasar/app": "^2.1.0",
     "babel-eslint": "^10.1.0",
-    "eslint": "^7.8.1",
+    "eslint": "^7.9.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-loader": "^4.0.2",
     "eslint-plugin-vue": "^6.2.2"

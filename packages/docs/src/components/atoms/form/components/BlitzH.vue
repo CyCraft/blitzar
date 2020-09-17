@@ -1,5 +1,6 @@
 <script>
 import { isArray, isString } from 'is-what'
+
 /**
  * BlitzH is not yet exposed, because I'm still thinking about the best syntax for everything
  */
@@ -7,6 +8,9 @@ export default {
   name: 'BlitzH',
   functional: true,
   props: {
+    /**
+     * @type {{ [key: string]: any, events: {}, slots: { default: any }, class: string | Record<string, any> | (string | Record<string, any>)[], style: string | Record<string, any> | (string | Record<string, any>)[] }}
+     */
     options: { type: [Object, Array, String] },
   },
   render(h, ctx) {
