@@ -8,6 +8,7 @@ export const routeNamePageSectionsMap: { [key in ROUTE_NAMES]: string[] } = {
     'slots2',
     'modes',
     'actionButtons',
+    'stylingViaCss',
     'events1',
     'events2',
     'events3',
