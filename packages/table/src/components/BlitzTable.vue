@@ -83,6 +83,7 @@
     <template v-slot:item="gridItemProps">
       <slot name="item" v-bind="gridItemProps">
         <q-card
+          v-if="schemaGrid"
           :class="
             flattenArray([
               'blitz-table__grid-item',
@@ -291,6 +292,15 @@ export default {
      * @category modified prop
      */
     rowKey: {},
+  },
+  created() {
+    // some validation on creation
+    const needsSchemaGrid = this.grid === true || this.actionButtons.includes('grid')
+    if (needsSchemaGrid && this.schemaGrid === undefined) {
+      throw new Error(
+        '[BlitzTable] You need to defined a prop called "schemaGrid" if you want to use a grid layout as well!'
+      )
+    }
   },
   data() {
     const { lang, grid, selected } = this
