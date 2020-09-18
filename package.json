@@ -25,8 +25,8 @@
     "dep:reinstall-all": "rimraf node_modules && lerna clean -y && npm run dep:install"
   },
   "devDependencies": {
-    "@types/node": "^14.10.3",
-    "@types/webpack-env": "^1.15.2",
+    "@types/node": "^14.11.1",
+    "@types/webpack-env": "^1.15.3",
     "ava": "^3.12.1",
     "copyfiles": "^2.3.0",
     "esm": "^3.2.25",
