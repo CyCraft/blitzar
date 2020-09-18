@@ -375,11 +375,11 @@ export default {
       )
     },
     gridBlitzFormProps() {
-      const { gridBlitzFormOptions, schemaGrid, schemaColumns } = this
+      const { gridBlitzFormOptions, schemaGrid } = this
       const defaults = {
         actionButtons: [],
         mode: 'raw',
-        schema: schemaGrid || schemaColumns,
+        schema: schemaGrid,
       }
       return merge(defaults, gridBlitzFormOptions)
     },
