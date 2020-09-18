@@ -1,6 +1,6 @@
 {
   "name": "@blitzar/utils",
-  "version": "0.0.0-beta.9",
+  "version": "0.0.1",
   "description": "Blitzar utils",
   "author": "Luca Ban - Mesqueeb",
   "main": "src/index.js",
