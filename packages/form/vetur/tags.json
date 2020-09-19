@@ -16,11 +16,7 @@
       "evaluatedProps",
       "internalLabels",
       "internalErrors",
-      "internalErrorsFor",
-      "autofocus",
-      "no-error-focus",
-      "no-reset-focus",
-      "greedy"
+      "internalErrorsFor"
     ],
     "description": ""
   }

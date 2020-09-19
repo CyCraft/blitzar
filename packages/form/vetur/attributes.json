@@ -13,7 +13,7 @@
   },
   "blitz-form/actionButtons": {
     "type": "array",
-    "description": "Buttons on top of the form that control the 'mode' of the form. The possible pre-made buttons are:\n - 'edit' a button which puts the form in 'edit' mode & does `emit('edit')`\n - 'cancel' a button which puts the form in 'view' mode & does `emit('cancel')`\n - 'save' a button which puts the form in 'edit' mode & does `emit('save', {newData, oldData})`\n - 'delete' a red button which does `emit('delete')`\n - 'archive' a red button which does `emit('archive')`\n\n You can also pass custom buttons with the same schema to generate forms.\n\n See the documentation on \"Action Buttons\" for more info."
+    "description": "Buttons on top of the form that control the 'mode' of the form. The possible pre-made buttons are:\n- 'edit' a button which puts the form in 'edit' mode & does `emit('edit')`\n- 'cancel' a button which puts the form in 'view' mode & does `emit('cancel')`\n- 'save' a button which puts the form in 'edit' mode & does `emit('save', {newData, oldData})`\n- 'delete' a red button which does `emit('delete')`\n- 'archive' a red button which does `emit('archive')`\n\nYou can also pass custom buttons with the same schema to generate forms.\n\nSee the documentation on \"Action Buttons\" for more info."
   },
   "blitz-form/actionButtonDefaults": {
     "type": "object",
@@ -29,7 +29,7 @@
   },
   "blitz-form/columnCount": {
     "type": "number",
-    "description": "The amount of columns the form should have. Each field can set a specific 'span' to be able to span multiple columns."
+    "description": "The amount of columns the form should have.\n\nEach field can set a specific 'span' to be able to span multiple columns."
   },
   "blitz-form/gridGap": {
     "type": "string",
@@ -41,42 +41,26 @@
   },
   "blitz-form/mode": {
     "type": "string",
-    "description": "The mode represents how fields are rendered\n - \"edit\" or \"add\" means they can be interacted with\n - \"view\" means they can't\n - \"raw\" means the fields are not generated, just the raw value inside a div\n\n This prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields)."
+    "description": "The mode represents how fields are rendered\n- \"edit\" or \"add\" means they can be interacted with\n- \"view\" means they can't\n- \"raw\" means the fields are not generated, just the raw value inside a div\n\nThis prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields)."
   },
   "blitz-form/labelPosition": {
     "type": "string|function",
-    "description": "The position of the label in comparison to the field.\n\n This prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields)."
+    "description": "The position of the label in comparison to the field.\n\nThis prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields)."
   },
   "blitz-form/evaluatedProps": {
     "type": "array",
-    "description": "An array with prop names that should be treated as \"Evaluated Props\" when passed a function.\n\n This prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields)."
+    "description": "An array with prop names that should be treated as \"Evaluated Props\" when passed a function.\n\nThis prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields)."
   },
   "blitz-form/internalLabels": {
-    "type": "boolean",
-    "description": "Set to true if the entire form has its own labels and you do not want the BlitzField to show a label.\n\n When `true` subLabels will be passed as a prop called 'hint'.\n\n This prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields)."
+    "type": "boolean|undefined",
+    "description": "Set to true if the entire form has its own labels and you do not want the BlitzField to show a label.\n\nWhen `true` subLabels will be passed as a prop called 'hint'.\n\nThis prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields)."
   },
   "blitz-form/internalErrors": {
-    "type": "boolean",
-    "description": "Set to true if the entire form has its own error handling. This makes sure it passes on props like `rules` and does nothing with them in the BlitzField.\n\n This prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields)."
+    "type": "boolean|undefined",
+    "description": "Set to true if the entire form has its own error handling. This makes sure it passes on props like `rules` and does nothing with them in the BlitzField.\n\nThis prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields)."
   },
   "blitz-form/internalErrorsFor": {
     "type": "array",
     "description": "Pass the component names (without `.vue`) that have internal error handling. This makes sure it passes on props like `rules` and does nothing with them in the BlitzField."
-  },
-  "blitz-form/autofocus": {
-    "type": "boolean",
-    "description": "Focus first focusable element on initial component render"
-  },
-  "blitz-form/no-error-focus": {
-    "type": "boolean",
-    "description": "Do not try to focus on first component that has a validation error when submitting form"
-  },
-  "blitz-form/no-reset-focus": {
-    "type": "boolean",
-    "description": "Do not try to focus on first component when resetting form"
-  },
-  "blitz-form/greedy": {
-    "type": "boolean",
-    "description": "Validate all fields in form (by default it stops after finding the first invalid field with synchronous validation)"
   }
 }
