@@ -1,4 +1,114 @@
 {
+  "blitz-field/value": {
+    "type": "undefined"
+  },
+  "blitz-field/component": {
+    "type": "string|object|function",
+    "description": "Each BlitzField has a label, sublabel and a component rendered via &#60;component :is=\"component\" /&#62;. You can pass (1) the name of a registered component, or (2) a component’s options object."
+  },
+  "blitz-field/default": {
+    "type": "undefined",
+    "description": "A default value to be used when the 'value' is `undefined`.\n\nYou can also pass a function that will receive two params you can work with: `(formData, context)`\n- `formData` is the value object of your BlitzForm. This will be undefined when BlitzField is used as stand-alone (without BlitzForm) unless you manually pass it.\n- `context` is either your BlitzForm or BlitzField context with many usefull props. See the documentation on \"Evaluated Props\" for more info."
+  },
+  "blitz-field/required": {
+    "type": "boolean|function",
+    "description": "Wether or not the field is required or not. If a field is marked 'required' it will add a default rule like so: `[val => (val !== null && val !== undefined) || 'Field is required']`. The default message can be set in the `lang` prop as `requiredField`."
+  },
+  "blitz-field/rules": {
+    "type": "array|function"
+  },
+  "blitz-field/id": {
+    "type": "string",
+    "description": "An 'id' is required for a &#60;BlitzForm /&#62; to be able to know which fields have which value. When using &#60;BlitzField /&#62; on its own, it is not required."
+  },
+  "blitz-field/subLabel": {
+    "type": "string|function",
+    "description": "A smaller label for extra info."
+  },
+  "blitz-field/fieldStyle": {
+    "type": "object|array|string|function",
+    "description": "Custom styling to be applied to the BlitzField. Applied like so `:style=\"fieldStyle\"`. Can be an Evaluated Prop (this is why I opted to have a different name from `style`)."
+  },
+  "blitz-field/fieldClasses": {
+    "type": "object|array|string|function",
+    "description": "Custom classes to be applied to the BlitzField. Applied like so `:class=\"fieldClasses\"`. Can be an Evaluated Prop (this is why I opted to have a different name from `class`)."
+  },
+  "blitz-field/componentStyle": {
+    "type": "object|array|string|function",
+    "description": "Custom styling to be applied to the inner component of BlitzField. Applied like so `:style=\"componentStyle\"`. Can be an Evaluated Prop."
+  },
+  "blitz-field/componentClasses": {
+    "type": "object|array|string|function",
+    "description": "Custom classes to be applied to the inner component of BlitzField. Applied like so `:class=\"componentClasses\"`. Can be an Evaluated Prop."
+  },
+  "blitz-field/parseValue": {
+    "type": "function",
+    "description": "This function can modify a value before it is passed on to the inner component. Also see `parseInput` for the reverse."
+  },
+  "blitz-field/parseInput": {
+    "type": "function",
+    "description": "This function can modify a value upon user input, every time before the value is emitted. Also see `parseValue` for the reverse."
+  },
+  "blitz-field/events": {
+    "type": "object",
+    "description": "An Object with an event name as key and the handler function as value. The function you pass will receive the native event payload as first parameter and the BlitzField context (the component instance) as second: `($event, context) => {}`"
+  },
+  "blitz-field/slots": {
+    "type": "{ label?: string | Record<string, any> | Record<string, any>[], default?: string | Record<string, any> | Record<string, any>[] }",
+    "description": "An Object with keys for the slot names and an object for values. The object you pass to a slot is itself applied as a `<component is=\"\" />. See the last example below for how it will be applied:"
+  },
+  "blitz-field/lang": {
+    "type": "object",
+    "description": "The text used in the UI, eg. for required fields, etc."
+  },
+  "blitz-field/mode": {
+    "type": "string",
+    "description": "The mode represents how fields are rendered\n- \"edit\" or \"add\" means they can be interacted with\n- \"view\" means they can't\n- \"raw\" means the fields are not generated, just the raw value inside a div\n\nThis prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields)."
+  },
+  "blitz-field/labelPosition": {
+    "type": "string|function",
+    "description": "The position of the label in comparison to the field.\n\nThis prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields)."
+  },
+  "blitz-field/evaluatedProps": {
+    "type": "array",
+    "description": "An array with prop names that should be treated as \"Evaluated Props\" when passed a function.\n\nThis prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields)."
+  },
+  "blitz-field/internalLabels": {
+    "type": "boolean|undefined",
+    "description": "Set to true if the component has its own labels and you do not want the BlitzField to show a label.\n\nWhen `true` subLabels will be passed as a prop called 'hint'.\n\nThis prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields)."
+  },
+  "blitz-field/internalErrors": {
+    "type": "boolean|undefined",
+    "description": "Set to true if the component has its own error handling. This makes sure it passes on props like `rules` and does nothing with them in the BlitzField.\n\nThis prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields)."
+  },
+  "blitz-field/formData": {
+    "type": "object",
+    "description": "This is the *nested* data of all the fields inside a BlitzForm."
+  },
+  "blitz-field/formDataFlat": {
+    "type": "object",
+    "description": "This is the *flattened* data of all the fields inside a BlitzForm."
+  },
+  "blitz-field/formId": {
+    "type": "string",
+    "description": "A manually set 'id' of the BlitzForm."
+  },
+  "blitz-field/fieldInput": {
+    "type": "function",
+    "description": "The `fieldInput` function of BlitzForm. Is passed so it can be used in the input event: `events: {input: (value, {fieldInput} => fieldInput({id: 'otherField', value}))}`"
+  },
+  "blitz-field/showCondition": {
+    "type": "function|boolean",
+    "description": "Setting to `true` or `false` can show or hide the field. When using as an Evaluated Prop it can be very powerful."
+  },
+  "blitz-field/readonly": {
+    "type": "boolean|function",
+    "description": "`readonly` defaults to `true` on `mode: 'view'"
+  },
+  "blitz-field/label": {
+    "type": "string|function",
+    "description": "An BlitzField label is always \"external\" to the field. (It replaces the Quasar label if the underlying Quasar component uses one.)"
+  },
   "blitz-form/value": {
     "type": "object",
     "description": "An object with the data of the entire form. The object keys are the ids of the fields passed in the 'schema'.\n\nTo be used with `:value` or `v-model`."
@@ -62,5 +172,58 @@
   "blitz-form/internalErrorsFor": {
     "type": "array",
     "description": "Pass the component names (without `.vue`) that have internal error handling. This makes sure it passes on props like `rules` and does nothing with them in the BlitzField."
+  },
+  "blitz-h/options": {
+    "type": "{ [key: string]: any, events: {}, slots: { default: any }, class: string | Record<string, any> | (string | Record<string, any>)[], style: string | Record<string, any> | (string | Record<string, any>)[] }"
+  },
+  "blitz-btn/btnLabel": {
+    "type": "string",
+    "description": "`btnLabel` is the button's \"label\". (`label` on the other hand is used for the field label of &#60;BlitzField /&#62;)"
+  },
+  "blitz-btn/color": {
+    "type": "string"
+  },
+  "blitz-div/value": {
+    "type": "undefined"
+  },
+  "blitz-div/valueType": {
+    "type": "string",
+    "description": "valueType can be any type."
+  },
+  "blitz-div/type": {
+    "type": "string"
+  },
+  "blitz-div/suffix": {
+    "type": "string"
+  },
+  "blitz-div/prefix": {
+    "type": "string"
+  },
+  "blitz-div/options": {
+    "type": "array"
+  },
+  "blitz-div/multiple": {
+    "type": "boolean"
+  },
+  "blitz-mini-form/value": {
+    "type": "array"
+  },
+  "blitz-mini-form/schema": {
+    "type": "array",
+    "description": "This is the information on the columns you want to be shown. An array of objects just like a BlitzForm."
+  },
+  "blitz-mini-form/attrsToPass": {
+    "type": "array",
+    "description": "A list of prop (attribute) names to be passed on to each single BlitzField generated in the mini form.\n\nThis is useful when you want to use Evaluated Props in the schema of the mine form but need information from the top level BlitzForm."
+  },
+  "blitz-mini-form/maxRows": {
+    "type": "number",
+    "description": "Allows to limit the max amount of rows."
+  },
+  "blitz-mini-form/disable": {
+    "type": "boolean"
+  },
+  "blitz-mini-form/readonly": {
+    "type": "boolean"
   }
 }

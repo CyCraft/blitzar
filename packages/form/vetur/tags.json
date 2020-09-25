@@ -1,4 +1,37 @@
 {
+  "blitz-field": {
+    "attributes": [
+      "value",
+      "component",
+      "default",
+      "required",
+      "rules",
+      "id",
+      "subLabel",
+      "fieldStyle",
+      "fieldClasses",
+      "componentStyle",
+      "componentClasses",
+      "parseValue",
+      "parseInput",
+      "events",
+      "slots",
+      "lang",
+      "mode",
+      "labelPosition",
+      "evaluatedProps",
+      "internalLabels",
+      "internalErrors",
+      "formData",
+      "formDataFlat",
+      "formId",
+      "fieldInput",
+      "showCondition",
+      "readonly",
+      "label"
+    ],
+    "description": ""
+  },
   "blitz-form": {
     "attributes": [
       "value",
@@ -19,5 +52,41 @@
       "internalErrorsFor"
     ],
     "description": ""
+  },
+  "blitz-h": {
+    "attributes": [
+      "options"
+    ],
+    "description": "BlitzH is not yet exposed, because I'm still thinking about the best syntax for everything"
+  },
+  "blitz-btn": {
+    "attributes": [
+      "btnLabel",
+      "color"
+    ],
+    "description": "## usage\n\nBlitzBtn is a component that's registered for you; alongside BlitzForm and BlitzField.\nYou can use it like:\n- &#60;BlitzBtn /&#62; as standalone\n- &#60;BlitzField component=\"BlitzBtn\" /&#62; inside a field (with label & sublabel)\n- in a BlitzForm \"schema\" like so: `component: 'BlitzBtn'`\n\n## description\n\nBlitzBtn is a wrapper around QBtn. The only differences are:\n\n- you can pass the button label as `btnLabel` (this is required because when using QBtn it will always use the same label as your field label)\n- it defaults to `color: primary` which is nice 😄\n\nAll other props/attributes are passed on.`,"
+  },
+  "blitz-div": {
+    "attributes": [
+      "value",
+      "valueType",
+      "type",
+      "suffix",
+      "prefix",
+      "options",
+      "multiple"
+    ],
+    "description": "## usage\n\nBlitzDiv is a component that's registered for you; alongside BlitzForm and BlitzField.\nYou can use it like:\n- &#60;BlitzDiv /&#62; as standalone\n- &#60;BlitzField component=\"BlitzDiv\" /&#62; inside a field (with label & sublabel)\n- in a BlitzForm \"schema\" like so: `component: 'BlitzDiv'`\n\n## description\n\nBlitzDiv is used by BlitzForms when `mode: 'raw'`. The component shows the raw values of the data inside a simple `&#60;div&#62;`.\n\nThe difference the BlitzDiv field over a regular div, is that it will parse your value as per your field's schema. It will parse your value based on the following schema props:\n- `type`: shows numbers with thousands separator and dates as toLocaleDateString()\n- `valueType`: shows numbers with thousands separator and dates as toLocaleDateString()\n- `suffix`: shows `value + suffix` when passed\n- `prefix`: shows `prefix + value` when passed\n- `options`: shows the \"label\" of the option which has the value when passed\n- `multiple`: if your field allows to have multiple values, `multiple` must be `true`. This is used when parsing the `options`\n\nThe difference between `type` and `valueType` is when you don't want to set the type for an \"input\" field, you can use `valueType` instead of `type`."
+  },
+  "blitz-mini-form": {
+    "attributes": [
+      "value",
+      "schema",
+      "attrsToPass",
+      "maxRows",
+      "disable",
+      "readonly"
+    ],
+    "description": "## usage\n\nBlitzMiniForm is a component that's registered for you; alongside BlitzForm and BlitzField.\nYou can use it like:\n- &#60;BlitzMiniForm /&#62; as standalone\n- &#60;BlitzField component=\"BlitzMiniForm\" /&#62; inside a field (with label & sublabel)\n- in a BlitzForm \"schema\" like so: `component: 'BlitzMiniForm'`\n\n## description\n\nWith BlitzMiniForm you can pass a \"schema\" just like a BlitzForm. The difference is that BlitzMiniForm is more like a (as the name says) \"mini\" form. 😃\n\nThe \"schema\" you specify is shown as a single row. New rows are added automatically on user input.`,"
   }
 }
