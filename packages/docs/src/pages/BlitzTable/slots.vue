@@ -111,6 +111,8 @@ const schemaColumns = [
 ]
 
 /**
+# Slots
+
 You can use slots with BlitzTable.
 
 ## BlitzTable specific slots

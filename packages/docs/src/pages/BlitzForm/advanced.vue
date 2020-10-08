@@ -153,6 +153,8 @@ const schema = [
 ]
 
 /**
+ * # Advanced
+ *
  * This is a more advanced example so you can see the full power of BlitzForms. All fields you see here are just regular Quasar components.
  */
 export default {

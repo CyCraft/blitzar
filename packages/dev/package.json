@@ -22,7 +22,7 @@
     "merge-anything": "^3.0.6",
     "nestify-anything": "^1.0.1",
     "path-to-prop": "^1.0.0",
-    "planetar": "^0.5.2",
+    "planetar": "^0.6.0",
     "quasar": "^1.14.1"
   },
   "devDependencies": {

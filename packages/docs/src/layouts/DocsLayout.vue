@@ -9,7 +9,9 @@
         flat
         @click="() => (leftDrawerOpen = !leftDrawerOpen)"
       />
-      <div class="q-ml-md text-h6 text-black cursor-pointer" @click="$router.push('/')">Blitzar ⚡️</div>
+      <div class="q-ml-md text-h6 text-black cursor-pointer" @click="$router.push('/')">
+        Blitzar ⚡️
+      </div>
     </q-header>
     <q-drawer v-model="leftDrawerOpen" show-if-above bordered :width="260" :breakpoint="600">
       <div class="q-pa-md q-gutter-md" style="border: thin solid #eee">
@@ -20,50 +22,39 @@
         />
         <AnchorLink href="https://github.com/cycraft/blitzar" content="Github" external />
       </div>
-      <scrollactive class="q-pa-md column q-gutter-md" :offset="80">
-        <AnchorLink
-          v-for="s in pageSections"
-          :key="s"
-          :content="spaceCase(pascalCase(s))"
-          :href="`#${s}`"
-          class="text-black scrollactive-item"
-        />
-        <AnchorLink
-          key="api"
-          :content="`Api ${routeName}`"
-          href="#api-card"
-          class="text-black scrollactive-item"
-        />
-      </scrollactive>
+      <TableOfContents :TOC="TOC" />
     </q-drawer>
 
     <q-page-container>
-      <router-view />
+      <router-view @set-toc="setTOC" />
     </q-page-container>
   </q-layout>
 </template>
 
 <script lang="ts">
-import AnchorLink from 'components/AnchorLink.vue'
-import { defineComponent, ref, computed } from '@vue/composition-api'
-import { spaceCase, pascalCase } from 'case-anything'
-import { routeNamePageSectionsMap } from '../config/pageSections'
+import { defineComponent, ref, computed, Ref } from '@vue/composition-api'
 import Vue from 'vue'
-import VueScrollactive from 'vue-scrollactive'
+import { spaceCase, pascalCase } from 'case-anything'
+import { TableOfContents } from 'planetar'
+import AnchorLink from 'components/AnchorLink.vue'
+import { routeNamePageChaptersMap } from '../config/pageChapters'
 import { ROUTE_NAMES } from '../router/routes'
-
-Vue.use(VueScrollactive)
 
 export default defineComponent({
   name: 'MainLayout',
-  components: { AnchorLink },
+  components: { AnchorLink, TableOfContents },
   setup(props, options) {
     const leftDrawerOpen = ref(true)
 
     const routeName = options.root.$route.name as ROUTE_NAMES
-    const pageSections = computed(() => routeNamePageSectionsMap[routeName])
+    const pageChapters = computed(() => routeNamePageChaptersMap[routeName])
 
-    return { leftDrawerOpen, routeName, pageSections, spaceCase, pascalCase }
+    const TOC: Ref<any[]> = ref([])
+    function setTOC(newTOC: any[]) {
+      TOC.value.splice(0, TOC.value.length, ...newTOC)
+    }
+
+    return { leftDrawerOpen, routeName, pageChapters, spaceCase, pascalCase, setTOC, TOC }
   },
 })
 </script>

@@ -48,6 +48,8 @@ const schema = [
 ]
 
 /**
+# Modes
+
 BlitzForm has four modes:
 - `'edit'`: (default) Show editable fields based on the schemai
 - `'view'`: Show fields based on the schema; but make each field `readonly: true`.

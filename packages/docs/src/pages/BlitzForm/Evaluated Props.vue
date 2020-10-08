@@ -43,6 +43,8 @@ const schema = [
 ]
 
 /**
+# Evaluated Props
+
 As you know, &#60;BlitzForm /&#62; needs a 'schema' with information on each field you want to show. However, when using a BlitzForm you can replace the value of any prop in any field with a function instead of the value directly. This function will be executed any time the data of any field changes. This allows you to have "dynamic" props, based on the data of the form.
 
 For example, when you pass `disable: true` to a certain field, it will appear as disabled inside the form. You can instead also pass `disable: (val, context) => context.formData.myCheckBox` to be able to only disable that field when `myCheckBox` is truthy.

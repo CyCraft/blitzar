@@ -1,7 +1,6 @@
 <template>
   <div>
     <BlitzTable
-      @row-click="rowClick"
       :schemaColumns="schemaColumns"
       :schemaGrid="schemaColumns"
       :rows="rows"
@@ -15,15 +14,15 @@
 
 <script>
 import DialogWrapper from '../../components/DialogWrapper.vue'
-import { BlitzTable, BlitzForm } from 'blitzar'
+import { BlitzTable, BlitzBtn } from 'blitzar'
 // All components that are used in the form need to be globally registered.
 import { QInput, QSelect, QImg, QToggle, date, Dialog } from 'quasar'
 import Vue from 'vue'
+Vue.component('BlitzBtn', BlitzBtn)
 Vue.component('QInput', QInput)
 Vue.component('QSelect', QSelect)
 Vue.component('QImg', QImg)
 Vue.component('QToggle', QToggle)
-Vue.component('BlitzForm', BlitzForm)
 Vue.component('DialogWrapper', DialogWrapper)
 
 const rows = [
@@ -89,6 +88,47 @@ const rows = [
 
 const schemaColumns = [
   {
+    id: 'edit-btn',
+    component: 'BlitzBtn',
+    btnLabel: 'Edit',
+    mode: 'edit',
+    unelevated: true,
+    size: 'sm',
+    dense: true,
+    hideBottomSpace: true,
+    events: {
+      click: (event, { formData }) => {
+        Dialog.create({
+          // tell Quasar's Dialog plugin to use DialogWrapper.vue
+          component: 'DialogWrapper',
+          parent: this,
+          // tell DialogWrapper.vue to use a BlitzForm
+          slotComponent: 'BlitzForm',
+          // props bound to BlitzForm via v-bind="slotProps"
+          slotProps: {
+            actionButtons: ['edit', 'cancel', 'save'],
+            value: formData,
+            schema: schemaColumns,
+            class: 'q-pa-lg',
+            mode: 'edit',
+          },
+          // events bound to BlitzForm via v-on="slotEvents"
+          slotEvents: ({ hide }) => ({
+            cancel: hide,
+            save: ({ newData }) => {
+              const { id: rowId } = formData
+              const rowToUpdate = rows.find((r) => r.id === rowId)
+              Object.entries(newData).forEach(([fieldId, value]) => {
+                rowToUpdate[fieldId] = value
+              })
+              hide()
+            },
+          }),
+        })
+      },
+    },
+  },
+  {
     id: 'title',
     label: 'Lesson Title',
     component: 'QInput',
@@ -150,40 +190,15 @@ const schemaColumns = [
   },
 ]
 
+/**
+# Edit on Button Click
+
+Since a &#60;BlitzTable /&#62; is based on the [BlitzForms](/docs/BlitzForm) schema system, it's possible to easily implement stuff like inline editing; popup editing; or show an editable form on a row click.
+ */
 export default {
   components: { BlitzTable },
   data() {
     return { rows, schemaColumns }
-  },
-  methods: {
-    rowClick(event, rowData) {
-      const _rows = this.rows
-      Dialog.create({
-        // tell Quasar's Dialog plugin to use DialogWrapper.vue
-        component: 'DialogWrapper',
-        // tell DialogWrapper.vue to use a BlitzForm
-        slotComponent: 'BlitzForm',
-        // props bound to BlitzForm via v-bind="slotProps"
-        slotProps: {
-          actionButtons: ['edit', 'cancel', 'save'],
-          value: rowData,
-          schema: schemaColumns,
-          class: 'q-pa-lg',
-        },
-        // events bound to BlitzForm via v-on="slotEvents"
-        slotEvents: ({ hide }) => ({
-          cancel: hide,
-          save: ({ newData }) => {
-            const { id: rowId } = rowData
-            const rowToUpdate = _rows.find((r) => r.id === rowId)
-            Object.entries(newData).forEach(([fieldId, value]) => {
-              rowToUpdate[fieldId] = value
-            })
-            hide()
-          },
-        }),
-      })
-    },
   },
 }
 </script>

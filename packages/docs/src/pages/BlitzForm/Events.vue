@@ -35,6 +35,8 @@ const schema = [
 ]
 
 /**
+# Events
+
 For all possible events take a look at the [Api Card](#api-blitz-form).
 
 You can listen to the `@input` event on a &#60;BlitzForm /&#62; which will trigger each time the formData is changed. This makes BlitzForm usable with v-model.

@@ -47,6 +47,8 @@ const schema = [
 ]
 
 /**
+# Validation
+
 BlitzForms have validation enabled by default when clicking the save button or when executing `validate` on the BlitzForm ref.
  */
 export default {

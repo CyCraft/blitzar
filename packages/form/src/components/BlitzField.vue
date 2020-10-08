@@ -17,7 +17,9 @@
   >
     <!-- display: inline -->
     <div
-      v-if="labelUsedHere || (getEvaluatedPropOrAttr('slots') && getEvaluatedPropOrAttr('slots').label)"
+      v-if="
+        labelUsedHere || (getEvaluatedPropOrAttr('slots') && getEvaluatedPropOrAttr('slots').label)
+      "
       class="blitz-field__label"
     >
       {{ labelUsedHere }}
@@ -166,7 +168,7 @@ export default {
     value: { type: undefined },
     /**
      * Each BlitzField has a label, sublabel and a component rendered via &#60;component :is="component" /&#62;. You can pass (1) the name of a registered component, or (2) a component’s options object.
-     * @example 'QInput'
+     * @example 'input'
      * @example 'MyCustomField
      * @category general
      */

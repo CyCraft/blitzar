@@ -39,6 +39,8 @@ const schema = [
 ]
 
 /**
+# Computed Fields
+
 Computed fields are fields that can represent data which doesn't neccesarily exist in your data. They have a "caluculated value" based on the form data.
 
 Do not confuse this concept with "Evaluated Props".

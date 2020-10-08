@@ -8,6 +8,7 @@
     "dev:vuepress": "npm run prepare && cd packages/docs-vuepress && npm run dev",
     "test": "lerna run test",
     "build": "npm run prepare && lerna run build && git add -A && git commit -m \"chore: build\"",
+    "build:favicon": "copyfiles media/* packages/docs/public && cd packages/docs && npm run build:favicon",
     "publish": "npm run build && lerna publish",
     "deploy:docs": "npm run build && firebase deploy --only hosting && git add -A && git commit -m \"chore: deploy\"",
     "prepare": "npm run prepare:form && npm run prepare:table",

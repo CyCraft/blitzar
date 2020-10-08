@@ -27,6 +27,8 @@ const schemaColumns = [
 ]
 
 /**
+# Selection
+
 By default selection is implemented for both table and grid view, however, every row NEEDS an 'id' prop in order for it to work.
 
 CSS can be overwritten with these classes:

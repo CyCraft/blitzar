@@ -29,6 +29,8 @@ const schemaColumns = [
 ]
 
 /**
+# Styling via Props
+
 Of course we want to style our tables.
 
 Props usable on the columns schema:

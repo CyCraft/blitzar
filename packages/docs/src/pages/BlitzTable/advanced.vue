@@ -147,6 +147,8 @@ const schemaColumns = [
 ]
 
 /**
+# Advanced
+
 This is a more advanced example.
  */
 export default {

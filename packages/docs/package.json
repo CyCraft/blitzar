@@ -9,6 +9,7 @@
     "lint": "eslint --ext .js,.ts,.vue ./",
     "dev": "quasar dev",
     "build": "quasar build",
+    "build:favicon": "icongenie generate -i ./public/media/blitzar-favicon.png --skip-trim",
     "test": "echo \"No test specified\" && exit 0"
   },
   "dependencies": {
@@ -27,7 +28,7 @@
     "merge-anything": "^3.0.6",
     "nestify-anything": "^1.0.1",
     "path-to-prop": "^1.0.0",
-    "planetar": "^0.5.2",
+    "planetar": "^0.6.0",
     "quasar": "^1.14.1",
     "vue-scrollactive": "^0.9.3"
   },

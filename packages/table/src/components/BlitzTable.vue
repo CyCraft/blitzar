@@ -196,6 +196,7 @@ export default {
     schemaColumns: { type: Array, required: true },
     /**
      * The schema for the grid cards you want to generate. (BlitzForm schema format)
+     * @example [{ id: 'nameFirst', label: 'First Name', component: 'input' }, { id: 'nameLast', label: 'Last Name', component: 'input' }]
      * @category column
      */
     schemaGrid: { type: [Array, Object] },

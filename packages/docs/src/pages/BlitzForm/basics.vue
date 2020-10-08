@@ -41,6 +41,8 @@ const schema = [
 ]
 
 /**
+# Basics
+
 `&#60;BlitzForm /&#62;` is a component that allows you to easily create forms by passing an object with a schema on how you want the form to look. By merely passing a schema array you can easily generate entire forms! No more writing clunky HTML forms! 🎉
 
 ## Schema

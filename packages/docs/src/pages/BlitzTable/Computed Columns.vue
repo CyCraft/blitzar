@@ -34,6 +34,8 @@ const schemaColumns = [
 ]
 
 /**
+# Computed Columns
+
 This is an example of a table with computed columns. A computed column is when you want a column in your table that should show data which doesn't exist on your actual records.
 
 In this example the "full name" is computed on the fly when showing the table and immidiately made "sortable" as well.

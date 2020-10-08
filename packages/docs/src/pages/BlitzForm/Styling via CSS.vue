@@ -68,16 +68,17 @@ const schema = [
 ]
 
 /**
- * Styling a BlitzForm field through CSS can be done by targeting these classes:
- *
- * - `.blitz-field`
- * - `.blitz-field__sub-label`
- * - `.blitz-field__component`
- * - `.blitz-field__label`
- *
- * ## Styling raw form data with CSS
- *
- * This example uses `mode="raw"` to show just the raw form data. Then CSS is used to style it. See the "style" tab.
+# Styling via CSS
+
+Styling a BlitzForm field through CSS can be done by targeting these classes:
+- `.blitz-field`
+- `.blitz-field__sub-label`
+- `.blitz-field__component`
+- `.blitz-field__label`
+
+## Styling raw form data with CSS
+
+This example uses `mode="raw"` to show just the raw form data. Then CSS is used to style it. See the "style" tab.
  */
 export default {
   components: { BlitzForm },

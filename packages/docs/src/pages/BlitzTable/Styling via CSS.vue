@@ -33,7 +33,7 @@
 </template>
 
 <style lang="sass">
-@import '@planetar/styles/index.sass'
+@import '@planetar/styles'
 
 .my-styled-table
   /** spacing & layout */
@@ -57,7 +57,7 @@
     background: $c-stone-light
   ._above-table
     ._view-toggle path
-      fill: $c-secondary
+      fill: $c-science
       opacity: 0.7
     ._view-toggle._active path
       fill: $c-blue-ribbon
@@ -83,17 +83,17 @@
     border-color: $c-stone-dark
   /** typography */
   th
-    +t-caption-semi-bold
+    +t-caption-semi-bold()
   td
-    +t-body2
+    +t-body2()
   .q-table__bottom,
   .q-table__bottom span
-    +t-caption
+    +t-caption()
   &._grid
     .blitz-field__component
-      +t-body2
+      +t-body2()
     .blitz-field__label
-      +t-caption
+      +t-caption()
 </style>
 
 <script>
@@ -110,6 +110,8 @@ const schemaColumns = [
 ]
 
 /**
+# Styling via CSS
+
 There are two ways you can style a BlitzTable: via css or via props.
 
 I believe that styling should be done in CSS as much as possible. When doing styling via props you're basically mixing data with styling, and the more your app grows, the more annoying this becomes to work with in my experience.
