@@ -2,7 +2,7 @@
   "name": "blitzar",
   "private": true,
   "scripts": {
-    "audit": "lerna-audit",
+    "audit": "npm audit fix && lerna-audit && lerna bootstrap",
     "dev": "npm run prepare && cd packages/dev && npm run dev",
     "dev:docs": "npm run prepare && cd packages/docs && npm run dev",
     "dev:vuepress": "npm run prepare && cd packages/docs-vuepress && npm run dev",
@@ -25,16 +25,17 @@
     "dep:reinstall-all": "rimraf node_modules && lerna clean -y && npm run dep:install"
   },
   "devDependencies": {
-    "@types/node": "^14.11.1",
+    "@types/node": "^14.11.5",
     "@types/webpack-env": "^1.15.3",
-    "ava": "^3.12.1",
-    "copyfiles": "^2.3.0",
+    "ava": "^3.13.0",
+    "copyfiles": "^2.4.0",
     "esm": "^3.2.25",
     "lerna": "^3.22.1",
-    "npm-check-updates": "^9.0.1",
+    "lerna-audit": "^1.2.0",
+    "npm-check-updates": "^9.0.4",
     "prettier": "^2.1.2",
     "rimraf": "^3.0.2",
-    "rollup": "^2.27.1"
+    "rollup": "^2.29.0"
   },
   "dependencies": {},
   "author": "Luca Ban - Mesqueeb",

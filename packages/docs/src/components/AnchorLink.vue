@@ -54,7 +54,7 @@ export default defineComponent({
   name: 'AnchorLink',
   props: {
     content: { type: String, required: true },
-    href: { type: String, required: true },
+    href: { type: String },
     external: { type: Boolean, default: false },
   },
 })
