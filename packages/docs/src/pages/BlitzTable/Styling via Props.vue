@@ -11,8 +11,7 @@
   </div>
 </template>
 
-<style lang="sass">
-</style>
+<style lang="sass"></style>
 
 <script>
 import { BlitzTable } from 'blitzar'
