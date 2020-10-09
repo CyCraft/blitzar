@@ -33,7 +33,39 @@
 </template>
 
 <style lang="sass">
-@import '@planetar/styles'
+// @import '@planetar/styles/variables'
+$c-stone: #EFF3F9
+$c-stone-light: #F6F9FC
+$c-stone-dark: #D9E2F1
+$c-science: rgba(#0E2348, 0.72)
+$c-blue-ribbon: #0563ED
+
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans&family=Poppins:wght@400;500;600;700&display=swap")
+=header-globals()
+  font-family: 'Poppins', sans-serif
+  +C(color, blue-zodiac)
+=body-globals()
+  font-family: 'Open Sans', sans-serif
+  +C(color, blue-zodiac)
+
+=t-body2()
+  +body-globals()
+  font-weight: $regular
+  font-size: 14px
+  line-height: 20px
+  letter-spacing: 0.01em
+=t-caption()
+  +header-globals()
+  font-weight: $regular
+  font-size: 12px
+  line-height: 16px
+  letter-spacing: 0.02em
+=t-caption-semi-bold()
+  +header-globals()
+  font-weight: $semi-bold
+  font-size: 12px
+  line-height: 16px
+  letter-spacing: 0.02em
 
 .my-styled-table
   /** spacing & layout */
@@ -44,11 +76,11 @@
   ._above-table
     display: flex
     align-items: flex-end
-    padding: $sm
+    padding: 0.5rem
     > *:first-child
       margin-right: auto
     ._view-toggle
-      margin-left: $sm
+      margin-left: 0.5rem
       height: 24px
       cursor: pointer
   /** colours */
