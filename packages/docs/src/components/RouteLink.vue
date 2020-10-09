@@ -5,16 +5,17 @@
 </template>
 
 <style lang="sass">
+// $
 .route-link
-  color: black
+  color: white
   font-weight: 500
   text-decoration: none
   display: flex
   align-items: center
   &:hover
-    color: #fbcc5a
+    +C(color, primary)
   &.is-active
-    color: #fbcc5a
+    +C(color, primary)
 </style>
 
 <script lang="ts">

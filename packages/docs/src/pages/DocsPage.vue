@@ -10,7 +10,13 @@
 </template>
 
 <style lang="sass">
-// .page-docs
+// $
+.page-docs
+  .planetar-example-card
+    color: black
+    // +C(background, nasa-dark)
+    > *
+    //   background: inherit
 </style>
 
 <script lang="ts">

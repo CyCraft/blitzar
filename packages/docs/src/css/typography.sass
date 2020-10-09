@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap")
 @import url("https://fonts.googleapis.com/css2?family=Open+Sans&family=Poppins:wght@400;500;600;700&display=swap")
 @import 'colors'
 
@@ -13,19 +14,24 @@ $bold: 700
 // $extra-black: 950
 
 =header-globals()
-  font-family: 'Poppins', sans-serif
+  font-family: 'Montserrat', sans-serif
   color: white
 =body-globals()
-  color: white
+  font-family: 'Montserrat', sans-serif
+  color: rgba(255, 255, 255, 0.85)
 
 html, body
   +body-globals()
+
+a
+  color: white
 
 =t-h1()
   font-weight: $bold
   font-size: 56px
   line-height: 64px
   letter-spacing: 0.01em
+  text-transform: uppercase
   +header-globals()
 
 =t-h2()
@@ -123,8 +129,15 @@ html, body
   letter-spacing: 0.02em
   +header-globals()
 
+.text-logo
+  font-size: 28px
+  line-height: 1
+  font-weight: $semi-bold
+
 h1, h2, h3, h4, h5, h6
   margin: 0
+  margin-top: 0.6em
+  margin-bottom: 0.3em
 .text-h1, h1
   +t-h1()
 .text-h2, h2

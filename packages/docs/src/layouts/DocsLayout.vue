@@ -1,6 +1,6 @@
 <template>
-  <q-layout view="HHH Lpr fff">
-    <q-header style="background: white; padding: 0.7rem 1.5rem" bordered class="row items-center">
+  <q-layout view="HHH Lpr fff" class="docs-layout">
+    <q-header style="padding: 0.7rem 1.5rem" class="_layout-header row items-center">
       <q-btn
         class="xs"
         dense
@@ -9,12 +9,13 @@
         flat
         @click="() => (leftDrawerOpen = !leftDrawerOpen)"
       />
-      <div class="q-ml-md text-h6 text-black cursor-pointer" @click="$router.push('/')">
-        Blitzar ⚡️
+      <div
+        class="q-ml-md text-h6 cursor-pointer flex items-center text-uppercase"
+        @click="$router.push('/')"
+      >
+        <q-img src="media/blitzar-logo-white.svg" style="width: 20px" class="mr-xs" />litzar
       </div>
-    </q-header>
-    <q-drawer v-model="leftDrawerOpen" show-if-above bordered :width="260" :breakpoint="600">
-      <div class="q-pa-md q-gutter-md" style="border: thin solid #eee">
+      <div class="ml-auto flex q-gutter-md">
         <AnchorLink
           href="https://github.com/cycraft/blitzar/releases"
           content="Changelog"
@@ -22,6 +23,15 @@
         />
         <AnchorLink href="https://github.com/cycraft/blitzar" content="Github" external />
       </div>
+    </q-header>
+    <q-drawer
+      v-model="leftDrawerOpen"
+      show-if-above
+      :width="260"
+      :breakpoint="600"
+      content-class="_layout-side"
+      dark
+    >
       <TableOfContents :TOC="TOC" />
     </q-drawer>
 
@@ -30,6 +40,18 @@
     </q-page-container>
   </q-layout>
 </template>
+
+<style lang="sass">
+// $
+.docs-layout
+  ._layout-header
+    +C(background, nasa)
+    color: white
+    border-bottom: thin solid white
+  ._layout-side
+    +C(background, nasa)
+    color: white
+</style>
 
 <script lang="ts">
 import { defineComponent, ref, computed, Ref } from '@vue/composition-api'

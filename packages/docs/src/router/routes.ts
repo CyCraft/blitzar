@@ -9,7 +9,7 @@ const routes: RouteConfig[] = [
   {
     path: '/',
     component: () => import('layouts/LandingPageLayout.vue'),
-    children: [{ path: '', component: () => import('pages/Index.vue') }],
+    children: [{ path: '', component: () => import('pages/LandingPage.vue') }],
   },
   {
     path: '/docs',

@@ -1,7 +1,10 @@
 <template>
   <q-page class="column items-center justify-evenly">
     <div>
-      <h1 class="mb-xxxl text-center">⚡️ Blitzar</h1>
+      <div class="mb-xxxl column items-center">
+        <q-img src="media/blitzar-logo-white.svg" style="width: 118px" />
+        <h1 class="text-logo mt-md">Blitzar</h1>
+      </div>
       <div class="pa-md q-gutter-xl flex">
         <RouteLink content="BlitzForm" to="/docs/blitz-form" />
         <RouteLink content="BlitzTable" to="/docs/blitz-table" />

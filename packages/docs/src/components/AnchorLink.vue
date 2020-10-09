@@ -31,18 +31,19 @@
 </template>
 
 <style lang="sass">
+// $s
 .anchor-link
-  color: #fbcc5a
+  +C(color, primary)
   font-weight: 500
   text-decoration: none
   display: flex
   align-items: center
   &._external
-    color: black
+    color: white
     font-weight: 600
   &:hover,
   &.is-active
-    color: #fbcc5a !important
+    +C(color, primary, !important)
   ._svg
     color: #aaa
 </style>

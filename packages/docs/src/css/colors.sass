@@ -15,13 +15,14 @@ $c-disabled: rgba(#0E2348, 0.28)
  * primary is always used to signify what is of primary importance to the user. It can be applied to any action that is considered primary, and there can be up to two elements of primary importance per view. (Never more than two.)
  */
 $c-nasa: #0B3D92
+$c-nasa-dark: #0c306c
 
 /**
  * primary is always used to signify what is of primary importance to the user. It can be applied to any action that is considered primary, and there can be up to two elements of primary importance per view. (Never more than two.)
  */
-$c-primary: #0563ED
-$c-primary-light: #2989FF
-$c-primary-dark: #0152A4
+$c-primary: #FCA081
+$c-primary-light: #FCA081
+$c-primary-dark: #FCA081
 
 /**
  * Breezy and beautiful, Sail is used to signify what is of secondary importance to the user.
@@ -62,14 +63,14 @@ $c-lucy-black: #1a1d26
 /**
  * Color Map
  */
-$colors: ("nasa": $c-nasa, "mercury": $c-mercury, "blue-zodiac": $c-blue-zodiac, "science": $c-science, "hint": $c-hint, "disabled": $c-disabled, "primary": $c-primary, "primary-light": $c-primary-light, "primary-dark": $c-primary-dark, "sail": $c-sail, "sail-dark": $c-sail-dark, "blue-ribbon": $c-blue-ribbon, "azure-skies": $c-azure-skies, "endeavour": $c-endeavour, "stone": $c-stone, "stone-light": $c-stone-light, "stone-dark": $c-stone-dark, "error": $c-error, "success": $c-success)
+$colors: ("nasa": $c-nasa, "nasa-dark": $c-nasa-dark, "mercury": $c-mercury, "blue-zodiac": $c-blue-zodiac, "science": $c-science, "hint": $c-hint, "disabled": $c-disabled, "primary": $c-primary, "primary-light": $c-primary-light, "primary-dark": $c-primary-dark, "sail": $c-sail, "sail-dark": $c-sail-dark, "blue-ribbon": $c-blue-ribbon, "azure-skies": $c-azure-skies, "endeavour": $c-endeavour, "stone": $c-stone, "stone-light": $c-stone-light, "stone-dark": $c-stone-dark, "error": $c-error, "success": $c-success)
 
 /**
  * Color mixin to be used like:
- * +c(color, primary)
- * +c(background, secondary)
+ * +C(color, primary)
+ * +C(background, secondary)
  */
-=c($attr, $color-name, $extra-stuff: "")
+=C($attr, $color-name, $extra-stuff: "")
   #{$attr}: map-get($colors, $color-name) #{$extra-stuff}
   #{$attr}: var(--q-color-#{$color-name}) #{$extra-stuff}
 
@@ -86,10 +87,10 @@ $colors: ("nasa": $c-nasa, "mercury": $c-mercury, "blue-zodiac": $c-blue-zodiac,
 @each $name, $color in $colors
 
   .bg-#{$name}
-    +c(background, $name)
+    +C(background, $name)
   .text-#{$name},
   .c-#{$name}
-    +c(color, $name)
+    +C(color, $name)
 
 /**
  * For overwriting quasar variables
