@@ -75,24 +75,6 @@ $colors: ("nasa": $c-nasa, "nasa-dark": $c-nasa-dark, "mercury": $c-mercury, "bl
   #{$attr}: var(--q-color-#{$color-name}, map-get($colors, $color-name)) #{$extra-stuff}
 
 /**
- * Set native CSS variables
- */
-\:root
-  @each $name, $color in $colors
-    --q-color-#{$name}: #{$color}
-
-/**
- * Create helpers classes
- */
-@each $name, $color in $colors
-
-  .bg-#{$name}
-    +C(background, $name)
-  .text-#{$name},
-  .c-#{$name}
-    +C(color, $name)
-
-/**
  * For overwriting quasar variables
  */
 $primary: $c-primary

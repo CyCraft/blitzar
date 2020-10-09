@@ -55,7 +55,6 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed, Ref } from '@vue/composition-api'
-import Vue from 'vue'
 import { spaceCase, pascalCase } from 'case-anything'
 import { TableOfContents } from 'planetar'
 import AnchorLink from 'components/AnchorLink.vue'
