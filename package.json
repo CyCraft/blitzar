@@ -7,10 +7,10 @@
     "dev:docs": "npm run prepare && cd packages/docs && npm run dev",
     "dev:vuepress": "npm run prepare && cd packages/docs-vuepress && npm run dev",
     "test": "lerna run test",
-    "build": "npm run prepare && lerna run build && git add -A && git commit -m \"chore: build\"",
+    "build": "npm run prepare && lerna run build && git add -A && git commit -m \"chore: build\" && git push",
     "build:favicon": "copyfiles media/* packages/docs/public && cd packages/docs && npm run build:favicon",
     "publish": "npm run build && lerna publish",
-    "deploy:docs": "npm run build && firebase deploy --only hosting && git add -A && git commit -m \"chore: deploy\"",
+    "deploy:docs": "npm run build && firebase deploy --only hosting && git add -A && git commit -m \"chore: deploy\" && git push",
     "prepare": "npm run prepare:form && npm run prepare:table",
     "prepare:form": "npm run copy:form-to-docs && npm run copy:form-to-vuepress && npm run copy:form-to-dev",
     "prepare:table": "npm run copy:table-to-docs && npm run copy:table-to-vuepress && npm run copy:table-to-dev",
@@ -26,7 +26,7 @@
     "dep:reinstall-all": "rimraf node_modules && lerna clean -y && npm run dep:install"
   },
   "devDependencies": {
-    "@types/node": "^14.11.5",
+    "@types/node": "^14.11.7",
     "@types/webpack-env": "^1.15.3",
     "ava": "^3.13.0",
     "copyfiles": "^2.4.0",
@@ -36,7 +36,8 @@
     "npm-check-updates": "^9.0.4",
     "prettier": "^2.1.2",
     "rimraf": "^3.0.2",
-    "rollup": "^2.29.0"
+    "rollup": "^2.29.0",
+    "typescript": "^4.0.3"
   },
   "dependencies": {},
   "author": "Luca Ban - Mesqueeb",
