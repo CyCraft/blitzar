@@ -72,7 +72,7 @@ $colors: ("nasa": $c-nasa, "nasa-dark": $c-nasa-dark, "mercury": $c-mercury, "bl
  */
 =C($attr, $color-name, $extra-stuff: "")
   #{$attr}: map-get($colors, $color-name) #{$extra-stuff}
-  #{$attr}: var(--q-color-#{$color-name}) #{$extra-stuff}
+  #{$attr}: var(--q-color-#{$color-name}, map-get($colors, $color-name)) #{$extra-stuff}
 
 /**
  * Set native CSS variables
