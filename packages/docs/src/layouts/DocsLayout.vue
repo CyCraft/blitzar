@@ -5,7 +5,7 @@
         class="xs"
         dense
         icon="menu"
-        color="black"
+        color="white"
         flat
         @click="() => (leftDrawerOpen = !leftDrawerOpen)"
       />
@@ -48,9 +48,8 @@
     +C(background, nasa)
     color: white
     border-bottom: thin solid white
-  ._layout-side
-    +C(background, nasa)
-    color: white
+  .q-drawer
+    background: none
 </style>
 
 <script lang="ts">

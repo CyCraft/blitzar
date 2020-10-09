@@ -1,5 +1,5 @@
 <template>
-  <q-page class="column items-center justify-evenly">
+  <q-page class="landing-page column items-center justify-evenly">
     <div>
       <div class="mb-xxxl column items-center">
         <q-img src="media/blitzar-logo-white.svg" style="width: 118px" />
@@ -18,6 +18,12 @@
     </div>
   </q-page>
 </template>
+
+<style lang="sass">
+// $
+.landing-page
+  +C(background, nasa)
+</style>
 
 <script lang="ts">
 import { defineComponent } from '@vue/composition-api'
