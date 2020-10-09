@@ -28,7 +28,7 @@
     "@blitzar/form": "^0.0.1",
     "@blitzar/utils": "^0.0.1",
     "copy-anything": "^2.0.1",
-    "planetar": "^0.6.3"
+    "planetar": "^0.7.0"
   },
   "gitHead": "67dabbf127033a928ec02d3a1a9da8a4d8d83d40"
 }
