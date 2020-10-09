@@ -12,7 +12,6 @@
 </template>
 
 <style lang="sass">
-@import '@planetar/styles/index.sass'
 </style>
 
 <script>
