@@ -1,13 +1,15 @@
 <template>
   <q-form ref="refBlitzForm" :class="`blitz-form blitz-form--nav-${actionButtonsPosition}`">
+    <!-- prevent the default behaviour of HTML5 forms being "submitted" on "enter" inside input fields -->
+    <button type="submit" disabled style="display: none" aria-hidden="true"></button>
+    <!-- navigation buttons row (save, edit, ...) -->
     <div
       :class="`blitz-form__nav-row blitz-form__nav-row--${actionButtonsPosition}`"
       v-if="isFullString(formErrorMsg) || actionButtonsSchema.length"
     >
-      <div
-        class="blitz-form__validation-error text-negative"
-        v-if="isFullString(formErrorMsg)"
-      >{{ formErrorMsg }}</div>
+      <div class="blitz-form__validation-error text-negative" v-if="isFullString(formErrorMsg)">
+        {{ formErrorMsg }}
+      </div>
       <BlitzField
         v-for="(field, i) in actionButtonsSchema"
         :key="i"
@@ -16,6 +18,7 @@
         @input="(value, origin) => fieldInput({ id: field.id, value, origin })"
       />
     </div>
+    <!-- form contents -->
     <div
       class="blitz-form__form"
       :style="`grid-template-columns:${' 1fr'.repeat(columnCount)}; grid-gap: ${gridGap}`"
