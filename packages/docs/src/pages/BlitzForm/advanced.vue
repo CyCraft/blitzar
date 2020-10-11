@@ -14,10 +14,9 @@
 <script>
 import { BlitzForm } from 'blitzar'
 // All components that are used in the form need to be globally registered.
-import { QInput, QBtnToggle, QSlider, QSelect, QOptionGroup, QToggle, date } from 'quasar'
+import { QInput, QSlider, QSelect, QOptionGroup, QToggle, date } from 'quasar'
 import Vue from 'vue'
 Vue.component('QInput', QInput)
-Vue.component('QBtnToggle', QBtnToggle)
 Vue.component('QSlider', QSlider)
 Vue.component('QSelect', QSelect)
 Vue.component('QOptionGroup', QOptionGroup)
@@ -35,11 +34,11 @@ const schema = [
   {
     id: 'powerOrigin',
     span: 1,
-    component: 'QBtnToggle',
+    component: 'QOptionGroup',
+    type: 'radio',
     label: 'Power origin',
     subLabel: 'Where does your power come from?',
     // component props:
-    spread: true,
     options: [
       { label: 'Mutation', value: 'mutation' },
       { label: 'Self taught', value: 'self' },
