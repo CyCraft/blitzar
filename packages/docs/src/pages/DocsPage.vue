@@ -12,8 +12,10 @@
 <style lang="sass">
 // $
 .page-docs
+  .markdown
+    +C(color, 'white')
   .planetar-example-card
-    color: black
+    +C(color, 'black')
 </style>
 
 <script lang="ts">

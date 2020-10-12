@@ -49,7 +49,7 @@
     color: white
     border-bottom: thin solid white
   .q-drawer
-    background: none
+    +C(background, nasa)
 </style>
 
 <script lang="ts">

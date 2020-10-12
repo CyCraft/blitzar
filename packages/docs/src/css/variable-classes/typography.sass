@@ -3,11 +3,10 @@
 @import '../variables/typography'
 @import '../variables/colors'
 
-html, body
-  +body-globals()
-
 a
-  color: white
+  +C(color, 'white')
+  &:hover
+    +C(color, 'primary')
 
 h1, h2, h3, h4, h5, h6
   margin: 0
