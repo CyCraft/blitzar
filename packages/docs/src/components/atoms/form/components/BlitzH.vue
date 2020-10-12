@@ -2,14 +2,14 @@
 import { isArray, isString } from 'is-what'
 
 /**
- * BlitzH is not yet exposed, because I'm still thinking about the best syntax for everything
+ * I'm still thinking about the best syntax for BlitzH
  */
 export default {
   name: 'BlitzH',
   functional: true,
   props: {
     /**
-     * @type {{ [key: string]: any, events: {}, slots: { default: any }, class: string | Record<string, any> | (string | Record<string, any>)[], style: string | Record<string, any> | (string | Record<string, any>)[] }}
+     * @type {{ [key: string]: any, events: {}, slot: any, class: string | Record<string, any> | (string | Record<string, any>)[], style: string | Record<string, any> | (string | Record<string, any>)[] }}
      */
     options: { type: [Object, Array, String] },
   },
@@ -18,7 +18,9 @@ export default {
     return optionsArray.map((o) => {
       if (isString(o)) return ctx._v(o)
       let children
-      if (o.slots && o.slots.default) {
+      if (o.slot) {
+        children = [h('BlitzH', { props: { options: o.slot } })]
+      } else if (o.slots && o.slots.default) {
         children = [h('BlitzH', { props: { options: o.slots.default } })]
       }
       return h(

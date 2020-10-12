@@ -10,11 +10,8 @@
 <script>
 import { BlitzForm } from 'blitzar'
 // All components that are used in the form need to be globally registered.
-import { QInput, QSelect, QIcon, QTooltip } from 'quasar'
+import { QTooltip } from 'quasar'
 import Vue from 'vue'
-Vue.component('QInput', QInput)
-Vue.component('QSelect', QSelect)
-Vue.component('QIcon', QIcon)
 Vue.component('QTooltip', QTooltip)
 
 const schema = [
@@ -24,14 +21,8 @@ const schema = [
     label: 'Example of a label slot with a tooltip',
     slots: {
       label: {
-        component: 'QIcon',
-        name: 'info',
-        slots: {
-          default: {
-            component: 'QTooltip',
-            slots: { default: `Hi! I'm a tooltip! Yiiiihaaaa` },
-          },
-        },
+        component: 'span',
+        slot: ['⚠️', { component: 'QTooltip', slot: `Hi! I'm a tooltip! Yiiiihaaaa` }],
       },
     },
   },
@@ -40,13 +31,15 @@ const schema = [
     component: 'input',
     label: 'Example of a label slot with multiple components',
     slots: {
-      label: ['🌈', { component: 'span', slots: { default: '🌈' }, style: 'font-size: 2em' }],
+      label: ['🌈', { component: 'span', slot: '🌈', style: 'font-size: 2em' }, 'double rainbow'],
     },
   },
 ]
 
 /**
 ## label slot
+
+You can use a "label" slot to pass extra content to a field's label.
 
 In the example below we see usage of the label slot to add some extra content next to the title.
  */

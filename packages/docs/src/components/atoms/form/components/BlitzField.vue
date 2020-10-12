@@ -59,10 +59,7 @@
       v-on="eventsCalculated"
       :style="componentStyleUsedHere"
     >
-      <BlitzH
-        v-if="getEvaluatedPropOrAttr('slots') && getEvaluatedPropOrAttr('slots').default"
-        :options="getEvaluatedPropOrAttr('slots').default"
-      />
+      <BlitzH v-if="defaultSlotCalculated" :options="defaultSlotCalculated" />
     </component>
     <QField
       v-else
@@ -87,10 +84,7 @@
           v-on="eventsCalculated"
           style="flex: 1"
         >
-          <BlitzH
-            v-if="getEvaluatedPropOrAttr('slots') && getEvaluatedPropOrAttr('slots').default"
-            :options="getEvaluatedPropOrAttr('slots').default"
-          />
+          <BlitzH v-if="defaultSlotCalculated" :options="defaultSlotCalculated" />
         </component>
       </template>
     </QField>
@@ -430,6 +424,11 @@ export default {
         carry[propKey] = evaluateProp(propValue, cValue, context)
         return carry
       }, {})
+    },
+    defaultSlotCalculated() {
+      const { getEvaluatedPropOrAttr } = this
+      const slots = getEvaluatedPropOrAttr('slots')
+      if (isPlainObject(slots)) return slots.default
     },
     componentName() {
       const { getEvaluatedPropOrAttr } = this

@@ -347,13 +347,17 @@ export default {
     cSchema() {
       const { schema, schemaOverwritableDefaults, schemaForcedDefaults, internalErrorsFor } = this
       return schema.map((blueprint) => {
-        const other = internalErrorsFor.includes(blueprint.component)
+        const internalErrorDefaults = internalErrorsFor.includes(blueprint.component)
           ? { internalErrors: true }
           : {}
+        const slotsOverwrite = !blueprint.slot
+          ? {}
+          : { slots: merge(blueprint.slots || {}, { default: blueprint.slot }) }
         const blueprintParsed = merge(
           schemaOverwritableDefaults,
-          other,
+          internalErrorDefaults,
           blueprint,
+          slotsOverwrite,
           schemaForcedDefaults
         )
         return blueprintParsed
