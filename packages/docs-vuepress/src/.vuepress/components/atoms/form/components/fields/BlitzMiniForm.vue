@@ -23,7 +23,7 @@
         class="ef-mini-form__sub-field"
         :rowIndex="rowIndex"
         :rowData="cValue[rowIndex]"
-        :rowInput="params => setSubFieldValue({ id: params.id, value: params.value, rowIndex })"
+        :rowInput="(params) => setSubFieldValue({ id: params.id, value: params.value, rowIndex })"
         v-bind="subfield"
         :value="cValue[rowIndex][subfield.id]"
         @input="
@@ -59,8 +59,8 @@ import BlitzField from '../BlitzField.vue'
 
 BlitzMiniForm is a component that's registered for you; alongside BlitzForm and BlitzField.
 You can use it like:
-- &#60;BlitzMiniForm /&#62; as standalone
-- &#60;BlitzField component="BlitzMiniForm" /&#62; inside a field (with label & sublabel)
+- <BlitzMiniForm /> as standalone
+- <BlitzField component="BlitzMiniForm" /> inside a field (with label & sublabel)
 - in a BlitzForm "schema" like so: `component: 'BlitzMiniForm'`
 
 ## description

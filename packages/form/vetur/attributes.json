@@ -4,7 +4,7 @@
   },
   "blitz-field/component": {
     "type": "string|object|function",
-    "description": "Each BlitzField has a label, sublabel and a component rendered via &#60;component :is=\"component\" /&#62;. You can pass (1) the name of a registered component, or (2) a component’s options object."
+    "description": "Each BlitzField has a label, sublabel and a component rendered via <component :is=\"component\" />. You can pass (1) the name of a registered component, or (2) a component’s options object."
   },
   "blitz-field/default": {
     "type": "undefined",
@@ -19,7 +19,7 @@
   },
   "blitz-field/id": {
     "type": "string",
-    "description": "An 'id' is required for a &#60;BlitzForm /&#62; to be able to know which fields have which value. When using &#60;BlitzField /&#62; on its own, it is not required."
+    "description": "An 'id' is required for a <BlitzForm /> to be able to know which fields have which value. When using <BlitzField /> on its own, it is not required."
   },
   "blitz-field/subLabel": {
     "type": "string|function",
@@ -178,7 +178,7 @@
   },
   "blitz-btn/btnLabel": {
     "type": "string",
-    "description": "`btnLabel` is the button's \"label\". (`label` on the other hand is used for the field label of &#60;BlitzField /&#62;)"
+    "description": "`btnLabel` is the button's \"label\". (`label` on the other hand is used for the field label of <BlitzField />)"
   },
   "blitz-btn/color": {
     "type": "string"

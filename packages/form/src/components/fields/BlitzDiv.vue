@@ -15,13 +15,13 @@ import { parseFieldValue } from '@blitzar/utils'
 
 BlitzDiv is a component that's registered for you; alongside BlitzForm and BlitzField.
 You can use it like:
-- &#60;BlitzDiv /&#62; as standalone
-- &#60;BlitzField component="BlitzDiv" /&#62; inside a field (with label & sublabel)
+- <BlitzDiv /> as standalone
+- <BlitzField component="BlitzDiv" /> inside a field (with label & sublabel)
 - in a BlitzForm "schema" like so: `component: 'BlitzDiv'`
 
 ## description
 
-BlitzDiv is used by BlitzForms when `mode: 'raw'`. The component shows the raw values of the data inside a simple `&#60;div&#62;`.
+BlitzDiv is used by BlitzForms when `mode: 'raw'`. The component shows the raw values of the data inside a simple `<div>`.
 
 The difference the BlitzDiv field over a regular div, is that it will parse your value as per your field's schema. It will parse your value based on the following schema props:
 - `type`: shows numbers with thousands separator and dates as toLocaleDateString()

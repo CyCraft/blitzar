@@ -11,8 +11,8 @@ import { QBtn } from 'quasar'
 
 BlitzBtn is a component that's registered for you; alongside BlitzForm and BlitzField.
 You can use it like:
-- &#60;BlitzBtn /&#62; as standalone
-- &#60;BlitzField component="BlitzBtn" /&#62; inside a field (with label & sublabel)
+- <BlitzBtn /> as standalone
+- <BlitzField component="BlitzBtn" /> inside a field (with label & sublabel)
 - in a BlitzForm "schema" like so: `component: 'BlitzBtn'`
 
 ## description
@@ -32,7 +32,7 @@ export default {
     // prop categories: behavior content general model state style
     // EF props:
     /**
-     * `btnLabel` is the button's "label". (`label` on the other hand is used for the field label of &#60;BlitzField /&#62;)
+     * `btnLabel` is the button's "label". (`label` on the other hand is used for the field label of <BlitzField />)
      * @category content
      */
     btnLabel: { type: String },

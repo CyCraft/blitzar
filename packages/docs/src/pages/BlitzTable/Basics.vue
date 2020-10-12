@@ -28,7 +28,7 @@ const schemaColumns = [
 /**
 # Basics
 
-&#60;BlitzTable /&#62; is Quasar's QTable but with the allows you to define columns & grid-cards via the schema syntax of [BlitzForms](/docs/blitz-form).
+<BlitzTable /> is Quasar's QTable but with the allows you to define columns & grid-cards via the schema syntax of [BlitzForms](/docs/blitz-form).
 
 A single schema object describing the fields in your data can be used for:
 - defining the columns of a BlitzTable
