@@ -110,22 +110,22 @@ const schema = [
     id: 'checkboxes',
     span: 1,
     component: 'QOptionGroup',
-    label: 'Check some boxes',
+    label: 'Choose some power-ups',
     default: () => [], // 'QOptionGroup' might not work without a default array
     // component props:
     type: 'checkbox',
     options: [
       {
-        label: 'Option 1',
-        value: 'op1',
+        label: 'ISO-8 Chrystal',
+        value: 'iso-8',
       },
       {
-        label: 'Option 2',
-        value: 'op2',
+        label: 'Health potion',
+        value: 'hp-potion',
       },
       {
-        label: 'Option 3',
-        value: 'op3',
+        label: 'Energy drink',
+        value: 'energy-potion',
       },
     ],
   },
@@ -152,9 +152,15 @@ const schema = [
 ]
 
 /**
- * # Advanced
- *
- * This is a more advanced example so you can see the full power of BlitzForms. All fields you see here are just regular Quasar components.
+## Quasar Framework
+
+All fields you see here are Quasar components.
+
+Please note that Quasar cannot auto-detect the use of Quasar components in Blitzar. So you need to register them as global Vue components like so:
+
+```js
+Vue.component('QInput', QInput)
+```
  */
 export default {
   components: { BlitzForm },

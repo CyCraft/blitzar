@@ -3,7 +3,8 @@ import { ROUTE_NAMES } from '../router/routes'
 export const routeNamePageChaptersMap: { [key in ROUTE_NAMES]: string[] } = {
   [ROUTE_NAMES.FORM]: [
     'Basics.vue',
-    'Advanced.vue',
+    'Frameworks.md',
+    'Quasar Framework.vue',
     'Slots.vue',
     'Slots - 2.vue',
     'Modes.vue',

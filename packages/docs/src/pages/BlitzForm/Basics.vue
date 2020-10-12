@@ -9,34 +9,28 @@
 
 <script>
 import { BlitzForm } from 'blitzar'
-// All components that are used in the form need to be globally registered.
-import { QInput, QSelect } from 'quasar'
-import Vue from 'vue'
-Vue.component('QInput', QInput)
-Vue.component('QSelect', QSelect)
 
 const schema = [
   {
     id: 'name',
-    component: 'QInput',
+    component: 'input',
     label: 'Superhero name',
     subLabel: 'Think of something cool.',
-    outlined: true,
   },
   {
     id: 'powerOrigin',
-    component: 'QSelect',
+    name: 'powerOrigin',
+    component: 'select',
     label: 'Power origin',
     subLabel: 'Where does your power come from?',
     // component props:
-    options: [
-      { label: 'Mutation', value: 'mutation' },
-      { label: 'Self taught', value: 'self' },
-      { label: 'Magic item', value: 'item' },
-    ],
-    outlined: true,
-    emitValue: true,
-    mapOptions: true,
+    slots: {
+      default: [
+        { component: 'option', value: 'mutation', slots: { default: 'Mutation' } },
+        { component: 'option', value: 'self', slots: { default: 'Self taught' } },
+        { component: 'option', value: 'item', slots: { default: 'Magic item' } },
+      ],
+    },
   },
 ]
 
@@ -50,12 +44,10 @@ const schema = [
 The schema of a BlitzForm is an array of objects that usually looks something like this:
 Eg.:
 ```js
-[
-  // you can use custom Vue components
-  { id: 'myField', label: 'My Field', component: 'MyFieldVueComponent' },
-
-  // you can use quasar components
-  { id: 'name', label: 'Name', component: 'QInput' },
+// you can use regular HTML5 tags or custom Vue components!
+const schema = [
+  { id: 'firstName', label: 'First Name', component: 'input' },
+  { id: 'lastName', label: 'Last Name', component: 'input' },
 ]
 ```
 
@@ -63,11 +55,15 @@ Besides 'id', 'label' and 'component' there are many more props you can pass: su
 
 ## Value/Model
 
-There are several ways to work with the data of a BlitzForm.
+There are several ways to retrieve the data that a user fills in a BlitzForm.
 
 1. You can pass an empty object as `v-model` (or `:value` & listen to `@input`).<br />In this case BlitzForms will populate an object with the field's `id` as key and the user input as value.
 2. You can listen to the `@field-input` event which triggers every time a field's value changes. It's payload is an object that looks like: `{id, value}`.
 3. You can listen to the `@save` event which is triggered when the form's save button is pressed. It's payload is an object that looks like: `{newData, oldData}`. For more info see the [Action Buttons documentation](#actionButtons).
+
+## Basic example
+
+Check out the template; script; style below to see how simple the code looks to render this form:
  */
 export default {
   components: { BlitzForm },
