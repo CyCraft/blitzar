@@ -19,18 +19,16 @@ const schema = [
   },
   {
     id: 'powerOrigin',
-    name: 'powerOrigin',
     component: 'select',
     label: 'Power origin',
     subLabel: 'Where does your power come from?',
     // component props:
-    slots: {
-      default: [
-        { component: 'option', value: 'mutation', slots: { default: 'Mutation' } },
-        { component: 'option', value: 'self', slots: { default: 'Self taught' } },
-        { component: 'option', value: 'item', slots: { default: 'Magic item' } },
-      ],
-    },
+    name: 'powerOrigin',
+    slot: [
+      { component: 'option', value: 'mutation', slot: 'Mutation' },
+      { component: 'option', value: 'self', slot: 'Self taught' },
+      { component: 'option', value: 'item', slot: 'Magic item' },
+    ],
   },
 ]
 
