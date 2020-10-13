@@ -3,9 +3,11 @@
   "version": "0.0.2",
   "description": "Blitzar utils",
   "author": "Luca Ban - Mesqueeb",
-  "main": "src/index.js",
+  "module": "src/index.js",
+  "main": "dist/index.js",
   "scripts": {
-    "test": "ava"
+    "test": "ava",
+    "build": "rimraf dist && copyfiles --up 1 'src/*' dist"
   },
   "dependencies": {
     "commafy-anything": "^1.1.3",

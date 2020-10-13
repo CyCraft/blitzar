@@ -29,14 +29,14 @@
     "@blitzar/table": "^0.0.2"
   },
   "license": "MIT",
-  "vetur": {
-    "tags": "vetur/tags.json",
-    "attributes": "vetur/attributes.json"
-  },
   "bugs": "https://github.com/cycraft/blitzar/issues",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/cycraft/blitzar.git"
+  },
+  "vetur": {
+    "tags": "vetur/tags.json",
+    "attributes": "vetur/attributes.json"
   },
   "gitHead": "67dabbf127033a928ec02d3a1a9da8a4d8d83d40"
 }

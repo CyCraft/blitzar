@@ -3,8 +3,12 @@
   "version": "0.0.2",
   "description": "Blitzar form component",
   "author": "Luca Ban - Mesqueeb",
-  "main": "src/index.js",
-  "scripts": {},
+  "module": "src/index.js",
+  "main": "dist/index.js",
+  "scripts": {
+    "vue-int": "vue-int -i src/components -r -o vetur",
+    "build": "rimraf dist && vue-compile src -o dist"
+  },
   "dependencies": {
     "@blitzar/utils": "^0.0.2",
     "case-anything": "^1.1.2",
@@ -33,10 +37,6 @@
     "vue"
   ],
   "license": "MIT",
-  "vetur": {
-    "tags": "vetur/tags.json",
-    "attributes": "vetur/attributes.json"
-  },
   "homepage": "https://github.com/cycraft/blitzar#readme",
   "bugs": {
     "url": "https://github.com/cycraft/blitzar/issues"
@@ -44,6 +44,10 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/cycraft/blitzar.git"
+  },
+  "vetur": {
+    "tags": "vetur/tags.json",
+    "attributes": "vetur/attributes.json"
   },
   "gitHead": "67dabbf127033a928ec02d3a1a9da8a4d8d83d40"
 }
