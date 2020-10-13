@@ -11,15 +11,15 @@ import { BlitzForm } from 'blitzar'
 
 const schema = [
   {
-    label: 'a div component example (see script tab)',
-    component: 'div',
-    slot: 'I am a div',
-    componentStyle: 'border: dashed thin goldenrod; padding: 2em',
+    component: 'h6',
+    slot: 'You can use header tags in your forms (<h6> component)',
+    componentStyle: 'color: black',
   },
   {
-    label: 'an H6 example',
-    component: 'h6',
-    slot: 'I am an h6',
+    component: 'a',
+    href: 'https://google.com',
+    slot: 'google.com (<a> component)',
+    componentStyle: 'color: blue',
   },
   {
     label: `nested ol > li components`,
@@ -29,6 +29,12 @@ const schema = [
       { component: 'li', slot: 'dos' },
       { component: 'li', slot: 'tres' },
     ],
+  },
+  {
+    label: 'You can even use regular divs in your forms',
+    component: 'div',
+    slot: 'I am a div',
+    componentStyle: 'border: dashed thin goldenrod; padding: 2em',
   },
   {
     label: 'a div in a div in a div',

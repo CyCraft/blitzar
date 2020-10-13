@@ -6,5 +6,3 @@ Currently there are two supported "slots" per field:
 
 - default
 - label
-
-> PLEASE NOTE, this feature is still experimental and is prone to change while we are in beta!!
