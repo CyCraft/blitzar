@@ -1,5 +1,6 @@
 <script>
-import { isArray, isString } from 'is-what'
+import { isArray, isPlainObject, isString } from 'is-what'
+import { omit } from 'filter-anything'
 
 /**
  * I'm still thinking about the best syntax for BlitzH
@@ -27,6 +28,7 @@ export default {
         o.component,
         {
           props: o,
+          attrs: omit(o, ['lang', 'rules', 'label', 'hint', 'readonly', 'component', 'slots']),
           on: o.events,
           class: o.class,
           style: o.style,

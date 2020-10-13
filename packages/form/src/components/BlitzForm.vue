@@ -444,7 +444,7 @@ export default {
   },
   methods: {
     isFullString,
-    event(eventName, payload) {
+    event(eventName, payload, origin) {
       if (eventName === 'update:mode') {
         /**
          * This event makes it possible to sync the prop 'mode' like so: `:mode.sync="mode"`
@@ -468,7 +468,7 @@ export default {
          * This event enables the form to be usable with `v-model="formData"`
          * @property {{ [id in string]: any }} payload event payload
          */
-        this.$emit('input', payload)
+        this.$emit('input', payload, origin)
       }
       if (eventName === 'edit') {
         /**
@@ -512,7 +512,7 @@ export default {
       // emit field-input with field's id and new data
       this.event('field-input', { id, value, origin })
       // emit input with entire formData
-      this.event('input', this.formData) // do not extract `this` from here
+      this.event('input', this.formData, origin) // do not extract `this` from here
       // if the form has a formErrorMsg, validate gain to check to see if it's solved
       if (isFullString(this.formErrorMsg)) {
         const res = validateFormPerSchema(this.formData, this.schema, this.innerLang)

@@ -10,8 +10,9 @@
 <script>
 import { BlitzForm } from 'blitzar'
 // All components that are used in the form need to be globally registered.
-import { QInput, Notify } from 'quasar'
+import { QInput } from 'quasar'
 import Vue from 'vue'
+import { showToast } from '../../helpers/toast'
 Vue.component('QInput', QInput)
 
 const schema = [
@@ -20,8 +21,7 @@ const schema = [
     component: 'QInput',
     label: 'Focus me',
     events: {
-      focus: (val, { id, label }) =>
-        Notify.create({ message: `focussed: 「${label}」`, caption: ` (field id: ${id})` }),
+      focus: (val, { id, label }) => showToast(`focussed: 「${label}」`, ` (field id: ${id})`),
     },
   },
   {
@@ -29,7 +29,7 @@ const schema = [
     component: 'QInput',
     label: 'Type something',
     events: {
-      input: (val, { $q }) => Notify.create(JSON.stringify(val)),
+      input: (val) => showToast('Typed:', val),
     },
   },
 ]

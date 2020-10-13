@@ -14,8 +14,9 @@
 
 <script>
 import { BlitzForm } from 'blitzar'
+import { showToast } from '../../helpers/toast'
 // All components that are used in the form need to be globally registered.
-import { QInput, Notify } from 'quasar'
+import { QInput } from 'quasar'
 import Vue from 'vue'
 Vue.component('QInput', QInput)
 
@@ -52,10 +53,10 @@ export default {
   },
   methods: {
     logFieldInput(eventPayload) {
-      Notify.create({ message: '@field-input', caption: JSON.stringify(eventPayload) })
+      showToast('@field-input', eventPayload)
     },
-    logFormInput(eventPayload) {
-      Notify.create({ message: '@input', caption: JSON.stringify(eventPayload) })
+    logFormInput(eventPayload, origin) {
+      showToast('@input', eventPayload, origin)
     },
   },
 }

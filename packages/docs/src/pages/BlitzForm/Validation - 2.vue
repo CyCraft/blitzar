@@ -9,8 +9,9 @@
 
 <script>
 import { BlitzForm, BlitzBtn, validateFormPerSchema } from 'blitzar'
+import { showToast } from '../../helpers/toast'
 // All components that are used in the form need to be globally registered.
-import { QInput, QToggle, Notify } from 'quasar'
+import { QInput, QToggle } from 'quasar'
 import Vue from 'vue'
 Vue.component('BlitzBtn', BlitzBtn)
 Vue.component('QInput', QInput)
@@ -40,10 +41,7 @@ export default {
           click: () => {
             const result = validateFormPerSchema(this.formData, this.schema)
             const errorsRemain = Object.values(result).some((r) => r !== true)
-            Notify.create({
-              message: errorsRemain ? 'Errors remain' : 'All good!',
-              caption: JSON.stringify(result),
-            })
+            showToast(errorsRemain ? 'Errors remain' : 'All good!', result)
             console.log('validateFormPerSchema(this.formData, this.schema) → \n', result)
           },
         },

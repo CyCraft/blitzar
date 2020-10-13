@@ -1,38 +1,3 @@
-<template>
-  <div>
-    <BlitzForm :schema="schema" v-model="formData" />
-    <PreviewCode comment="formData">{{ formData }}</PreviewCode>
-  </div>
-</template>
-
-<style lang="sass" scoped></style>
-
-<script>
-import { BlitzForm } from 'blitzar'
-
-const schema = [
-  {
-    id: 'name',
-    component: 'input',
-    label: 'Superhero name',
-    subLabel: 'Think of something cool.',
-  },
-  {
-    id: 'powerOrigin',
-    component: 'select',
-    label: 'Power origin',
-    subLabel: 'Where does your power come from?',
-    // component props:
-    name: 'powerOrigin',
-    slot: [
-      { component: 'option', value: 'mutation', slot: 'Mutation' },
-      { component: 'option', value: 'self', slot: 'Self taught' },
-      { component: 'option', value: 'item', slot: 'Magic item' },
-    ],
-  },
-]
-
-/**
 # Basics
 
 `<BlitzForm />` is a component that allows you to easily create forms by passing an object with a schema on how you want the form to look. By merely passing a schema array you can easily generate entire forms! No more writing clunky HTML forms! 🎉
@@ -41,6 +6,7 @@ const schema = [
 
 The schema of a BlitzForm is an array of objects that usually looks something like this:
 Eg.:
+
 ```js
 // you can use regular HTML5 tags or custom Vue components!
 const schema = [
@@ -58,15 +24,3 @@ There are several ways to retrieve the data that a user fills in a BlitzForm.
 1. You can pass an empty object as `v-model` (or `:value` & listen to `@input`).<br />In this case BlitzForms will populate an object with the field's `id` as key and the user input as value.
 2. You can listen to the `@field-input` event which triggers every time a field's value changes. It's payload is an object that looks like: `{id, value}`.
 3. You can listen to the `@save` event which is triggered when the form's save button is pressed. It's payload is an object that looks like: `{newData, oldData}`. For more info see the [Action Buttons documentation](#actionButtons).
-
-## Basic example
-
-Check out the template; script; style below to see how simple the code looks to render this form:
- */
-export default {
-  components: { BlitzForm },
-  data() {
-    return { schema, formData: {} }
-  },
-}
-</script>

@@ -50,6 +50,17 @@
       :class="['blitz-field__component', ...componentClassesArrayUsedHere]"
       :style="componentStyleUsedHere"
     />
+    <select
+      v-else-if="hasInternalOrNoErrors && component === 'select'"
+      v-model="cValue"
+      v-bind="propsAndAttrsToPass"
+      v-on="eventsCalculated"
+      style="flex: 1"
+      :class="['blitz-field__component', ...componentClassesArrayUsedHere]"
+      :style="componentStyleUsedHere"
+    >
+      <BlitzH v-if="defaultSlotCalculated" :options="defaultSlotCalculated" />
+    </select>
     <component
       v-else-if="hasInternalOrNoErrors"
       :is="component"
@@ -76,6 +87,15 @@
           v-on="eventsCalculated"
           style="flex: 1"
         />
+        <select
+          v-if="component === 'select'"
+          v-model="cValue"
+          v-bind="propsAndAttrsToPass"
+          v-on="eventsCalculated"
+          style="flex: 1"
+        >
+          <BlitzH v-if="defaultSlotCalculated" :options="defaultSlotCalculated" />
+        </select>
         <component
           v-else
           :is="component"
