@@ -2,11 +2,6 @@
   <div class="ef-div" v-bind="$attrs" v-on="$listeners">{{ cValue }}</div>
 </template>
 
-<style lang="sass">
-// $
-@import '../../index.sass'
-</style>
-
 <script>
 import { parseFieldValue } from '@blitzar/utils'
 
