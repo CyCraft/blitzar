@@ -1,6 +1,6 @@
 <template>
   <div>
-    <BlitzForm :schema="schema" v-model="formData" />
+    <BlitzForm :schema="schema" v-model="formData" :columnCount="2" />
     <PreviewCode comment="formData">{{ formData }}</PreviewCode>
   </div>
 </template>
@@ -9,16 +9,12 @@
 
 <script>
 import { BlitzForm } from 'blitzar'
-// All components that are used in the form need to be globally registered.
-import { QInput } from 'quasar'
-import Vue from 'vue'
 import { showToast } from '../../helpers/toast'
-Vue.component('QInput', QInput)
 
 const schema = [
   {
     id: 'focusMe',
-    component: 'QInput',
+    component: 'input',
     label: 'Focus me',
     events: {
       focus: (val, { id, label }) => showToast(`focussed: 「${label}」`, ` (field id: ${id})`),
@@ -26,7 +22,7 @@ const schema = [
   },
   {
     id: 'typeInMe',
-    component: 'QInput',
+    component: 'input',
     label: 'Type something',
     events: {
       input: (val) => showToast('Typed:', val),
@@ -35,9 +31,9 @@ const schema = [
 ]
 
 /**
-## Form component events
+## Field events
 
-Each form component can have a prop called `events`. This prop will be applied to the field like so: `v-on="events"`.
+Each component in a form can have a prop called `events`. This prop will be applied to the field like so: `v-on="events"`.
 
 An `events` prop would look like so:
 ```js

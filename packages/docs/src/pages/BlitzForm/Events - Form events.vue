@@ -5,6 +5,7 @@
       v-model="formData"
       @field-input="logFieldInput"
       @input="logFormInput"
+      :columnCount="2"
     />
     <PreviewCode comment="formData">{{ formData }}</PreviewCode>
   </div>
@@ -15,28 +16,33 @@
 <script>
 import { BlitzForm } from 'blitzar'
 import { showToast } from '../../helpers/toast'
-// All components that are used in the form need to be globally registered.
-import { QInput } from 'quasar'
-import Vue from 'vue'
-Vue.component('QInput', QInput)
 
 const schema = [
   {
     id: 'name',
-    component: 'QInput',
+    component: 'input',
     label: 'Superhero name',
-    outlined: true,
+    subLabel: 'Think of something cool.',
   },
   {
-    id: 'power',
-    component: 'QInput',
-    label: 'Superhero power',
-    outlined: true,
+    id: 'powerOrigin',
+    component: 'select',
+    label: 'Power origin',
+    subLabel: 'Where does your power come from?',
+    // component props:
+    name: 'powerOrigin',
+    slot: [
+      { component: 'option', value: 'mutation', slot: 'Mutation' },
+      { component: 'option', value: 'self', slot: 'Self taught' },
+      { component: 'option', value: 'item', slot: 'Magic item' },
+    ],
   },
 ]
 
 /**
 # Events
+
+## Form events
 
 For all possible events take a look at the [Api Card](#api-blitz-form).
 

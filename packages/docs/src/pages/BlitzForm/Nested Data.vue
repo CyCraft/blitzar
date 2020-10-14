@@ -16,38 +16,31 @@
 <script>
 import { BlitzForm } from 'blitzar'
 import { showToast } from '../../helpers/toast'
-// All components that are used in the form need to be globally registered.
-import { QInput } from 'quasar'
-import Vue from 'vue'
-Vue.component('QInput', QInput)
 
 const schema = [
   {
     id: 'size.width',
     label: 'Width',
-    component: 'QInput',
+    component: 'input',
     parseInput: Number,
     // component props:
     type: 'number',
-    suffix: 'cm',
   },
   {
     id: 'size.depth',
     label: 'Depth',
-    component: 'QInput',
+    component: 'input',
     parseInput: Number,
     // component props:
     type: 'number',
-    suffix: 'cm',
   },
   {
     id: 'size.height',
     label: 'Height',
-    component: 'QInput',
+    component: 'input',
     parseInput: Number,
     // component props:
     type: 'number',
-    suffix: 'cm',
   },
 ]
 

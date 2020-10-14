@@ -1,6 +1,6 @@
 <template>
   <div>
-    <BlitzForm :schema="schema" v-model="formData" />
+    <BlitzForm :schema="schema" v-model="formData" :columnCount="2" />
     <PreviewCode comment="formData">{{ formData }}</PreviewCode>
   </div>
 </template>

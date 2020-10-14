@@ -6,7 +6,7 @@ In the Vue ecosystem there are many frameworks that provide pre-made form compon
 
 Click on your favorite framework to see an example:
 
-- **Quasar Framework** (see below)
+- [Quasar Framework](#quasar-framework)
 - _Vuetify (coming soon)_
 - _Nuxt (coming soon)_
 - _Tailwind (coming soon)_

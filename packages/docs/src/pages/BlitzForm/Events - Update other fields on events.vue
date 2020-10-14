@@ -9,36 +9,30 @@
 
 <script>
 import { BlitzForm } from 'blitzar'
-// All components that are used in the form need to be globally registered.
-import { QInput } from 'quasar'
-import Vue from 'vue'
-Vue.component('QInput', QInput)
 
 const schema = [
   {
     id: 'tel',
-    component: 'QInput',
+    component: 'input',
     label: 'Phone nr (hyphenated)',
     subLabel: 'Type any number with `-` or `(  )`',
     events: {
       input: (val, { fieldInput }) =>
         fieldInput({ id: 'telClean', value: !val ? '' : val.replace(/[^\d]/g, '').trim() }),
     },
-    outlined: true,
   },
   {
     id: 'telClean',
-    component: 'QInput',
+    component: 'input',
     label: 'Phone nr (only numbers)',
     subLabel: 'This field is automatically updated when you type in a phone nr on the left.',
     // component props:
-    disable: true,
-    outlined: true,
+    disabled: true,
   },
 ]
 
 /**
-## Update other fields on 'input'
+## Update other fields on events
 
 Here we see an example of one field updating the contents of another on the input event.
 ```js

@@ -6,44 +6,35 @@
       <option value="raw">raw</option>
       <option value="add">add</option>
     </select>
-    <BlitzForm :schema="schema" v-model="formData" :mode="mode" />
-    <PreviewCode comment="formData" :code="formData" />
+    <BlitzForm :schema="schema" v-model="formData" :mode="mode" :columnCount="2" />
+    <PreviewCode comment="formData">{{ formData }}</PreviewCode>
   </div>
 </template>
 
 <style lang="sass" scoped></style>
 
 <script>
-import { BlitzForm, BlitzDiv } from 'blitzar'
-// All components that are used in the form need to be globally registered.
-import { QInput, QSelect } from 'quasar'
-import Vue from 'vue'
-Vue.component('BlitzDiv', BlitzDiv)
-Vue.component('QInput', QInput)
-Vue.component('QSelect', QSelect)
+import { BlitzForm } from 'blitzar'
 
 const schema = [
   {
     id: 'name',
-    component: 'QInput',
+    component: 'input',
     label: 'Superhero name',
     subLabel: 'Think of something cool.',
-    outlined: true,
   },
   {
     id: 'powerOrigin',
-    component: 'QSelect',
+    component: 'select',
     label: 'Power origin',
     subLabel: 'Where does your power come from?',
     // component props:
-    options: [
-      { label: 'Mutation', value: 'mutation' },
-      { label: 'Self taught', value: 'self' },
-      { label: 'Magic item', value: 'item' },
+    name: 'powerOrigin',
+    slot: [
+      { component: 'option', value: 'mutation', slot: 'Mutation' },
+      { component: 'option', value: 'self', slot: 'Self taught' },
+      { component: 'option', value: 'item', slot: 'Magic item' },
     ],
-    outlined: true,
-    emitValue: true,
-    mapOptions: true,
   },
 ]
 

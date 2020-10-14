@@ -51,6 +51,7 @@ export default {
     const actionButtonDefaults = {
       archive: { icon: 'archive', showCondition: (_, { mode }) => mode !== 'edit' },
       delete: { icon: 'delete', showCondition: (_, { mode }) => mode !== 'edit' },
+      cancel: { color: 'black' },
       edit: { icon: 'edit', flat: false, outline: true },
       save: { icon: 'save', color: 'green' },
     }
