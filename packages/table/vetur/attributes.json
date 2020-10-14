@@ -1,0 +1,124 @@
+{
+  "blitz-cell/value": {
+    "type": "undefined",
+    "description": "the value unformatted"
+  },
+  "blitz-cell/cellStyle": {
+    "type": "object|array|string|function",
+    "description": "Custom styling to be applied to the BlitzCell. Applied like so `:style=\"cellStyle\"`"
+  },
+  "blitz-cell/cellClasses": {
+    "type": "object|array|string|function",
+    "description": "Custom classes to be applied to the BlitzCell. Applied like so `:class=\"cellClasses\"`"
+  },
+  "blitz-cell/formData": {
+    "type": "object"
+  },
+  "blitz-cell/formDataFlat": {
+    "type": "object"
+  },
+  "blitz-cell/formId": {
+    "type": "string"
+  },
+  "blitz-cell/mode": {
+    "type": "string"
+  },
+  "blitz-cell/fieldInput": {
+    "type": "function"
+  },
+  "blitz-cell/component": {
+    "type": "string|object|function"
+  },
+  "blitz-cell/events": {
+    "type": "object",
+    "description": "only 'click' is used for button fields"
+  },
+  "blitz-row/qTableRowProps": {
+    "type": "object",
+    "description": "The QTable v-slot:body props to pass to QTr"
+  },
+  "blitz-row/value": {
+    "type": "object",
+    "description": "The BlitzForm data"
+  },
+  "blitz-row/schema": {
+    "type": "array|object",
+    "description": "The BlitzForm schema"
+  },
+  "blitz-row/rowStyle": {
+    "type": "object|array|string|function",
+    "description": "Custom styling to be applied to the BlitzRow. Applied like so `:style=\"rowStyle\"`"
+  },
+  "blitz-row/rowClasses": {
+    "type": "object|array|string|function",
+    "description": "Custom classes to be applied to the BlitzRow. Applied like so `:class=\"rowClasses\"`"
+  },
+  "blitz-row/mode": {
+    "type": "string"
+  },
+  "blitz-row/id": {
+    "type": "string"
+  },
+  "blitz-table/schemaColumns": {
+    "type": "array",
+    "description": "The schema for the columns you want to generate. (BlitzForm schema format)"
+  },
+  "blitz-table/schemaGrid": {
+    "type": "array|object",
+    "description": "The schema for the grid cards you want to generate. (BlitzForm schema format)"
+  },
+  "blitz-table/rows": {
+    "type": "array",
+    "description": "Rows of data to display. Use `rows` instead of the QTables `data`. Renamed for clarity."
+  },
+  "blitz-table/actionButtons": {
+    "type": "array",
+    "description": "Action buttons to add to the table. These can be pre-set buttons you can add by passing a string, or custom ones by passing an object with {label, handler}.\n\nPreset buttons include:\n- 'add'\n- 'grid'\n- 'selection:duplicate' (this just does `$emit('duplicate', selectionArray)`, you must implement your own logic."
+  },
+  "blitz-table/gridBlitzFormOptions": {
+    "type": "object",
+    "description": "The BlitzForm options you want to use for the grid cards.\n\nPlease note:\n- The 'schema' should be set via the 'schemaGrid' prop.\n- 'value' and 'id' are set automatically.\n- These are the default values, but they can be overridden: `{ actionButtons: [] }`\n- See the documentation of BlitzForm for more information on available props."
+  },
+  "blitz-table/lang": {
+    "type": "object",
+    "description": "The text used in the UI, eg. the 'add new record' buttons etc... Pass an object with keys: ...."
+  },
+  "blitz-table/rowClasses": {
+    "type": "",
+    "description": "Check the description at BlitzRow.vue"
+  },
+  "blitz-table/rowStyle": {
+    "type": "",
+    "description": "Check the description at BlitzRow.vue"
+  },
+  "blitz-table/grid": {
+    "type": "boolean"
+  },
+  "blitz-table/selected": {
+    "type": "array"
+  },
+  "blitz-table/cardClass": {
+    "type": "array",
+    "description": "CSS classes to apply to the card (when in grid mode).\nYou can pass a function which will be evaluated just like an evaluated prop. The first param passed will be the entire row data. The second is `item` scoped slot object from a QTable."
+  },
+  "blitz-table/cardStyle": {
+    "type": "array",
+    "description": "CSS style to apply to the card (when in grid mode).\nYou can pass a function which will be evaluated just like an evaluated prop. The first param passed will be the entire row data. The second is `item` scoped slot object from a QTable."
+  },
+  "blitz-table/data": {
+    "type": "array",
+    "description": "Use `rows` instead of the QTables `data`. Renamed for clarity."
+  },
+  "blitz-table/columns": {
+    "type": "",
+    "description": "Do not use this! Use `schemaColumns` instead. This is the prop QTable uses to define its columns. BlitzTable uses `schemaColumns` instead."
+  },
+  "blitz-table/title": {
+    "type": "string",
+    "description": "A title to be placed above your table."
+  },
+  "blitz-table/rowKey": {
+    "type": "",
+    "description": "This is fixed to `id` in a BlitzTable and cannot be changed."
+  }
+}

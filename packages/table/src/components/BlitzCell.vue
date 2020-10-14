@@ -6,7 +6,6 @@
 </template>
 
 <style lang="sass">
-// $
 @import '../index.sass'
 </style>
 

@@ -8,6 +8,7 @@
     "dev:vuepress": "npm run prepare && npm run start:dev && cd packages/docs-vuepress && npm run dev",
     "test": "lerna run test",
     "build": "lerna run build",
+    "build:form": "cd packages/form && npm run build",
     "build:for-publish": "npm run prepare && npm run start:build && lerna run build && npm run build:vue-int && git add -A && git commit -m \"chore: build\" && git push",
     "build:favicon": "copyfiles media/* packages/docs/public && cd packages/docs && npm run build:favicon",
     "build:vue-int": "lerna run vue-int && ts-node scripts/vueInt.ts",
@@ -43,11 +44,14 @@
     "fs-extra": "^9.0.1",
     "lerna": "^3.22.1",
     "lerna-audit": "^1.2.0",
+    "node-sass": "^4.14.1",
     "npm-check-updates": "^9.0.4",
+    "postcss": "^8.1.1",
     "prettier": "^2.1.2",
     "rimraf": "^3.0.2",
     "rollup": "^2.29.0",
-    "typescript": "^4.0.3"
+    "typescript": "^4.0.3",
+    "vue-compile": "^0.6.1"
   },
   "dependencies": {},
   "author": "Luca Ban - Mesqueeb",

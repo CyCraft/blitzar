@@ -63,11 +63,21 @@
   },
   "blitz-field/mode": {
     "type": "string",
-    "description": "The mode represents how fields are rendered\n- \"edit\" or \"add\" means they can be interacted with\n- \"view\" means they can't\n- \"raw\" means the fields are not generated, just the raw value inside a div\n\nThis prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields)."
+    "description": "The mode represents how fields are rendered\n- \"edit\" or \"add\" means they can be interacted with\n- \"view\" means they can't\n- \"raw\" means the fields are not generated, just the raw value inside a div\n\nThis prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).",
+    "options": [
+      "edit",
+      "add",
+      "view",
+      "raw"
+    ]
   },
   "blitz-field/labelPosition": {
     "type": "string|function",
-    "description": "The position of the label in comparison to the field.\n\nThis prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields)."
+    "description": "The position of the label in comparison to the field.\n\nThis prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).",
+    "options": [
+      "top",
+      "left"
+    ]
   },
   "blitz-field/evaluatedProps": {
     "type": "array",
@@ -131,7 +141,13 @@
   },
   "blitz-form/actionButtonsPosition": {
     "type": "string",
-    "description": "The position of the action buttons."
+    "description": "The position of the action buttons.",
+    "options": [
+      "top",
+      "bottom",
+      "right",
+      "left"
+    ]
   },
   "blitz-form/validator": {
     "type": "function",
@@ -151,11 +167,21 @@
   },
   "blitz-form/mode": {
     "type": "string",
-    "description": "The mode represents how fields are rendered\n- \"edit\" or \"add\" means they can be interacted with\n- \"view\" means they can't\n- \"raw\" means the fields are not generated, just the raw value inside a div\n\nThis prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields)."
+    "description": "The mode represents how fields are rendered\n- \"edit\" or \"add\" means they can be interacted with\n- \"view\" means they can't\n- \"raw\" means the fields are not generated, just the raw value inside a div\n\nThis prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).",
+    "options": [
+      "edit",
+      "add",
+      "view",
+      "raw"
+    ]
   },
   "blitz-form/labelPosition": {
     "type": "string|function",
-    "description": "The position of the label in comparison to the field.\n\nThis prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields)."
+    "description": "The position of the label in comparison to the field.\n\nThis prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).",
+    "options": [
+      "top",
+      "left"
+    ]
   },
   "blitz-form/evaluatedProps": {
     "type": "array",
@@ -174,7 +200,7 @@
     "description": "Pass the component names (without `.vue`) that have internal error handling. This makes sure it passes on props like `rules` and does nothing with them in the BlitzField."
   },
   "blitz-h/options": {
-    "type": "{ [key: string]: any, events: {}, slots: { default: any }, class: string | Record<string, any> | (string | Record<string, any>)[], style: string | Record<string, any> | (string | Record<string, any>)[] }"
+    "type": "{ [key: string]: any, events: {}, slot: any, class: string | Record<string, any> | (string | Record<string, any>)[], style: string | Record<string, any> | (string | Record<string, any>)[] }"
   },
   "blitz-btn/btnLabel": {
     "type": "string",

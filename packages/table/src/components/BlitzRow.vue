@@ -9,7 +9,6 @@
 </template>
 
 <style lang="sass" scoped>
-// $
 @import '../index.sass'
 
 // .blitz-row

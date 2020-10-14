@@ -1,0 +1,50 @@
+{
+  "blitz-cell": {
+    "attributes": [
+      "value",
+      "cellStyle",
+      "cellClasses",
+      "formData",
+      "formDataFlat",
+      "formId",
+      "mode",
+      "fieldInput",
+      "component",
+      "events"
+    ],
+    "description": ""
+  },
+  "blitz-row": {
+    "attributes": [
+      "qTableRowProps",
+      "value",
+      "schema",
+      "rowStyle",
+      "rowClasses",
+      "mode",
+      "id"
+    ],
+    "description": ""
+  },
+  "blitz-table": {
+    "attributes": [
+      "schemaColumns",
+      "schemaGrid",
+      "rows",
+      "actionButtons",
+      "gridBlitzFormOptions",
+      "lang",
+      "rowClasses",
+      "rowStyle",
+      "grid",
+      "selected",
+      "cardClass",
+      "cardStyle",
+      "data",
+      "columns",
+      "title",
+      "rowKey"
+    ],
+    "description": ""
+  }
+}
