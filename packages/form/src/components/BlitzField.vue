@@ -88,7 +88,7 @@
           style="flex: 1"
         />
         <select
-          v-if="component === 'select'"
+          v-else-if="component === 'select'"
           v-model="cValue"
           v-bind="propsAndAttrsToPass"
           v-on="eventsCalculated"

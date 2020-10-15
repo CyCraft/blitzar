@@ -107,7 +107,7 @@ const schema = [
     ],
   },
   {
-    id: 'checkboxes',
+    id: 'powerUps',
     span: 1,
     component: 'QOptionGroup',
     label: 'Choose some power-ups',

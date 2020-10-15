@@ -13,13 +13,13 @@
 
 <script>
 import { BlitzForm } from 'blitzar'
-import { date } from 'quasar'
+import Vue from 'vue'
 
 const schema = [
   {
     id: 'name',
     span: 1,
-    component: 'QInput',
+    component: 'input',
     label: 'Superhero name',
     subLabel: 'Think of something cool.',
     required: true,
@@ -27,11 +27,10 @@ const schema = [
   {
     id: 'powerOrigin',
     span: 1,
-    component: 'QOptionGroup',
+    component: 'SimpleOptionGroup',
     type: 'radio',
     label: 'Power origin',
     subLabel: 'Where does your power come from?',
-    // component props:
     options: [
       { label: 'Mutation', value: 'mutation' },
       { label: 'Self taught', value: 'self' },
@@ -41,72 +40,68 @@ const schema = [
   {
     id: 'stamina',
     span: 2,
-    component: 'QSlider',
+    component: 'input',
+    type: 'range',
     label: 'Stamina',
+    parseInput: Number,
     default: 50,
-    // component props:
     min: 0,
     max: 100,
-    labelAlways: true,
   },
   {
     id: 'power',
     span: 1,
-    component: 'QInput',
+    component: 'input',
     label: 'Power',
     subLabel: 'Fill in a number. (this will get formatted as a number in the formData)',
     parseInput: Number,
-    // component props:
     type: 'number',
-    suffix: 'PW',
   },
   {
     id: 'roleModel',
     span: 1,
-    component: 'QSelect',
+    component: 'select',
     label: 'Role model',
     subLabel: 'Who do you look up to?',
-    // component props:
-    options: [
-      { label: 'Steve Rogers/Captain America', value: 'captain-america' },
-      { label: 'Tony Stark/Iron Man', value: 'iron-man' },
-      { label: 'Thor Odinson', value: 'thor-odinson' },
-      { label: 'Bruce Banner/The Incredible Hulk', value: 'the-incredible-hulk' },
-      { label: 'Natasha Romanoff/Black Widow', value: 'black-widow' },
-      { label: 'Clint Barton/Hawkeye', value: 'hawkeye' },
-      { label: 'Pietro Maximoff/Quicksilver', value: 'quicksilver' },
-      { label: 'Wanda Maximoff/Scarlet Witch', value: 'scarlet-witch' },
-      { label: 'The Vision', value: 'the-vision' },
-      { label: 'James Rhodes/War Machine (Iron Patriot)', value: 'war-machine' },
-      { label: 'Sam Wilson/Falcon', value: 'falcon' },
-      { label: 'Bucky Barnes/The Winter Soldier (White Wolf)', value: 'the-winter-soldier' },
-      { label: "T'Challa/Black Panther", value: 'black-panther' },
-      { label: 'Stephen Strange/Doctor Strange', value: 'doctor-strange' },
-      { label: 'Peter Parker/Spider-Man', value: 'spider-man' },
-      { label: 'Scott Lang/Ant-Man (Giant-Man)', value: 'ant-man' },
-      { label: 'Hope van Dyne/Wasp', value: 'wasp' },
-      { label: 'Carol Danvers/Captain Marvel', value: 'captain-marvel' },
-      { label: 'Peter Quill/Star-Lord', value: 'star-lord' },
-      { label: 'Gamora', value: 'gamora' },
-      { label: 'Drax the Destroyer', value: 'drax-the-destroyer' },
-      { label: 'Rocket (Raccoon)', value: 'rocket-raccoon' },
-      { label: '(Baby, Teenage) Groot', value: 'groot' },
-      { label: 'Mantis', value: 'mantis' },
-      { label: 'Matthew Murdock/Daredevil', value: 'daredevil' },
-      { label: 'Jessica Jones (Jewel)', value: 'jessica-jones' },
-      { label: 'Carl Lucas/Luke Cage (Power Man)', value: 'luke-cage' },
-      { label: 'Danny Rand/Iron Fist', value: 'iron-fist' },
-      { label: 'Frank Castle/The Punisher', value: 'the-punisher' },
+    slot: [
+      { component: 'option', value: 'captain-america', slot: 'Steve Rogers/Captain America' },
+      { component: 'option', value: 'iron-man', slot: 'Tony Stark/Iron Man' },
+      { component: 'option', value: 'thor-odinson', slot: 'Thor Odinson' },
+      { component: 'option', value: 'the-hulk', slot: 'Bruce Banner/The Hulk' },
+      { component: 'option', value: 'black-widow', slot: 'Natasha Romanoff/Black Widow' },
+      { component: 'option', value: 'hawkeye', slot: 'Clint Barton/Hawkeye' },
+      { component: 'option', value: 'quicksilver', slot: 'Pietro Maximoff/Quicksilver' },
+      { component: 'option', value: 'scarlet-witch', slot: 'Wanda Maximoff/Scarlet Witch' },
+      { component: 'option', value: 'the-vision', slot: 'The Vision' },
+      { component: 'option', value: 'war-machine', slot: 'James Rhodes/War Machine' },
+      { component: 'option', value: 'falcon', slot: 'Sam Wilson/Falcon' },
+      { component: 'option', value: 'the-winter-soldier', slot: 'Bucky Barnes/The Winter Soldier' },
+      { component: 'option', value: 'black-panther', slot: "T'Challa/Black Panther" },
+      { component: 'option', value: 'doctor-strange', slot: 'Stephen Strange/Doctor Strange' },
+      { component: 'option', value: 'spider-man', slot: 'Peter Parker/Spider-Man' },
+      { component: 'option', value: 'ant-man', slot: 'Scott Lang/Ant-Man (Giant-Man)' },
+      { component: 'option', value: 'wasp', slot: 'Hope van Dyne/Wasp' },
+      { component: 'option', value: 'captain-marvel', slot: 'Carol Danvers/Captain Marvel' },
+      { component: 'option', value: 'star-lord', slot: 'Peter Quill/Star-Lord' },
+      { component: 'option', value: 'gamora', slot: 'Gamora' },
+      { component: 'option', value: 'drax-the-destroyer', slot: 'Drax the Destroyer' },
+      { component: 'option', value: 'rocket-raccoon', slot: 'Rocket (Raccoon)' },
+      { component: 'option', value: 'groot', slot: '(Baby, Teenage) Groot' },
+      { component: 'option', value: 'mantis', slot: 'Mantis' },
+      { component: 'option', value: 'daredevil', slot: 'Matthew Murdock/Daredevil' },
+      { component: 'option', value: 'jessica-jones', slot: 'Jessica Jones (Jewel)' },
+      { component: 'option', value: 'luke-cage', slot: 'Carl Lucas/Luke Cage (Power Man)' },
+      { component: 'option', value: 'iron-fist', slot: 'Danny Rand/Iron Fist' },
+      { component: 'option', value: 'the-punisher', slot: 'Frank Castle/The Punisher' },
     ],
   },
   {
-    id: 'checkboxes',
+    id: 'powerUps',
     span: 1,
-    component: 'QOptionGroup',
+    component: 'SimpleOptionGroup',
+    type: 'checkbox',
     label: 'Choose some power-ups',
     default: () => [], // 'QOptionGroup' might not work without a default array
-    // component props:
-    type: 'checkbox',
     options: [
       {
         label: 'ISO-8 Chrystal',
@@ -125,7 +120,8 @@ const schema = [
   { span: 1 },
   {
     id: 'consent',
-    component: 'QToggle',
+    component: 'input',
+    type: 'checkbox',
     span: 1,
     label: 'Do you agree with our terms?',
     rules: [(val) => val || 'You must accept our terms'],
@@ -134,18 +130,43 @@ const schema = [
   {
     id: 'submissionDate',
     span: 1,
-    component: 'QInput',
+    component: 'input',
+    type: 'date',
     label: 'Date of submission',
-    parseInput: (val) => new Date(val),
-    parseValue: (val) => date.formatDate(val, 'YYYY/MM/DD'),
-    // component props:
-    mask: '####/##/##',
-    placeholder: 'YYYY/MM/DD',
   },
 ]
 
+Vue.component('SimpleOptionGroup', {
+  props: { id: String, value: [String, Array], type: String, options: Array },
+  render(h) {
+    const name = JSON.stringify(this.options)
+    const emitInput = (o) => {
+      if (this.type === 'radio') return this.$emit('input', o.value)
+      const newValue = this.value.includes(o.value)
+        ? this.value.filter((v) => v !== o.value)
+        : [...this.value, o.value]
+      this.$emit('input', newValue)
+    }
+    return h(
+      'div',
+      this.options.map((o) => [
+        h('label', { on: { input: () => emitInput(o) } }, [
+          h('input', { domProps: { type: this.type, value: o.value, name } }),
+          [` ${o.label}`, h('div')],
+        ]),
+      ])
+    )
+  },
+})
+
 /**
 ## Advanced Example
+
+Here you can see an advanced form rendered all with HTML5 form elements.
+
+If you look at the "script" you will see it's easy to use regular HTML5 elements. The only thing we had to write a quick custom component for, was the radio and checkbox groups.
+
+In reality however, you will probably use Blitzar with your custom Vue components, so feel free to ignore my quick implementation of 'SimpleOptionGroup' in the script tab of this example:
  */
 export default {
   components: { BlitzForm },

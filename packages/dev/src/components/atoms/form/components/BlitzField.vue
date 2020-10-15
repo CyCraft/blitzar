@@ -160,6 +160,7 @@ import {
   isFullString,
 } from 'is-what'
 import { merge } from 'merge-anything'
+import { mapObject } from 'map-anything'
 import BlitzH from './BlitzH'
 import { defaultLang } from '../meta/lang'
 import { createRequiredRule } from '../helpers/validation.js'
@@ -439,6 +440,13 @@ export default {
       const { evaluatedProps, cValue } = this
       const context = this
       return evaluatedProps.reduce((carry, propKey) => {
+        if (propKey === 'slots' || propKey === 'slot') {
+          const slotsValue = 'slots' in context ? context['slots'] : context.$attrs['slots']
+          carry['slots'] = isPlainObject(slotsValue)
+            ? mapObject(slotsValue, (propValue) => evaluateProp(propValue, cValue, context))
+            : evaluateProp(slotsValue, cValue, context)
+          return carry
+        }
         const propValue = propKey in context ? context[propKey] : context.$attrs[propKey]
         carry[propKey] = evaluateProp(propValue, cValue, context)
         return carry
