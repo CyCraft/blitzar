@@ -286,21 +286,23 @@ export default {
         formValidationError: 'There are remaining errors.',
       }),
     },
-    // shared props:
+    // shared props
     /**
      * The mode represents how fields are rendered
-     * - "edit" or "add" means they can be interacted with
-     * - "view" means they can't
-     * - "raw" means the fields are not generated, just the raw value inside a div
+     * - `'edit'`: (default) Show editable fields based on the schema
+     * - `'view'`: Show each field with `readonly: true`.
+     * - `'disabled'`: Show each field with `disabled: true`.
+     * - `'raw'`: Used to show raw data of your form. No fields are generated, just divs with the labels and values. This mode is powerful because it will automatically map values to the schema provided (eg. adding pre-/suffix; mapping to options of a select; etc.)
+     * - `'add'`: The same as 'edit'
      *
      * This prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).
-     * @type {'edit' | 'add' | 'view' | 'raw'}
+     * @type {'edit' | 'view' | 'disabled' | 'raw' | 'add'}
      * @category state
      */
     mode: {
       type: String,
       default: 'edit',
-      validator: (prop) => ['edit', 'add', 'view', 'raw'].includes(prop),
+      validator: (prop) => ['edit', 'view', 'disabled', 'raw', 'add'].includes(prop),
     },
     /**
      * The position of the label in comparison to the field.
@@ -393,6 +395,11 @@ export default {
      * @category inheritedProp
      */
     readonly: { inheritedProp: 'modified', type: [Boolean, Function], default: false },
+    /**
+     * `disabled` defaults to `true` on `mode: 'disabled'
+     * @category state
+     */
+    disabled: { type: [Boolean, Function], default: false },
     /**
      * An BlitzField label is always "external" to the field. (It replaces the Quasar label if the underlying Quasar component uses one.)
      * @category content
@@ -518,12 +525,16 @@ export default {
         : getEvaluatedPropOrAttr('subLabel')
       const readonlyToPass =
         getEvaluatedPropOrAttr('mode') === 'view' || getEvaluatedPropOrAttr('readonly')
+      const disabledToPass =
+        getEvaluatedPropOrAttr('mode') === 'disabled' || getEvaluatedPropOrAttr('disabled')
       const propsToPass = {
         lang: langCalculated,
         rules: rulesCalculated,
         label: labelToPass,
         hint: hintToPass,
         readonly: readonlyToPass,
+        disable: disabledToPass,
+        disabled: disabledToPass,
       }
       const attrsToPass = Object.keys($attrs).reduce((carry, attrKey) => {
         carry[attrKey] = getEvaluatedPropOrAttr(attrKey)
