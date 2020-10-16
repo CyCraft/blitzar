@@ -26,11 +26,10 @@ const schema = [
   },
   {
     id: 'powerOrigin',
-    component: 'select',
     label: 'Power origin',
     subLabel: 'Where does your power come from?',
     // component props:
-    name: 'powerOrigin',
+    component: 'select',
     slot: [
       { component: 'option', value: 'mutation', slot: 'Mutation' },
       { component: 'option', value: 'self', slot: 'Self taught' },
@@ -55,7 +54,7 @@ When added you will see the buttons like the preview below. They each have a fun
 
 The buttons above emits the events: `@edit`, `@cancel`, `@save`, `@delete`, `@archive`
 
-You can listen for these events on the <BlitzForm /> to use do things like:
+You can listen for these events on the `<BlitzForm />` to use do things like:
 - saving data to a DB when "save" is clicked
 - moving a popup when 'cancel' is clicked
 - clear the form data (`value`) when 'delete' is clicked

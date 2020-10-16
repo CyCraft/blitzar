@@ -23,11 +23,10 @@ const schema = [
   },
   {
     id: 'powerOrigin',
-    component: 'select',
     label: 'Power origin',
     subLabel: 'Where does your power come from?',
     // component props:
-    name: 'powerOrigin',
+    component: 'select',
     slot: [
       { component: 'option', value: 'mutation', slot: 'Mutation' },
       { component: 'option', value: 'self', slot: 'Self taught' },
@@ -54,7 +53,7 @@ actionButtons: [{
 ```
 
 Being able to show/hide these button based on the `formData` can be very powerful.
-Be sure to check out the "Evaluated Props" and "Events" documentation.
+Be sure to check out the [evaluated props](#evaluated-props) and [events](#events) documentation.
  */
 export default {
   components: { BlitzForm },

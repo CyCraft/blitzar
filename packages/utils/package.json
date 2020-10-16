@@ -3,11 +3,12 @@
   "version": "0.0.2",
   "description": "Blitzar utils",
   "author": "Luca Ban - Mesqueeb",
-  "module": "src/index.js",
-  "main": "dist/index.js",
+  "module": "dist/index.esm.js",
+  "main": "dist/index.cjs.js",
   "scripts": {
     "test": "ava",
-    "build": "rimraf dist && copyfiles --up 1 'src/*' dist"
+    "build": "npm run clean && rollup -c ./build.js",
+    "clean": "rimraf ./types && rimraf ./dist"
   },
   "dependencies": {
     "commafy-anything": "^1.1.3",

@@ -27,11 +27,10 @@ const schema = [
   },
   {
     id: 'powerOrigin',
-    component: 'select',
     label: 'Power origin',
     subLabel: 'Where does your power come from?',
     // component props:
-    name: 'powerOrigin',
+    component: 'select',
     slot: [
       { component: 'option', value: 'mutation', slot: 'Mutation' },
       { component: 'option', value: 'self', slot: 'Self taught' },

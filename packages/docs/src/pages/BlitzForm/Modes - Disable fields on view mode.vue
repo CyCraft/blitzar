@@ -37,6 +37,9 @@ const schema = [
       { component: 'option', value: 'self', slot: 'Self taught' },
       { component: 'option', value: 'item', slot: 'Magic item' },
     ],
+    // make field "disabled" when the mode is 'view':
+    evaluatedProps: ['disabled'],
+    disabled: (val, { mode }) => mode === 'view',
   },
   {
     id: 'stamina',
@@ -47,6 +50,9 @@ const schema = [
     default: 50,
     min: 0,
     max: 100,
+    // make field "disabled" when the mode is 'view':
+    evaluatedProps: ['disabled'],
+    disabled: (val, { mode }) => mode === 'view',
   },
   {
     id: 'consent',
@@ -54,24 +60,20 @@ const schema = [
     type: 'checkbox',
     label: 'Do you agree with our terms?',
     default: false,
+    // make field "disabled" when the mode is 'view':
+    evaluatedProps: ['disabled'],
+    disabled: (val, { mode }) => mode === 'view',
   },
 ]
 
 /**
-# Modes
+## Disable fields on view mode
 
-BlitzForm has five modes:
-- `'edit'`: (default) Show editable fields based on the schema
-- `'view'`: Show each field with `readonly: true`.
-- `'disabled'`: Show each field with `disabled: true`.
-- `'raw'`: Used to show raw data of your form. No fields are generated, just divs with the labels and values. This mode is powerful because it will automatically map values to the schema provided (eg. adding pre-/suffix; mapping to options of a select; etc.)
-- `'add'`: The same as 'edit'
+It's also possible you just use the "disabled" prop for fields that don't handle "readonly".
 
-The same schema to render a form can be re-used to just display form data as well. Your form schema is therefore very versatile!
+In this example below you can see how easy this is by using an evaluated prop for "disabled". (Read more on [evaluated props](#evaluated-props) down below)
 
-Please note however, that in order for 'view' mode to work, you will need to make sure that all components you use in your form, have proper handling when BlitzForm passes `readonly: true` to them.
-
-With the HTML5 elements seen in the example below, _only_ the input element understands `readonly: true`. Try switching the mode to 'view' and you will see that all other fields are still editable; so you'll need to use Vue components that handle `readonly: true`, or write wrapper Vue components for these HTML5 elements.
+However, in reality it's cleaner you write a wrapper Vue component and handle this logic there with proper CSS tweaks as well.
  */
 export default {
   components: { BlitzForm },

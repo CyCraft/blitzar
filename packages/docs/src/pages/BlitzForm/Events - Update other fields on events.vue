@@ -49,7 +49,7 @@ events: {
 
 The `fieldInput` function can be used to update other fields inside your form. It receives a single parameter which should be an object that looks like `{id, value}` with the `id` of the field you want to update and a `value` you want to update it with.
 
-Be sure to also check the documentation on `Computed Fields` as well.
+Be sure to also check the documentation on [computed fields](#computed-fields) as well.
  */
 export default {
   components: { BlitzForm },

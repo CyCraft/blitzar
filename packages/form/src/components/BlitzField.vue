@@ -34,11 +34,14 @@
     <!-- no component -->
     <template v-if="!component"></template>
     <!-- raw component -->
-    <BlitzDiv
+    <BlitzH
       v-else-if="mode === 'raw'"
-      v-bind="BlitzDivProps"
-      :class="['blitz-field__component', ...componentClassesArrayUsedHere]"
-      :style="componentStyleUsedHere"
+      :options="{
+        component: 'div',
+        slot: parsedFieldValue,
+        class: ['blitz-field__component', ...componentClassesArrayUsedHere],
+        style: componentStyleUsedHere,
+      }"
     />
     <!-- raw component -->
     <input
@@ -161,6 +164,7 @@ import {
 } from 'is-what'
 import { merge } from 'merge-anything'
 import { mapObject } from 'map-anything'
+import { parseFieldValue } from '@blitzar/utils'
 import BlitzH from './BlitzH'
 import { defaultLang } from '../meta/lang'
 import { createRequiredRule } from '../helpers/validation.js'
@@ -206,7 +210,7 @@ export default {
      */
     rules: { type: [Array, Function], default: () => [] },
     /**
-     * An 'id' is required for a <BlitzForm /> to be able to know which fields have which value. When using <BlitzField /> on its own, it is not required.
+     * An 'id' is required for a `<BlitzForm />` to be able to know which fields have which value. When using <BlitzField /> on its own, it is not required.
      * @category model
      */
     id: { type: String },
@@ -579,10 +583,9 @@ export default {
       if (isPlainObject(classes)) return [classes]
       return classes
     },
-    BlitzDivProps() {
+    parsedFieldValue() {
       const { cValue, getEvaluatedPropOrAttr } = this
-      return {
-        value: cValue,
+      const blueprint = {
         valueType: getEvaluatedPropOrAttr('valueType'),
         type: getEvaluatedPropOrAttr('type'),
         dateFormat: getEvaluatedPropOrAttr('dateFormat'),
@@ -590,7 +593,10 @@ export default {
         prefix: getEvaluatedPropOrAttr('prefix'),
         options: getEvaluatedPropOrAttr('options'),
         multiple: getEvaluatedPropOrAttr('multiple'),
+        slots: getEvaluatedPropOrAttr('slots'),
+        component: getEvaluatedPropOrAttr('component'),
       }
+      return parseFieldValue(cValue, blueprint)
     },
   },
 }

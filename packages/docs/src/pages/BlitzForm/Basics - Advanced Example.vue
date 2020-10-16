@@ -101,7 +101,7 @@ const schema = [
     component: 'SimpleOptionGroup',
     type: 'checkbox',
     label: 'Choose some power-ups',
-    default: () => [], // 'QOptionGroup' might not work without a default array
+    default: () => [],
     options: [
       {
         label: 'ISO-8 Chrystal',

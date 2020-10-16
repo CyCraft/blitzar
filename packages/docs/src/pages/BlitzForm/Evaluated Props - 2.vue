@@ -9,34 +9,32 @@
 
 <script>
 import { BlitzForm } from 'blitzar'
-// All components that are used in the form need to be globally registered.
-import { QToggle } from 'quasar'
-import Vue from 'vue'
-Vue.component('QToggle', QToggle)
 
 const schema = [
   {
-    id: 'over18',
-    component: 'QToggle',
+    id: 'under18',
+    component: 'input',
+    type: 'checkbox',
     default: false,
-    label: 'Are you over 18?',
+    label: 'Are you under 18?',
   },
   {
     id: 'parentalConsent',
-    component: 'QToggle',
+    component: 'input',
+    type: 'checkbox',
     default: false,
     label: 'Do you have parental consent?',
-    subLabel: 'This will be disabled when the first question is `true`.',
-    evaluatedProps: ['disable'],
+    subLabel: 'Only applicable when under 18',
+    evaluatedProps: ['disabled'],
     // component props:
-    disable: (val, { formData }) => formData.over18,
+    disabled: (val, { formData }) => !formData.under18,
   },
 ]
 
 /**
 ## Dynamic prop based on the value of "another" field
 
-Eg. `disable: (val, {formData}) => formData.over18`
+Eg. `disabled: (val, {formData}) => !formData.under18`
  */
 export default {
   components: { BlitzForm },

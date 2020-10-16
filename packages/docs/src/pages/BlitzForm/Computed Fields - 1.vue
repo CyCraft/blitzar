@@ -9,54 +9,35 @@
 
 <script>
 import { BlitzForm } from 'blitzar'
-// All components that are used in the form need to be globally registered.
-import { QInput } from 'quasar'
-import Vue from 'vue'
-Vue.component('QInput', QInput)
 
 const schema = [
   {
     id: 'firstName',
-    component: 'QInput',
+    component: 'input',
     label: 'First name',
-    outlined: true,
   },
   {
     id: 'lastName',
-    component: 'QInput',
+    component: 'input',
     label: 'Last name',
-    outlined: true,
   },
   {
     id: 'fullName',
-    component: 'QInput',
+    component: 'input',
     label: 'Full name (computed)',
-    disable: true,
-    outlined: true,
+    disabled: true,
     parseValue: (val, { formData }) =>
       `${formData.firstName || ''} ${formData.lastName || ''}`.trim(),
   },
 ]
 
 /**
-# Computed Fields
-
-Computed fields are fields that can represent data which doesn't neccesarily exist in your data. They have a "caluculated value" based on the form data.
-
-Do not confuse this concept with "Evaluated Props".
-- Evaluated Props: a calculated prop of a field
-- Computed Fields: a field with a calculated value
-
-An example of a Computed Field could be a full name of a person which exists of `${formData.firstName} ${formData.lastName}`
-
-There are three ways we could create such a field:
-
 ## The `parseValue` prop
 
 ```js
 {
   id: 'fullName',
-  component: 'QInput', // or any other component
+  component: 'input',
   parseValue: (val, {formData}) => `${formData.firstName || ''} ${formData.lastName || ''}`
 }
 ```

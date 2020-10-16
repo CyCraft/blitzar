@@ -1,6 +1,8 @@
 # Basics
 
-`<BlitzForm />` is a component that allows you to easily create forms by passing an object with a schema on how you want the form to look. By merely passing a schema array you can easily generate entire forms! No more writing clunky HTML forms! 🎉
+`<BlitzForm />` is a Vue component that allows you to easily create forms by passing an object with a schema on how you want the form to look. By merely passing a schema array you can easily generate entire forms! No more writing clunky HTML forms! 🎉
+
+> BlitzForm is a BYOC form generator! (Bring Your Own Components)
 
 ## Schema
 
@@ -14,6 +16,8 @@ const schema = [
   { id: 'lastName', label: 'Last Name', component: 'input' },
 ]
 ```
+
+The "component" of a field in your schema can be any Vue component you have globally registered or any HTML5 tag.
 
 Besides 'id', 'label' and 'component' there are many more props you can pass: subLabel; required; labelPosition; fieldClasses; componentClasses; parseValue; parseInput; events and many more.
 

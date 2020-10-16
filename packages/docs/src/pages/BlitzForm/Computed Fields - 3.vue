@@ -9,30 +9,23 @@
 
 <script>
 import { BlitzForm } from 'blitzar'
-// All components that are used in the form need to be globally registered.
-import { QInput } from 'quasar'
-import Vue from 'vue'
-Vue.component('QInput', QInput)
 
 const schema = [
   {
     id: 'firstName',
-    component: 'QInput',
+    component: 'input',
     label: 'First name',
-    outlined: true,
   },
   {
     id: 'lastName',
-    component: 'QInput',
+    component: 'input',
     label: 'Last name',
-    outlined: true,
   },
   {
     id: 'fullName',
-    component: 'QInput',
+    component: 'input',
     label: 'Full name (computed)',
-    disable: true,
-    outlined: true,
+    disabled: true,
     parseValue: (val, { formData, fieldInput }) => {
       const value = `${formData.firstName || ''} ${formData.lastName || ''}`.trim()
       if (val !== value) fieldInput({ id: 'fullName', value })
@@ -49,7 +42,7 @@ The third way to create a computed field is this:
 ```js
 {
   id: 'fullName',
-  component: 'QInput', // or any other component
+  component: 'input',
   parseValue: (val, {formData, fieldInput}) => {
     const value = `${formData.firstName || ''} ${formData.lastName || ''}`.trim()
     if (val !== value) fieldInput({id: 'fullName', value})

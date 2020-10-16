@@ -68,17 +68,9 @@ const schema = [
 ]
 
 /**
-# Styling via CSS
+## Left labels
 
-Styling a BlitzForm field through CSS can be done by targeting these classes:
-- `.blitz-field`
-- `.blitz-field__sub-label`
-- `.blitz-field__component`
-- `.blitz-field__label`
-
-## Styling raw form data with CSS
-
-This example uses `mode="raw"` to show just the raw form data. Then CSS is used to style it. See the "style" tab.
+TODO: create an example that has a form with left labels, and all same with labels
  */
 export default {
   components: { BlitzForm },

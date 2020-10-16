@@ -9,17 +9,12 @@
 
 <script>
 import { BlitzForm } from 'blitzar'
-// All components that are used in the form need to be globally registered.
-import { QInput } from 'quasar'
-import Vue from 'vue'
-Vue.component('QInput', QInput)
 
 const schema = [
   {
     id: 'firstName',
-    component: 'QInput',
     label: 'First name',
-    outlined: true,
+    component: 'input',
     events: {
       input: (val, { formData, fieldInput }) => {
         const { lastName = '' } = formData
@@ -29,10 +24,9 @@ const schema = [
     },
   },
   {
-    component: 'QInput',
-    label: 'Last name',
     id: 'lastName',
-    outlined: true,
+    label: 'Last name',
+    component: 'input',
     events: {
       input: (val, { formData, fieldInput }) => {
         const { firstName = '' } = formData
@@ -43,10 +37,9 @@ const schema = [
   },
   {
     id: 'fullName',
-    component: 'QInput',
     label: 'Full name (computed)',
-    disable: true,
-    outlined: true,
+    component: 'input',
+    disabled: true,
   },
 ]
 
@@ -55,7 +48,7 @@ const schema = [
 
 It can be handy to also save the calculated value in your database so you can filter/search/sort on this field. (This is required when using eg. an [BlitzTable](/docs/blitz-table) or QTable.)
 
-In this case we can use the method called `fieldInput()` which is accessible on the context and first explained on the [events documentation page](#events1).
+In this case we can use the method called `fieldInput()` which is accessible on the context and first explained on the [events documentation page](#events).
 
 ```js
 {
@@ -87,8 +80,6 @@ This method has pro's and con's though:
 - CON: it cannot be used if you need a computed field _not_ based on other fields (eg. a timestamp returning `new Date()`)
 - CON: when your database already has data, you cannot use this without manually updating what's already in your database
 - CON: if you want to save the computed field to your database, you have to include this computed field in all forms the user can edit this data
-
-There is also a third way we can create a computed field (see the last tab).
  */
 export default {
   components: { BlitzForm },
@@ -96,4 +87,7 @@ export default {
     return { schema, formData: {} }
   },
 }
+/**
+There is also a third way we can create a computed field.
+ */
 </script>

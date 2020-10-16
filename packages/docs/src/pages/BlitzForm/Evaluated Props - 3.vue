@@ -14,22 +14,18 @@
 
 <script>
 import { BlitzForm } from 'blitzar'
-// All components that are used in the form need to be globally registered.
-import { QInput, QToggle } from 'quasar'
-import Vue from 'vue'
-Vue.component('QInput', QInput)
-Vue.component('QToggle', QToggle)
 
 const schema = [
   {
     id: 'car',
-    component: 'QToggle',
+    component: 'input',
+    type: 'checkbox',
     default: false,
     label: 'Do you have a car?',
   },
   {
     id: 'carType',
-    component: 'QInput',
+    component: 'input',
     label: 'What is the brand?',
     subLabel: 'This is only shown when the first question is `true`.',
     evaluatedProps: ['showCondition'],
@@ -37,7 +33,7 @@ const schema = [
   },
   {
     id: 'carNrPlate',
-    component: 'QInput',
+    component: 'input',
     label: 'Enter your license plate brand?',
     subLabel: "This is hidden when the form is set to 'view' mode. Try clicking 'save'.",
     evaluatedProps: ['showCondition'],

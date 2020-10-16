@@ -8,14 +8,8 @@
 <style lang="sass" scoped></style>
 
 <script>
-import { BlitzForm, BlitzBtn, validateFormPerSchema } from 'blitzar'
+import { BlitzForm, validateFormPerSchema } from 'blitzar'
 import { showToast } from '../../helpers/toast'
-// All components that are used in the form need to be globally registered.
-import { QInput, QToggle } from 'quasar'
-import Vue from 'vue'
-Vue.component('BlitzBtn', BlitzBtn)
-Vue.component('QInput', QInput)
-Vue.component('QToggle', QToggle)
 
 /**
 There is also the possibility to do programatic validation. BlitzForms provides a helper function which can be used without the need of rendering the form at all. It can be used like so:
@@ -35,8 +29,9 @@ export default {
     }
     const schema = [
       {
-        component: 'BlitzBtn',
-        btnLabel: 'validate Programmatically',
+        component: 'button',
+        type: 'button',
+        slot: 'validate Programmatically',
         events: {
           click: () => {
             const result = validateFormPerSchema(this.formData, this.schema)
@@ -47,8 +42,9 @@ export default {
         },
       },
       {
-        component: 'BlitzBtn',
-        btnLabel: 'Set Form Data',
+        component: 'button',
+        type: 'button',
+        slot: 'Set Form Data',
         events: {
           click: () => {
             this.formData.name = 'Luca Ban'
@@ -59,8 +55,9 @@ export default {
         },
       },
       {
-        component: 'BlitzBtn',
-        btnLabel: 'Clear Form Data',
+        component: 'button',
+        type: 'button',
+        slot: 'Clear Form Data',
         events: {
           click: (e) => {
             this.formData.name = undefined
@@ -73,13 +70,13 @@ export default {
       {
         id: 'name',
         label: 'Name',
-        component: 'QInput',
+        component: 'input',
         required: true,
       },
       {
         id: 'age',
         label: 'Age',
-        component: 'QInput',
+        component: 'input',
         type: 'number',
         parseInput: Number,
         rules: [(val) => val >= 18 || 'You must be over 18'],
@@ -87,7 +84,8 @@ export default {
       {
         id: 'consent',
         label: 'Do you agree with our terms?',
-        component: 'QToggle',
+        component: 'input',
+        type: 'checkbox',
         default: false,
         rules: [(val) => val || 'You must accept our terms'],
       },

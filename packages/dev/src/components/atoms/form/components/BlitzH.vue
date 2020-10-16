@@ -3,6 +3,18 @@ import { isArray, isPlainObject, isString } from 'is-what'
 import { omit } from 'filter-anything'
 
 /**
+ * @typedef {BlitzHOption}
+ * @type {{
+  component: string,
+  slot: any,
+  events: {},
+  class: string | Record<string, any> | (string | Record<string, any>)[],
+  style: string | Record<string, any> | (string | Record<string, any>)[],
+  [key: string]: any,
+}}
+ */
+
+/**
  * I'm still thinking about the best syntax for BlitzH
  */
 export default {
@@ -10,9 +22,9 @@ export default {
   functional: true,
   props: {
     /**
-     * @type {{ [key: string]: any, events: {}, slot: any, class: string | Record<string, any> | (string | Record<string, any>)[], style: string | Record<string, any> | (string | Record<string, any>)[] }}
+     * @type {string | BlitzHOption | BlitzHOption[]}
      */
-    options: { type: [Object, Array, String] },
+    options: { type: [String, Object, Array] },
   },
   render(h, ctx) {
     const optionsArray = isArray(ctx.props.options) ? ctx.props.options : [ctx.props.options]
@@ -28,7 +40,18 @@ export default {
         o.component,
         {
           props: o,
-          attrs: omit(o, ['lang', 'rules', 'label', 'hint', 'readonly', 'component', 'slots']),
+          attrs: omit(o, [
+            'lang',
+            'rules',
+            'label',
+            'hint',
+            'readonly',
+            'component',
+            'slots',
+            'class',
+            'style',
+            'events',
+          ]),
           on: o.events,
           class: o.class,
           style: o.style,

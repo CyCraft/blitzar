@@ -19,7 +19,7 @@
   },
   "blitz-field/id": {
     "type": "string",
-    "description": "An 'id' is required for a <BlitzForm /> to be able to know which fields have which value. When using <BlitzField /> on its own, it is not required."
+    "description": "An 'id' is required for a `<BlitzForm />` to be able to know which fields have which value. When using <BlitzField /> on its own, it is not required."
   },
   "blitz-field/subLabel": {
     "type": "string|function",
@@ -63,12 +63,13 @@
   },
   "blitz-field/mode": {
     "type": "string",
-    "description": "The mode represents how fields are rendered\n- \"edit\" or \"add\" means they can be interacted with\n- \"view\" means they can't\n- \"raw\" means the fields are not generated, just the raw value inside a div\n\nThis prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).",
+    "description": "The mode represents how fields are rendered\n- `'edit'`: (default) Show editable fields based on the schema\n- `'view'`: Show each field with `readonly: true`.\n- `'disabled'`: Show each field with `disabled: true`.\n- `'raw'`: Used to show raw data of your form. No fields are generated, just divs with the labels and values. This mode is powerful because it will automatically map values to the schema provided (eg. adding pre-/suffix; mapping to options of a select; etc.)\n- `'add'`: The same as 'edit'\n\nThis prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).",
     "options": [
       "edit",
-      "add",
       "view",
-      "raw"
+      "disabled",
+      "raw",
+      "add"
     ]
   },
   "blitz-field/labelPosition": {
@@ -114,6 +115,10 @@
   "blitz-field/readonly": {
     "type": "boolean|function",
     "description": "`readonly` defaults to `true` on `mode: 'view'"
+  },
+  "blitz-field/disabled": {
+    "type": "boolean|function",
+    "description": "`disabled` defaults to `true` on `mode: 'disabled'"
   },
   "blitz-field/label": {
     "type": "string|function",
@@ -167,12 +172,13 @@
   },
   "blitz-form/mode": {
     "type": "string",
-    "description": "The mode represents how fields are rendered\n- \"edit\" or \"add\" means they can be interacted with\n- \"view\" means they can't\n- \"raw\" means the fields are not generated, just the raw value inside a div\n\nThis prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).",
+    "description": "The mode represents how fields are rendered\n- `'edit'`: (default) Show editable fields based on the schema\n- `'view'`: Show each field with `readonly: true`.\n- `'disabled'`: Show each field with `disabled: true`.\n- `'raw'`: Used to show raw data of your form. No fields are generated, just divs with the labels and values. This mode is powerful because it will automatically map values to the schema provided (eg. adding pre-/suffix; mapping to options of a select; etc.)\n- `'add'`: The same as 'edit'\n\nThis prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).",
     "options": [
       "edit",
-      "add",
       "view",
-      "raw"
+      "disabled",
+      "raw",
+      "add"
     ]
   },
   "blitz-form/labelPosition": {
@@ -200,7 +206,7 @@
     "description": "Pass the component names (without `.vue`) that have internal error handling. This makes sure it passes on props like `rules` and does nothing with them in the BlitzField."
   },
   "blitz-h/options": {
-    "type": "{ [key: string]: any, events: {}, slot: any, class: string | Record<string, any> | (string | Record<string, any>)[], style: string | Record<string, any> | (string | Record<string, any>)[] }"
+    "type": "array"
   },
   "blitz-btn/btnLabel": {
     "type": "string",

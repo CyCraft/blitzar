@@ -14,33 +14,27 @@
 
 <script>
 import { BlitzForm } from 'blitzar'
-// All components that are used in the form need to be globally registered.
-import { QInput, QToggle } from 'quasar'
-import Vue from 'vue'
-Vue.component('QInput', QInput)
-Vue.component('QToggle', QToggle)
 
 const schema = [
   {
     id: 'name',
     label: 'Name',
-    component: 'QInput',
-    // component props:
+    component: 'input',
     required: true,
   },
   {
     id: 'age',
     label: 'Age',
-    component: 'QInput',
+    component: 'input',
     parseInput: Number,
     rules: [(val) => val >= 18 || 'You must be over 18'],
-    // component props:
     type: 'number',
   },
   {
     id: 'consent',
     label: 'Do you agree with our terms?',
-    component: 'QToggle',
+    component: 'input',
+    type: 'checkbox',
     rules: [(val) => val || 'You must accept our terms'],
     default: false,
   },
