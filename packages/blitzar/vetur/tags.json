@@ -65,7 +65,7 @@
       "btnLabel",
       "color"
     ],
-    "description": "## usage\n\nBlitzBtn is a component that's registered for you; alongside BlitzForm and BlitzField.\nYou can use it like:\n- <BlitzBtn /> as standalone\n- <BlitzField component=\"BlitzBtn\" /> inside a field (with label & sublabel)\n- in a BlitzForm \"schema\" like so: `component: 'BlitzBtn'`\n\n## description\n\nBlitzBtn is a wrapper around QBtn. The only differences are:\n\n- you can pass the button label as `btnLabel` (this is required because when using QBtn it will always use the same label as your field label)\n- it defaults to `color: primary` which is nice 😄\n\nAll other props/attributes are passed on.`,"
+    "description": "BlitzBtn is a wrapper around QBtn. The only differences are:\n\n- you can pass the button label as `btnLabel` (this is required because when using QBtn it will always use the same label as your field label)\n- it defaults to `color: primary` which is nice 😄\n\nAll other props/attributes are passed on.`,"
   },
   "blitz-div": {
     "attributes": [
@@ -88,20 +88,15 @@
       "disable",
       "readonly"
     ],
-    "description": "## usage\n\nBlitzMiniForm is a component that's registered for you; alongside BlitzForm and BlitzField.\nYou can use it like:\n- <BlitzMiniForm /> as standalone\n- <BlitzField component=\"BlitzMiniForm\" /> inside a field (with label & sublabel)\n- in a BlitzForm \"schema\" like so: `component: 'BlitzMiniForm'`\n\n## description\n\nWith BlitzMiniForm you can pass a \"schema\" just like a BlitzForm. The difference is that BlitzMiniForm is more like a (as the name says) \"mini\" form. 😃\n\nThe \"schema\" you specify is shown as a single row. New rows are added automatically on user input.`,"
+    "description": "With BlitzMiniForm you can pass a \"schema\" just like a BlitzForm. The difference is that BlitzMiniForm is more like a (as the name says) \"mini\" form. 😃\n\nThe \"schema\" you specify is shown as a single row. New rows are added automatically on user input.`,"
   },
   "blitz-cell": {
     "attributes": [
       "value",
       "cellStyle",
       "cellClasses",
-      "formData",
-      "formDataFlat",
-      "formId",
-      "mode",
       "fieldInput",
-      "component",
-      "events"
+      "component"
     ],
     "description": ""
   },

@@ -4,13 +4,8 @@
       "value",
       "cellStyle",
       "cellClasses",
-      "formData",
-      "formDataFlat",
-      "formId",
-      "mode",
       "fieldInput",
-      "component",
-      "events"
+      "component"
     ],
     "description": ""
   },

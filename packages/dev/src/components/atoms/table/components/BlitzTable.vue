@@ -71,7 +71,6 @@
           @click.native="(e) => onRowClick(e, rowProps.row)"
         >
           <!-- requires row, blueprint, value -->
-          {{ JSON.stringify(getFieldBlueprint(BlitzFormSimulatedContext, blueprint)).slots }}
           <BlitzCell
             v-bind="getFieldBlueprint(BlitzFormSimulatedContext, blueprint)"
             :value="getProp(BlitzFormSimulatedContext.formData, blueprint.id)"
@@ -448,6 +447,7 @@ export default {
     },
     flattenArray,
     getProp,
+    merge,
     enableGrid() {
       this.innerGrid = true
     },
@@ -470,10 +470,13 @@ export default {
     onInputCell(rowId, colId, value, origin) {
       this.$emit('input-cell', { rowId, colId, value, origin })
     },
-    getFieldBlueprint(blitzFormSimulatedContext, blueprint) {
+    getFieldBlueprint(BlitzFormSimulatedContext, blueprint) {
       const bluePrintSlots = blueprint.slots || {}
-      const slots = blueprint.slot ? { slots: { ...bluePrintSlots, default: blueprint.slot } } : {}
-      return merge(blitzFormSimulatedContext, blueprint, slots)
+      const slots = blueprint.slot
+        ? { slots: { ...(blueprint.slots || {}), default: blueprint.slot }, slot: undefined }
+        : {}
+      const r = merge(BlitzFormSimulatedContext, blueprint, slots)
+      return r
     },
   },
 }
