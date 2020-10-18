@@ -72,7 +72,7 @@
         >
           <!-- requires row, blueprint, value -->
           <BlitzCell
-            v-bind="merge(BlitzFormSimulatedContext, blueprint)"
+            v-bind="getFieldBlueprint(BlitzFormSimulatedContext, blueprint)"
             :value="getProp(BlitzFormSimulatedContext.formData, blueprint.id)"
             @input="(val, origin) => onInputCell(rowProps.row.id, blueprint.id, val, origin)"
           />
@@ -469,6 +469,14 @@ export default {
     },
     onInputCell(rowId, colId, value, origin) {
       this.$emit('input-cell', { rowId, colId, value, origin })
+    },
+    getFieldBlueprint(BlitzFormSimulatedContext, blueprint) {
+      const bluePrintSlots = blueprint.slots || {}
+      const slots = blueprint.slot
+        ? { slots: { ...(blueprint.slots || {}), default: blueprint.slot }, slot: undefined }
+        : {}
+      const r = merge(BlitzFormSimulatedContext, blueprint, slots)
+      return r
     },
   },
 }

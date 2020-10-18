@@ -1,18 +1,12 @@
 <template>
   <div class="slots-demo">
-    <QBtnToggle
-      class="_button-toggle"
-      v-model="chosenExample"
-      noCaps
-      spread
-      :options="[
-        { label: 'v-slot:above-table', value: 0 },
-        { label: 'v-slot:top-right', value: 1 },
-        { label: 'all top slots', value: 2 },
-      ]"
-    />
+    <select class="_button-toggle" v-model="chosenExample">
+      <option value="0">example: v-slot:above-table</option>
+      <option value="1">example: v-slot:top-right</option>
+      <option value="2">example: all slots</option>
+    </select>
     <BlitzTable
-      v-if="chosenExample === 0"
+      v-if="chosenExample === '0'"
       :schemaColumns="schemaColumns"
       :schemaGrid="schemaColumns"
       :rows="rows"
@@ -21,21 +15,15 @@
       :filter="filter"
     >
       <template v-slot:above-table>
-        <QInput
+        <input
           v-model="filter"
-          outlined
-          dense
-          placeholder="Search for Lesson by title, topic, or subject"
+          placeholder=" 🔍 Search for Lesson by title, topic, or subject"
           class="q-my-md"
-        >
-          <template v-slot:prepend>
-            <QIcon name="search" />
-          </template>
-        </QInput>
+        />
       </template>
     </BlitzTable>
     <BlitzTable
-      v-if="chosenExample === 1"
+      v-if="chosenExample === '1'"
       :schemaColumns="schemaColumns"
       :schemaGrid="schemaColumns"
       :rows="rows"
@@ -44,21 +32,15 @@
       :filter="filter"
     >
       <template v-slot:top-right>
-        <QInput
+        <input
           v-model="filter"
-          outlined
-          dense
-          placeholder="Search for Lesson by title, topic, or subject"
+          placeholder=" 🔍 Search for Lesson by title, topic, or subject"
           class="full-width"
-        >
-          <template v-slot:prepend>
-            <QIcon name="search" />
-          </template>
-        </QInput>
+        />
       </template>
     </BlitzTable>
     <BlitzTable
-      v-if="chosenExample === 2"
+      v-if="chosenExample === '2'"
       :schemaColumns="schemaColumns"
       :schemaGrid="schemaColumns"
       :rows="rows"
@@ -98,7 +80,6 @@
 
 <script>
 import { BlitzTable } from 'blitzar'
-import { QBtnToggle, QIcon, QInput } from 'quasar'
 
 const rows = [
   { nameFirst: 'Eleanor', nameLast: 'Shellstrop' },
@@ -127,10 +108,10 @@ You can use all Quasar slots "around" the table. However, BlitzTable uses these 
 If you find yourself in a spot where you also want to use slots for the rows or items, you are probably better off using a regular QTable, perhaps in combination with a [BlitzForm](/docs/blitz-form). Feel free to look at my source code for how I built the BlitzTable component.
  */
 export default {
-  components: { BlitzTable, QBtnToggle, QIcon, QInput },
+  components: { BlitzTable },
   data() {
     return {
-      chosenExample: 0,
+      chosenExample: '0',
       filter: '',
       schemaColumns,
       rows,

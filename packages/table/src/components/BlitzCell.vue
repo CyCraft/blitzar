@@ -45,29 +45,9 @@ export default {
     /**
      * @category blitzFormProp
      */
-    formData: { type: Object, default: () => ({}) },
-    /**
-     * @category blitzFormProp
-     */
-    formDataFlat: { type: Object, default: () => ({}) },
-    /**
-     * @category blitzFormProp
-     */
-    formId: { type: String },
-    /**
-     * @category blitzFormProp
-     */
-    mode: { type: String },
-    /**
-     * @category blitzFormProp
-     */
     fieldInput: { type: Function },
     // BlitzField props that are used here:
     component: { type: [String, Object, Function] },
-    /**
-     * only 'click' is used for button fields
-     */
-    events: { type: Object, default: () => ({}) },
   },
   computed: {
     blitzFieldProps() {

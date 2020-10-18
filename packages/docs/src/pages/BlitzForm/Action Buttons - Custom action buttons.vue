@@ -12,7 +12,7 @@
 <style lang="sass" scoped></style>
 
 <script>
-import { BlitzForm, BlitzBtn } from 'blitzar'
+import { BlitzForm } from 'blitzar'
 
 const schema = [
   {
@@ -43,8 +43,9 @@ You can also pass custom buttons & fields with a schema. The schema you provide 
 An example of a custom button could be:
 ```js
 actionButtons: [{
-  component: 'BlitzBtn',
-  btnLabel: 'log the data',
+  component: 'button',
+  slot: 'log the data',
+  type: 'button',
   showCondition: (_, {formData}) => formData.enableLogging,
   events: {
     click: (event, {formData}) => console.log(formData),
@@ -63,9 +64,8 @@ export default {
       'edit',
       'save',
       {
-        component: 'BlitzBtn',
-        btnLabel: 'log the data (check console)',
-        push: true,
+        component: 'button',
+        slot: 'log the data (check console)',
         events: {
           click: (event, { formData }) => console.log('formData →', formData),
         },

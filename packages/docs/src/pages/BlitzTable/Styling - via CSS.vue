@@ -110,16 +110,6 @@ const schemaColumns = [
 ]
 
 /**
-# Styling via CSS
-
-There are two ways you can style a BlitzTable: via css or via props.
-
-I believe that styling should be done in CSS as much as possible. When doing styling via props you're basically mixing data with styling, and the more your app grows, the more annoying this becomes to work with in my experience.
-
-## Styling with props
-
-That said, if you really want, you can still use the "styling" related props from [Quasar's QTable](https://quasar.dev/vue-components/table#QTable-API), because all props not used by BlitzTable are passed to the QTable it's wrapping.
-
 ## Styling with CSS (recommended)
 
 Check out this example's "style" tab to see how styling is applied!

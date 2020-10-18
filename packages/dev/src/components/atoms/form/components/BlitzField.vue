@@ -185,9 +185,9 @@ export default {
      */
     value: { type: undefined },
     /**
-     * Each BlitzField has a label, sublabel and a component rendered via <component :is="component" />. You can pass (1) the name of a registered component, or (2) a component’s options object.
+     * Each BlitzField has a label, sublabel and a component rendered via `<component :is="component" />`. You can pass (1) the name of a registered component, or (2) a component’s options object.
      * @example 'input'
-     * @example 'MyCustomField
+     * @example 'MyCustomField'
      * @category general
      */
     component: { type: [String, Object, Function] },
@@ -210,7 +210,7 @@ export default {
      */
     rules: { type: [Array, Function], default: () => [] },
     /**
-     * An 'id' is required for a `<BlitzForm />` to be able to know which fields have which value. When using <BlitzField /> on its own, it is not required.
+     * An 'id' is required for a `<BlitzForm />` to be able to know which fields have which value. When using `<BlitzField />` on its own, it is not required.
      * @category model
      */
     id: { type: String },

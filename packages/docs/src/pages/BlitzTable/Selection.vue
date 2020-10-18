@@ -17,8 +17,8 @@
 import { BlitzTable } from 'blitzar'
 
 const rows = [
-  { nameFirst: 'Eleanor', nameLast: 'Shellstrop' },
-  { nameFirst: 'Chidi', nameLast: 'Anagonye' },
+  { nameFirst: 'Eleanor', nameLast: 'Shellstrop', id: 'nkbiu4LA9yZx' },
+  { nameFirst: 'Chidi', nameLast: 'Anagonye', id: 'S6XPiAO6IhLi' },
 ]
 
 const schemaColumns = [

@@ -14,13 +14,6 @@
 
 <script>
 import { BlitzTable } from 'blitzar'
-// All components that are used in the form need to be globally registered.
-import { QInput, QSelect, QImg, QToggle, date } from 'quasar'
-import Vue from 'vue'
-Vue.component('QInput', QInput)
-Vue.component('QSelect', QSelect)
-Vue.component('QImg', QImg)
-Vue.component('QToggle', QToggle)
 
 const rows = [
   {
@@ -28,58 +21,50 @@ const rows = [
     topic: 'curriculum',
     subject: 'We will look at the curriculum of the Mathematica √/%^×-+÷',
     img:
-      'https://images.unsplash.com/photo-1509228468518-180dd4864904?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=160',
+      'https://images.unsplash.com/photo-1509228468518-180dd4864904?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=50',
     grade: 90000,
     passing: true,
-    created: new Date(),
-    classes: [{ label: 'One', value: '1' }],
+    created: '2020-12-06',
   },
   {
     title: 'Films',
     topic: 'split',
     subject: 'We will look at the split of the Films √/%^×-+÷',
     img:
-      'https://images.unsplash.com/photo-1509228468518-180dd4864904?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=160',
+      'https://images.unsplash.com/photo-1509228468518-180dd4864904?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=50',
     grade: 80000,
     passing: false,
-    created: new Date('2020/01/01'),
-    classes: [{ label: 'One', value: '1' }],
+    created: '2020-01-01',
   },
   {
     title: 'Winds',
     topic: 'north',
     subject: 'We will look at the north of the Winds √/%^×-+÷',
     img:
-      'https://images.unsplash.com/photo-1509228468518-180dd4864904?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=160',
+      'https://images.unsplash.com/photo-1509228468518-180dd4864904?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=50',
     grade: 120000,
     passing: false,
-    created: new Date(),
-    classes: [{ label: 'Two', value: '2' }],
+    created: '2020-12-06',
   },
   {
     title: 'Apps',
     topic: 'hotdog',
     subject: 'We will look at the hotdog of the Apps √/%^×-+÷',
     img:
-      'https://images.unsplash.com/photo-1509228468518-180dd4864904?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=160',
+      'https://images.unsplash.com/photo-1509228468518-180dd4864904?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=50',
     grade: 25,
     passing: true,
-    created: new Date('1990-01-01'),
-    classes: [
-      { label: 'One', value: '1' },
-      { label: 'Two', value: '2' },
-    ],
+    created: '1990-01-01',
   },
   {
     title: 'Computers',
     topic: 'hardware',
     subject: 'We will look at the hardware of the Computers √/%^×-+÷',
     img:
-      'https://images.unsplash.com/photo-1509228468518-180dd4864904?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=160',
+      'https://images.unsplash.com/photo-1509228468518-180dd4864904?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=50',
     grade: 0,
     passing: false,
-    created: new Date(),
-    classes: [{ label: 'One', value: '1' }],
+    created: '2020-12-06',
   },
 ]
 
@@ -87,62 +72,44 @@ const schemaColumns = [
   {
     id: 'title',
     label: 'Lesson Title',
-    component: 'QInput',
+    component: 'input',
   },
   {
     id: 'topic',
     label: 'Topic',
-    component: 'QInput',
+    component: 'input',
   },
   {
     id: 'subject',
     label: 'Subject',
-    component: 'QInput',
+    component: 'input',
   },
   {
     id: 'img',
     label: 'Image',
-    component: 'QImg',
-    mode: 'view',
+    component: 'img',
     evaluatedProps: ['src'],
-    internalErrors: true,
-    // component props:
     src: (val) => val,
+    mode: 'view',
   },
   {
     id: 'grade',
     label: 'Grade',
-    component: 'QInput',
-    // component props:
+    component: 'input',
     type: 'number',
   },
   {
     id: 'passing',
     label: 'Passing',
-    component: 'QToggle',
+    component: 'input',
+    type: 'checkbox',
     default: false,
   },
   {
     id: 'created',
     label: 'Created at',
-    component: 'QInput',
-    parseInput: (val) => new Date(val),
-    parseValue: (val) => date.formatDate(val, 'YYYY/MM/DD'),
-    // component props:
-    mask: '####/##/##',
-    placeholder: 'YYYY/MM/DD',
-  },
-  {
-    id: 'classes',
-    label: 'Classes',
-    component: 'QSelect',
-    // component props:
-    multiple: true,
-    options: [
-      { label: 'One', value: '1' },
-      { label: 'Two', value: '2' },
-      { label: 'Three', value: '3' },
-    ],
+    component: 'input',
+    type: 'date',
   },
 ]
 

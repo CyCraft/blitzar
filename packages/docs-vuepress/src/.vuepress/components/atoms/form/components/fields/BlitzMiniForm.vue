@@ -54,16 +54,6 @@ import { isNumber } from 'is-what'
 import BlitzField from '../BlitzField.vue'
 
 /**
-## usage
-
-BlitzMiniForm is a component that's registered for you; alongside BlitzForm and BlitzField.
-You can use it like:
-- <BlitzMiniForm /> as standalone
-- <BlitzField component="BlitzMiniForm" /> inside a field (with label & sublabel)
-- in a BlitzForm "schema" like so: `component: 'BlitzMiniForm'`
-
-## description
-
 With BlitzMiniForm you can pass a "schema" just like a BlitzForm. The difference is that BlitzMiniForm is more like a (as the name says) "mini" form. 😃
 
 The "schema" you specify is shown as a single row. New rows are added automatically on user input.`,
