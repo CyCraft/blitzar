@@ -36,6 +36,8 @@
 @import '@planetar/styles/variables'
 
 .my-styled-table
+  h6
+    color: $c-blue-zodiac
   /** spacing & layout */
   th
     padding: 12px 24px

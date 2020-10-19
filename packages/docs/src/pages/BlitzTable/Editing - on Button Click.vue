@@ -88,7 +88,7 @@ const schemaColumns = [
           slotProps: {
             actionButtons: ['edit', 'cancel', 'save'],
             value: formData,
-            schema: schemaColumns,
+            schema: schemaColumns.slice(1),
             columnCount: 2,
             style: 'padding: 1.5rem',
             mode: 'edit',

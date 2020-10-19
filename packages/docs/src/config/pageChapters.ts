@@ -49,6 +49,6 @@ export const routeNamePageChaptersMap: { [key in ROUTE_NAMES]: string[] } = {
     'Editing - on Row Click.vue',
     'Styling.md',
     'Styling - via CSS.vue',
-    'Styling - via CSS.vue',
+    'Styling - via Props.vue',
   ],
 }
