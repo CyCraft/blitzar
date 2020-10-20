@@ -19,7 +19,7 @@
     "merge-anything": "^3.0.6",
     "nestify-anything": "^1.0.1",
     "quasar": "^1.14.1",
-    "snarkdown": "github:mesqueeb/snarkdown#dist"
+    "snarkdown": "^2.0.0"
   },
   "keywords": [
     "blitzar",
