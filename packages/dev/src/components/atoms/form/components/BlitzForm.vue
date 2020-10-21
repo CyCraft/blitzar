@@ -19,21 +19,26 @@
       />
     </div>
     <!-- form contents -->
-    <div
-      class="blitz-form__form"
-      :style="`grid-template-columns:${' 1fr'.repeat(columnCount)}; grid-gap: ${gridGap}`"
-    >
-      <BlitzField
-        v-for="field in cSchema"
-        :key="field.id"
-        v-bind="{ ...field, span: undefined }"
-        :value="formDataFlat[field.id]"
-        @input="(value, origin) => fieldInput({ id: field.id, value, origin })"
-        :style="
-          field.span ? `grid-column: ${field.span === true ? '1 / -1' : `span ${field.span}`}` : ''
-        "
-      />
-    </div>
+    <slot>
+      <!-- https://github.com/CyCraft/blitzar/issues/38 -->
+      <div
+        class="blitz-form__form"
+        :style="`grid-template-columns:${' 1fr'.repeat(columnCount)}; grid-gap: ${gridGap}`"
+      >
+        <BlitzField
+          v-for="field in cSchema"
+          :key="field.id"
+          v-bind="{ ...field, span: undefined }"
+          :value="formDataFlat[field.id]"
+          @input="(value, origin) => fieldInput({ id: field.id, value, origin })"
+          :style="
+            field.span
+              ? `grid-column: ${field.span === true ? '1 / -1' : `span ${field.span}`}`
+              : ''
+          "
+        />
+      </div>
+    </slot>
   </q-form>
 </template>
 

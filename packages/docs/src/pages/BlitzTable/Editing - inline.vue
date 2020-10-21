@@ -1,7 +1,7 @@
 <template>
   <div>
+    <!-- @row-click="rowClick" -->
     <BlitzTable
-      @row-click="rowClick"
       :schemaColumns="schemaColumns"
       :schemaGrid="schemaColumns"
       :rows="rows"
@@ -82,16 +82,19 @@ const schemaColumns = [
     label: 'Lesson Title',
     component: 'input',
     span: 2,
+    mode: 'edit',
   },
   {
     id: 'topic',
     label: 'Topic',
     component: 'input',
+    mode: 'edit',
   },
   {
     id: 'subject',
     label: 'Subject',
     component: 'input',
+    mode: 'edit',
   },
   {
     id: 'img',
@@ -99,13 +102,14 @@ const schemaColumns = [
     component: 'img',
     evaluatedProps: ['src'],
     src: (val) => val,
-    mode: 'view',
+    mode: 'edit',
   },
   {
     id: 'grade',
     label: 'Grade',
     component: 'input',
     type: 'number',
+    mode: 'edit',
   },
   {
     id: 'passing',
@@ -113,17 +117,19 @@ const schemaColumns = [
     component: 'input',
     type: 'checkbox',
     default: false,
+    mode: 'edit',
   },
   {
     id: 'created',
     label: 'Created at',
     component: 'input',
     type: 'date',
+    mode: 'edit',
   },
 ]
 
 /**
-## Edit on Row Click
+## Edit inline
  */
 export default {
   components: { BlitzTable },

@@ -19,6 +19,7 @@ import { Dialog } from 'quasar'
 
 const rows = [
   {
+    id: 'Lorem',
     title: 'Mathematica',
     topic: 'curriculum',
     subject: 'We will look at the curriculum of the Mathematica √/%^×-+÷',
@@ -29,6 +30,7 @@ const rows = [
     created: '2020-12-06',
   },
   {
+    id: 'ipsum',
     title: 'Films',
     topic: 'split',
     subject: 'We will look at the split of the Films √/%^×-+÷',
@@ -39,6 +41,7 @@ const rows = [
     created: '2020-01-01',
   },
   {
+    id: 'dolor',
     title: 'Winds',
     topic: 'north',
     subject: 'We will look at the north of the Winds √/%^×-+÷',
@@ -49,6 +52,7 @@ const rows = [
     created: '2020-12-06',
   },
   {
+    id: 'sit',
     title: 'Apps',
     topic: 'hotdog',
     subject: 'We will look at the hotdog of the Apps √/%^×-+÷',
@@ -59,6 +63,7 @@ const rows = [
     created: '1990-01-01',
   },
   {
+    id: 'amet',
     title: 'Computers',
     topic: 'hardware',
     subject: 'We will look at the hardware of the Computers √/%^×-+÷',

@@ -73,7 +73,7 @@ It's also possible you just use the "disabled" prop for fields that don't handle
 
 In this example below you can see how easy this is by using an evaluated prop for "disabled". (Read more on [evaluated props](#evaluated-props) down below)
 
-However, in reality it's cleaner you write a wrapper Vue component and handle this logic there with proper CSS tweaks as well.
+However, in reality it's cleaner you just add the "readonly" prop to your Vue components, or if you use a component library, create a wrapper components for them.
  */
 export default {
   components: { BlitzForm },

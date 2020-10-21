@@ -1,5 +1,5 @@
 <template>
-  <q-table
+  <QTable
     class="blitz-table"
     v-bind="qTableProps"
     :selected.sync="cSelected"
@@ -46,7 +46,7 @@
         (2) to set up the @row-input listener which is to be triggered whenever `fieldInput` is executed
         (3) add row classes; style and their respective props
       -->
-      <BlitzRow
+      <!-- <BlitzRow
         :q-table-row-props="rowProps"
         :schema="schemaColumns"
         :value="rowProps.row"
@@ -59,30 +59,74 @@
         "
         v-slot="BlitzFormSimulatedContext"
       >
-        <q-td v-if="selectionMode" auto-width>
+        <QTd v-if="selectionMode" auto-width>
           <div class="flex flex-center">
             <q-checkbox :dense="true" v-model="rowProps.selected" />
           </div>
-        </q-td>
-        <q-td
+        </QTd>
+        <QTd
           v-for="blueprint in schemaColumns"
           :key="blueprint.id"
           :props="rowProps"
           @click.native="(e) => onRowClick(e, rowProps.row)"
         >
-          <!-- requires row, blueprint, value -->
+          {{ /* requires row, blueprint, value */ }}
           <BlitzCell
             v-bind="getFieldBlueprint(BlitzFormSimulatedContext, blueprint)"
             :value="getProp(BlitzFormSimulatedContext.formData, blueprint.id)"
             @input="(val, origin) => onInputCell(rowProps.row.id, blueprint.id, val, origin)"
           />
-        </q-td>
-      </BlitzRow>
+        </QTd>
+      </BlitzRow> -->
+      <!-- <QTr
+        :props="rowProps"
+      > -->
+      <BlitzForm
+        :class="[
+          'blitz-table__row',
+          'blitz-row',
+          `blitz-row__${rowProps.row.id}`,
+          evaluate(rowClasses, rowProps.row),
+        ]"
+        :style="evaluate(rowStyle, rowProps.row)"
+        :formComponent="QTr"
+        :schema="schemaColumns"
+        :value="rowProps.row"
+        :id="rowProps.row.id"
+        mode="raw"
+        :key="rowProps.row.id + JSON.stringify(rowProps.row)"
+        @fieldInput="({ id, value, origin }) => onInputCell(rowProps.row.id, id, value, origin)"
+      >
+        <template v-slot="blitzFormCtx">
+          <QTd v-if="selectionMode" auto-width>
+            <div class="flex flex-center">
+              <q-checkbox :dense="true" v-model="rowProps.selected" />
+            </div>
+          </QTd>
+          <QTd
+            v-for="blueprint in blitzFormCtx.schema"
+            :key="blueprint.id"
+            :props="rowProps"
+            :class="['blitz-cell', evaluate(blueprint.cellClasses, rowProps.row)]"
+            :style="evaluate(blueprint.cellStyle, rowProps.row)"
+            @click.native="(e) => onRowClick(e, rowProps.row)"
+          >
+            <!-- somehow an extra div is required otherwise buttons won't render properly -->
+            <div>
+              <BlitzField
+                v-bind="{ ...blueprint, span: undefined, label: undefined, subLabel: undefined }"
+                :value="blitzFormCtx.formDataFlat[blueprint.id]"
+                @input="(val, origin) => onInputCell(rowProps.row.id, blueprint.id, val, origin)"
+              />
+            </div>
+          </QTd>
+        </template>
+      </BlitzForm>
     </template>
     <!-- Grid item -->
     <template v-slot:item="gridItemProps">
       <slot name="item" v-bind="gridItemProps">
-        <q-card
+        <QCard
           v-if="schemaGrid"
           :class="
             flattenArray([
@@ -104,10 +148,10 @@
                 onInputCell(gridItemProps.row.id, fieldId, value, origin)
             "
           />
-        </q-card>
+        </QCard>
       </slot>
     </template>
-  </q-table>
+  </QTable>
 </template>
 
 <style lang="sass">
@@ -150,8 +194,8 @@ import { getProp } from 'path-to-prop'
 import { merge } from 'merge-anything'
 import { flattenArray } from 'flatten-anything'
 import { isPlainObject, isFunction } from 'is-what'
-import { QTable, QTd, QCheckbox, QCard } from 'quasar'
-import { BlitzBtn, BlitzForm } from '@blitzar/form'
+import { QTable, QTr, QTd, QCheckbox, QCard } from 'quasar'
+import { BlitzForm, BlitzField, BlitzBtn } from '@blitzar/form'
 import BlitzRow from './BlitzRow.vue'
 import BlitzCell from './BlitzCell.vue'
 import schemaToQTableColumns from '../helpers/schemaToQTableColumns.js'
@@ -175,11 +219,13 @@ export default {
   inheritAttrs: false,
   components: {
     QTable,
+    QTr,
     QTd,
     QCheckbox,
     QCard,
     BlitzBtn,
     BlitzForm,
+    BlitzField,
     BlitzRow,
     BlitzCell,
   },
@@ -318,6 +364,7 @@ export default {
       defaultPagination: {
         rowsPerPage: 10,
       },
+      QTr,
     }
   },
   watch: {
@@ -441,9 +488,9 @@ export default {
     },
   },
   methods: {
-    evaluate(prop, rowProps) {
-      if (!isFunction(prop)) return prop
-      return prop(rowProps.row, rowProps, this)
+    evaluate(propValue, rowProps) {
+      if (!isFunction(propValue)) return propValue
+      return propValue(rowProps.row, rowProps, this)
     },
     flattenArray,
     getProp,

@@ -1,47 +1,59 @@
 <template>
-  <q-form ref="refBlitzForm" :class="`blitz-form blitz-form--nav-${actionButtonsPosition}`">
-    <!-- prevent the default behaviour of HTML5 forms being "submitted" on "enter" inside input fields -->
-    <button type="submit" disabled style="display: none" aria-hidden="true"></button>
-    <!-- navigation buttons row (save, edit, ...) -->
-    <div
-      :class="`blitz-form__nav-row blitz-form__nav-row--${actionButtonsPosition}`"
-      v-if="isFullString(formErrorMsg) || actionButtonsSchema.length"
-    >
-      <div class="blitz-form__validation-error text-negative" v-if="isFullString(formErrorMsg)">
-        {{ formErrorMsg }}
+  <component
+    :is="innerFormComponent"
+    ref="refBlitzForm"
+    :class="`blitz-form blitz-form--nav-${actionButtonsPosition} _${formComponent}`"
+  >
+    <template v-if="formComponent === 'QForm'">
+      <!-- prevent the default behaviour of HTML5 forms being "submitted" on "enter" inside input fields -->
+      <button type="submit" disabled style="display: none" aria-hidden="true"></button>
+      <!-- navigation buttons row (save, edit, ...) -->
+      <div
+        :class="`blitz-form__nav-row blitz-form__nav-row--${actionButtonsPosition}`"
+        v-if="isFullString(formErrorMsg) || actionButtonsSchema.length"
+      >
+        <div class="blitz-form__validation-error text-negative" v-if="isFullString(formErrorMsg)">
+          {{ formErrorMsg }}
+        </div>
+        <BlitzField
+          v-for="(field, i) in actionButtonsSchema"
+          :key="i"
+          v-bind="{ ...field, span: undefined }"
+          :value="formDataFlat[field.id]"
+          @input="(value, origin) => fieldInput({ id: field.id, value, origin })"
+        />
       </div>
-      <BlitzField
-        v-for="(field, i) in actionButtonsSchema"
-        :key="i"
-        v-bind="{ ...field, span: undefined }"
-        :value="formDataFlat[field.id]"
-        @input="(value, origin) => fieldInput({ id: field.id, value, origin })"
-      />
-    </div>
+    </template>
     <!-- form contents -->
-    <div
-      class="blitz-form__form"
-      :style="`grid-template-columns:${' 1fr'.repeat(columnCount)}; grid-gap: ${gridGap}`"
-    >
-      <BlitzField
-        v-for="field in cSchema"
-        :key="field.id"
-        v-bind="{ ...field, span: undefined }"
-        :value="formDataFlat[field.id]"
-        @input="(value, origin) => fieldInput({ id: field.id, value, origin })"
-        :style="
-          field.span ? `grid-column: ${field.span === true ? '1 / -1' : `span ${field.span}`}` : ''
-        "
-      />
-    </div>
-  </q-form>
+    <slot v-bind="{ schema: cSchema, formDataFlat }">
+      <!-- https://github.com/CyCraft/blitzar/issues/38 -->
+      <div
+        class="blitz-form__form"
+        :style="`grid-template-columns:${' 1fr'.repeat(columnCount)}; grid-gap: ${gridGap}`"
+      >
+        <BlitzField
+          v-for="field in cSchema"
+          :key="field.id"
+          v-bind="{ ...field, span: undefined }"
+          :value="formDataFlat[field.id]"
+          @input="(value, origin) => fieldInput({ id: field.id, value, origin })"
+          :style="
+            field.span
+              ? `grid-column: ${field.span === true ? '1 / -1' : `span ${field.span}`}`
+              : ''
+          "
+        />
+      </div>
+    </slot>
+  </component>
 </template>
 
 <style lang="sass">
 @import '../index.sass'
 
 .blitz-form
-  display: flex
+  &._QForm
+    display: flex
   &--nav-top,
   &--nav-bottom
     flex-direction: column
@@ -267,6 +279,13 @@ export default {
       type: Array,
       default: () => ['QInput', 'QSelect', 'QField', 'q-input', 'q-select', 'q-field'],
     },
+    /**
+     * The component that should be used to generate the form. Defaults to QForm. Must be an HTML5 element or globally registered Vue component.
+     * @example 'form'
+     * @example 'tr'
+     * @example 'MyFormWrapper'
+     */
+    formComponent: { type: [String, Function], default: 'QForm' },
   },
   data() {
     const { mode, id, value, schema, lang } = this
@@ -291,6 +310,7 @@ export default {
       formDataFlat,
       formDataFlatBackups: [copy(formDataFlat)],
       formErrorMsg: '',
+      innerFormComponent: this.formComponent === 'QForm' ? QForm : this.formComponent,
     }
   },
   watch: {
