@@ -15,7 +15,6 @@
     ]"
     :style="fieldStyleUsedHere"
   >
-    <!-- display: inline -->
     <div
       v-if="
         labelUsedHere || (getEvaluatedPropOrAttr('slots') && getEvaluatedPropOrAttr('slots').label)

@@ -1,10 +1,10 @@
 <template>
   <div>
-    <!-- @row-click="rowClick" -->
     <BlitzTable
       :schemaColumns="schemaColumns"
       :schemaGrid="schemaColumns"
       :rows="rows"
+      mode="edit"
       title="My Lessons"
       :flat="true"
     />
@@ -82,19 +82,16 @@ const schemaColumns = [
     label: 'Lesson Title',
     component: 'input',
     span: 2,
-    mode: 'edit',
   },
   {
     id: 'topic',
     label: 'Topic',
     component: 'input',
-    mode: 'edit',
   },
   {
     id: 'subject',
     label: 'Subject',
     component: 'input',
-    mode: 'edit',
   },
   {
     id: 'img',
@@ -102,14 +99,12 @@ const schemaColumns = [
     component: 'img',
     evaluatedProps: ['src'],
     src: (val) => val,
-    mode: 'edit',
   },
   {
     id: 'grade',
     label: 'Grade',
     component: 'input',
     type: 'number',
-    mode: 'edit',
   },
   {
     id: 'passing',
@@ -117,14 +112,12 @@ const schemaColumns = [
     component: 'input',
     type: 'checkbox',
     default: false,
-    mode: 'edit',
   },
   {
     id: 'created',
     label: 'Created at',
     component: 'input',
     type: 'date',
-    mode: 'edit',
   },
 ]
 
@@ -135,37 +128,6 @@ export default {
   components: { BlitzTable },
   data() {
     return { rows, schemaColumns }
-  },
-  methods: {
-    rowClick(event, rowData) {
-      const _rows = this.rows
-      Dialog.create({
-        // tell Quasar's Dialog plugin to use DialogWrapper.vue
-        component: DialogWrapper,
-        // tell DialogWrapper.vue to use a BlitzForm
-        slotComponent: BlitzForm,
-        // props bound to BlitzForm via v-bind="slotProps"
-        slotProps: {
-          actionButtons: ['edit', 'cancel', 'save'],
-          value: rowData,
-          schema: schemaColumns,
-          columnCount: 2,
-          style: 'padding: 1.5rem',
-        },
-        // events bound to BlitzForm via v-on="slotEvents"
-        slotEvents: ({ hide }) => ({
-          cancel: hide,
-          save: ({ newData }) => {
-            const { id: rowId } = rowData
-            const rowToUpdate = _rows.find((r) => r.id === rowId)
-            Object.entries(newData).forEach(([fieldId, value]) => {
-              rowToUpdate[fieldId] = value
-            })
-            hide()
-          },
-        }),
-      })
-    },
   },
 }
 </script>

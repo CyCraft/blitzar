@@ -1,5 +1,5 @@
 <template>
-  <q-table
+  <QTable
     class="blitz-table"
     v-bind="qTableProps"
     :selected.sync="cSelected"
@@ -31,71 +31,68 @@
       <slot :name="slot" v-bind="scope" />
     </template>
 
-    <!-- <template v-slot:header="headerProps">
-      <q-tr :props="headerProps">
-        <q-th auto-width />
-        <q-th v-for="col in headerProps.cols" :key="col.name" :props="headerProps">
-          {{ col.label }}
-        </q-th>
-      </q-tr>
-    </template>-->
     <template v-slot:body="rowProps">
-      <!--
-        BlitzRow.vue's only purpose is:
-        (1) to create `BlitzFormSimulatedContext` including the `fieldInput` function (required for BlitzCells to make sure the schema's can access this function)
-        (2) to set up the @row-input listener which is to be triggered whenever `fieldInput` is executed
-        (3) add row classes; style and their respective props
-      -->
-      <BlitzRow
-        :q-table-row-props="rowProps"
+      <BlitzForm
+        :class="
+          [
+            'blitz-table__row',
+            'blitz-row',
+            `blitz-row__${rowProps.row.id}`,
+            evaluate(rowClasses, rowProps.row),
+          ].flat()
+        "
+        :style="evaluate(rowStyle, rowProps.row)"
+        :formComponent="QTr"
         :schema="schemaColumns"
         :value="rowProps.row"
         :id="rowProps.row.id"
-        :row-style="rowStyle"
-        :row-classes="rowClasses"
-        mode="raw"
-        @row-input="
-          ({ rowId, fieldId, value, origin }) => onInputCell(rowId, fieldId, value, origin)
-        "
-        v-slot="BlitzFormSimulatedContext"
+        :mode="mode"
+        :key="rowProps.row.id + JSON.stringify(rowProps.row)"
+        @fieldInput="({ id, value, origin }) => onInputCell(rowProps.row.id, id, value, origin)"
       >
-        <q-td v-if="selectionMode" auto-width>
-          <div class="flex flex-center">
-            <q-checkbox :dense="true" v-model="rowProps.selected" />
-          </div>
-        </q-td>
-        <q-td
-          v-for="blueprint in schemaColumns"
-          :key="blueprint.id"
-          :props="rowProps"
-          @click.native="(e) => onRowClick(e, rowProps.row)"
-        >
-          <!-- requires row, blueprint, value -->
-          <BlitzCell
-            v-bind="getFieldBlueprint(BlitzFormSimulatedContext, blueprint)"
-            :value="getProp(BlitzFormSimulatedContext.formData, blueprint.id)"
-            @input="(val, origin) => onInputCell(rowProps.row.id, blueprint.id, val, origin)"
-          />
-        </q-td>
-      </BlitzRow>
+        <template v-slot="blitzFormCtx">
+          <QTd v-if="selectionMode" auto-width>
+            <div class="flex flex-center">
+              <q-checkbox :dense="true" v-model="rowProps.selected" />
+            </div>
+          </QTd>
+          <QTd
+            v-for="blueprint in blitzFormCtx.schema"
+            :key="blueprint.id"
+            :props="rowProps"
+            :class="['blitz-cell', evaluate(blueprint.cellClasses, rowProps.row)].flat()"
+            :style="evaluate(blueprint.cellStyle, rowProps.row)"
+            @click.native="(e) => onRowClick(e, rowProps.row)"
+          >
+            <!-- somehow an extra div is required otherwise buttons won't render properly -->
+            <div>
+              <BlitzField
+                v-bind="{ ...blueprint, span: undefined, label: undefined, subLabel: undefined }"
+                :value="blitzFormCtx.formDataFlat[blueprint.id]"
+                @input="(val, origin) => onInputCell(rowProps.row.id, blueprint.id, val, origin)"
+              />
+            </div>
+          </QTd>
+        </template>
+      </BlitzForm>
     </template>
     <!-- Grid item -->
     <template v-slot:item="gridItemProps">
       <slot name="item" v-bind="gridItemProps">
-        <q-card
+        <QCard
           v-if="schemaGrid"
           :class="
-            flattenArray([
+            [
               'blitz-table__grid-item',
               gridItemProps.selected ? 'selected' : [],
               evaluate(cardClass, gridItemProps),
-            ])
+            ].flat()
           "
           :style="evaluate(cardStyle, gridItemProps)"
           @click="(e) => onRowClick(e, gridItemProps.row, 'grid', gridItemProps)"
         >
           <BlitzForm
-            :key="JSON.stringify(gridItemProps.row)"
+            :key="gridItemProps.row.id + JSON.stringify(gridItemProps.row)"
             :value="gridItemProps.row"
             :id="gridItemProps.row.id"
             v-bind="gridBlitzFormProps"
@@ -104,10 +101,10 @@
                 onInputCell(gridItemProps.row.id, fieldId, value, origin)
             "
           />
-        </q-card>
+        </QCard>
       </slot>
     </template>
-  </q-table>
+  </QTable>
 </template>
 
 <style lang="sass">
@@ -146,14 +143,10 @@
 </style>
 
 <script>
-import { getProp } from 'path-to-prop'
 import { merge } from 'merge-anything'
-import { flattenArray } from 'flatten-anything'
 import { isPlainObject, isFunction } from 'is-what'
-import { QTable, QTd, QCheckbox, QCard } from 'quasar'
-import { BlitzBtn, BlitzForm } from '@blitzar/form'
-import BlitzRow from './BlitzRow.vue'
-import BlitzCell from './BlitzCell.vue'
+import { QTable, QTr, QTd, QCheckbox, QCard } from 'quasar'
+import { BlitzForm, BlitzField, BlitzBtn } from '@blitzar/form'
 import schemaToQTableColumns from '../helpers/schemaToQTableColumns.js'
 
 /**
@@ -175,17 +168,15 @@ export default {
   inheritAttrs: false,
   components: {
     QTable,
+    QTr,
     QTd,
     QCheckbox,
     QCard,
     BlitzBtn,
     BlitzForm,
-    BlitzRow,
-    BlitzCell,
+    BlitzField,
   },
-  desc: `BlitzForms is a peer dependency!`,
   props: {
-    // BlitzTable props:
     /**
      * The schema for the columns you want to generate. (BlitzForm schema format)
      * @type {{[key in string]: any}[]}
@@ -234,15 +225,17 @@ export default {
      */
     lang: { type: Object, default: () => ({ add: 'Add new', duplicate: 'Duplicate' }) }, // when updating this, be sure to also update "innerLang"
     /**
-     * Check the description at BlitzRow.vue
+     * Custom styling to be applied to each row. Applied like so `:style="rowStyle"`
+     * @example 'padding: 1em;'
      * @category style
      */
-    rowClasses: {},
+    rowStyle: { type: [Object, Array, String, Function] },
     /**
-     * Check the description at BlitzRow.vue
+     * Custom classes to be applied to each row. Applied like so `:class="rowClasses"`
+     * @example ['dark-theme']
      * @category style
      */
-    rowStyle: {},
+    rowClasses: { type: [Object, Array, String, Function] },
     // Inherited props used here:
     /**
      * @category inherited prop
@@ -270,6 +263,11 @@ export default {
      * @category inherited prop
      */
     cardStyle: { type: [Function, String, Array, Object] },
+    /**
+     * By default the rows show just the raw data without showing field components. If you set `mode: 'edit'` your entire table will show the actual (editable) component as per your schema.
+     * @category content
+     */
+    mode: { type: String, default: 'raw' },
     // Inherited props with different defaults:
     // Modified inherited props:
     /**
@@ -318,6 +316,7 @@ export default {
       defaultPagination: {
         rowsPerPage: 10,
       },
+      QTr,
     }
   },
   watch: {
@@ -375,11 +374,10 @@ export default {
       )
     },
     gridBlitzFormProps() {
-      const { gridBlitzFormOptions, schemaGrid } = this
+      const { gridBlitzFormOptions, schemaGrid, mode } = this
       const defaults = {
-        actionButtons: [],
-        mode: 'raw',
         schema: schemaGrid,
+        mode,
       }
       return merge(defaults, gridBlitzFormOptions)
     },
@@ -441,13 +439,10 @@ export default {
     },
   },
   methods: {
-    evaluate(prop, rowProps) {
-      if (!isFunction(prop)) return prop
-      return prop(rowProps.row, rowProps, this)
+    evaluate(propValue, rowProps) {
+      if (!isFunction(propValue)) return propValue
+      return propValue(rowProps.row, rowProps, this)
     },
-    flattenArray,
-    getProp,
-    merge,
     enableGrid() {
       this.innerGrid = true
     },
@@ -469,14 +464,6 @@ export default {
     },
     onInputCell(rowId, colId, value, origin) {
       this.$emit('input-cell', { rowId, colId, value, origin })
-    },
-    getFieldBlueprint(BlitzFormSimulatedContext, blueprint) {
-      const bluePrintSlots = blueprint.slots || {}
-      const slots = blueprint.slot
-        ? { slots: { ...(blueprint.slots || {}), default: blueprint.slot }, slot: undefined }
-        : {}
-      const r = merge(BlitzFormSimulatedContext, blueprint, slots)
-      return r
     },
   },
 }
