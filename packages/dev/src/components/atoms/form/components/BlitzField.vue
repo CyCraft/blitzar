@@ -3,7 +3,7 @@
     v-if="getEvaluatedPropOrAttr('showCondition')"
     :class="[
       'blitz-field',
-      `blitz-field--${mode}`,
+      `blitz-field--${getEvaluatedPropOrAttr('mode')}`,
       `blitz-field--${componentName}`,
       `blitz-field--label-${labelPosition}`,
       {
@@ -34,7 +34,7 @@
     <template v-if="!component"></template>
     <!-- raw component -->
     <BlitzH
-      v-else-if="mode === 'raw'"
+      v-else-if="getEvaluatedPropOrAttr('mode') === 'raw'"
       :options="{
         component: 'div',
         slot: parsedFieldValue,
@@ -302,11 +302,7 @@ export default {
      * @type {'edit' | 'view' | 'disabled' | 'raw' | 'add'}
      * @category state
      */
-    mode: {
-      type: String,
-      default: 'edit',
-      validator: (prop) => ['edit', 'view', 'disabled', 'raw', 'add'].includes(prop),
-    },
+    mode: { type: [String, Function], default: 'edit' },
     /**
      * The position of the label in comparison to the field.
      *
@@ -384,7 +380,7 @@ export default {
     fieldInput: { type: Function },
     /**
      * Setting to `true` or `false` can show or hide the field. When using as an Evaluated Prop it can be very powerful.
-     * @example (val, {mode}) => mode.edit
+     * @example (val, { mode }) => (mode === 'edit')
      * @example false
      * @category behavior
      * @category state

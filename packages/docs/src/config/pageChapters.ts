@@ -43,6 +43,7 @@ export const routeNamePageChaptersMap: { [key in ROUTE_NAMES]: string[] } = {
     'Advanced.vue',
     'Computed Columns.vue',
     'Selection.vue',
+    'Selection - Styling.vue',
     'Slots.vue',
     'Editing.md',
     'Editing - on Button Click.vue',

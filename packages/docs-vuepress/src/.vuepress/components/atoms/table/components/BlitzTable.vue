@@ -30,7 +30,17 @@
     >
       <slot :name="slot" v-bind="scope" />
     </template>
-
+    <!-- header for just the multiple selection -->
+    <template v-slot:header-selection>
+      <div class="_table-selection-cell" v-if="selectionMode">
+        <BlitzField
+          class="js-blitz-header-selection"
+          v-bind="{ ...selectionComponentProps, value: allRowsAreSelected }"
+          @input="setSelectionAllRows"
+        />
+      </div>
+    </template>
+    <!-- table body -->
     <template v-slot:body="rowProps">
       <BlitzForm
         :class="
@@ -52,24 +62,25 @@
       >
         <template v-slot="blitzFormCtx">
           <QTd v-if="selectionMode" auto-width>
-            <div class="flex flex-center">
-              <q-checkbox :dense="true" v-model="rowProps.selected" />
+            <div class="_table-selection-cell">
+              <BlitzField v-bind="selectionComponentProps" v-model="rowProps.selected" />
             </div>
           </QTd>
           <QTd
-            v-for="blueprint in blitzFormCtx.schema"
-            :key="blueprint.id"
+            v-for="colBlueprint in blitzFormCtx.schema"
+            :key="colBlueprint.id"
             :props="rowProps"
-            :class="['blitz-cell', evaluate(blueprint.cellClasses, rowProps.row)].flat()"
-            :style="evaluate(blueprint.cellStyle, rowProps.row)"
-            @click.native="(e) => onRowClick(e, rowProps.row)"
+            :class="['blitz-cell', evaluate(colBlueprint.cellClasses, rowProps.row)].flat()"
+            :style="evaluate(colBlueprint.cellStyle, rowProps.row)"
+            @click="(e) => onCellClick(e, rowProps.row, colBlueprint.id)"
+            @dblclick="(e) => onCellDblclick(e, rowProps.row, colBlueprint.id)"
           >
             <!-- somehow an extra div is required otherwise buttons won't render properly -->
             <div>
               <BlitzField
-                v-bind="{ ...blueprint, span: undefined, label: undefined, subLabel: undefined }"
-                :value="blitzFormCtx.formDataFlat[blueprint.id]"
-                @input="(val, origin) => onInputCell(rowProps.row.id, blueprint.id, val, origin)"
+                v-bind="{ ...colBlueprint, span: undefined, label: undefined, subLabel: undefined }"
+                :value="blitzFormCtx.formDataFlat[colBlueprint.id]"
+                @input="(val, origin) => onInputCell(rowProps.row.id, colBlueprint.id, val, origin)"
               />
             </div>
           </QTd>
@@ -96,7 +107,7 @@
             :value="gridItemProps.row"
             :id="gridItemProps.row.id"
             v-bind="gridBlitzFormProps"
-            @field-input="
+            @fieldInput="
               ({ id: fieldId, value, origin }) =>
                 onInputCell(gridItemProps.row.id, fieldId, value, origin)
             "
@@ -113,6 +124,8 @@
 .blitz-table
   display: flex
   flex-direction: column
+  ._table-selection-cell
+    +flex-center()
   th
     white-space: pre
   .q-table__top
@@ -236,6 +249,18 @@ export default {
      * @category style
      */
     rowClasses: { type: [Object, Array, String, Function] },
+    /**
+     * A an object that represents the checkbox when "selection" component BlitzForm blueprint.
+     * Defaults to a regular HTML5 checkbox.
+     * @example { component: 'MyCheckbox', class: 'table-checkbox' }
+     */
+    selectionComponentProps: {
+      type: Object,
+      default: () => ({
+        component: 'input',
+        type: 'checkbox',
+      }),
+    },
     // Inherited props used here:
     /**
      * @category inherited prop
@@ -243,6 +268,7 @@ export default {
     grid: { type: Boolean, default: false },
     /**
      * @category inherited prop
+     * @type {Record<string, any>[]}
      */
     selected: { type: Array, default: () => [] },
     /**
@@ -332,6 +358,10 @@ export default {
       const { qTableProps } = this
       return qTableProps.selection === 'single' || qTableProps.selection === 'multiple'
     },
+    allRowsAreSelected() {
+      const { rows, cSelected } = this
+      return rows.length > 0 && rows.length === cSelected.length
+    },
     pagination: {
       get() {
         return this.qTableProps.pagination || this.defaultPagination
@@ -355,23 +385,22 @@ export default {
       )
     },
     qTableProps() {
-      const propsOnlyUsedInSlots = ['cardStyle', 'cardClass']
-      const propsToNotPass = propsOnlyUsedInSlots
-        .reduce((carry, key) => ({ ...carry, [key]: undefined }), {}) // prettier-ignore
-      return merge(
-        this.$attrs,
-        {
-          // Quasar props with modified behavior:
-          data: this.rows,
-          columns: this.cColumns,
-          rowKey: 'id',
-          grid: this.innerGrid,
-          // Quasar props with modified defaults:
-          // filter: this.$attrs.filter || this.innerFilter,
-          // Quasar props just to pass:
-        },
-        propsToNotPass
-      )
+      const propsToNotPass = ['cardStyle', 'cardClass']
+      const propsToPass = merge(this.$attrs, {
+        // Quasar props with modified behavior:
+        data: this.rows,
+        columns: this.cColumns,
+        rowKey: 'id',
+        grid: this.innerGrid,
+        // Quasar props with modified defaults:
+        // filter: this.$attrs.filter || this.innerFilter,
+        // Quasar props just to pass:
+      })
+      return Object.entries(propsToPass).reduce((carry, [key, val]) => {
+        if (propsToNotPass.includes(key)) return carry
+        carry[key] = val
+        return carry
+      }, {})
     },
     gridBlitzFormProps() {
       const { gridBlitzFormOptions, schemaGrid, mode } = this
@@ -386,6 +415,15 @@ export default {
         return this.innerSelected
       },
       set(val) {
+        // set indeterminate
+        const isIndeterminate = val.length && val.length < this.rows.length
+        const headerCheckbox = this.$el.querySelector('.js-blitz-header-selection input')
+        if (isIndeterminate && headerCheckbox) {
+          headerCheckbox.indeterminate = true
+        }
+        if (!isIndeterminate && headerCheckbox) {
+          headerCheckbox.indeterminate = false
+        }
         this.innerSelected = val
         this.$emit('update:selected', val)
       },
@@ -443,6 +481,13 @@ export default {
       if (!isFunction(propValue)) return propValue
       return propValue(rowProps.row, rowProps, this)
     },
+    setSelectionAllRows(setTo) {
+      if (setTo === true) {
+        this.cSelected = this.rows
+      } else {
+        this.cSelected = []
+      }
+    },
     enableGrid() {
       this.innerGrid = true
     },
@@ -454,6 +499,14 @@ export default {
     },
     tapDuplicate() {
       this.$emit('duplicate', this.cSelected)
+    },
+    onCellDblclick(event, rowData, colId) {
+      this.$emit('row-dblclick', event, rowData)
+      this.$emit('cell-dblclick', event, rowData, colId)
+    },
+    onCellClick(event, rowData, colId) {
+      this.onRowClick(event, rowData)
+      this.$emit('cell-click', event, rowData, colId)
     },
     onRowClick(event, rowData, origin, gridItemProps) {
       const { selectionMode } = this

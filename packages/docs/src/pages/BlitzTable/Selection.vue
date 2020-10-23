@@ -30,11 +30,9 @@ const schemaColumns = [
 /**
 # Selection
 
-By default selection is implemented for both table and grid view, however, every row NEEDS an 'id' prop in order for it to work.
+By default selection is implemented for both table and grid view.
 
-CSS can be overwritten with these classes:
-- `.blitz-table__grid-item.selected`
-- `.blitz-table__row.selected`
+Please note that every row NEEDS an 'id' prop in order for it to work.
  */
 export default {
   components: { BlitzTable },
