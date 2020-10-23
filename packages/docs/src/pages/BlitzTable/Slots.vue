@@ -1,6 +1,6 @@
 <template>
   <div class="slots-demo">
-    <select class="_button-toggle" v-model="chosenExample">
+    <select class="mb-md" v-model="chosenExample">
       <option value="0">example: v-slot:above-table</option>
       <option value="1">example: v-slot:top-right</option>
       <option value="2">example: all slots</option>
@@ -11,7 +11,8 @@
       :schemaGrid="schemaColumns"
       :rows="rows"
       title="Users"
-      :flat="true"
+      flat
+      bordered
       :filter="filter"
     >
       <template v-slot:above-table>
@@ -28,7 +29,8 @@
       :schemaGrid="schemaColumns"
       :rows="rows"
       title="Users"
-      :flat="true"
+      flat
+      bordered
       :filter="filter"
     >
       <template v-slot:top-right>
@@ -45,7 +47,8 @@
       :schemaGrid="schemaColumns"
       :rows="rows"
       title="Users"
-      :flat="true"
+      flat
+      bordered
       :filter="filter"
     >
       <template v-slot:above-nav-row>
@@ -71,11 +74,6 @@
   ._slot-preview
     padding: 1rem
     border: thin solid goldenrod
-  ._button-toggle
-    border: solid 2px $primary
-    border-radius: 6px
-    > *
-      border-radius: 3px
 </style>
 
 <script>

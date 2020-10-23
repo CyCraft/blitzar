@@ -6,7 +6,8 @@
       :schemaGrid="schemaColumns"
       :rows="rows"
       title="My Lessons"
-      :flat="true"
+      flat
+      bordered
     />
   </div>
 </template>

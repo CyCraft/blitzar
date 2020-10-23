@@ -5,7 +5,8 @@
       :schemaGrid="schemaColumns"
       :rows="rows"
       title="Users"
-      :flat="true"
+      flat
+      bordered
       tableHeaderClass="bg-stone t-caption-semi-bold"
     />
   </div>

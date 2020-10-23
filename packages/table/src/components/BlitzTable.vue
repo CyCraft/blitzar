@@ -57,19 +57,20 @@
             </div>
           </QTd>
           <QTd
-            v-for="blueprint in blitzFormCtx.schema"
-            :key="blueprint.id"
+            v-for="colBlueprint in blitzFormCtx.schema"
+            :key="colBlueprint.id"
             :props="rowProps"
-            :class="['blitz-cell', evaluate(blueprint.cellClasses, rowProps.row)].flat()"
-            :style="evaluate(blueprint.cellStyle, rowProps.row)"
-            @click.native="(e) => onRowClick(e, rowProps.row)"
+            :class="['blitz-cell', evaluate(colBlueprint.cellClasses, rowProps.row)].flat()"
+            :style="evaluate(colBlueprint.cellStyle, rowProps.row)"
+            @click="(e) => onCellClick(e, rowProps.row, colBlueprint.id)"
+            @dblclick="(e) => onCellDblclick(e, rowProps.row, colBlueprint.id)"
           >
             <!-- somehow an extra div is required otherwise buttons won't render properly -->
             <div>
               <BlitzField
-                v-bind="{ ...blueprint, span: undefined, label: undefined, subLabel: undefined }"
-                :value="blitzFormCtx.formDataFlat[blueprint.id]"
-                @input="(val, origin) => onInputCell(rowProps.row.id, blueprint.id, val, origin)"
+                v-bind="{ ...colBlueprint, span: undefined, label: undefined, subLabel: undefined }"
+                :value="blitzFormCtx.formDataFlat[colBlueprint.id]"
+                @input="(val, origin) => onInputCell(rowProps.row.id, colBlueprint.id, val, origin)"
               />
             </div>
           </QTd>
@@ -96,7 +97,7 @@
             :value="gridItemProps.row"
             :id="gridItemProps.row.id"
             v-bind="gridBlitzFormProps"
-            @field-input="
+            @fieldInput="
               ({ id: fieldId, value, origin }) =>
                 onInputCell(gridItemProps.row.id, fieldId, value, origin)
             "
@@ -454,6 +455,14 @@ export default {
     },
     tapDuplicate() {
       this.$emit('duplicate', this.cSelected)
+    },
+    onCellDblclick(event, rowData, colId) {
+      this.$emit('row-dblclick', event, rowData)
+      this.$emit('cell-dblclick', event, rowData, colId)
+    },
+    onCellClick(event, rowData, colId) {
+      this.onRowClick(event, rowData)
+      this.$emit('cell-click', event, rowData, colId)
     },
     onRowClick(event, rowData, origin, gridItemProps) {
       const { selectionMode } = this

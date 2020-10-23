@@ -1,13 +1,13 @@
 <template>
   <div>
     <BlitzTable
-      :schemaColumns="schemaColumns"
+      :schemaColumns="schemaColumnsWithEditLogic"
       :schemaGrid="schemaColumns"
       :rows="rows"
-      mode="edit"
       title="My Lessons"
       flat
       bordered
+      @cell-dblclick="cellDblclick"
       @input-cell="inputCell"
     />
   </div>
@@ -101,6 +101,7 @@ const schemaColumns = [
     component: 'img',
     evaluatedProps: ['src'],
     src: (val) => val,
+    mode: 'view',
   },
   {
     id: 'grade',
@@ -124,18 +125,69 @@ const schemaColumns = [
 ]
 
 /**
-## Edit inline
+ * The editing logic for every schema blueprint is dynamically setting the "mode" of a cell.
+ * It does this based on the colId and rowId which are being edited.
+ */
+const editingLogic = (blueprintId, { editingColId, editingRowId, saveLastEdit, stopEditing }) => ({
+  // mode is an Evaluated Prop. See BlitzForm documentation for more info:
+  evaluatedProps: ['mode'],
+  mode: (val, { formData }) =>
+    editingColId === blueprintId && formData.id === editingRowId ? 'edit' : 'raw',
+  events: {
+    keydown: (event) => {
+      if (event.code === 'Enter') saveLastEdit()
+      if (event.code === 'Escape') stopEditing()
+    },
+    blur: saveLastEdit,
+  },
+})
+
+/**
+## Edit inline on cell double-click
  */
 export default {
   components: { BlitzTable },
   data() {
-    return { rows, schemaColumns }
+    return { rows, schemaColumns, editingColId: '', editingRowId: '', lastEdit: null }
+  },
+  computed: {
+    schemaColumnsWithEditLogic() {
+      const { editingColId, editingRowId, saveLastEdit, stopEditing } = this
+      const editingLogicContext = { editingColId, editingRowId, saveLastEdit, stopEditing }
+      // return the columns with the added logic to edit & save data
+      return schemaColumns.map((blueprint) => {
+        if (blueprint.id === 'img') return blueprint
+        return {
+          ...blueprint,
+          ...editingLogic(blueprint.id, editingLogicContext),
+        }
+      })
+    },
   },
   methods: {
-    inputCell({ rowId, colId, value, origin }) {
+    saveLastEdit() {
+      if (!this.lastEdit) return this.stopEditing()
+      const { rowId, colId, value } = this.lastEdit
       const row = this.rows.find((r) => r.id === rowId)
-      if (!row) return
       row[colId] = value
+      this.stopEditing()
+    },
+    stopEditing() {
+      this.editingColId = ''
+      this.lastEdit = null
+    },
+    cellDblclick(mouseEvent, rowData, colId) {
+      this.editingColId = colId
+      this.editingRowId = rowData.id
+      // auto focus logic:
+      const cellEl = mouseEvent.srcElement.parentElement
+      this.$nextTick(() => {
+        const inputEl = cellEl.querySelector('input')
+        if (inputEl) inputEl.focus()
+      })
+    },
+    inputCell({ rowId, colId, value, origin }) {
+      this.lastEdit = { rowId, colId, value }
     },
   },
 }

@@ -5,7 +5,8 @@
       :schemaGrid="schemaColumns"
       :rows="rows"
       title="Users"
-      :flat="true"
+      flat
+      bordered
     />
   </div>
 </template>
