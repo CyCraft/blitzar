@@ -3,7 +3,7 @@
     <DocPage
       :pathToChapterFiles="pathToChapterFiles"
       :chapterOrder="chapterOrder"
-      :pathToApiCardSourceFile="pathToApiCardSourceFile"
+      :pathsToApiCardSourceFile="pathsToApiCardSourceFile"
       @TOC="(TOC) => $emit('set-toc', TOC)"
     />
   </q-page>
@@ -33,13 +33,16 @@ export default defineComponent({
     const routeName = options.root.$route.name as ROUTE_NAMES
     const pathToChapterFiles = 'pages/' + routeName
     const chapterOrder = computed((): string[] => routeNamePageChaptersMap[routeName])
-    const pathToApiCardSourceFile = computed(() =>
+    const pathsToApiCardSourceFile = computed(() =>
       routeName === 'BlitzForm'
-        ? 'components/atoms/form/components/BlitzForm.vue'
-        : 'components/atoms/table/components/BlitzTable.vue'
+        ? [
+            'components/atoms/form/components/BlitzForm.vue',
+            'components/atoms/form/components/BlitzField.vue',
+          ]
+        : ['components/atoms/table/components/BlitzTable.vue']
     )
 
-    return { pathToChapterFiles, chapterOrder, pathToApiCardSourceFile }
+    return { pathToChapterFiles, chapterOrder, pathsToApiCardSourceFile }
   },
 })
 </script>

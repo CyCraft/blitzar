@@ -39,7 +39,6 @@ export const routeNamePageChaptersMap: { [key in ROUTE_NAMES]: string[] } = {
     'Computed Fields - 3.vue',
     'Validation.vue',
     'Validation - 2.vue',
-    // 'Hacks.vue',
   ],
   [ROUTE_NAMES.TABLE]: [
     'Basics.vue',
