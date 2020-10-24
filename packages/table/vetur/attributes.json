@@ -8,7 +8,7 @@
     "description": "The schema for the columns you want to generate. (BlitzForm schema format)"
   },
   "blitz-table/schemaGrid": {
-    "type": "array|object",
+    "type": "array",
     "description": "The schema for the grid cards you want to generate. (BlitzForm schema format)"
   },
   "blitz-table/rows": {
@@ -55,7 +55,7 @@
   },
   "blitz-table/data": {
     "type": "array",
-    "description": "Use `rows` instead of the QTables `data`. Renamed for clarity."
+    "description": "Do not use this! Use `rows` instead of the QTables `data`. Renamed for clarity."
   },
   "blitz-table/columns": {
     "type": "",
@@ -67,6 +67,6 @@
   },
   "blitz-table/rowKey": {
     "type": "",
-    "description": "This is fixed to `id` in a BlitzTable and cannot be changed."
+    "description": "Do not use this! This is fixed to `id` in a BlitzTable and cannot be changed."
   }
 }
