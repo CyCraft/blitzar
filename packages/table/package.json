@@ -14,7 +14,7 @@
     "is-what": "^3.11.2",
     "merge-anything": "^3.0.6",
     "path-to-prop": "^1.0.0",
-    "quasar": "^1.14.1"
+    "quasar": "^1.14.2"
   },
   "license": "MIT",
   "keywords": [

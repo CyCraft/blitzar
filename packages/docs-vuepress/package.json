@@ -10,14 +10,14 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@quasar/extras": "^1.9.7",
-    "@vuepress/plugin-register-components": "^1.6.0",
+    "@quasar/extras": "^1.9.9",
+    "@vuepress/plugin-register-components": "^1.7.1",
     "fibers": "^5.0.0",
     "node-sass": "^4.14.1",
-    "quasar": "^1.14.1",
+    "quasar": "^1.14.2",
     "sass": "^1.27.0",
-    "sass-loader": "^10.0.2",
-    "vuepress": "^1.6.0"
+    "sass-loader": "^10.0.4",
+    "vuepress": "^1.7.1"
   },
   "homepage": "https://github.com/cycraft/blitzar#readme",
   "repository": {
@@ -28,7 +28,7 @@
     "@blitzar/form": "^0.0.4",
     "@blitzar/utils": "^0.0.4",
     "copy-anything": "^2.0.1",
-    "planetar": "^0.7.1"
+    "planetar": "^0.7.4"
   },
   "gitHead": "67dabbf127033a928ec02d3a1a9da8a4d8d83d40"
 }
