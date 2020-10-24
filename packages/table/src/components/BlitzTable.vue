@@ -287,8 +287,8 @@ export default {
      * CSS style to apply to the card (when in grid mode).
      * You can pass a function which will be evaluated just like an evaluated prop. The first param passed will be the entire row data. The second is `item` scoped slot object from a QTable.
      * @type {(rowData: Record<string, any>, gridCardProps: GridCardProps, BlitzTableContext: any) => string | Record<string, any> | (string | Record<string, any>)[]}
-     * @example 'background-color: #ff0000'
-     * @example :card-style="{ backgroundColor: '#ff0000' }"
+     * @example 'background-color: #fff'
+     * @example :card-style="{ backgroundColor: '#fff' }"
      * @category inherited prop
      */
     cardStyle: { type: [Function, String, Array, Object] },

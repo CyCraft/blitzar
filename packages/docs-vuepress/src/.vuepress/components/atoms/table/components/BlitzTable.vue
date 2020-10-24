@@ -1,6 +1,7 @@
 <template>
   <QTable
     class="blitz-table"
+    :tableHeaderClass="qTableProps.tableHeaderClass + ` blitz-table__header`"
     v-bind="qTableProps"
     :selected.sync="cSelected"
     :pagination.sync="pagination"
@@ -142,6 +143,9 @@
   &.q-table--grid .q-table__middle
     min-height: 0
     margin-bottom: 0
+  // td:before
+  //   background: none !important // todo: prevent this line from being necessary in BlitzTable
+
 .blitz-table__nav-row
   display: grid
   justify-content: stretch
@@ -150,6 +154,7 @@
   grid-gap: $md
   grid-auto-flow: column
   grid-template-columns: 1fr
+
 .blitz-table__grid-item
   margin: $sm
   padding: $md
@@ -282,8 +287,8 @@ export default {
      * CSS style to apply to the card (when in grid mode).
      * You can pass a function which will be evaluated just like an evaluated prop. The first param passed will be the entire row data. The second is `item` scoped slot object from a QTable.
      * @type {(rowData: Record<string, any>, gridCardProps: GridCardProps, BlitzTableContext: any) => string | Record<string, any> | (string | Record<string, any>)[]}
-     * @example 'background-color: #ff0000'
-     * @example :card-style="{ backgroundColor: '#ff0000' }"
+     * @example 'background-color: #fff'
+     * @example :card-style="{ backgroundColor: '#fff' }"
      * @category inherited prop
      */
     cardStyle: { type: [Function, String, Array, Object] },
@@ -323,6 +328,11 @@ export default {
         '[BlitzTable] You need to defined a prop called "schemaGrid" if you want to use a grid layout as well!'
       )
     }
+  },
+  mounted() {
+    const footerEl = this.$el.querySelector('.q-table__bottom')
+    if (!footerEl) return
+    footerEl.classList.add('blitz-table__footer')
   },
   data() {
     const { grid, selected } = this
