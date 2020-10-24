@@ -62,7 +62,7 @@
     "description": "The text used in the UI, eg. for required fields, etc."
   },
   "blitz-field/mode": {
-    "type": "string",
+    "type": "string|function",
     "description": "The mode represents how fields are rendered\n- `'edit'`: (default) Show editable fields based on the schema\n- `'view'`: Show each field with `readonly: true`.\n- `'disabled'`: Show each field with `disabled: true`.\n- `'raw'`: Used to show raw data of your form. No fields are generated, just divs with the labels and values. This mode is powerful because it will automatically map values to the schema provided (eg. adding pre-/suffix; mapping to options of a select; etc.)\n- `'add'`: The same as 'edit'\n\nThis prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).",
     "options": [
       "edit",
@@ -205,37 +205,12 @@
     "type": "array",
     "description": "Pass the component names (without `.vue`) that have internal error handling. This makes sure it passes on props like `rules` and does nothing with them in the BlitzField."
   },
+  "blitz-form/formComponent": {
+    "type": "string|function",
+    "description": "The component that should be used to generate the form. Defaults to QForm. Must be an HTML5 element or globally registered Vue component."
+  },
   "blitz-h/options": {
     "type": "array"
-  },
-  "blitz-btn/btnLabel": {
-    "type": "string",
-    "description": "`btnLabel` is the button's \"label\". (`label` on the other hand is used for the field label of `<BlitzField />`)"
-  },
-  "blitz-btn/color": {
-    "type": "string"
-  },
-  "blitz-div/value": {
-    "type": "undefined"
-  },
-  "blitz-div/valueType": {
-    "type": "string",
-    "description": "valueType can be any type."
-  },
-  "blitz-div/type": {
-    "type": "string"
-  },
-  "blitz-div/suffix": {
-    "type": "string"
-  },
-  "blitz-div/prefix": {
-    "type": "string"
-  },
-  "blitz-div/options": {
-    "type": "array"
-  },
-  "blitz-div/multiple": {
-    "type": "boolean"
   },
   "blitz-mini-form/value": {
     "type": "array"
@@ -258,49 +233,9 @@
   "blitz-mini-form/readonly": {
     "type": "boolean"
   },
-  "blitz-cell/value": {
-    "type": "undefined",
-    "description": "the value unformatted"
-  },
-  "blitz-cell/cellStyle": {
-    "type": "object|array|string|function",
-    "description": "Custom styling to be applied to the BlitzCell. Applied like so `:style=\"cellStyle\"`"
-  },
-  "blitz-cell/cellClasses": {
-    "type": "object|array|string|function",
-    "description": "Custom classes to be applied to the BlitzCell. Applied like so `:class=\"cellClasses\"`"
-  },
-  "blitz-cell/fieldInput": {
-    "type": "function"
-  },
-  "blitz-cell/component": {
-    "type": "string|object|function"
-  },
-  "blitz-row/qTableRowProps": {
-    "type": "object",
-    "description": "The QTable v-slot:body props to pass to QTr"
-  },
-  "blitz-row/value": {
-    "type": "object",
-    "description": "The BlitzForm data"
-  },
-  "blitz-row/schema": {
-    "type": "array|object",
-    "description": "The BlitzForm schema"
-  },
-  "blitz-row/rowStyle": {
-    "type": "object|array|string|function",
-    "description": "Custom styling to be applied to the BlitzRow. Applied like so `:style=\"rowStyle\"`"
-  },
-  "blitz-row/rowClasses": {
-    "type": "object|array|string|function",
-    "description": "Custom classes to be applied to the BlitzRow. Applied like so `:class=\"rowClasses\"`"
-  },
-  "blitz-row/mode": {
-    "type": "string"
-  },
-  "blitz-row/id": {
-    "type": "string"
+  "blitz-grid-list-toggle/value": {
+    "type": "boolean",
+    "description": "`value: true` represents \"grid mode\" so shows a \"list icon\"\n`value: false` represents \"list mode\" so shows a \"grid icon\""
   },
   "blitz-table/schemaColumns": {
     "type": "array",
@@ -316,23 +251,23 @@
   },
   "blitz-table/actionButtons": {
     "type": "array",
-    "description": "Action buttons to add to the table. These can be pre-set buttons you can add by passing a string, or custom ones by passing an object with {label, handler}.\n\nPreset buttons include:\n- 'add'\n- 'grid'\n- 'selection:duplicate' (this just does `$emit('duplicate', selectionArray)`, you must implement your own logic."
+    "description": "Action buttons to add to the top right of the table. An array of objects just like a BlitzForm schema.\n\nThere is also one preset button to toggle between grid- and list-view. This is shown by default, or can be included in the schema array as just the string 'grid' like the example below."
   },
   "blitz-table/gridBlitzFormOptions": {
     "type": "object",
     "description": "The BlitzForm options you want to use for the grid cards.\n\nPlease note:\n- The 'schema' should be set via the 'schemaGrid' prop.\n- 'value' and 'id' are set automatically.\n- These are the default values, but they can be overridden: `{ actionButtons: [] }`\n- See the documentation of BlitzForm for more information on available props."
   },
-  "blitz-table/lang": {
-    "type": "object",
-    "description": "The text used in the UI, eg. the 'add new record' buttons etc... Pass an object with keys: ...."
+  "blitz-table/rowStyle": {
+    "type": "object|array|string|function",
+    "description": "Custom styling to be applied to each row. Applied like so `:style=\"rowStyle\"`"
   },
   "blitz-table/rowClasses": {
-    "type": "",
-    "description": "Check the description at BlitzRow.vue"
+    "type": "object|array|string|function",
+    "description": "Custom classes to be applied to each row. Applied like so `:class=\"rowClasses\"`"
   },
-  "blitz-table/rowStyle": {
-    "type": "",
-    "description": "Check the description at BlitzRow.vue"
+  "blitz-table/selectionComponentProps": {
+    "type": "object",
+    "description": "A an object that represents the checkbox when \"selection\" component BlitzForm blueprint.\nDefaults to a regular HTML5 checkbox."
   },
   "blitz-table/grid": {
     "type": "boolean"
@@ -347,6 +282,10 @@
   "blitz-table/cardStyle": {
     "type": "array",
     "description": "CSS style to apply to the card (when in grid mode).\nYou can pass a function which will be evaluated just like an evaluated prop. The first param passed will be the entire row data. The second is `item` scoped slot object from a QTable."
+  },
+  "blitz-table/mode": {
+    "type": "string",
+    "description": "By default the rows show just the raw data without showing field components. If you set `mode: 'edit'` your entire table will show the actual (editable) component as per your schema."
   },
   "blitz-table/data": {
     "type": "array",

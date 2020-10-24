@@ -50,7 +50,8 @@
       "evaluatedProps",
       "internalLabels",
       "internalErrors",
-      "internalErrorsFor"
+      "internalErrorsFor",
+      "formComponent"
     ],
     "description": ""
   },
@@ -59,25 +60,6 @@
       "options"
     ],
     "description": "I'm still thinking about the best syntax for BlitzH"
-  },
-  "blitz-btn": {
-    "attributes": [
-      "btnLabel",
-      "color"
-    ],
-    "description": "BlitzBtn is a wrapper around QBtn. The only differences are:\n\n- you can pass the button label as `btnLabel` (this is required because when using QBtn it will always use the same label as your field label)\n- it defaults to `color: primary` which is nice 😄\n\nAll other props/attributes are passed on.`,"
-  },
-  "blitz-div": {
-    "attributes": [
-      "value",
-      "valueType",
-      "type",
-      "suffix",
-      "prefix",
-      "options",
-      "multiple"
-    ],
-    "description": "BlitzDiv is used by BlitzForms on `mode: 'raw'`. The component shows the raw values of the data inside a simple `<div>`.\n\nThe difference the BlitzDiv field over a regular div, is that it will parse your value as per your field's schema. It will parse your value based on the following schema props:\n- `type`: shows numbers with thousands separator and dates as toLocaleDateString()\n- `valueType`: shows numbers with thousands separator and dates as toLocaleDateString()\n- `suffix`: shows `value + suffix` when passed\n- `prefix`: shows `prefix + value` when passed\n- `options`: shows the \"label\" of the option which has the value when passed\n- `multiple`: if your field allows to have multiple values, `multiple` must be `true`. This is used when parsing the `options`\n\nThe difference between `type` and `valueType` is when you don't want to set the type for an \"input\" field, you can use `valueType` instead of `type`."
   },
   "blitz-mini-form": {
     "attributes": [

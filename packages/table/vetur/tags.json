@@ -1,23 +1,7 @@
 {
-  "blitz-cell": {
+  "blitz-grid-list-toggle": {
     "attributes": [
-      "value",
-      "cellStyle",
-      "cellClasses",
-      "fieldInput",
-      "component"
-    ],
-    "description": ""
-  },
-  "blitz-row": {
-    "attributes": [
-      "qTableRowProps",
-      "value",
-      "schema",
-      "rowStyle",
-      "rowClasses",
-      "mode",
-      "id"
+      "value"
     ],
     "description": ""
   },
@@ -28,13 +12,14 @@
       "rows",
       "actionButtons",
       "gridBlitzFormOptions",
-      "lang",
-      "rowClasses",
       "rowStyle",
+      "rowClasses",
+      "selectionComponentProps",
       "grid",
       "selected",
       "cardClass",
       "cardStyle",
+      "mode",
       "data",
       "columns",
       "title",

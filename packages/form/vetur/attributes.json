@@ -62,7 +62,7 @@
     "description": "The text used in the UI, eg. for required fields, etc."
   },
   "blitz-field/mode": {
-    "type": "string",
+    "type": "string|function",
     "description": "The mode represents how fields are rendered\n- `'edit'`: (default) Show editable fields based on the schema\n- `'view'`: Show each field with `readonly: true`.\n- `'disabled'`: Show each field with `disabled: true`.\n- `'raw'`: Used to show raw data of your form. No fields are generated, just divs with the labels and values. This mode is powerful because it will automatically map values to the schema provided (eg. adding pre-/suffix; mapping to options of a select; etc.)\n- `'add'`: The same as 'edit'\n\nThis prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).",
     "options": [
       "edit",
@@ -205,37 +205,12 @@
     "type": "array",
     "description": "Pass the component names (without `.vue`) that have internal error handling. This makes sure it passes on props like `rules` and does nothing with them in the BlitzField."
   },
+  "blitz-form/formComponent": {
+    "type": "string|function",
+    "description": "The component that should be used to generate the form. Defaults to QForm. Must be an HTML5 element or globally registered Vue component."
+  },
   "blitz-h/options": {
     "type": "array"
-  },
-  "blitz-btn/btnLabel": {
-    "type": "string",
-    "description": "`btnLabel` is the button's \"label\". (`label` on the other hand is used for the field label of `<BlitzField />`)"
-  },
-  "blitz-btn/color": {
-    "type": "string"
-  },
-  "blitz-div/value": {
-    "type": "undefined"
-  },
-  "blitz-div/valueType": {
-    "type": "string",
-    "description": "valueType can be any type."
-  },
-  "blitz-div/type": {
-    "type": "string"
-  },
-  "blitz-div/suffix": {
-    "type": "string"
-  },
-  "blitz-div/prefix": {
-    "type": "string"
-  },
-  "blitz-div/options": {
-    "type": "array"
-  },
-  "blitz-div/multiple": {
-    "type": "boolean"
   },
   "blitz-mini-form/value": {
     "type": "array"
