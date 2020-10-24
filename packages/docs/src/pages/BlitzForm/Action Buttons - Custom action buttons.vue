@@ -4,7 +4,7 @@
       :actionButtons="actionButtons"
       :schema="schema"
       v-model="formData"
-      :columnCount="2"
+      :columnCount="5"
     />
   </div>
 </template>
@@ -16,10 +16,17 @@ import { BlitzForm } from 'blitzar'
 
 const schema = [
   {
+    id: 'enableLogging',
+    component: 'input',
+    type: 'checkbox',
+    label: 'Enable logging',
+  },
+  {
     id: 'name',
     component: 'input',
     label: 'Superhero name',
     subLabel: 'Think of something cool.',
+    span: 2,
   },
   {
     id: 'powerOrigin',
@@ -32,6 +39,7 @@ const schema = [
       { component: 'option', value: 'self', slot: 'Self taught' },
       { component: 'option', value: 'item', slot: 'Magic item' },
     ],
+    span: 2,
   },
 ]
 
@@ -44,8 +52,8 @@ An example of a custom button could be:
 ```js
 actionButtons: [{
   component: 'button',
-  slot: 'log the data',
   type: 'button',
+  slot: 'log the data',
   showCondition: (_, {formData}) => formData.enableLogging,
   events: {
     click: (event, {formData}) => console.log(formData),
@@ -65,7 +73,9 @@ export default {
       'save',
       {
         component: 'button',
+        type: 'button',
         slot: 'log the data (check console)',
+        showCondition: (_, { formData }) => formData.enableLogging,
         events: {
           click: (event, { formData }) => console.log('formData →', formData),
         },

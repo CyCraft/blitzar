@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="example-action-buttons-overwrite-style">
     <BlitzForm
       :actionButtons="['edit', 'cancel', 'save', 'delete']"
       :actionButtonDefaults="actionButtonDefaults"
@@ -12,7 +12,13 @@
   </div>
 </template>
 
-<style lang="sass" scoped></style>
+<style lang="sass">
+.example-action-buttons-overwrite-style
+  .my-button-class
+    border: none
+    background: none
+    font-weight: 700
+</style>
 
 <script>
 import { BlitzForm } from 'blitzar'
@@ -39,21 +45,33 @@ const schema = [
   },
 ]
 
+const actionButtonDefaults = {
+  // you can pass a class to adjust the look of the button:
+  edit: { slot: `✏️ Edit`, componentClasses: 'my-button-class' },
+  // you can also directly adjust the style:
+  cancel: { componentStyle: 'background: none; border: none;' },
+  save: {
+    slot: `💾 Save`,
+    componentStyle: 'background: none; border: thin solid green; color: green',
+  },
+  delete: {
+    componentStyle: 'background: none; border: none; color: crimson',
+    showCondition: (_, { mode }) => mode !== 'edit',
+  },
+}
+
 /**
 ## Overwriting pre-made buttons
 
-You can overwrite how the pre-made buttons look with the `actionButtonDefaults` prop, as seen in the example below:
+You can overwrite how the pre-made buttons look with the `actionButtonDefaults` prop.
+
+In the example below (script tab) you can see we are overwriting some properties of the HTML5 buttons.
+
+However, most likely you will pass `component: 'MyButton'` and pass your own Vue button components.
  */
 export default {
   components: { BlitzForm },
   data() {
-    const actionButtonDefaults = {
-      archive: { icon: 'archive', showCondition: (_, { mode }) => mode !== 'edit' },
-      delete: { icon: 'delete', showCondition: (_, { mode }) => mode !== 'edit' },
-      cancel: { color: 'black' },
-      edit: { icon: 'edit', flat: false, outline: true },
-      save: { icon: 'save', color: 'green' },
-    }
     return { schema, formData: {}, actionButtonDefaults }
   },
   methods: {

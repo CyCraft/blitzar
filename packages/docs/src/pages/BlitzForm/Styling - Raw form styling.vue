@@ -12,7 +12,6 @@
 </template>
 
 <style lang="sass">
-// this is non-scoped style
 .raw-form-data-style
   background: #F6F9FC
   border-radius: 8px

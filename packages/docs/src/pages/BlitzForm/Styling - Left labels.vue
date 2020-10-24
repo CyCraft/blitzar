@@ -1,34 +1,18 @@
 <template>
   <div>
     <BlitzForm
-      class="raw-form-data-style"
+      class="styling-left-labels"
       labelPosition="left"
       :schema="schema"
-      mode="raw"
       v-model="formData"
-      gridGap="0"
     />
   </div>
 </template>
 
 <style lang="sass">
-// this is non-scoped style
-.raw-form-data-style
-  background: #F6F9FC
-  border-radius: 8px
-  padding: 1rem
-  .blitz-field
-    border-bottom: 1px solid #D9E2F1
-    padding-top: 8px
-    padding-bottom: 8px
-    line-height: 24px
-  .blitz-field__component
-    text-align: right
-  ._title
-    font-weight: 600
-    border-bottom: none
-    padding: 0
-    line-height: 20px
+.styling-left-labels
+  .blitz-field__label
+    min-width: 120px
 </style>
 
 <script>
@@ -70,7 +54,7 @@ const schema = [
 /**
 ## Left labels
 
-TODO: create an example that has a form with left labels, and all same with labels
+When using left labels, it's adviced to set `.blitz-field__label` to a minimum width.
  */
 export default {
   components: { BlitzForm },

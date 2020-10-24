@@ -36,7 +36,7 @@
 </template>
 
 <style lang="sass">
-@import '../../index.sass'
+@import '../index.sass'
 
 .ef-mini-form
   >.ef-mini-form__row
@@ -51,7 +51,7 @@
 import { merge } from 'merge-anything'
 import { copy } from 'copy-anything'
 import { isNumber } from 'is-what'
-import BlitzField from '../BlitzField.vue'
+import BlitzField from './BlitzField.vue'
 
 /**
 With BlitzMiniForm you can pass a "schema" just like a BlitzForm. The difference is that BlitzMiniForm is more like a (as the name says) "mini" form. 😃

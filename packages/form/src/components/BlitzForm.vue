@@ -16,11 +16,10 @@
           {{ formErrorMsg }}
         </div>
         <BlitzField
-          v-for="(field, i) in actionButtonsSchema"
-          :key="i"
-          v-bind="{ ...field, span: undefined }"
-          :value="formDataFlat[field.id]"
-          @input="(value, origin) => fieldInput({ id: field.id, value, origin })"
+          v-for="(blueprint, i) in actionButtonsSchema"
+          :key="blueprint.id || i"
+          v-bind="blueprint"
+          v-on="blueprint.events"
         />
       </div>
     </template>
@@ -101,7 +100,6 @@ import { nestifyObject } from 'nestify-anything'
 import { validateFormPerSchema } from '../helpers/validation'
 import { flattenPerSchema } from '@blitzar/utils'
 import { defaultLang } from '../meta/lang'
-import BlitzBtn from './fields/BlitzBtn.vue'
 import BlitzField from './BlitzField.vue'
 
 export default {
@@ -142,7 +140,7 @@ export default {
      *
      * See the documentation on "Action Buttons" for more info.
      * @example ['delete', 'cancel', 'edit', 'save']
-     * @example [{component: 'BlitzBtn', btnLabel: 'log', events: {click: console.log}}]
+     * @example [{component: 'button', type: 'button', slot: 'log', events: {click: console.log}}]
      * @category content
      */
     actionButtons: { type: Array, default: () => [] },
@@ -396,33 +394,38 @@ export default {
       } = this
       const map = {
         delete: {
-          btnLabel: innerLang['delete'],
-          flat: true,
+          component: 'button',
+          type: 'button',
+          slot: innerLang['delete'],
           color: 'negative',
           events: { click: tapDelete },
         },
         archive: {
-          btnLabel: innerLang['archive'],
-          flat: true,
+          component: 'button',
+          type: 'button',
+          slot: innerLang['archive'],
           color: 'negative',
           events: { click: tapArchive },
         },
         edit: {
+          component: 'button',
+          type: 'button',
           showCondition: (_, { mode }) => ['view', 'raw'].includes(mode),
-          flat: true,
-          btnLabel: innerLang['edit'],
+          slot: innerLang['edit'],
           events: { click: tapEdit },
         },
         cancel: {
+          component: 'button',
+          type: 'button',
           showCondition: (_, { mode }) => ['edit', 'add'].includes(mode),
-          btnLabel: innerLang['cancel'],
-          flat: true,
+          slot: innerLang['cancel'],
           events: { click: tapCancel },
         },
         save: {
+          component: 'button',
+          type: 'button',
           showCondition: (_, { mode }) => ['edit', 'add'].includes(mode),
-          unelevated: true,
-          btnLabel: innerLang['save'],
+          slot: innerLang['save'],
           events: { click: tapSave },
         },
       }
@@ -434,13 +437,29 @@ export default {
         schemaOverwritableDefaults,
         schemaForcedDefaults,
         actionButtonsMap,
+        formDataFlat,
       } = this
       return actionButtons.map((blueprint) => {
-        const buttonBlueprint = isString(blueprint) ? actionButtonsMap[blueprint] : blueprint
+        const _bp = isString(blueprint) ? actionButtonsMap[blueprint] : blueprint
+        const slotsOverwrite = !_bp.slot
+          ? {}
+          : { slots: merge(_bp.slots || {}, { default: _bp.slot }) }
+        const events = _bp.events || {}
+        const eventsOverwrites = !events.input
+          ? {}
+          : {
+              events: { input: (value, origin) => fieldInput({ id: field.id, value, origin }) },
+            }
+        const overwrites = {
+          span: undefined,
+          value: formDataFlat[_bp.id],
+          ...slotsOverwrite,
+          ...eventsOverwrites,
+        }
         const blueprintParsed = merge(
-          { component: BlitzBtn },
           schemaOverwritableDefaults,
-          buttonBlueprint,
+          _bp,
+          overwrites,
           schemaForcedDefaults
         )
         return blueprintParsed
