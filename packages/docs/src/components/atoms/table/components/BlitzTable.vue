@@ -203,20 +203,21 @@ export default {
   props: {
     /**
      * The schema for the columns you want to generate. (BlitzForm schema format)
-     * @type {{[key in string]: any}[]}
+     * @type {Record<string, any>[]}
      * @example [{ id: 'nameFirst', label: 'First Name', component: 'input' }, { id: 'nameLast', label: 'Last Name', component: 'input' }]
      * @category column
      */
     schemaColumns: { type: Array, required: true },
     /**
      * The schema for the grid cards you want to generate. (BlitzForm schema format)
+     * @type {Record<string, any>[]}
      * @example [{ id: 'nameFirst', label: 'First Name', component: 'input' }, { id: 'nameLast', label: 'Last Name', component: 'input' }]
      * @category column
      */
     schemaGrid: { type: [Array, Object] },
     /**
      * Rows of data to display. Use `rows` instead of the QTables `data`. Renamed for clarity.
-     * @type {{[key in string]: any}[]}
+     * @type {Record<string, any>[]}
      * @example [{ nameFirst: 'Eleanor', nameLast: 'Shellstrop' }, { nameFirst: 'Chidi', nameLast: 'Anagonye' }]
      * @category model
      */
@@ -300,7 +301,7 @@ export default {
     // Inherited props with different defaults:
     // Modified inherited props:
     /**
-     * Use `rows` instead of the QTables `data`. Renamed for clarity.
+     * Do not use this! Use `rows` instead of the QTables `data`. Renamed for clarity.
      * @category modified prop
      */
     data: { type: Array },
@@ -315,7 +316,7 @@ export default {
      */
     title: { type: String },
     /**
-     * This is fixed to `id` in a BlitzTable and cannot be changed.
+     * Do not use this! This is fixed to `id` in a BlitzTable and cannot be changed.
      * @category modified prop
      */
     rowKey: {},
