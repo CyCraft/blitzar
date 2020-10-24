@@ -6,8 +6,8 @@
       :rows="rows"
       title="Default table"
     />
-    <div :class="`my-styled-table ${grid ? '_grid' : '_rows'}`">
-      <div class="_above-table">
+    <div>
+      <div :class="`styled-table__above-table`">
         <h6>Styled table</h6>
         <div @click="grid = true" :class="['_view-toggle', { _active: grid === true }]">
           <!-- prettier-ignore -->
@@ -19,7 +19,7 @@
         </div>
       </div>
       <BlitzTable
-        class="_table"
+        :class="`styled-table__blitz-table ${grid ? 'mode-grid' : 'mode-rows'}`"
         :schemaColumns="schemaColumns"
         :schemaGrid="schemaColumns"
         :rows="rows"
@@ -35,67 +35,72 @@
 <style lang="sass">
 @import '@planetar/styles/variables'
 
-.my-styled-table
+/** Styling for table title and grid toggle */
+.styled-table__above-table
+  /** spacing & layout */
+  display: flex
+  align-items: flex-end
+  padding: 0.5rem
+  > *:first-child
+    margin-right: auto
+  ._view-toggle
+    margin-left: 0.5rem
+    height: 24px
+    cursor: pointer
+  /** typography */
   h6
     color: $c-blue-zodiac
-  /** spacing & layout */
+  /** colors */
+  ._view-toggle path
+    fill: $c-science
+    opacity: 0.7
+  ._view-toggle._active path
+    fill: $c-blue-ribbon
+    opacity: 1
+
+/** Styling for actual table */
+.styled-table__blitz-table
+  /** borders */
+  border: thin solid $c-stone-dark
+  border-radius: 12px
+  .blitz-table__footer
+    border-top: thin solid $c-stone-dark
+  .blitz-table__header, tr, th, td
+    border-color: $c-stone-dark
+  /** spacing */
   th
     padding: 12px 24px
   td
     padding: 18px 24px
-  ._above-table
-    display: flex
-    align-items: flex-end
-    padding: 0.5rem
-    > *:first-child
-      margin-right: auto
-    ._view-toggle
-      margin-left: 0.5rem
-      height: 24px
-      cursor: pointer
-  /** colours */
-  thead,
-  .q-table__bottom // https://github.com/quasarframework/quasar/issues/7723
+  /** colors */
+  .blitz-table__header,
+  .blitz-table__footer
     background: $c-stone-light
-  ._above-table
-    ._view-toggle path
-      fill: $c-science
-      opacity: 0.7
-    ._view-toggle._active path
-      fill: $c-blue-ribbon
-      opacity: 1
-  &._grid
-    ._table
-      background: $c-stone
-    .blitz-table__grid-item
-      box-shadow: none
-      border-radius: 12px
   /** hovering row color */
   td:before
-    background: none !important // todo: prevent this line from being necessary in BlitzTable
+    background: none !important
   tr:hover
     background: $c-stone-light
-  /** borders */
-  ._table
-    border: thin solid $c-stone-dark
-    border-radius: 12px
-  .q-table__bottom
-    border-top: thin solid $c-stone-dark
-  thead, tr, th,td
-    border-color: $c-stone-dark
   /** typography */
   th
     +t-caption-semi-bold()
   td
     +t-body2()
-  .q-table__bottom,
-  .q-table__bottom span
+  .blitz-table__footer,
+  .blitz-table__footer span
     +t-caption()
-  &._grid
-    .blitz-field__component
-      +t-body2()
-    .blitz-field__label
-      +t-caption()
+
+/** grid mode tweaks */
+.styled-table__blitz-table.mode-grid
+  background: $c-stone
+  .blitz-table__grid-item
+    box-shadow: none
+    border-radius: 12px
+    border-color: $c-stone-dark
+  .blitz-field__label
+    +t-caption()
+  .blitz-field__component
+    +t-body2()
 </style>
 
 <script>
