@@ -13,11 +13,11 @@
           <div class="q-table__title" v-if="title">{{ title }}</div>
         </slot>
         <slot name="top-right">
-          <BlitzBtn
-            v-for="btn in cActionButtons"
-            :key="btn.btnLabel"
-            v-bind="btn"
-            v-on="btn.events"
+          <BlitzField
+            v-for="(blueprint, i) in cActionButtons"
+            :key="blueprint.id || i"
+            v-bind="blueprint"
+            v-on="blueprint.events"
           />
         </slot>
       </div>
@@ -101,6 +101,10 @@
           "
           :style="evaluate(cardStyle, gridItemProps)"
           @click="(e) => onRowClick(e, gridItemProps.row, 'grid', gridItemProps)"
+          :dark="qTableProps.dark"
+          :square="qTableProps.square"
+          :flat="qTableProps.flat"
+          :bordered="qTableProps.bordered"
         >
           <BlitzForm
             :key="gridItemProps.row.id + JSON.stringify(gridItemProps.row)"
@@ -124,6 +128,8 @@
 .blitz-table
   display: flex
   flex-direction: column
+  ._table-top-right
+    +flex-center()
   ._table-selection-cell
     +flex-center()
   th
@@ -159,7 +165,8 @@
 import { merge } from 'merge-anything'
 import { isPlainObject, isFunction } from 'is-what'
 import { QTable, QTr, QTd, QCheckbox, QCard } from 'quasar'
-import { BlitzForm, BlitzField, BlitzBtn } from '@blitzar/form'
+import BlitzGridListToggle from './BlitzGridListToggle'
+import { BlitzForm, BlitzField } from '@blitzar/form'
 import schemaToQTableColumns from '../helpers/schemaToQTableColumns.js'
 
 /**
@@ -185,7 +192,6 @@ export default {
     QTd,
     QCheckbox,
     QCard,
-    BlitzBtn,
     BlitzForm,
     BlitzField,
   },
@@ -211,13 +217,10 @@ export default {
      */
     rows: { type: Array, required: true },
     /**
-     * Action buttons to add to the table. These can be pre-set buttons you can add by passing a string, or custom ones by passing an object with {label, handler}.
+     * Action buttons to add to the top right of the table. An array of objects just like a BlitzForm schema.
      *
-     * Preset buttons include:
-     * - 'add'
-     * - 'grid'
-     * - 'selection:duplicate' (this just does `$emit('duplicate', selectionArray)`, you must implement your own logic.
-     * @example ['add', 'grid', { btnLabel: 'do it', events: { click: console.log } }]
+     * There is also one preset button to toggle between grid- and list-view. This is shown by default, or can be included in the schema array as just the string 'grid' like the example below.
+     * @example ['grid', { component: 'button', slot: 'log it', events: { click: console.log } }]
      * @category content
      */
     actionButtons: { type: Array, default: () => ['grid'] },
@@ -232,11 +235,6 @@ export default {
      * @category column
      */
     gridBlitzFormOptions: { type: Object, default: () => ({}) },
-    /**
-     * The text used in the UI, eg. the 'add new record' buttons etc... Pass an object with keys: ....
-     * @category content
-     */
-    lang: { type: Object, default: () => ({ add: 'Add new', duplicate: 'Duplicate' }) }, // when updating this, be sure to also update "innerLang"
     /**
      * Custom styling to be applied to each row. Applied like so `:style="rowStyle"`
      * @example 'padding: 1em;'
@@ -327,18 +325,14 @@ export default {
     }
   },
   data() {
-    const { lang, grid, selected } = this
-    // merge user provided lang onto defaults
+    const { grid, selected } = this
     const innerSelected = selected
-    // when updating this, be sure to also update the "lang" prop
-    const innerLang = merge({ add: 'Add new', duplicate: 'Duplicate' }, lang)
-    const innerGrid = grid
+    const gridModeEnabled = grid
     // const innerFilter = filter
     return {
       // innerFilter,
       innerSelected,
-      innerLang,
-      innerGrid,
+      gridModeEnabled,
       defaultPagination: {
         rowsPerPage: 10,
       },
@@ -347,7 +341,7 @@ export default {
   },
   watch: {
     grid(newValue) {
-      this.innerGrid = newValue
+      this.gridModeEnabled = newValue
     },
     selected(newValue) {
       this.innerSelected = newValue
@@ -391,7 +385,7 @@ export default {
         data: this.rows,
         columns: this.cColumns,
         rowKey: 'id',
-        grid: this.innerGrid,
+        grid: this.gridModeEnabled,
         // Quasar props with modified defaults:
         // filter: this.$attrs.filter || this.innerFilter,
         // Quasar props just to pass:
@@ -434,37 +428,25 @@ export default {
     cActionButtons() {
       const {
         actionButtons,
-        innerLang,
         tapAdd,
         tapDuplicate,
         cSelected,
-        innerGrid,
+        gridModeEnabled,
         enableGrid,
         disableGrid,
         schemaGrid,
       } = this
       const blitzTableContext = this
+      const defaultsGridButton = {
+        component: BlitzGridListToggle,
+        value: this.gridModeEnabled,
+        events: { input: (newVal) => (this.gridModeEnabled = newVal) },
+      }
       return actionButtons
         .map((btn) => {
           if (btn === 'grid' && schemaGrid) {
             // return // 以下の機能は未完成
-            return innerGrid
-              ? { icon: 'view_list', flat: true, events: { click: disableGrid } }
-              : { icon: 'view_module', flat: true, events: { click: enableGrid } }
-          }
-          if (cSelected.length) {
-            if (btn === 'selection:duplicate') {
-              return {
-                btnLabel: innerLang['duplicate'],
-                push: true,
-                events: { click: tapDuplicate },
-              }
-            }
-          }
-          if (!cSelected.length) {
-            if (btn === 'add') {
-              return { btnLabel: innerLang['add'], push: true, events: { click: tapAdd } }
-            }
+            return defaultsGridButton
           }
           if (isPlainObject(btn)) {
             if (!isPlainObject(btn.events)) return btn
@@ -474,6 +456,11 @@ export default {
           }
         })
         .filter((btn) => isPlainObject(btn))
+        .map((blueprint) => {
+          if (!blueprint.slot) return blueprint
+          const slots = blueprint.slots || {}
+          return { ...blueprint, slots: { ...slots, default: blueprint.slot } }
+        })
     },
   },
   methods: {
@@ -487,18 +474,6 @@ export default {
       } else {
         this.cSelected = []
       }
-    },
-    enableGrid() {
-      this.innerGrid = true
-    },
-    disableGrid() {
-      this.innerGrid = false
-    },
-    tapAdd() {
-      this.$emit('add')
-    },
-    tapDuplicate() {
-      this.$emit('duplicate', this.cSelected)
     },
     onCellDblclick(event, rowData, colId) {
       this.$emit('row-dblclick', event, rowData)

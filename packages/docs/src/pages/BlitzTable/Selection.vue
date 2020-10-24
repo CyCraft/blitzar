@@ -2,6 +2,8 @@
   <div>
     <BlitzTable
       selection="multiple"
+      :selected.sync="selectionArray"
+      :actionButtons="actionButtons"
       :schemaColumns="schemaColumns"
       :schemaGrid="schemaColumns"
       :rows="rows"
@@ -16,6 +18,7 @@
 
 <script>
 import { BlitzTable } from 'blitzar'
+import { showToast } from '../../helpers/toast'
 
 const rows = [
   { nameFirst: 'Eleanor', nameLast: 'Shellstrop', id: 'nkbiu4LA9yZx' },
@@ -37,7 +40,26 @@ Please note that every row NEEDS an 'id' prop in order for it to work.
 export default {
   components: { BlitzTable },
   data() {
-    return { rows, schemaColumns }
+    return { rows, schemaColumns, selectionArray: [] }
+  },
+  computed: {
+    showSelectedStudentsButton() {
+      const { selectionArray } = this
+      return {
+        component: 'button',
+        slot: 'log selected students',
+        showCondition: !!selectionArray.length,
+        events: {
+          click: () => {
+            showToast('selected students:', selectionArray)
+            console.log(`selectionArray → `, selectionArray)
+          },
+        },
+      }
+    },
+    actionButtons() {
+      return ['grid', this.showSelectedStudentsButton]
+    },
   },
 }
 </script>

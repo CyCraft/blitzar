@@ -1,4 +1,4 @@
-import { isPlainObject } from 'is-what'
+import { isArray, isPlainObject } from 'is-what'
 import { Notify } from 'quasar'
 
 /**
@@ -7,6 +7,7 @@ import { Notify } from 'quasar'
 export function showToast(message: string, payload: any, origin?: any): void {
   if (origin === 'default') return
   if (isPlainObject(payload) && payload.origin === 'default') return
-  const caption = isPlainObject(payload) ? JSON.stringify(payload) : payload
+  const caption =
+    isPlainObject(payload) || isArray(payload) ? JSON.stringify(payload, undefined, 2) : payload
   Notify.create({ message, caption })
 }
