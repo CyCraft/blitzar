@@ -38,9 +38,11 @@ const schema = [
     // component props:
     component: 'select',
     slot: [
+      { component: 'option', value: '', slot: '' },
       { component: 'option', value: 'mutation', slot: 'Mutation' },
       { component: 'option', value: 'self', slot: 'Self taught' },
       { component: 'option', value: 'item', slot: 'Magic item' },
+      { component: 'option', value: 'gear', slot: 'Gear' },
     ],
   },
 ]

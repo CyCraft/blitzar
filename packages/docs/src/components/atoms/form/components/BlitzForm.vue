@@ -484,6 +484,11 @@ export default {
   },
   methods: {
     isFullString,
+    /**
+     * @param {'update:mode' | 'field-input' | 'input' | 'edit' | 'cancel' | 'save' | 'delete' | 'archive'} eventName
+     * @param {any} payload
+     * @param {'default' | 'cancel' | '' | undefined} origin
+     */
     event(eventName, payload, origin) {
       if (eventName === 'update:mode') {
         /**
@@ -498,8 +503,13 @@ export default {
          *
          * The payload is an object with `id` for the field id and `value` as the new value.
          *
-         * `origin: 'default'` is added when the field-input event is executed when the form is generated and the default values are applied. `field-input` events from user input won't have an 'origin'. A custom origin can be added when executing `fieldInput` from inside evaluatuated props.
-         * @property {{ id: string, value: any, origin?: 'default' | string }} payload event payload
+         * The `origin` prop of the event payload is what caused field-input event:
+         * - `'default'` means that the event was emitted when the form was mounted and all fields have initialised their default values.
+         * - `'cancel'` means that the 'cancel' button was clicked and the event data was reset to what it was before it was edited.
+         * - field-input events from user input won't have an origin.
+         * - A custom origin can be added when you execute `fieldInput` from inside an evaluatuated prop.
+         *
+         * @property {{ id: string, value: any, origin?: 'default' | 'cancel' | '' }} payload event payload
          */
         this.$emit('field-input', payload)
       }
@@ -507,6 +517,10 @@ export default {
         /**
          * This event enables the form to be usable with `v-model="formData"`
          * @property {{ [id in string]: any }} payload event payload
+         * @property {'default' | 'cancel' | '' | undefined} origin the cause of the input event:
+         * - `'default'` means that the event was emitted when the form was mounted and all fields have initialised their default values.
+         * - `'cancel'` means that the 'cancel' button was clicked and the event data was reset to what it was before it was edited.
+         * - input events from user input won't have an origin.
          */
         this.$emit('input', payload, origin)
       }
@@ -575,6 +589,13 @@ export default {
     tapCancel() {
       this.restoreBackup()
       this.resetState()
+      const origin = 'cancel'
+      Object.entries(this.formDataFlat).forEach(([id, value]) => {
+        // emit field-input with field's id and new data
+        this.event('field-input', { id, value, origin })
+      })
+      // emit input with entire formData
+      this.event('input', this.formData, origin) // do not extract `this` from here
       this.event('cancel')
     },
     validate() {

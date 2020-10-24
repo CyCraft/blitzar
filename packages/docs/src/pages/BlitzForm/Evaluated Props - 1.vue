@@ -33,6 +33,7 @@ const schema = [
         : 'pick a color!',
     // component props:
     slot: [
+      { component: 'option', value: '', slot: '' },
       { component: 'option', value: 'red', slot: 'red' },
       { component: 'option', value: 'blue', slot: 'blue' },
       { component: 'option', value: 'green', slot: 'green' },

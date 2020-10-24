@@ -64,6 +64,7 @@ const schema = [
     label: 'Role model',
     subLabel: 'Who do you look up to?',
     slot: [
+      { component: 'option', value: '', slot: '' },
       { component: 'option', value: 'captain-america', slot: 'Steve Rogers/Captain America' },
       { component: 'option', value: 'iron-man', slot: 'Tony Stark/Iron Man' },
       { component: 'option', value: 'thor-odinson', slot: 'Thor Odinson' },

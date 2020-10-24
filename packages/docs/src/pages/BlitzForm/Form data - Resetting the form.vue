@@ -1,6 +1,12 @@
 <template>
   <div>
-    <BlitzForm :schema="schema" v-model="formData" :columnCount="2" />
+    <BlitzForm
+      mode="view"
+      :schema="schema"
+      v-model="formData"
+      :columnCount="2"
+      :actionButtons="actionButtons"
+    />
     <PreviewCode comment="formData">{{ formData }}</PreviewCode>
   </div>
 </template>
@@ -34,14 +40,23 @@ const schema = [
 ]
 
 /**
-## Basic example
+## Resetting the form
 
-Check out the template; script; style below to see how simple the code looks to render this form:
+A BlitzForm automatically makes a backup of form data so you can "cancel an edit".
+
+In the example below there is a form with data. Try clicking "edit", then modify some data, then click "cancel".
  */
 export default {
   components: { BlitzForm },
   data() {
-    return { schema, formData: {} }
+    return {
+      schema,
+      formData: {
+        name: 'Thor Odinson',
+        powerOrigin: 'self',
+      },
+      actionButtons: ['cancel', 'save', 'edit'],
+    }
   },
 }
 </script>
