@@ -111,7 +111,8 @@ export default {
      * An object with the data of the entire form. The object keys are the ids of the fields passed in the 'schema'.
      *
      * To be used with `:value` or `v-model`.
-     * @example {name: ''}
+     * @type {Record<string, any>}
+     * @example { name: '' }
      * @category model
      */
     value: { type: Object, default: () => ({}) },
@@ -119,11 +120,13 @@ export default {
      * A manually set 'id' of the BlitzForm. This prop is accessible in the `context` (as `formId`) of any "evaluated prop" and event.
      *
      * Read more on Evaluated Props in its dedicated page.
+     * @type {string}
      * @category model
      */
     id: { type: String },
     /**
      * This is the heart of your BlitzForm. It's the schema that will defined what fields will be generated.
+     * @type {Record<string, any>[]}
      * @example [{id: 'name', label: 'Name', component: 'QInput'}, {id: 'age', label: 'Age', component: 'QInput', type: 'number'}]
      * @category model
      */
@@ -139,6 +142,7 @@ export default {
      * You can also pass custom buttons with the same schema to generate forms.
      *
      * See the documentation on "Action Buttons" for more info.
+     * @type {('edit' | 'cancel' | 'save' | 'delete' | 'archive' | Record<string, any>)[]}
      * @example ['delete', 'cancel', 'edit', 'save']
      * @example [{component: 'button', type: 'button', slot: 'log', events: {click: console.log}}]
      * @category content
@@ -146,6 +150,7 @@ export default {
     actionButtons: { type: Array, default: () => [] },
     /**
      * You can overwrite the schema used for the default action buttons for edit, cancel, save, delete & archive.
+     * @type {{ edit?: Record<string, any>, cancel?: Record<string, any>, save?: Record<string, any>, delete?: Record<string, any>, archive?: Record<string, any>, }}
      * @example {'save': {push: true}, 'delete': {color: 'secondary'}}
      * @category content
      */
@@ -162,6 +167,7 @@ export default {
     },
     /**
      * A function which serves as global validator for your form. It will receive the edited data as first param and the original data (before user edits) as second. It should return true if all is OK or a string with error message.
+     * @type {(newData: Record<string, any>, oldData: Record<string, any>) => (true | string)}
      * @example (newData, oldData) => newData.pass1 === newData.pass2 || 'passwords don't match'
      * @category behavior
      */
@@ -170,17 +176,20 @@ export default {
      * The amount of columns the form should have.
      *
      * Each field can set a specific 'span' to be able to span multiple columns.
+     * @type {number}
      * @category style
      */
     columnCount: { type: Number, default: 1 },
     /**
      * The gap between each field in the form.
+     * @type {string}
      * @category style
      */
     gridGap: { type: String, default: '1em' },
     /**
-     * The text used in the UI, eg. edit/save buttons etc... Pass an object with keys: archive, delete, cancel, edit, save.
-     * @example {cancel: 'キャンセル', edit: '編集', save: '保存'}
+     * The text used in the UI for the action buttons and some error messages.
+     * @type {{ archive?: string, delete?: string, cancel?: string, edit?: string, save?: string, requiredField?: string, formValidationError?: string } | EvaluatedProp<{ archive?: string, delete?: string, cancel?: string, edit?: string, save?: string, requiredField?: string, formValidationError?: string }>}
+     * @example { cancel: 'キャンセル', edit: '編集', save: '保存' }
      * @category content
      */
     lang: {
@@ -257,6 +266,7 @@ export default {
      * When `true` subLabels will be passed as a prop called 'hint'.
      *
      * This prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).
+     * @type {boolean | undefined}
      * @category behavior
      */
     internalLabels: { type: [Boolean, undefined], required: false, default: undefined },
@@ -264,12 +274,12 @@ export default {
      * Set to true if the entire form has its own error handling. This makes sure it passes on props like `rules` and does nothing with them in the BlitzField.
      *
      * This prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).
+     * @type {boolean | undefined}
      * @category behavior
      */
     internalErrors: { type: [Boolean, undefined], required: false, default: undefined },
     /**
      * Pass the component names (without `.vue`) that have internal error handling. This makes sure it passes on props like `rules` and does nothing with them in the BlitzField.
-     *
      * @type {string[]}
      * @category behavior
      */
@@ -278,7 +288,8 @@ export default {
       default: () => ['QInput', 'QSelect', 'QField', 'q-input', 'q-select', 'q-field'],
     },
     /**
-     * The component that should be used to generate the form. Defaults to QForm. Must be an HTML5 element or globally registered Vue component.
+     * The component that should be used to generate the form. Defaults to QForm. You can pass the name of a native HTML5 element or Vue component that is globally registered. You can also import the Vue file and directly pass the imported object, just like you would when you add it to a Vue file's components prop.
+     * @type {string | Function}
      * @example 'form'
      * @example 'tr'
      * @example 'MyFormWrapper'
