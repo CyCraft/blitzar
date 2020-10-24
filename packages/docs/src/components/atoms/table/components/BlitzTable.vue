@@ -169,7 +169,7 @@
 <script>
 import { merge } from 'merge-anything'
 import { isPlainObject, isFunction } from 'is-what'
-import { QTable, QTr, QTd, QCheckbox, QCard } from 'quasar'
+import { QTable, QTr, QTd, QCard } from 'quasar'
 import BlitzGridListToggle from './BlitzGridListToggle'
 import { BlitzForm, BlitzField } from '@blitzar/form'
 import schemaToQTableColumns from '../helpers/schemaToQTableColumns.js'
@@ -195,7 +195,6 @@ export default {
     QTable,
     QTr,
     QTd,
-    QCheckbox,
     QCard,
     BlitzForm,
     BlitzField,
