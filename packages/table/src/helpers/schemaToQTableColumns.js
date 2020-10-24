@@ -10,7 +10,7 @@ export default function schemaToQTableColumns(schema) {
       type,
       label,
       align,
-      default: df,
+      defaultValue,
       sortable,
       parseValue,
       sort,
@@ -25,9 +25,9 @@ export default function schemaToQTableColumns(schema) {
       // fieldInput has a chance to be triggered on `parseValue`, and thus needs to be added as fn to make sure it exists on the context but does nothing. We don't want to trigger fieldInput on sorting, therefore it must be an empty fn.
       const valueOrDefaultValue = !isUndefined(value)
         ? value
-        : isFunction(df)
-        ? df(row, blitzFieldContext)
-        : df
+        : isFunction(defaultValue)
+        ? defaultValue(row, blitzFieldContext)
+        : defaultValue
       if (isFunction(parseValue)) return parseValue(valueOrDefaultValue, blitzFieldContext)
       return valueOrDefaultValue
     }

@@ -150,7 +150,7 @@ const schemaColumns = [
     label: 'Passing',
     component: 'input',
     type: 'checkbox',
-    default: false,
+    defaultValue: false,
   },
   {
     id: 'created',

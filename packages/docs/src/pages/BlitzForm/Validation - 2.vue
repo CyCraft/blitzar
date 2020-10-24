@@ -86,7 +86,7 @@ export default {
         label: 'Do you agree with our terms?',
         component: 'input',
         type: 'checkbox',
-        default: false,
+        defaultValue: false,
         rules: [(val) => val || 'You must accept our terms'],
       },
     ]

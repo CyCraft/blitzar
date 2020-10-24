@@ -50,7 +50,7 @@ const schema = [
     span: 2,
     component: 'QSlider',
     label: 'Stamina',
-    default: 50,
+    defaultValue: 50,
     // component props:
     min: 0,
     max: 100,
@@ -111,7 +111,7 @@ const schema = [
     span: 1,
     component: 'QOptionGroup',
     label: 'Choose some power-ups',
-    default: () => [], // 'QOptionGroup' might not work without a default array
+    defaultValue: () => [], // 'QOptionGroup' might not work without a default array
     // component props:
     type: 'checkbox',
     options: [
@@ -136,7 +136,7 @@ const schema = [
     span: 1,
     label: 'Do you agree with our terms?',
     rules: [(val) => val || 'You must accept our terms'],
-    default: false,
+    defaultValue: false,
   },
   {
     id: 'submissionDate',

@@ -46,7 +46,7 @@ const schema = [
     type: 'range',
     label: 'Stamina',
     parseInput: Number,
-    default: 50,
+    defaultValue: 50,
     min: 0,
     max: 100,
   },
@@ -55,7 +55,7 @@ const schema = [
     component: 'input',
     type: 'checkbox',
     label: 'Do you agree with our terms?',
-    default: false,
+    defaultValue: false,
   },
 ]
 

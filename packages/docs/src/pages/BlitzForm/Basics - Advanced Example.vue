@@ -44,7 +44,7 @@ const schema = [
     type: 'range',
     label: 'Stamina',
     parseInput: Number,
-    default: 50,
+    defaultValue: 50,
     min: 0,
     max: 100,
   },
@@ -102,7 +102,7 @@ const schema = [
     component: 'SimpleOptionGroup',
     type: 'checkbox',
     label: 'Choose some power-ups',
-    default: () => [],
+    defaultValue: () => [],
     options: [
       {
         label: 'ISO-8 Chrystal',
@@ -126,7 +126,7 @@ const schema = [
     span: 1,
     label: 'Do you agree with our terms?',
     rules: [(val) => val || 'You must accept our terms'],
-    default: false,
+    defaultValue: false,
   },
   {
     id: 'submissionDate',

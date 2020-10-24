@@ -20,7 +20,7 @@ const schema = [
     id: 'car',
     component: 'input',
     type: 'checkbox',
-    default: false,
+    defaultValue: false,
     label: 'Do you have a car?',
   },
   {

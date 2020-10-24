@@ -36,7 +36,7 @@ const schema = [
     component: 'input',
     type: 'checkbox',
     rules: [(val) => val || 'You must accept our terms'],
-    default: false,
+    defaultValue: false,
   },
 ]
 

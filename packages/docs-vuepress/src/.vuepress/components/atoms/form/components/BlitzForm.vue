@@ -304,9 +304,9 @@ export default {
     const formId = id
     const dataFlat = flattenPerSchema(value, schema)
     const schemaArray = isArray(schema) ? schema : Object.values(schema)
-    const dataFlatDefaults = schemaArray.reduce((carry, { id, default: df }) => {
+    const dataFlatDefaults = schemaArray.reduce((carry, { id, defaultValue }) => {
       if (!isFullString(id)) return carry
-      carry[id] = isFunction(df) ? df(value, this) : df
+      carry[id] = isFunction(defaultValue) ? defaultValue(value, this) : defaultValue
       return carry
     }, {})
     const formDataFlat = merge(dataFlatDefaults, copy(dataFlat))
