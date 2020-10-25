@@ -16,7 +16,7 @@
     "@blitzar/form": "^0.0.5",
     "@blitzar/table": "^0.0.5",
     "@blitzar/utils": "^0.0.5",
-    "@quasar/extras": "^1.9.9",
+    "@quasar/extras": "^1.9.10",
     "@vue/composition-api": "^0.6.7",
     "blitzar": "^0.0.5",
     "case-anything": "^1.1.2",
@@ -28,7 +28,7 @@
     "merge-anything": "^3.0.6",
     "nestify-anything": "^1.0.2",
     "path-to-prop": "^1.0.0",
-    "planetar": "^0.7.6",
+    "planetar": "^0.7.8",
     "quasar": "^1.14.2",
     "vue-scrollactive": "^0.9.3"
   },

@@ -188,6 +188,11 @@ import schemaToQTableColumns from '../helpers/schemaToQTableColumns.js'
  * @property {string} __trClass - Internal prop passed down to QTr (if used)
  */
 
+/**
+Here you can find all the information on the available props & events of BlitzTable.
+
+If any of the documentation is unclear, feel free to [open an issue](https://github.com/cycraft/blitzar/issues) to ask for clarification!
+ */
 export default {
   name: 'BlitzTable',
   inheritAttrs: false,
@@ -372,7 +377,7 @@ export default {
       },
       set(newPagination) {
         if (this.qTableProps.pagination) {
-          return this.$emit('update:pagination', newPagination)
+          return this.event('update:pagination', newPagination)
         }
         this.defaultPagination = newPagination
       },
@@ -429,7 +434,7 @@ export default {
           headerCheckbox.indeterminate = false
         }
         this.innerSelected = val
-        this.$emit('update:selected', val)
+        this.event('update:selected', val)
       },
     },
     cColumns() {
@@ -486,22 +491,91 @@ export default {
       }
     },
     onCellDblclick(event, rowData, colId) {
-      this.$emit('row-dblclick', event, rowData)
-      this.$emit('cell-dblclick', event, rowData, colId)
+      this.event('row-dblclick', event, rowData)
+      this.event('cell-dblclick', event, rowData, colId)
     },
     onCellClick(event, rowData, colId) {
       this.onRowClick(event, rowData)
-      this.$emit('cell-click', event, rowData, colId)
+      this.event('cell-click', event, rowData, colId)
     },
     onRowClick(event, rowData, origin, gridItemProps) {
       const { selectionMode } = this
       if (origin === 'grid' && selectionMode) {
         gridItemProps.selected = !gridItemProps.selected
       }
-      this.$emit('row-click', event, rowData)
+      this.event('row-click', event, rowData)
     },
     onInputCell(rowId, colId, value, origin) {
-      this.$emit('input-cell', { rowId, colId, value, origin })
+      this.event('input-cell', { rowId, colId, value, origin })
+    },
+    /**
+     * @param {'update:pagination' | 'update:selected' | 'row-click' | 'row-dblclick' | 'cell-click' | 'cell-dblclick' | 'input-cell'} eventName
+     * @param {...any[]} args
+     */
+    event(eventName, ...args) {
+      if (eventName === 'update:pagination') {
+        /**
+         * This makes it possible to sync the table pagination like:
+         * ```html
+         * <BlitzTable :pagination.sync="pagination" />
+         * ```
+         * See the [Quasar docs](https://quasar.dev/vue-components/table#Pagination) for the exact details on how pagination works.
+         * @property {{ sortBy: 'desc' | 'asc', descending: boolean, page: number, rowsPerPage: number, rowsNumber?: number }} payload newPagination
+         */
+        this.$emit('update:pagination', ...args)
+      }
+      if (eventName === 'update:selected') {
+        /**
+         * This makes it possible to sync the table selection (the selected rows) like:
+         * ```html
+         * <BlitzTable :selected.sync="selected" selection="multiple" />
+         * ```
+         * See the [Quasar docs](https://quasar.dev/vue-components/table#Selection) for the exact details on how selection works.
+         * @property {Record<string, any>[]} payload val
+         */
+        this.$emit('update:selected', ...args)
+      }
+      if (eventName === 'row-click') {
+        /**
+         * Emitted when user clicks/taps on a row.
+         * @property {MouseEvent} event the mouse event that occured
+         * @property {Record<string, any>} payload the rowData
+         */
+        this.$emit('row-click', ...args)
+      }
+      if (eventName === 'row-dblclick') {
+        /**
+         * Emitted when user quickly double clicks/taps on a row.
+         * @property {MouseEvent} event the mouse event that occured
+         * @property {Record<string, any>} payload the rowData
+         */
+        this.$emit('row-dblclick', ...args)
+      }
+      if (eventName === 'cell-click') {
+        /**
+         * Emitted when user clicks/taps on a cell.
+         * @property {MouseEvent} event the mouse event that occured
+         * @property {Record<string, any>} payload the rowData
+         * @property {string} colId the column ID, this is what you have set as `id` in the schema
+         */
+        this.$emit('cell-click', ...args)
+      }
+      if (eventName === 'cell-dblclick') {
+        /**
+         * Emitted when user quickly double clicks/taps on a cell.
+         * @property {MouseEvent} event the mouse event that occured
+         * @property {Record<string, any>} payload the rowData
+         * @property {string} colId the column ID, this is what you have set as `id` in the schema
+         */
+        this.$emit('cell-dblclick', ...args)
+      }
+      if (eventName === 'input-cell') {
+        /**
+         * Emitted when the user updates the cell, if rendered as editable by setting `mode: 'edit'` in the schema.
+         * @property {{ rowId: string, colId: string, value: any, origin?: string }} payload
+         */
+        this.$emit('input-cell', ...args)
+      }
     },
   },
 }

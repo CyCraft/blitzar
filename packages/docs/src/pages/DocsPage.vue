@@ -16,6 +16,12 @@
     +C(color, 'white')
   .planetar-example-card
     +C(color, 'black')
+  .planetar-api-card
+    +C(background, 'white')
+    .text-h4
+      +C(color, blue-zodiac)
+    a
+      +C(color, primary)
 </style>
 
 <script lang="ts">

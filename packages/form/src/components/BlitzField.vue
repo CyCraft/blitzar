@@ -24,6 +24,7 @@
       class="blitz-field__label"
     >
       {{ labelUsedHere }}
+      <!-- @slot The label slot is the area behind the label on the same line. This slot can be set via the schema at `slots: {label: 'slot content'}`. See the "slots" documentation for more info. -->
       <slot name="label">
         <BlitzH
           v-if="getEvaluatedPropOrAttr('slots') && getEvaluatedPropOrAttr('slots').label"
@@ -74,7 +75,12 @@
     >
       <BlitzH v-if="defaultSlotCalculated" :options="defaultSlotCalculated" />
     </component>
-    <QField v-else v-model="cValue" v-bind="propsAndAttrsToPassForQField">
+    <QField
+      v-else
+      v-model="cValue"
+      v-bind="propsAndAttrsToPassForQField"
+      class="blitz-field__component-validation"
+    >
       <template v-slot:control>
         <input
           v-if="component === 'input'"
@@ -139,6 +145,11 @@
         grid-row: 1 / 2
   .blitz-field__component
     flex: 1
+  /** this fixes an issue where QInput fields are larger when they have rules */
+  .blitz-field__component-validation
+    .q-field__control,
+    .q-field__native
+      min-height: 40px
 
 // style
 .blitz-field
@@ -290,7 +301,7 @@ export default {
     /**
      * A smaller label for extra info.
      * @type {string | EvaluatedProp<string>}
-     * @example 'ask for info'
+     * @example 'first and last'
      * @category content
      */
     subLabel: { type: [String, Function] },
@@ -471,7 +482,7 @@ export default {
     const { value, defaultValue, formData } = this
     if (!isUndefined(value)) return { innerValue: value }
     const innerValue = isFunction(defaultValue) ? defaultValue(formData, this) : defaultValue
-    this.$emit('input', innerValue, 'default')
+    this.event('input', innerValue, 'default')
     return {
       innerValue,
     }
@@ -488,6 +499,23 @@ export default {
       if (propOrAttr in this) return this[propOrAttr]
       return this.$attrs[propOrAttr]
     },
+    /**
+     * @param {'input'} eventName
+     * @param {any} payload
+     * @param {'default' | '' | undefined} origin
+     */
+    event(eventName, payload, origin) {
+      if (eventName === 'input') {
+        /**
+         * This event enables the field to be usable with `v-model="value"`
+         * @property {any} payload the updated value
+         * @property {'default' | '' | undefined} origin the cause of the input event:
+         * - `'default'` means that the event was emitted when the form was mounted and all fields have initialised their default values.
+         * - input events from user input won't have an origin.
+         */
+        this.$emit('input', payload, origin)
+      }
+    },
   },
   computed: {
     cValue: {
@@ -500,7 +528,7 @@ export default {
         const { parseInput, events } = this
         if (isFunction(parseInput)) val = parseInput(val, this)
         if (isFunction(events.input)) events.input(val, this)
-        this.$emit('input', val, ...otherArguments)
+        this.event('input', val, ...otherArguments)
       },
     },
     evaluatedPropsDataObject() {

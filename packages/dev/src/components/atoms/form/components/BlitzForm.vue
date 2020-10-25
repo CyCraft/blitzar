@@ -24,6 +24,7 @@
       </div>
     </template>
     <!-- form contents -->
+    <!-- @slot The default slot is what contains by default the actual form fields. This slot should not be used, unless you are only interested in the logic of BlitzForm and not of BlitzFields. -->
     <slot v-bind="{ schema: cSchema, formDataFlat }">
       <div
         class="blitz-form__form"
@@ -101,6 +102,11 @@ import { flattenPerSchema } from '@blitzar/utils'
 import { defaultLang } from '../meta/lang'
 import BlitzField from './BlitzField.vue'
 
+/**
+Here you can find all the information on the available props & events of BlitzForm.
+
+If any of the documentation is unclear, feel free to [open an issue](https://github.com/cycraft/blitzar/issues) to ask for clarification!
+ */
 export default {
   name: 'BlitzForm',
   components: { BlitzField, QForm },

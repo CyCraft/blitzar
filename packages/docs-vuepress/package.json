@@ -10,7 +10,7 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@quasar/extras": "^1.9.9",
+    "@quasar/extras": "^1.9.10",
     "@vuepress/plugin-register-components": "^1.7.1",
     "fibers": "^5.0.0",
     "node-sass": "^4.14.1",
@@ -28,7 +28,7 @@
     "@blitzar/form": "^0.0.5",
     "@blitzar/utils": "^0.0.5",
     "copy-anything": "^2.0.1",
-    "planetar": "^0.7.6"
+    "planetar": "^0.7.8"
   },
   "gitHead": "67dabbf127033a928ec02d3a1a9da8a4d8d83d40"
 }
