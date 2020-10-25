@@ -53,7 +53,7 @@
       "internalErrorsFor",
       "formComponent"
     ],
-    "description": ""
+    "description": "Here you can find all the information on the available props & events of BlitzForm.\n\nIf any of the documentation is unclear, feel free to [open an issue](https://github.com/cycraft/blitzar/issues) to ask for clarification!"
   },
   "blitz-h": {
     "attributes": [
