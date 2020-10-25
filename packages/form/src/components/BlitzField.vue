@@ -222,7 +222,7 @@ export default {
      * @type {(formData: Record<string, any>, formContext: FormContext) => any | any}
      * @category model
      */
-    defaultValue: { type: [undefined, Function] },
+    defaultValue: { type: undefined },
     /**
      * A function that modifies a value before it is used in the actual component. (see `parseInput` for the reverse)
      * @type {(val: any) => any}
