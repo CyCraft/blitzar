@@ -99,11 +99,11 @@
   },
   "blitz-field/fieldStyle": {
     "type": "string | Record<string, boolean> | (string | Record<string, boolean>)[] | EvaluatedProp<string | Record<string, boolean> | (string | Record<string, boolean>)[]>",
-    "description": "Custom styling to be applied to the BlitzField. Applied like so `:style=\"fieldStyle\"`. Can be an Evaluated Prop (this is why I opted to have a different name from `style`)."
+    "description": "Custom styling to be applied to the BlitzField. Applied like so `:style=\"fieldStyle\"`. Can be an Evaluated Prop (this is why I opted to have a different name from `style`).\n\nIn a BlitzForm schema you can also just write `style: '...'` and BlitzForm will pass that as fieldStyle for you, because \"style\" is not a valid prop name."
   },
   "blitz-field/fieldClasses": {
     "type": "string | Record<string, boolean> | (string | Record<string, boolean>)[] | EvaluatedProp<string | Record<string, boolean> | (string | Record<string, boolean>)[]>",
-    "description": "Custom classes to be applied to the BlitzField. Applied like so `:class=\"fieldClasses\"`. Can be an Evaluated Prop (this is why I opted to have a different name from `class`)."
+    "description": "Custom classes to be applied to the BlitzField. Applied like so `:class=\"fieldClasses\"`. Can be an Evaluated Prop (this is why I opted to have a different name from `class`).\n\nIn a BlitzForm schema you can also just write `class: '...'` and BlitzForm will pass that as fieldClasses for you, because \"class\" is not a valid prop name."
   },
   "blitz-field/componentStyle": {
     "type": "string | Record<string, boolean> | (string | Record<string, boolean>)[] | EvaluatedProp<string | Record<string, boolean> | (string | Record<string, boolean>)[]>",
@@ -139,7 +139,7 @@
   },
   "blitz-form/schema": {
     "type": "array",
-    "description": "This is the heart of your BlitzForm. It's the schema that will defined what fields will be generated."
+    "description": "This is the heart of your BlitzForm. It's the schema that will defined what fields will be generated.\n\nThe possible props you can pass are:\n- BlitzField props (see BlitzField API Card in the documentation)\n- any props of the actual component you define"
   },
   "blitz-form/actionButtons": {
     "type": "array",

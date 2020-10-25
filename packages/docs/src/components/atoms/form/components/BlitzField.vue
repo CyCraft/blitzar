@@ -1,19 +1,21 @@
 <template>
   <div
     v-if="getEvaluatedPropOrAttr('showCondition')"
-    :class="[
-      'blitz-field',
-      `blitz-field--${getEvaluatedPropOrAttr('mode')}`,
-      `blitz-field--${componentName}`,
-      `blitz-field--label-${labelPosition}`,
-      {
-        'blitz-field--no-label': !labelUsedHere,
-        'blitz-field--no-sub-label': !subLabelHtmlUsedHere,
-        'blitz-field--no-component': !component,
-      },
-      ...fieldClassesArrayUsedHere,
-    ]"
-    :style="fieldStyleUsedHere"
+    :class="
+      [
+        'blitz-field',
+        `blitz-field--${getEvaluatedPropOrAttr('mode')}`,
+        `blitz-field--${componentName}`,
+        `blitz-field--label-${labelPosition}`,
+        {
+          'blitz-field--no-label': !labelUsedHere,
+          'blitz-field--no-sub-label': !subLabelHtmlUsedHere,
+          'blitz-field--no-component': !component,
+        },
+        getEvaluatedPropOrAttr('fieldClasses'),
+      ].flat()
+    "
+    :style="getEvaluatedPropOrAttr('fieldStyle')"
   >
     <div
       v-if="
@@ -38,63 +40,57 @@
       :options="{
         component: 'div',
         slot: parsedFieldValue,
-        class: ['blitz-field__component', ...componentClassesArrayUsedHere],
-        style: componentStyleUsedHere,
+        class: ['blitz-field__component', getEvaluatedPropOrAttr('componentClasses')].flat(),
+        style: getEvaluatedPropOrAttr('componentStyle'),
       }"
     />
     <!-- raw component -->
     <input
-      v-else-if="hasInternalOrNoErrors && component === 'input'"
+      v-else-if="usesInternalOrNoErrors && component === 'input'"
       v-model="cValue"
       v-bind="propsAndAttrsToPass"
       v-on="eventsCalculated"
-      style="flex: 1"
-      :class="['blitz-field__component', ...componentClassesArrayUsedHere]"
-      :style="componentStyleUsedHere"
+      :class="['blitz-field__component', getEvaluatedPropOrAttr('componentClasses')].flat()"
+      :style="getEvaluatedPropOrAttr('componentStyle')"
     />
     <select
-      v-else-if="hasInternalOrNoErrors && component === 'select'"
+      v-else-if="usesInternalOrNoErrors && component === 'select'"
       v-model="cValue"
       v-bind="propsAndAttrsToPass"
       v-on="eventsCalculated"
-      style="flex: 1"
-      :class="['blitz-field__component', ...componentClassesArrayUsedHere]"
-      :style="componentStyleUsedHere"
+      :class="['blitz-field__component', getEvaluatedPropOrAttr('componentClasses')].flat()"
+      :style="getEvaluatedPropOrAttr('componentStyle')"
     >
       <BlitzH v-if="defaultSlotCalculated" :options="defaultSlotCalculated" />
     </select>
     <component
-      v-else-if="hasInternalOrNoErrors"
+      v-else-if="usesInternalOrNoErrors"
       :is="component"
-      :class="['blitz-field__component', ...componentClassesArrayUsedHere]"
       v-model="cValue"
       v-bind="propsAndAttrsToPass"
       v-on="eventsCalculated"
-      :style="componentStyleUsedHere"
+      :class="['blitz-field__component', getEvaluatedPropOrAttr('componentClasses')].flat()"
+      :style="getEvaluatedPropOrAttr('componentStyle')"
     >
       <BlitzH v-if="defaultSlotCalculated" :options="defaultSlotCalculated" />
     </component>
-    <QField
-      v-else
-      v-model="cValue"
-      v-bind="propsAndAttrsToPassForQField"
-      :class="['blitz-field__component', ...componentClassesArrayUsedHere]"
-      :style="componentStyleUsedHere"
-    >
+    <QField v-else v-model="cValue" v-bind="propsAndAttrsToPassForQField">
       <template v-slot:control>
         <input
           v-if="component === 'input'"
           v-model="cValue"
           v-bind="propsAndAttrsToPass"
           v-on="eventsCalculated"
-          style="flex: 1"
+          :class="['blitz-field__component', ...getEvaluatedPropOrAttr('componentClasses')]"
+          :style="getEvaluatedPropOrAttr('componentStyle')"
         />
         <select
           v-else-if="component === 'select'"
           v-model="cValue"
           v-bind="propsAndAttrsToPass"
           v-on="eventsCalculated"
-          style="flex: 1"
+          :class="['blitz-field__component', ...getEvaluatedPropOrAttr('componentClasses')]"
+          :style="getEvaluatedPropOrAttr('componentStyle')"
         >
           <BlitzH v-if="defaultSlotCalculated" :options="defaultSlotCalculated" />
         </select>
@@ -104,7 +100,8 @@
           v-model="cValue"
           v-bind="propsAndAttrsToPass"
           v-on="eventsCalculated"
-          style="flex: 1"
+          :class="['blitz-field__component', ...getEvaluatedPropOrAttr('componentClasses')]"
+          :style="getEvaluatedPropOrAttr('componentStyle')"
         >
           <BlitzH v-if="defaultSlotCalculated" :options="defaultSlotCalculated" />
         </component>
@@ -140,6 +137,9 @@
         align-items: center
       .blitz-field__component
         grid-row: 1 / 2
+  .blitz-field__component
+    flex: 1
+
 // style
 .blitz-field
   .blitz-field__sub-label
@@ -160,6 +160,7 @@ import {
   isUndefined,
   isNullOrUndefined,
   isFullString,
+  isBoolean,
 } from 'is-what'
 import { merge } from 'merge-anything'
 import { mapObject } from 'map-anything'
@@ -226,7 +227,7 @@ export default {
     /**
      * A function that modifies a value before it is used in the actual component. (see `parseInput` for the reverse)
      * @type {(val: any) => any}
-     * @example val => val && val.toUpperCase()
+     * @example val => val && val.split(' ').map(str => !str ? '' : `${str[0].toUpperCase()}${str.slice(1)}`).join(' ')
      * @example val => Number(val)
      * @example val => Date(val)
      * @category model
@@ -235,7 +236,7 @@ export default {
     /**
      * A function that modifies a value after user input but before the value is emitted. (see `parseValue` for the reverse)
      * @type {(val: any) => any}
-     * @example val => String(val)
+     * @example val => (val || '').toLowerCase()
      * @example val => val.toISOString()
      * @category model
      */
@@ -282,12 +283,14 @@ export default {
     /**
      * The field label.
      * @type {string | EvaluatedProp<string>}
+     * @example 'Your Name'
      * @category content
      */
     label: { type: [String, Function] },
     /**
      * A smaller label for extra info.
      * @type {string | EvaluatedProp<string>}
+     * @example 'ask for info'
      * @category content
      */
     subLabel: { type: [String, Function] },
@@ -401,13 +404,17 @@ export default {
     },
     /**
      * Custom styling to be applied to the BlitzField. Applied like so `:style="fieldStyle"`. Can be an Evaluated Prop (this is why I opted to have a different name from `style`).
+     *
+     * In a BlitzForm schema you can also just write `style: '...'` and BlitzForm will pass that as fieldStyle for you, because "style" is not a valid prop name.
      * @type {string | Record<string, boolean> | (string | Record<string, boolean>)[] | EvaluatedProp<string | Record<string, boolean> | (string | Record<string, boolean>)[]>}
-     * @example 'padding: 1em;'
+     * @example 'padding: 0.5em; color: white'
      * @category style
      */
     fieldStyle: { type: [Object, Array, String, Function] },
     /**
      * Custom classes to be applied to the BlitzField. Applied like so `:class="fieldClasses"`. Can be an Evaluated Prop (this is why I opted to have a different name from `class`).
+     *
+     * In a BlitzForm schema you can also just write `class: '...'` and BlitzForm will pass that as fieldClasses for you, because "class" is not a valid prop name.
      * @type {string | Record<string, boolean> | (string | Record<string, boolean>)[] | EvaluatedProp<string | Record<string, boolean> | (string | Record<string, boolean>)[]>}
      * @example ['dark-theme']
      * @category style
@@ -461,7 +468,7 @@ export default {
     fieldInput: { type: Function },
   },
   data() {
-    const { value, defaultValue, formData, internalErrors } = this
+    const { value, defaultValue, formData } = this
     if (!isUndefined(value)) return { innerValue: value }
     const innerValue = isFunction(defaultValue) ? defaultValue(formData, this) : defaultValue
     this.$emit('input', innerValue, 'default')
@@ -524,13 +531,13 @@ export default {
       const { name } = component || {}
       return name
     },
-    hasInternalOrNoErrors() {
+    usesInternalOrNoErrors() {
       const { getEvaluatedPropOrAttr, componentName, rulesCalculated } = this
       const internalErrors = getEvaluatedPropOrAttr('internalErrors')
       if (internalErrors !== undefined) return internalErrors
       return !rulesCalculated.length
     },
-    internalLabelsCalculated() {
+    usesInternalLabels() {
       const { component, getEvaluatedPropOrAttr } = this
       const internalLabels = getEvaluatedPropOrAttr('internalLabels')
       return internalLabels && !isNullOrUndefined(component)
@@ -563,74 +570,64 @@ export default {
       }, {})
     },
     propsAndAttrsToPass() {
-      // props only used here: parseValue, parseInput, label
-      const {
-        $attrs,
-        getEvaluatedPropOrAttr,
-        langCalculated,
-        rulesCalculated,
-        internalLabelsCalculated,
-      } = this
-      // should we pass on label & subLabel (as hint) or not
-      const labelToPass = !internalLabelsCalculated ? undefined : getEvaluatedPropOrAttr('label')
-      const hintToPass = !internalLabelsCalculated
-        ? getEvaluatedPropOrAttr('hint')
-        : getEvaluatedPropOrAttr('subLabel')
-      const readonlyToPass =
-        getEvaluatedPropOrAttr('mode') === 'view' || getEvaluatedPropOrAttr('readonly')
-      const disabledToPass =
-        getEvaluatedPropOrAttr('mode') === 'disabled' || getEvaluatedPropOrAttr('disabled')
+      const { getEvaluatedPropOrAttr } = this
       const propsToPass = {
-        lang: langCalculated,
-        rules: rulesCalculated,
-        label: labelToPass,
-        hint: hintToPass,
-        readonly: readonlyToPass,
-        disable: disabledToPass,
-        disabled: disabledToPass,
+        // we always wanna pass only this prop:
+        required: getEvaluatedPropOrAttr('required'),
       }
-      const attrsToPass = Object.keys($attrs).reduce((carry, attrKey) => {
+      // only pass rules when it has internal errors
+      if (this.usesInternalOrNoErrors) {
+        propsToPass.rules = this.rulesCalculated
+      }
+      // only pass label and hint when it has internal labels
+      if (this.usesInternalLabels) {
+        propsToPass.label = getEvaluatedPropOrAttr('label')
+        propsToPass.hint = getEvaluatedPropOrAttr('subLabel') || getEvaluatedPropOrAttr('hint')
+      } else {
+        propsToPass.hint = getEvaluatedPropOrAttr('hint')
+      }
+      // if readonly is set as prop
+      const readonly = getEvaluatedPropOrAttr('readonly')
+      if (isBoolean(readonly) || readonly === 'readonly') {
+        propsToPass.readonly = readonly
+      } else {
+        propsToPass.readonly = getEvaluatedPropOrAttr('mode') === 'view'
+      }
+      // if disabled is set as prop
+      const disabled = getEvaluatedPropOrAttr('disabled')
+      if (isBoolean(disabled) || disabled === 'disabled') {
+        propsToPass.disabled = disabled
+        propsToPass.disable = disabled
+      } else {
+        propsToPass.disabled = getEvaluatedPropOrAttr('mode') === 'disabled'
+        propsToPass.disable = getEvaluatedPropOrAttr('mode') === 'disabled'
+      }
+      const attrsToPass = Object.keys(this.$attrs).reduce((carry, attrKey) => {
         carry[attrKey] = getEvaluatedPropOrAttr(attrKey)
         return carry
       }, {})
       return { ...propsToPass, ...attrsToPass }
     },
     propsAndAttrsToPassForQField() {
-      // disable prefix suffix for QField
       return merge(this.propsAndAttrsToPass, {
-        prefix: undefined,
-        suffix: undefined,
+        rules: this.rulesCalculated,
+        // defaults for UI
         borderless: true,
         stackLabel: true,
+        // always disable prefix suffix for QField
+        prefix: undefined,
+        suffix: undefined,
       })
     },
     labelUsedHere() {
-      const { internalLabelsCalculated, getEvaluatedPropOrAttr } = this
-      return internalLabelsCalculated ? undefined : getEvaluatedPropOrAttr('label')
+      const { usesInternalLabels, getEvaluatedPropOrAttr } = this
+      return usesInternalLabels ? undefined : getEvaluatedPropOrAttr('label')
     },
     subLabelHtmlUsedHere() {
-      const { internalLabelsCalculated, getEvaluatedPropOrAttr } = this
-      const subLabel = internalLabelsCalculated ? undefined : getEvaluatedPropOrAttr('subLabel')
+      const { usesInternalLabels, getEvaluatedPropOrAttr } = this
+      const subLabel = usesInternalLabels ? undefined : getEvaluatedPropOrAttr('subLabel')
       if (!isFullString(subLabel)) return null
       return snarkdown(subLabel)
-    },
-    fieldStyleUsedHere() {
-      return this.getEvaluatedPropOrAttr('fieldStyle')
-    },
-    componentStyleUsedHere() {
-      return this.getEvaluatedPropOrAttr('componentStyle')
-    },
-    fieldClassesArrayUsedHere() {
-      const classes = this.getEvaluatedPropOrAttr('fieldClasses')
-      if (isString(classes)) return classes.split(' ')
-      if (isPlainObject(classes)) return [classes]
-      return classes
-    },
-    componentClassesArrayUsedHere() {
-      const classes = this.getEvaluatedPropOrAttr('componentClasses')
-      if (isString(classes)) return classes.split(' ')
-      if (isPlainObject(classes)) return [classes]
-      return classes
     },
     parsedFieldValue() {
       const { cValue, getEvaluatedPropOrAttr } = this

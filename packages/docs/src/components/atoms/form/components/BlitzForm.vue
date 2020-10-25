@@ -25,7 +25,6 @@
     </template>
     <!-- form contents -->
     <slot v-bind="{ schema: cSchema, formDataFlat }">
-      <!-- https://github.com/CyCraft/blitzar/issues/38 -->
       <div
         class="blitz-form__form"
         :style="`grid-template-columns:${' 1fr'.repeat(columnCount)}; grid-gap: ${gridGap}`"
@@ -126,8 +125,12 @@ export default {
     id: { type: String },
     /**
      * This is the heart of your BlitzForm. It's the schema that will defined what fields will be generated.
+     *
+     * The possible props you can pass are:
+     * - BlitzField props (see BlitzField API Card in the documentation)
+     * - any props of the actual component you define
      * @type {Record<string, any>[]}
-     * @example [{id: 'name', label: 'Name', component: 'QInput'}, {id: 'age', label: 'Age', component: 'QInput', type: 'number'}]
+     * @example [{id: 'name', label: 'Name', component: 'input', style: 'color: white'}, {id: 'age', label: 'Age', component: 'input', type: 'number', style: 'color: white'}]
      * @category model
      */
     schema: { type: Array, required: true },
@@ -375,19 +378,28 @@ export default {
       }
     },
     cSchema() {
+      // slot, class, style are 3 prop names we cannot directly pass via `v-bind`.
+      // - slot: we pass as `slots: { default: ... }`
+      // - class: we pass as `fieldClasses`
+      // - style: we pass as `fieldStyle`
       const { schema, schemaOverwritableDefaults, schemaForcedDefaults, internalErrorsFor } = this
       return schema.map((blueprint) => {
         const internalErrorDefaults = internalErrorsFor.includes(blueprint.component)
           ? { internalErrors: true }
           : {}
-        const slotsOverwrite = !blueprint.slot
-          ? {}
-          : { slots: merge(blueprint.slots || {}, { default: blueprint.slot }) }
+        const overwrites = {}
+        if (blueprint.slot) {
+          overwrites.slots = merge(blueprint.slots || {}, { default: blueprint.slot })
+        }
+        const fieldClasses = blueprint.fieldClasses || blueprint.class
+        if (fieldClasses) overwrites.fieldClasses = fieldClasses
+        const fieldStyle = blueprint.fieldStyle || blueprint.style
+        if (fieldStyle) overwrites.fieldStyle = fieldStyle
         const blueprintParsed = merge(
           schemaOverwritableDefaults,
           internalErrorDefaults,
           blueprint,
-          slotsOverwrite,
+          overwrites,
           schemaForcedDefaults
         )
         return blueprintParsed
