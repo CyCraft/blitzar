@@ -1,13 +1,17 @@
 <template>
   <div class="preview-code q-mt-xl">
-    <pre class="language-js"><code>{{ comment ? `/** ${comment} */\n` : '' }}<slot /></code></pre>
+    <pre
+      class="_codeblock language-js"
+    ><code>{{ comment ? `/** ${comment} */\n` : '' }}<slot /></code></pre>
   </div>
 </template>
 
 <style lang="sass" scoped>
 // $
 
-// .preview-code
+.preview-code
+  > ._codeblock
+    +C(background, code-space)
 </style>
 
 <script lang="ts">

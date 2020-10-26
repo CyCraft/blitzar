@@ -125,6 +125,14 @@
   display: grid
   align-content: start
   grid-gap: $sm $md
+  // grid-grid-template-areas: "label" \
+  //                           "sublabel" \
+  //                           "field"
+  // grid-grid-template-areas: "label sublabel" \
+  //                           "label field" \
+  //                           "empty field"
+  // grid-grid-template-areas: "label    field" \
+  //                           "sublabel field"
   &--label-top
     grid-auto-flow: row
   &--label-left

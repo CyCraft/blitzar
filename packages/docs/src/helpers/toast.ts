@@ -9,5 +9,5 @@ export function showToast(message: string, payload: any, origin?: any): void {
   if (isPlainObject(payload) && payload.origin === 'default') return
   const caption =
     isPlainObject(payload) || isArray(payload) ? JSON.stringify(payload, undefined, 2) : payload
-  Notify.create({ message, caption })
+  Notify.create({ message, caption, classes: 'bg-code-space-light' })
 }

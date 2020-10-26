@@ -14,6 +14,15 @@
 .page-docs
   .markdown
     +C(color, 'white')
+    line-height: 1.65
+    code:not(.language-js):not(.language-html)
+      color: rgba(255,255,255,0.9)
+      +py(3px)
+      +px(6px)
+      border-radius: 6px
+    code:not(.language-js):not(.language-html),
+    pre
+      +C(background, code-space)
   .planetar-example-card
     +C(color, 'black')
   .planetar-api-card
