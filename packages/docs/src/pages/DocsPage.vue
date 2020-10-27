@@ -16,7 +16,7 @@
     +C(color, 'white')
     line-height: 1.65
     code:not(.language-js):not(.language-html)
-      color: rgba(255,255,255,0.9)
+      color: #eeeeee
       +py(3px)
       +px(6px)
       border-radius: 6px
