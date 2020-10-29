@@ -10,7 +10,7 @@
         {
           'blitz-field--no-label': !labelUsedHere,
           'blitz-field--no-sub-label': !subLabelHtmlUsedHere,
-          'blitz-field--no-component': !component,
+          'blitz-field--no-component': !componentName,
         },
         getEvaluatedPropOrAttr('fieldClasses'),
       ].flat()
@@ -34,7 +34,7 @@
     </div>
     <div v-if="subLabelHtmlUsedHere" class="blitz-field__sub-label" v-html="subLabelHtmlUsedHere" />
     <!-- no component -->
-    <template v-if="!component"></template>
+    <template v-if="!getEvaluatedPropOrAttr('component')"></template>
     <!-- raw component -->
     <BlitzH
       v-else-if="getEvaluatedPropOrAttr('mode') === 'raw'"
@@ -47,7 +47,7 @@
     />
     <!-- raw component -->
     <input
-      v-else-if="usesInternalOrNoErrors && component === 'input'"
+      v-else-if="usesInternalOrNoErrors && getEvaluatedPropOrAttr('component') === 'input'"
       v-model="cValue"
       v-bind="propsAndAttrsToPass"
       v-on="eventsCalculated"
@@ -55,7 +55,7 @@
       :style="getEvaluatedPropOrAttr('componentStyle')"
     />
     <select
-      v-else-if="usesInternalOrNoErrors && component === 'select'"
+      v-else-if="usesInternalOrNoErrors && getEvaluatedPropOrAttr('component') === 'select'"
       v-model="cValue"
       v-bind="propsAndAttrsToPass"
       v-on="eventsCalculated"
@@ -66,7 +66,7 @@
     </select>
     <component
       v-else-if="usesInternalOrNoErrors"
-      :is="component"
+      :is="getEvaluatedPropOrAttr('component')"
       v-model="cValue"
       v-bind="propsAndAttrsToPass"
       v-on="eventsCalculated"
@@ -83,7 +83,7 @@
     >
       <template v-slot:control>
         <input
-          v-if="component === 'input'"
+          v-if="getEvaluatedPropOrAttr('component') === 'input'"
           v-model="cValue"
           v-bind="propsAndAttrsToPass"
           v-on="eventsCalculated"
@@ -91,7 +91,7 @@
           :style="getEvaluatedPropOrAttr('componentStyle')"
         />
         <select
-          v-else-if="component === 'select'"
+          v-else-if="getEvaluatedPropOrAttr('component') === 'select'"
           v-model="cValue"
           v-bind="propsAndAttrsToPass"
           v-on="eventsCalculated"
@@ -102,7 +102,7 @@
         </select>
         <component
           v-else
-          :is="component"
+          :is="getEvaluatedPropOrAttr('component')"
           v-model="cValue"
           v-bind="propsAndAttrsToPass"
           v-on="eventsCalculated"
@@ -574,9 +574,9 @@ export default {
       return !rulesCalculated.length
     },
     usesInternalLabels() {
-      const { component, getEvaluatedPropOrAttr } = this
+      const { getEvaluatedPropOrAttr, componentName } = this
       const internalLabels = getEvaluatedPropOrAttr('internalLabels')
-      return internalLabels && !isNullOrUndefined(component)
+      return internalLabels && !isNullOrUndefined(componentName)
     },
     langCalculated() {
       const { getEvaluatedPropOrAttr } = this
