@@ -49,10 +49,10 @@
             'blitz-table__row',
             'blitz-row',
             `blitz-row__${rowProps.row.id}`,
-            evaluate(rowClasses, rowProps.row),
+            evaluate(rowClasses, rowProps),
           ].flat()
         "
-        :style="evaluate(rowStyle, rowProps.row)"
+        :style="evaluate(rowStyle, rowProps)"
         :formComponent="QTr"
         :schema="schemaColumns"
         :value="rowProps.row"
@@ -71,8 +71,8 @@
             v-for="colBlueprint in blitzFormCtx.schema"
             :key="colBlueprint.id"
             :props="rowProps"
-            :class="['blitz-cell', evaluate(colBlueprint.cellClasses, rowProps.row)].flat()"
-            :style="evaluate(colBlueprint.cellStyle, rowProps.row)"
+            :class="['blitz-cell', evaluate(colBlueprint.cellClasses, rowProps)].flat()"
+            :style="evaluate(colBlueprint.cellStyle, rowProps)"
             @click="(e) => onCellClick(e, rowProps.row, colBlueprint.id)"
             @dblclick="(e) => onCellDblclick(e, rowProps.row, colBlueprint.id)"
           >
