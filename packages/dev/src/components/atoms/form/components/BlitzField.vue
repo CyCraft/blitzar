@@ -265,7 +265,7 @@ export default {
      * @example 'MyCustomField'
      * @category content
      */
-    component: { type: [String, Function] },
+    component: { type: [String, Function, Object] }, // object for imported vue instances
     /**
      * An Object with keys for the slot names and an object for values. The object you pass to a slot is itself applied as a `<component is="" />`.
      *
@@ -397,16 +397,16 @@ export default {
     showCondition: { type: [Boolean, Function], default: true },
     /**
      * `readonly` defaults to `true` on `mode: 'view'
-     * @type {boolean | EvaluatedProp<boolean>}
+     * @type {boolean | 'readonly' | EvaluatedProp<boolean | 'readonly'>}
      * @category state
      */
-    readonly: { type: [Boolean, Function], default: false },
+    readonly: { type: [Boolean, Function, String, undefined], default: undefined },
     /**
      * `disabled` defaults to `true` on `mode: 'disabled'.
-     * @type {boolean | EvaluatedProp<boolean>}
+     * @type {boolean | 'disabled' | EvaluatedProp<boolean | 'disabled'>}
      * @category state
      */
-    disabled: { type: [Boolean, Function], default: false },
+    disabled: { type: [Boolean, Function, String, undefined], default: undefined },
     /**
      * The position of the label in comparison to the field.
      *

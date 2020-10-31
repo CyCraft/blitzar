@@ -82,12 +82,18 @@
     "description": "Setting to `false` will hide the field. When using as an Evaluated Prop it can used to conditionally hide fields based on the other formData."
   },
   "blitz-field/readonly": {
-    "type": "boolean | EvaluatedProp<boolean>",
-    "description": "`readonly` defaults to `true` on `mode: 'view'"
+    "type": "boolean | 'readonly' | EvaluatedProp<boolean | 'readonly'>",
+    "description": "`readonly` defaults to `true` on `mode: 'view'",
+    "options": [
+      "readonly"
+    ]
   },
   "blitz-field/disabled": {
-    "type": "boolean | EvaluatedProp<boolean>",
-    "description": "`disabled` defaults to `true` on `mode: 'disabled'."
+    "type": "boolean | 'disabled' | EvaluatedProp<boolean | 'disabled'>",
+    "description": "`disabled` defaults to `true` on `mode: 'disabled'.",
+    "options": [
+      "disabled"
+    ]
   },
   "blitz-field/labelPosition": {
     "type": "'top' | 'left' | EvaluatedProp<'top' | 'left'>",
