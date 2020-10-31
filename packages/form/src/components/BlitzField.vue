@@ -265,7 +265,7 @@ export default {
      * @example 'MyCustomField'
      * @category content
      */
-    component: { type: [String, Function] },
+    component: { type: [String, Function, Object] }, // object for imported vue instances
     /**
      * An Object with keys for the slot names and an object for values. The object you pass to a slot is itself applied as a `<component is="" />`.
      *
