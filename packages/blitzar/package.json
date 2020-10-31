@@ -1,6 +1,6 @@
 {
   "name": "blitzar",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "A Vue component collection for blitzing fast prototyping ⚡",
   "module": "index.js",
   "main": "index.js",
@@ -27,8 +27,8 @@
     "schema"
   ],
   "dependencies": {
-    "@blitzar/form": "^0.0.6",
-    "@blitzar/table": "^0.0.6"
+    "@blitzar/form": "^0.0.7",
+    "@blitzar/table": "^0.0.7"
   },
   "license": "MIT",
   "bugs": "https://github.com/cycraft/blitzar/issues",
