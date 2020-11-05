@@ -13,12 +13,12 @@
     "@blitzar/utils": "^0.0.8",
     "case-anything": "^1.1.2",
     "copy-anything": "^2.0.1",
-    "filter-anything": "^2.1.6",
-    "is-what": "^3.11.2",
-    "map-anything": "^1.0.0",
-    "merge-anything": "^3.0.6",
-    "nestify-anything": "^1.0.2",
-    "quasar": "^1.14.2",
+    "filter-anything": "^2.1.7",
+    "is-what": "^3.11.3",
+    "map-anything": "^1.0.1",
+    "merge-anything": "^3.0.7",
+    "nestify-anything": "^1.0.3",
+    "quasar": "^1.14.3",
     "snarkdown": "^2.0.0"
   },
   "keywords": [

@@ -14,9 +14,9 @@
     "@vuepress/plugin-register-components": "^1.7.1",
     "fibers": "^5.0.0",
     "node-sass": "^4.14.1",
-    "quasar": "^1.14.2",
-    "sass": "^1.27.0",
-    "sass-loader": "^10.0.4",
+    "quasar": "^1.14.3",
+    "sass": "^1.29.0",
+    "sass-loader": "^10.0.5",
     "vuepress": "^1.7.1"
   },
   "homepage": "https://github.com/cycraft/blitzar#readme",

@@ -11,10 +11,10 @@
   },
   "dependencies": {
     "@blitzar/form": "^0.0.8",
-    "is-what": "^3.11.2",
-    "merge-anything": "^3.0.6",
+    "is-what": "^3.11.3",
+    "merge-anything": "^3.0.7",
     "path-to-prop": "^1.0.0",
-    "quasar": "^1.14.2"
+    "quasar": "^1.14.3"
   },
   "license": "MIT",
   "keywords": [
