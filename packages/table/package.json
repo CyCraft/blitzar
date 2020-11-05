@@ -3,7 +3,7 @@
   "version": "0.0.8",
   "author": "Luca Ban - Mesqueeb",
   "description": "Blitzar table component",
-  "module": "src/index.js",
+  "module": "dist/index.js",
   "main": "dist/index.js",
   "scripts": {
     "vue-int": "vue-int -i src/components -r -o vetur",
@@ -12,7 +12,7 @@
   "dependencies": {
     "@blitzar/form": "^0.0.8",
     "is-what": "^3.11.3",
-    "merge-anything": "^3.0.7",
+    "merge-anything": "^4.0.0",
     "path-to-prop": "^1.0.0",
     "quasar": "^1.14.3"
   },

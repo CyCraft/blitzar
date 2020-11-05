@@ -1,5 +1,5 @@
 import { isDate, isNumber, isPlainObject, isArray } from 'is-what'
-import commafy from 'commafy-anything'
+import { commafy } from 'commafy-anything'
 
 /**
  * takes a value and returns the parsed value based on a BlitzField blueprint provided.
