@@ -79,7 +79,13 @@
             <!-- somehow an extra div is required otherwise buttons won't render properly -->
             <div>
               <BlitzField
-                v-bind="{ ...colBlueprint, span: undefined, label: undefined, subLabel: undefined }"
+                v-bind="{
+                  ...colBlueprint,
+                  span: undefined,
+                  label: undefined,
+                  subLabel: undefined,
+                  component: colBlueprint.component || 'div',
+                }"
                 :value="blitzFormCtx.formDataFlat[colBlueprint.id]"
                 @input="(val, origin) => onInputCell(rowProps.row.id, colBlueprint.id, val, origin)"
               />
