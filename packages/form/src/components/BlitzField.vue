@@ -531,7 +531,8 @@ export default {
         return innerValue
       },
       set(val, ...otherArguments) {
-        const { parseInput, events } = this
+        const { parseInput, evalPropOrAttr } = this
+        const events = evalPropOrAttr('events')
         if (isFunction(parseInput)) val = parseInput(val, this)
         if (isFunction(events.input)) events.input(val, this)
         this.event('input', val, ...otherArguments)
