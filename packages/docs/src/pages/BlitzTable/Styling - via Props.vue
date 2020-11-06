@@ -42,7 +42,6 @@ const schemaColumns = [
 
 function applyTeamColor(rowData) {
   const color = rowData.team
-  console.log(`applying color → `, color)
   return `background: ${color}`
 }
 
