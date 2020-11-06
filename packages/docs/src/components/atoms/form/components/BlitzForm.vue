@@ -2,7 +2,7 @@
   <component
     :is="innerFormComponent"
     ref="refBlitzForm"
-    :class="`blitz-form blitz-form--nav-${actionButtonsPosition} _${formComponent}`"
+    :class="`blitz-form blitz-form--nav-${actionButtonsPosition}`"
   >
     <template v-if="formComponent === 'QForm'">
       <!-- prevent the default behaviour of HTML5 forms being "submitted" on "enter" inside input fields -->
@@ -51,7 +51,7 @@
 @import '../index.sass'
 
 .blitz-form
-  &._QForm
+  &.q-form
     display: flex
   &--nav-top,
   &--nav-bottom

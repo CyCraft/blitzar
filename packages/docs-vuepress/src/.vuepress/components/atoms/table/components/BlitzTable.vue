@@ -1,13 +1,13 @@
 <template>
   <QTable
-    class="blitz-table"
+    :class="`blitz-table ${qTableProps.grid ? 'blitz-table--grid' : 'blitz-table--rows'}`"
     :tableHeaderClass="qTableProps.tableHeaderClass + ` blitz-table__header`"
     v-bind="qTableProps"
     :selected.sync="cSelected"
     :pagination.sync="pagination"
     v-on="$listeners"
   >
-    <template v-slot:top v-if="usesTopSlot">
+    <template v-slot:top v-if="usesTopSlot" class="blitz-table__top">
       <slot name="above-nav-row" />
       <div class="blitz-table__nav-row">
         <slot name="top-left">
@@ -15,6 +15,7 @@
         </slot>
         <slot name="top-right">
           <BlitzField
+            class="blitz-table__action-button"
             v-for="(blueprint, i) in cActionButtons"
             :key="blueprint.id || i"
             v-bind="blueprint"
@@ -48,7 +49,7 @@
           [
             'blitz-table__row',
             'blitz-row',
-            `blitz-row__${rowProps.row.id}`,
+            rowProps.row.id ? `blitz-row__${rowProps.row.id}` : '',
             evaluate(rowClasses, rowProps),
           ].flat()
         "
@@ -59,7 +60,7 @@
         :id="rowProps.row.id"
         :mode="mode"
         :key="rowProps.row.id + JSON.stringify(rowProps.row)"
-        @fieldInput="({ id, value, origin }) => onInputCell(rowProps.row.id, id, value, origin)"
+        @field-input="({ id, value, origin }) => onInputCell(rowProps.row.id, id, value, origin)"
       >
         <template v-slot="blitzFormCtx">
           <QTd v-if="selectionMode" auto-width>
@@ -118,9 +119,9 @@
             :value="gridItemProps.row"
             :id="gridItemProps.row.id"
             v-bind="gridBlitzFormProps"
-            @fieldInput="
-              ({ id: fieldId, value, origin }) =>
-                onInputCell(gridItemProps.row.id, fieldId, value, origin)
+            @field-input="
+              ({ id: colId, value, origin }) =>
+                onInputCell(gridItemProps.row.id, colId, value, origin)
             "
           />
         </QCard>
@@ -342,8 +343,11 @@ export default {
   },
   mounted() {
     const footerEl = this.$el.querySelector('.q-table__bottom')
-    if (!footerEl) return
-    footerEl.classList.add('blitz-table__footer')
+    if (footerEl) footerEl.classList.add('blitz-table__footer')
+    const topEl = this.$el.querySelector('.q-table__top')
+    if (topEl) topEl.classList.add('blitz-table__top')
+    const titleEl = this.$el.querySelector('.q-table__title')
+    if (titleEl) titleEl.classList.add('blitz-table__title')
   },
   data() {
     const { grid, selected } = this
@@ -486,8 +490,8 @@ export default {
   },
   methods: {
     evaluate(propValue, rowProps) {
-      if (!isFunction(propValue)) return propValue
-      return propValue(rowProps.row, rowProps, this)
+      if (!isFunction(propValue)) return propValue || ''
+      return propValue(rowProps.row, rowProps, this) || ''
     },
     setSelectionAllRows(setTo) {
       if (setTo === true) {
