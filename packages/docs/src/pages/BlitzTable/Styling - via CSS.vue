@@ -6,66 +6,30 @@
       :rows="rows"
       title="Default table"
     />
-    <div>
-      <div :class="`styled-table__above-table`">
-        <h6>Styled table</h6>
-        <div @click="grid = true" :class="['_view-toggle', { _active: grid === true }]">
-          <!-- prettier-ignore -->
-          <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M3 2C2.44772 2 2 2.44772 2 3V10C2 10.5523 2.44772 11 3 11H10C10.5523 11 11 10.5523 11 10V3C11 2.44772 10.5523 2 10 2H3ZM4 9V4H9V9H4ZM14 2C13.4477 2 13 2.44772 13 3V10C13 10.5523 13.4477 11 14 11H21C21.5523 11 22 10.5523 22 10V3C22 2.44772 21.5523 2 21 2H14ZM15 9V4H20V9H15ZM13 14C13 13.4477 13.4477 13 14 13H21C21.5523 13 22 13.4477 22 14V21C22 21.5523 21.5523 22 21 22H14C13.4477 22 13 21.5523 13 21V14ZM15 15V20H20V15H15ZM3 13C2.44772 13 2 13.4477 2 14V21C2 21.5523 2.44772 22 3 22H10C10.5523 22 11 21.5523 11 21V14C11 13.4477 10.5523 13 10 13H3ZM4 20V15H9V20H4Z" /></svg>
-        </div>
-        <div @click="grid = false" :class="['_view-toggle', { _active: grid === false }]">
-          <!-- prettier-ignore -->
-          <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M3 5C2.44772 5 2 5.44772 2 6C2 6.55228 2.44772 7 3 7H3.01C3.56228 7 4.01 6.55228 4.01 6C4.01 5.44772 3.56228 5 3.01 5H3ZM8 5C7.44772 5 7 5.44772 7 6C7 6.55228 7.44772 7 8 7H21C21.5523 7 22 6.55228 22 6C22 5.44772 21.5523 5 21 5H8ZM8 11C7.44772 11 7 11.4477 7 12C7 12.5523 7.44772 13 8 13H21C21.5523 13 22 12.5523 22 12C22 11.4477 21.5523 11 21 11H8ZM7 18C7 17.4477 7.44772 17 8 17H21C21.5523 17 22 17.4477 22 18C22 18.5523 21.5523 19 21 19H8C7.44772 19 7 18.5523 7 18ZM2 12C2 11.4477 2.44772 11 3 11H3.01C3.56228 11 4.01 11.4477 4.01 12C4.01 12.5523 3.56228 13 3.01 13H3C2.44772 13 2 12.5523 2 12ZM3 17C2.44772 17 2 17.4477 2 18C2 18.5523 2.44772 19 3 19H3.01C3.56228 19 4.01 18.5523 4.01 18C4.01 17.4477 3.56228 17 3.01 17H3Z" /></svg>
-        </div>
-      </div>
-      <BlitzTable
-        :class="`styled-table__blitz-table ${grid ? 'mode-grid' : 'mode-rows'}`"
-        :schemaColumns="schemaColumns"
-        :schemaGrid="schemaColumns"
-        :rows="rows"
-        :grid="grid"
-        flat
-        bordered
-        :actionButtons="[]"
-      />
-    </div>
+    <BlitzTable
+      :class="`styled-table ${grid ? 'mode-grid' : 'mode-rows'}`"
+      :schemaColumns="schemaColumns"
+      :schemaGrid="schemaColumns"
+      :rows="rows"
+      :grid="grid"
+      flat
+      bordered
+      title="Styled Table"
+    />
   </div>
 </template>
 
 <style lang="sass">
 @import '@planetar/styles/variables'
 
-/** Styling for table title and grid toggle */
-.styled-table__above-table
-  /** spacing & layout */
-  display: flex
-  align-items: flex-end
-  padding: 0.5rem
-  > *:first-child
-    margin-right: auto
-  ._view-toggle
-    margin-left: 0.5rem
-    height: 24px
-    cursor: pointer
-  /** typography */
-  h6
-    color: $c-blue-zodiac
-  /** colors */
-  ._view-toggle path
-    fill: $c-science
-    opacity: 0.7
-  ._view-toggle._active path
-    fill: $c-blue-ribbon
-    opacity: 1
-
 /** Styling for actual table */
-.styled-table__blitz-table
+.styled-table
   /** borders */
   border: thin solid $c-stone-dark
   border-radius: 12px
   .blitz-table__footer
     border-top: thin solid $c-stone-dark
-  .blitz-table__header, tr, th, td
+  .blitz-table__header, th, td
     border-color: $c-stone-dark
   /** spacing */
   th
@@ -73,34 +37,41 @@
   td
     padding: 18px 24px
   /** colors */
+  .blitz-table__top,
   .blitz-table__header,
   .blitz-table__footer
     background: $c-stone-light
+  .blitz-table__action-button > *
+    color: $c-blue-ribbon
   /** hovering row color */
   td:before
     background: none !important
   tr:hover
     background: $c-stone-light
-  /** typography */
+  /** typography - an example using sass mixins for typography styling */
+  .blitz-table__title
+    color: $c-blue-zodiac
+    +t-h6()
   th
     +t-caption-semi-bold()
   td
     +t-body2()
-  .blitz-table__footer,
   .blitz-table__footer span
     +t-caption()
 
 /** grid mode tweaks */
-.styled-table__blitz-table.mode-grid
+.styled-table.blitz-table--grid
   background: $c-stone
+  .blitz-table__top
+    background: $c-stone
   .blitz-table__grid-item
     box-shadow: none
     border-radius: 12px
     border-color: $c-stone-dark
-  .blitz-field__label
-    +t-caption()
-  .blitz-field__component
-    +t-body2()
+    .blitz-field__label
+      +t-caption()
+    .blitz-field__component
+      +t-body2()
 </style>
 
 <script>
@@ -119,10 +90,35 @@ const schemaColumns = [
 /**
 ## Styling with CSS (recommended)
 
-Check out this example's "style" tab to see how styling is applied!
+CSS classes to target:
+- `.blitz-table` (or set your own class like so: `<BlitzTable class="my-table" />`)
+- `.blitz-table--rows` the table when its in "table mode"
+- `.blitz-table--grid` the table when its in "grid mode"
+- `.blitz-table__header`
+- `.blitz-table__footer`
+- `.blitz-table__top` the top section which holds the title and "grid" button - excluding the table header
+- `.blitz-table__title`
+- `.blitz-table__action-button` the grid button and others passed to the `actionButtons` prop
 
-> Please note that the classes that you _should_ target with CSS, are currently still rough.
-> Improvement of which classes to target is still a WIP while we're in BETA.
+In table mode:
+- `tr` targets rows (including the header row)
+- `th` targets header cells
+- `td` targets body cells
+
+In grid mode:
+- `.blitz-table__grid-item` targets the grid card
+- `.blitz-field__label` targets the field label on a card
+- `.blitz-field__component` targets the field content
+
+To modifying the row hover color, you need to disable the default background on `td:before` and then set your color on `tr:hover` like so:
+```css
+td:before
+  background: none !important
+tr:hover
+  background: $c-stone-light
+```
+
+Check out this example's "style tab" to see how styling is applied!
  */
 export default {
   components: { BlitzTable },

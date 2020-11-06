@@ -1,15 +1,13 @@
 <template>
-  <div>
-    <BlitzTable
-      :schemaColumns="schemaColumns"
-      :schemaGrid="schemaColumns"
-      :rows="rows"
-      title="Users"
-      flat
-      bordered
-      tableHeaderClass="bg-stone t-caption-semi-bold"
-    />
-  </div>
+  <BlitzTable
+    :schemaColumns="schemaColumns"
+    :schemaGrid="schemaColumns"
+    :rows="rows"
+    title="Users"
+    flat
+    bordered
+    tableHeaderClass="bg-stone t-caption-semi-bold"
+  />
 </template>
 
 <style lang="sass"></style>
@@ -30,7 +28,7 @@ const schemaColumns = [
 /**
 ## Styling via Props
 
-You can use the "styling" related props from [Quasar's QTable](https://quasar.dev/vue-components/table#QTable-API), because all props not used by BlitzTable are passed to the QTable it's wrapping.
+You can use the "styling" related props from [Quasar's QTable](https://quasar.dev/vue-components/table#QTable-API), because all props not used by BlitzTable are passed to QTable.
 
 Props usable on the columns schema:
 - classes

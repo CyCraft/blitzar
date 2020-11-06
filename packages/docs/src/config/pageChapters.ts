@@ -55,6 +55,7 @@ export const routeNamePageChaptersMap: { [key in ROUTE_NAMES]: string[] } = {
     'Editing - Adding a new record.vue',
     'Styling.md',
     'Styling - via CSS.vue',
+    'Styling - Reusable complex styling.vue',
     'Styling - via Props.vue',
   ],
 }
