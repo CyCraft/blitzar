@@ -49,7 +49,7 @@
           [
             'blitz-table__row',
             'blitz-row',
-            `blitz-row__${rowProps.row.id}`,
+            rowProps.row.id ? `blitz-row__${rowProps.row.id}` : '',
             evaluate(rowClasses, rowProps),
           ].flat()
         "
@@ -60,7 +60,7 @@
         :id="rowProps.row.id"
         :mode="mode"
         :key="rowProps.row.id + JSON.stringify(rowProps.row)"
-        @fieldInput="({ id, value, origin }) => onInputCell(rowProps.row.id, id, value, origin)"
+        @field-input="({ id, value, origin }) => onInputCell(rowProps.row.id, id, value, origin)"
       >
         <template v-slot="blitzFormCtx">
           <QTd v-if="selectionMode" auto-width>
@@ -119,9 +119,9 @@
             :value="gridItemProps.row"
             :id="gridItemProps.row.id"
             v-bind="gridBlitzFormProps"
-            @fieldInput="
-              ({ id: fieldId, value, origin }) =>
-                onInputCell(gridItemProps.row.id, fieldId, value, origin)
+            @field-input="
+              ({ id: colId, value, origin }) =>
+                onInputCell(gridItemProps.row.id, colId, value, origin)
             "
           />
         </QCard>
@@ -490,8 +490,8 @@ export default {
   },
   methods: {
     evaluate(propValue, rowProps) {
-      if (!isFunction(propValue)) return propValue
-      return propValue(rowProps.row, rowProps, this)
+      if (!isFunction(propValue)) return propValue || ''
+      return propValue(rowProps.row, rowProps, this) || ''
     },
     setSelectionAllRows(setTo) {
       if (setTo === true) {
