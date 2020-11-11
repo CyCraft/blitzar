@@ -49,6 +49,8 @@
       "lang",
       "mode",
       "labelPosition",
+      "labelStyle",
+      "labelClasses",
       "evaluatedProps",
       "internalLabels",
       "internalErrors",

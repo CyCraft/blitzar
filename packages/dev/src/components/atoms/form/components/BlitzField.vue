@@ -454,15 +454,19 @@ export default {
     componentClasses: { type: [Object, Array, String, Function] },
     /**
      * Custom styling to be applied to the label of BlitzField. Applied like so `:style="componentStyle"`. Can be an Evaluated Prop.
+     *
+     * This prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).
      * @type {string | Record<string, boolean> | (string | Record<string, boolean>)[] | EvaluatedProp<string | Record<string, boolean> | (string | Record<string, boolean>)[]>}
-     * @example 'padding: 1em;'
+     * @example 'font-weight: 200;'
      * @category style
      */
     labelStyle: { type: [Object, Array, String, Function] },
     /**
      * Custom classes to be applied to the label of BlitzField. Applied like so `:class="labelClasses"`. Can be an Evaluated Prop.
+     *
+     * This prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).
      * @type {string | Record<string, boolean> | (string | Record<string, boolean>)[] | EvaluatedProp<string | Record<string, boolean> | (string | Record<string, boolean>)[]>}
-     * @example ['dark-theme']
+     * @example ['text-h1']
      * @category style
      */
     labelClasses: { type: [Object, Array, String, Function] },

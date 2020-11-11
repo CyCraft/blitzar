@@ -245,6 +245,24 @@ export default {
       validator: (prop) => ['top', 'left'].includes(prop),
     },
     /**
+     * Custom styling to be applied to the label of BlitzField. Applied like so `:style="componentStyle"`. Can be an Evaluated Prop.
+     *
+     * This prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).
+     * @type {string | Record<string, boolean> | (string | Record<string, boolean>)[] | EvaluatedProp<string | Record<string, boolean> | (string | Record<string, boolean>)[]>}
+     * @example 'font-weight: 200;'
+     * @category style
+     */
+    labelStyle: { type: [Object, Array, String, Function] },
+    /**
+     * Custom classes to be applied to the label of BlitzField. Applied like so `:class="labelClasses"`. Can be an Evaluated Prop.
+     *
+     * This prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).
+     * @type {string | Record<string, boolean> | (string | Record<string, boolean>)[] | EvaluatedProp<string | Record<string, boolean> | (string | Record<string, boolean>)[]>}
+     * @example ['text-h1']
+     * @category style
+     */
+    labelClasses: { type: [Object, Array, String, Function] },
+    /**
      * An array with prop names that should be treated as "Evaluated Props" when passed a function.
      *
      * This prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).
@@ -370,6 +388,8 @@ export default {
         fieldInput: this.fieldInput,
         // just pass
         labelPosition: this.labelPosition,
+        labelStyle: this.labelStyle,
+        labelClasses: this.labelClasses,
         evaluatedProps: this.evaluatedProps,
         internalLabels: this.internalLabels,
         internalErrors: this.internalErrors,
