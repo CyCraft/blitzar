@@ -19,7 +19,8 @@
   >
     <div
       v-if="labelUsedHere || (evalPropOrAttr('slots') && evalPropOrAttr('slots').label)"
-      class="blitz-field__label"
+      :class="['blitz-field__label', evalPropOrAttr('labelClasses')].flat()"
+      :style="evalPropOrAttr('labelStyle')"
     >
       {{ labelUsedHere }}
       <!-- @slot The label slot is the area behind the label on the same line. This slot can be set via the schema at `slots: {label: 'slot content'}`. See the "slots" documentation for more info. -->
@@ -451,6 +452,20 @@ export default {
      * @category style
      */
     componentClasses: { type: [Object, Array, String, Function] },
+    /**
+     * Custom styling to be applied to the label of BlitzField. Applied like so `:style="componentStyle"`. Can be an Evaluated Prop.
+     * @type {string | Record<string, boolean> | (string | Record<string, boolean>)[] | EvaluatedProp<string | Record<string, boolean> | (string | Record<string, boolean>)[]>}
+     * @example 'padding: 1em;'
+     * @category style
+     */
+    labelStyle: { type: [Object, Array, String, Function] },
+    /**
+     * Custom classes to be applied to the label of BlitzField. Applied like so `:class="labelClasses"`. Can be an Evaluated Prop.
+     * @type {string | Record<string, boolean> | (string | Record<string, boolean>)[] | EvaluatedProp<string | Record<string, boolean> | (string | Record<string, boolean>)[]>}
+     * @example ['dark-theme']
+     * @category style
+     */
+    labelClasses: { type: [Object, Array, String, Function] },
     /**
      * This is the *nested* data of all the fields inside a BlitzForm.
      *

@@ -26,6 +26,8 @@
       "fieldClasses",
       "componentStyle",
       "componentClasses",
+      "labelStyle",
+      "labelClasses",
       "formData",
       "formDataFlat",
       "formId",

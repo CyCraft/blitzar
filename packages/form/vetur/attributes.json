@@ -119,6 +119,14 @@
     "type": "string | Record<string, boolean> | (string | Record<string, boolean>)[] | EvaluatedProp<string | Record<string, boolean> | (string | Record<string, boolean>)[]>",
     "description": "Custom classes to be applied to the inner component of BlitzField. Applied like so `:class=\"componentClasses\"`. Can be an Evaluated Prop."
   },
+  "blitz-field/labelStyle": {
+    "type": "string | Record<string, boolean> | (string | Record<string, boolean>)[] | EvaluatedProp<string | Record<string, boolean> | (string | Record<string, boolean>)[]>",
+    "description": "Custom styling to be applied to the label of BlitzField. Applied like so `:style=\"componentStyle\"`. Can be an Evaluated Prop."
+  },
+  "blitz-field/labelClasses": {
+    "type": "string | Record<string, boolean> | (string | Record<string, boolean>)[] | EvaluatedProp<string | Record<string, boolean> | (string | Record<string, boolean>)[]>",
+    "description": "Custom classes to be applied to the label of BlitzField. Applied like so `:class=\"labelClasses\"`. Can be an Evaluated Prop."
+  },
   "blitz-field/formData": {
     "type": "Record<string, any>",
     "description": "This is the *nested* data of all the fields inside a BlitzForm.\n\nIt's not something you can pass via the schema, but something that BlitzForm will automatically pass to each of its fields so you can use it in Evaluated Props."
