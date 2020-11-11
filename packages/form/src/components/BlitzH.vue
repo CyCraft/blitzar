@@ -3,7 +3,7 @@ import { isArray, isPlainObject, isString } from 'is-what'
 import { omit } from 'filter-anything'
 
 /**
- * @typedef {BlitzHOption}
+ * @typedef BlitzHOption
  * @type {{
   component: string,
   slot: any,
