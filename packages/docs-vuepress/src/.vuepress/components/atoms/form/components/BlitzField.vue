@@ -466,7 +466,7 @@ export default {
      *
      * This prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).
      * @type {string | Record<string, boolean> | (string | Record<string, boolean>)[] | EvaluatedProp<string | Record<string, boolean> | (string | Record<string, boolean>)[]>}
-     * @example ['text-h1']
+     * @example ['text-h6']
      * @category style
      */
     labelClasses: { type: [Object, Array, String, Function] },
