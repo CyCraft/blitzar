@@ -54,12 +54,12 @@ import { isNumber } from 'is-what'
 import BlitzField from './BlitzField.vue'
 
 /**
-With BlitzMiniForm you can pass a "schema" just like a BlitzForm. The difference is that BlitzMiniForm is more like a (as the name says) "mini" form. 😃
+With BlitzListForm you can pass a "schema" just like a BlitzForm. The difference is that BlitzListForm is more like a (as the name says) "mini" form. 😃
 
 The "schema" you specify is shown as a single row. New rows are added automatically on user input.`,
  */
 export default {
-  name: 'BlitzMiniForm',
+  name: 'BlitzListForm',
   inheritAttrs: false,
   components: { BlitzField },
   props: {

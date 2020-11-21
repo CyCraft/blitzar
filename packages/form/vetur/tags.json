@@ -60,20 +60,11 @@
     "description": "Here you can find all the information on the available props & events of BlitzForm.\n\nIf any of the documentation is unclear, feel free to [open an issue](https://github.com/cycraft/blitzar/issues) to ask for clarification!"
   },
   "blitz-h": {
-    "attributes": [
-      "options"
-    ],
+    "attributes": ["options"],
     "description": "I'm still thinking about the best syntax for BlitzH"
   },
-  "blitz-mini-form": {
-    "attributes": [
-      "value",
-      "schema",
-      "attrsToPass",
-      "maxRows",
-      "disable",
-      "readonly"
-    ],
-    "description": "With BlitzMiniForm you can pass a \"schema\" just like a BlitzForm. The difference is that BlitzMiniForm is more like a (as the name says) \"mini\" form. 😃\n\nThe \"schema\" you specify is shown as a single row. New rows are added automatically on user input.`,"
+  "blitz-list-form": {
+    "attributes": ["value", "schema", "attrsToPass", "maxRows", "disable", "readonly"],
+    "description": "With BlitzListForm you can pass a \"schema\" just like a BlitzForm. The difference is that BlitzListForm is more like a (as the name says) \"mini\" form. 😃\n\nThe \"schema\" you specify is shown as a single row. New rows are added automatically on user input.`,"
   }
 }

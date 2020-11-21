@@ -42,16 +42,7 @@
   "blitz-field/mode": {
     "type": "'edit' | 'view' | 'disabled' | 'raw' | 'add' | EvaluatedProp<'edit' | 'view' | 'disabled' | 'raw' | 'add'>",
     "description": "The mode represents how fields are rendered\n- `'edit'`: (default) Show editable fields based on the schema\n- `'view'`: Show each field with `readonly: true`.\n- `'disabled'`: Show each field with `disabled: true`.\n- `'raw'`: Used to show raw data of your form. No fields are generated, just divs with the labels and values. This mode is powerful because it will automatically map values to the schema provided (eg. adding pre-/suffix; mapping to options of a select; etc.)\n- `'add'`: The same as 'edit'\n\nThis prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).",
-    "options": [
-      "edit",
-      "view",
-      "disabled",
-      "raw",
-      "add",
-      "view",
-      "disabled",
-      "raw"
-    ]
+    "options": ["edit", "view", "disabled", "raw", "add", "view", "disabled", "raw"]
   },
   "blitz-field/events": {
     "type": "Record<string, (event: any, formContext: FormContext) => any> | EvaluatedProp<Record<string, (event: any, formContext: FormContext) => any>>",
@@ -84,24 +75,17 @@
   "blitz-field/readonly": {
     "type": "boolean | 'readonly' | EvaluatedProp<boolean | 'readonly'>",
     "description": "`readonly` defaults to `true` on `mode: 'view'",
-    "options": [
-      "readonly"
-    ]
+    "options": ["readonly"]
   },
   "blitz-field/disabled": {
     "type": "boolean | 'disabled' | EvaluatedProp<boolean | 'disabled'>",
     "description": "`disabled` defaults to `true` on `mode: 'disabled'.",
-    "options": [
-      "disabled"
-    ]
+    "options": ["disabled"]
   },
   "blitz-field/labelPosition": {
     "type": "'top' | 'left' | EvaluatedProp<'top' | 'left'>",
     "description": "The position of the label in comparison to the field.\n\nThis prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).",
-    "options": [
-      "top",
-      "left"
-    ]
+    "options": ["top", "left"]
   },
   "blitz-field/fieldStyle": {
     "type": "string | Record<string, boolean> | (string | Record<string, boolean>)[] | EvaluatedProp<string | Record<string, boolean> | (string | Record<string, boolean>)[]>",
@@ -158,12 +142,7 @@
   "blitz-form/actionButtons": {
     "type": "array",
     "description": "Buttons on top of the form that control the 'mode' of the form. The possible pre-made buttons are:\n- 'edit' a button which puts the form in 'edit' mode & does `emit('edit')`\n- 'cancel' a button which puts the form in 'view' mode & does `emit('cancel')`\n- 'save' a button which puts the form in 'edit' mode & does `emit('save', {newData, oldData})`\n- 'delete' a red button which does `emit('delete')`\n- 'archive' a red button which does `emit('archive')`\n\nYou can also pass custom buttons with the same schema to generate forms.\n\nSee the documentation on \"Action Buttons\" for more info.",
-    "options": [
-      "cancel",
-      "save",
-      "delete",
-      "archive"
-    ]
+    "options": ["cancel", "save", "delete", "archive"]
   },
   "blitz-form/actionButtonDefaults": {
     "type": "{ edit?: Record<string, any>, cancel?: Record<string, any>, save?: Record<string, any>, delete?: Record<string, any>, archive?: Record<string, any>, }",
@@ -172,12 +151,7 @@
   "blitz-form/actionButtonsPosition": {
     "type": "string",
     "description": "The position of the action buttons.",
-    "options": [
-      "top",
-      "bottom",
-      "right",
-      "left"
-    ]
+    "options": ["top", "bottom", "right", "left"]
   },
   "blitz-form/validator": {
     "type": "(newData: Record<string, any>, oldData: Record<string, any>) => (true | string)",
@@ -198,21 +172,12 @@
   "blitz-form/mode": {
     "type": "string",
     "description": "The mode represents how fields are rendered\n- `'edit'`: (default) Show editable fields based on the schema\n- `'view'`: Show each field with `readonly: true`.\n- `'disabled'`: Show each field with `disabled: true`.\n- `'raw'`: Used to show raw data of your form. No fields are generated, just divs with the labels and values. This mode is powerful because it will automatically map values to the schema provided (eg. adding pre-/suffix; mapping to options of a select; etc.)\n- `'add'`: The same as 'edit'\n\nThis prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).",
-    "options": [
-      "edit",
-      "view",
-      "disabled",
-      "raw",
-      "add"
-    ]
+    "options": ["edit", "view", "disabled", "raw", "add"]
   },
   "blitz-form/labelPosition": {
     "type": "string|function",
     "description": "The position of the label in comparison to the field.\n\nThis prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).",
-    "options": [
-      "top",
-      "left"
-    ]
+    "options": ["top", "left"]
   },
   "blitz-form/labelStyle": {
     "type": "string | Record<string, boolean> | (string | Record<string, boolean>)[] | EvaluatedProp<string | Record<string, boolean> | (string | Record<string, boolean>)[]>",
@@ -245,25 +210,25 @@
   "blitz-h/options": {
     "type": "array"
   },
-  "blitz-mini-form/value": {
+  "blitz-list-form/value": {
     "type": "array"
   },
-  "blitz-mini-form/schema": {
+  "blitz-list-form/schema": {
     "type": "array",
     "description": "This is the information on the columns you want to be shown. An array of objects just like a BlitzForm."
   },
-  "blitz-mini-form/attrsToPass": {
+  "blitz-list-form/attrsToPass": {
     "type": "array",
     "description": "A list of prop (attribute) names to be passed on to each single BlitzField generated in the mini form.\n\nThis is useful when you want to use Evaluated Props in the schema of the mine form but need information from the top level BlitzForm."
   },
-  "blitz-mini-form/maxRows": {
+  "blitz-list-form/maxRows": {
     "type": "number",
     "description": "Allows to limit the max amount of rows."
   },
-  "blitz-mini-form/disable": {
+  "blitz-list-form/disable": {
     "type": "boolean"
   },
-  "blitz-mini-form/readonly": {
+  "blitz-list-form/readonly": {
     "type": "boolean"
   }
 }
