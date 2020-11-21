@@ -3,6 +3,7 @@ import { RouteConfig } from 'vue-router'
 export enum ROUTE_NAMES {
   FORM = 'BlitzForm',
   TABLE = 'BlitzTable',
+  LIST_FORM = 'BlitzListForm',
 }
 
 const routes: RouteConfig[] = [
@@ -23,6 +24,11 @@ const routes: RouteConfig[] = [
       {
         path: 'blitz-table',
         name: ROUTE_NAMES.TABLE,
+        component: () => import('pages/DocsPage.vue'),
+      },
+      {
+        path: 'blitz-list-form',
+        name: ROUTE_NAMES.LIST_FORM,
         component: () => import('pages/DocsPage.vue'),
       },
     ],

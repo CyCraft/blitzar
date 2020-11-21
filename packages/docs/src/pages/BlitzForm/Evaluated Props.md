@@ -13,7 +13,7 @@ The most important props you can access from `context`:
 
 - `formData` This is the _nested_ data of all the fields inside a BlitzForm.
 - `formDataFlat` This is the _flattened_ data of all the fields inside a BlitzForm.
-- `mode` The current mode of the BlitzForm. Can be `'view'` | `'edit'` | `'add'` | `'raw'`
+- `mode` The current mode of the BlitzForm. Can be `'view'` | `'edit'` | `'add'` | `'raw'` | `'disabled'`
 - `formId` An 'id' of the BlitzForm. This is only present when manually set.
 - Other common Vue props like: `$store`, `$router`, `$q` (for Quasar apps) etc.
 

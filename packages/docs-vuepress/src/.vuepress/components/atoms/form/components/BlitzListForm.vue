@@ -1,18 +1,18 @@
 <template>
-  <div class="ef-mini-form">
+  <div class="blitz-list-form">
     <div
-      class="ef-mini-form__row"
+      class="blitz-list-form__row"
       :style="`grid-template-columns: ${gridTemplateColumnsCalculated}`"
     >
       <BlitzField
         v-for="(subfield, fieldIndex) in schemaLabels"
         :key="fieldIndex"
-        class="ef-mini-form__sub-field"
+        class="blitz-list-form__sub-field"
         v-bind="subfield"
       />
     </div>
     <div
-      class="ef-mini-form__row"
+      class="blitz-list-form__row"
       v-for="(row, rowIndex) in cValue"
       :style="`grid-template-columns: ${gridTemplateColumnsCalculated}`"
       :key="rowIndex"
@@ -20,10 +20,11 @@
       <BlitzField
         v-for="(subfield, fieldIndex) in cSchema"
         :key="fieldIndex"
-        class="ef-mini-form__sub-field"
+        class="blitz-list-form__sub-field"
         :rowIndex="rowIndex"
         :rowData="cValue[rowIndex]"
         :rowInput="(params) => setSubFieldValue({ id: params.id, value: params.value, rowIndex })"
+        :deleteRow="() => deleteRow(rowIndex)"
         v-bind="subfield"
         :value="cValue[rowIndex][subfield.id]"
         @input="
@@ -38,8 +39,8 @@
 <style lang="sass">
 @import '../index.sass'
 
-.ef-mini-form
-  >.ef-mini-form__row
+.blitz-list-form
+  > .blitz-list-form__row
     display: grid
     justify-items: stretch
     align-items: center
@@ -54,7 +55,7 @@ import { isNumber } from 'is-what'
 import BlitzField from './BlitzField.vue'
 
 /**
-With BlitzListForm you can pass a "schema" just like a BlitzForm. The difference is that BlitzListForm is more like a (as the name says) "mini" form. 😃
+With BlitzListForm you can pass a "schema" just like a BlitzForm. The difference is that BlitzListForm is more like a (as the name says) "list" form. 😃
 
 The "schema" you specify is shown as a single row. New rows are added automatically on user input.`,
  */
@@ -67,40 +68,30 @@ export default {
     /**
      * @category model
      */
-    value: {
-      type: Array,
-      default: () => [],
-    },
+    value: { type: Array, default: () => [] },
     // EF props:
     /**
      * This is the information on the columns you want to be shown. An array of objects just like a BlitzForm.
+     * @example [{ label: 'Amount', id: 'amount', component: 'QInput', type: 'number' }, { label: 'Currency', id: 'curr', component: 'QSelect', options: [{ label: 'USD', value: 'usd' }] }]
      * @category content
      */
-    schema: {
-      type: Array,
-      default: () => [{ component: 'QInput' }],
-      examples: [
-        "[{label: 'Amount', id: 'amount', component: 'QInput', type: 'number'}, {label: 'Currency', id: 'curr', component: 'QSelect', options: [{label: 'USD', value: 'usd'}]}]",
-      ],
-    },
+    schema: { type: Array, default: () => [{ component: 'input' }] },
     /**
-     * A list of prop (attribute) names to be passed on to each single BlitzField generated in the mini form.
+     * A list of prop (attribute) names to be passed on to each single BlitzField generated in the list form.
      *
      * This is useful when you want to use Evaluated Props in the schema of the mine form but need information from the top level BlitzForm.
+     * @example ['formData', 'mode', 'myCustomProp']
      * @category content
      */
     attrsToPass: {
       type: Array,
       default: () => ['formData', 'formDataFlat', 'formId', 'mode', 'fieldInput', 'lang'],
-      examples: [`['formData', 'mode', 'myCustomProp']`],
     },
     /**
      * Allows to limit the max amount of rows.
      * @category content
      */
-    maxRows: {
-      type: Number,
-    },
+    maxRows: { type: Number },
     // props of which to inherit "description" etc. from BlitzField:
     disable: { type: Boolean },
     readonly: { type: Boolean },
@@ -119,7 +110,7 @@ export default {
         this.$emit('input', val)
       },
     },
-    miniFormAttrsToPass() {
+    listFormAttrsToPass() {
       const { attrsToPass, getPropOrAttrOrParentProp } = this
       return attrsToPass.reduce((carry, attrKey) => {
         carry[attrKey] = getPropOrAttrOrParentProp(attrKey)
@@ -127,18 +118,32 @@ export default {
       }, {})
     },
     cSchema() {
-      const { schema, disable, readonly, miniFormAttrsToPass } = this
-      return schema.map((subfield) => {
-        return merge(miniFormAttrsToPass, { disable, readonly }, subfield, {
+      const { schema, disable, readonly, listFormAttrsToPass } = this
+      // slot, class, style are 3 prop names we cannot directly pass via `v-bind`.
+      // - slot: we pass as `slots: { default: ... }`
+      // - class: we pass as `fieldClasses`
+      // - style: we pass as `fieldStyle`
+      return schema.map((blueprint) => {
+        const overwritableDefaults = { disable, readonly }
+        const overwrites = {
           label: '',
           subLabel: '',
-        })
+        }
+        if (blueprint.slot) {
+          overwrites.slots = merge(blueprint.slots || {}, { default: blueprint.slot })
+        }
+        const fieldClasses = blueprint.fieldClasses || blueprint.class
+        if (fieldClasses) overwrites.fieldClasses = fieldClasses
+        const fieldStyle = blueprint.fieldStyle || blueprint.style
+        if (fieldStyle) overwrites.fieldStyle = fieldStyle
+
+        return merge(listFormAttrsToPass, overwritableDefaults, blueprint, overwrites)
       })
     },
     schemaLabels() {
-      const { schema, miniFormAttrsToPass } = this
+      const { schema, listFormAttrsToPass } = this
       return schema.map((subfield) => {
-        return merge(miniFormAttrsToPass, subfield, { component: undefined })
+        return merge(listFormAttrsToPass, subfield, { component: undefined })
       })
     },
     gridTemplateColumnsCalculated() {

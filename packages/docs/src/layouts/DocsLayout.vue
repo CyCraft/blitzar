@@ -9,19 +9,14 @@
         flat
         @click="() => (leftDrawerOpen = !leftDrawerOpen)"
       />
-      <div
-        class="q-ml-md text-h6 cursor-pointer flex items-center text-uppercase"
-        @click="$router.push('/')"
-      >
-        <q-img src="media/blitzar-logo-white.svg" style="width: 20px" class="mr-xs" />litzar
+      <div class="text-h6 cursor-pointer flex items-center" @click="$router.push('/')">
+        <q-img src="media/blitzar-logo-white.svg" style="width: 20px" class="mr-xs gt-xs" />
+        <div class="ml-lg">{{ routeName }} Docs</div>
       </div>
       <div class="ml-auto flex q-gutter-md">
-        <AnchorLink
-          href="https://github.com/cycraft/blitzar/releases"
-          content="Changelog"
-          external
-        />
-        <AnchorLink href="https://github.com/cycraft/blitzar" content="Github" external />
+        <DropdownLink text="Components" class="px-sm" />
+        <AnchorLink href="https://github.com/cycraft/blitzar/releases" text="Changelog" external />
+        <AnchorLink href="https://github.com/cycraft/blitzar" text="Github" external />
       </div>
     </q-header>
     <q-drawer
@@ -56,13 +51,14 @@
 import { defineComponent, ref, computed, Ref } from '@vue/composition-api'
 import { spaceCase, pascalCase } from 'case-anything'
 import { TableOfContents } from 'planetar'
-import AnchorLink from 'components/AnchorLink.vue'
+import AnchorLink from '../components/AnchorLink.vue'
+import DropdownLink from '../components/DropdownLink.vue'
 import { routeNamePageChaptersMap } from '../config/pageChapters'
 import { ROUTE_NAMES } from '../router/routes'
 
 export default defineComponent({
   name: 'MainLayout',
-  components: { AnchorLink, TableOfContents },
+  components: { AnchorLink, DropdownLink, TableOfContents },
   setup(props, options) {
     const leftDrawerOpen = ref(true)
 

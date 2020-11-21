@@ -49,12 +49,14 @@ export default defineComponent({
     const pathToChapterFiles = 'pages/' + routeName
     const chapterOrder = computed((): string[] => routeNamePageChaptersMap[routeName])
     const pathsToApiCardSourceFile = computed(() =>
-      routeName === 'BlitzForm'
+      routeName === ROUTE_NAMES.TABLE
+        ? ['components/atoms/table/components/BlitzTable.vue']
+        : routeName === ROUTE_NAMES.FORM
         ? [
             'components/atoms/form/components/BlitzForm.vue',
             'components/atoms/form/components/BlitzField.vue',
           ]
-        : ['components/atoms/table/components/BlitzTable.vue']
+        : ['components/atoms/form/components/BlitzListForm.vue']
     )
 
     return { pathToChapterFiles, chapterOrder, pathsToApiCardSourceFile }

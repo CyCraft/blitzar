@@ -6,7 +6,7 @@
     :rel="external ? 'noopener noreferrer' : ''"
     v-on="$listeners"
   >
-    <slot>{{ content }}</slot>
+    <slot>{{ text }}</slot>
     <svg
       v-if="external"
       class="_svg q-ml-sm"
@@ -54,7 +54,7 @@ import { defineComponent } from '@vue/composition-api'
 export default defineComponent({
   name: 'AnchorLink',
   props: {
-    content: { type: String, required: true },
+    text: { type: String, required: true },
     href: { type: String },
     external: { type: Boolean, default: false },
   },

@@ -6,14 +6,11 @@
         <h1 class="text-logo mt-md">Blitzar</h1>
       </div>
       <div class="pa-md q-gutter-xl flex">
-        <RouteLink content="BlitzForm" to="/docs/blitz-form" />
-        <RouteLink content="BlitzTable" to="/docs/blitz-table" />
-        <AnchorLink
-          href="https://github.com/cycraft/blitzar/releases"
-          content="Changelog"
-          external
-        />
-        <AnchorLink href="https://github.com/cycraft/blitzar" content="Github" external />
+        <RouteLink text="BlitzForm" to="/docs/blitz-form" />
+        <RouteLink text="BlitzTable" to="/docs/blitz-table" />
+        <RouteLink text="BlitzListForm" to="/docs/blitz-list-form" />
+        <AnchorLink href="https://github.com/cycraft/blitzar/releases" text="Changelog" external />
+        <AnchorLink href="https://github.com/cycraft/blitzar" text="Github" external />
       </div>
     </div>
   </q-page>

@@ -471,13 +471,13 @@ export default {
      */
     labelClasses: { type: [Object, Array, String, Function] },
     /**
-     * This is the *nested* data of all the fields inside a BlitzForm.
+     * This is the *nested* data of all the fields inside a BlitzForm. (When using BlitzListForm as standalone, this is an array.)
      *
      * It's not something you can pass via the schema, but something that BlitzForm will automatically pass to each of its fields so you can use it in Evaluated Props.
-     * @type {Record<string, any>}
+     * @type {Record<string, any> | Record<string, any>[]}
      * @category readonly
      */
-    formData: { type: Object },
+    formData: { type: [Object, Array] },
     /**
      * This is the *flattened* data of all the fields inside a BlitzForm.
      *
@@ -495,13 +495,49 @@ export default {
      */
     formId: { type: String },
     /**
-     * The `fieldInput` function of BlitzForm. Is passed so it can be used in the input event: `events: { input: (value, { fieldInput } => fieldInput({ id: 'otherField', value }))}`
+     * The `fieldInput` function of BlitzForm. Is passed so it can be used in events. Eg.: `events: { input: (value, { fieldInput } => fieldInput({ id: 'otherField', value }))}`
      *
      * It's not something you can pass via the schema, but something that BlitzForm will automatically pass to each of its fields so you can use it in Evaluated Props.
      * @type {(val: any, formContext: FormContext) => void}
      * @category readonly
      */
     fieldInput: { type: Function },
+    /**
+     * (only present in BlitzListForm!)
+     * The `rowInput` function of BlitzForm. Is passed so it can be used in events. Eg.: `events: { input: (value, { fieldInput } => fieldInput({ id: 'otherField', value }))}`
+     *
+     * It's not something you can pass via the schema, but something that BlitzListForm will automatically pass to each of its fields so you can use it in Evaluated Props.
+     * @type {(val: any, formContext: FormContext) => void}
+     * @category readonly
+     */
+    rowInput: { type: Function },
+    /**
+     * (only present in BlitzListForm!)
+     * The current row index of this field.
+     *
+     * It's not something you can pass via the schema, but something that BlitzListForm will automatically pass to each of its fields so you can use it in Evaluated Props.
+     * @type {number}
+     * @category readonly
+     */
+    rowIndex: { type: Number },
+    /**
+     * (only present in BlitzListForm!)
+     * This is the *nested* data of all the fields of the row.
+     *
+     * It's not something you can pass via the schema, but something that BlitzListForm will automatically pass to each of its fields so you can use it in Evaluated Props.
+     * @type {Record<string, any>}
+     * @category readonly
+     */
+    rowData: { type: Object },
+    /**
+     * (only present in BlitzListForm!)
+     * This is a function that you can call to delete the row.
+     *
+     * It's not something you can pass via the schema, but something that BlitzListForm will automatically pass to each of its fields so you can use it in Evaluated Props.
+     * @type {() => void}
+     * @category readonly
+     */
+    deleteRow: { type: Function },
   },
   data() {
     const { value, defaultValue, formData } = this

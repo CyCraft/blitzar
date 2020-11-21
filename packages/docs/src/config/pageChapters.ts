@@ -3,8 +3,8 @@ import { ROUTE_NAMES } from '../router/routes'
 export const routeNamePageChaptersMap: { [key in ROUTE_NAMES]: string[] } = {
   [ROUTE_NAMES.FORM]: [
     'Basics.md',
-    'Basics - Basic Example.vue',
-    'Basics - Advanced Example.vue',
+    'Basics - Basic example.vue',
+    'Basics - Advanced example.vue',
     'Frameworks.md',
     'Frameworks - Quasar Framework.vue',
     'Slots.md',
@@ -20,6 +20,7 @@ export const routeNamePageChaptersMap: { [key in ROUTE_NAMES]: string[] } = {
     'Form data - Clearing the form.vue',
     'Form data - Resetting the form.vue',
     'Form data - Nested Data.vue',
+    'Form data - List forms.vue',
     'Styling.md',
     'Styling - Left labels.vue',
     'Styling - Raw form styling.vue',
@@ -57,5 +58,11 @@ export const routeNamePageChaptersMap: { [key in ROUTE_NAMES]: string[] } = {
     'Styling - via CSS.vue',
     'Styling - Reusable complex styling.vue',
     'Styling - via Props.vue',
+  ],
+  [ROUTE_NAMES.LIST_FORM]: [
+    'Basics.md',
+    'Basics - Basic example.vue',
+    'Basics - Advanced example.vue',
+    'BlitzForm Example.vue',
   ],
 }

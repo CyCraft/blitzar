@@ -1,7 +1,7 @@
 <template>
-  <router-link :class="['route-link']" :to="to" v-on="$listeners">
+  <div :class="['route-link']" v-on="$listeners">
     <slot>{{ text }}</slot>
-  </router-link>
+  </div>
 </template>
 
 <style lang="sass">
@@ -22,10 +22,9 @@
 import { defineComponent } from '@vue/composition-api'
 
 export default defineComponent({
-  name: 'RouteLink',
+  name: 'DropdownLink',
   props: {
     text: { type: String, required: true },
-    to: { type: String, required: true },
   },
 })
 </script>

@@ -8,4 +8,5 @@
 /src/components/atoms/table
 /src/pages/BlitzForm
 /src/pages/BlitzTable
+/src/pages/BlitzListForm
 DialogWrapper.vue
