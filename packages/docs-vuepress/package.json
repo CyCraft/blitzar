@@ -14,9 +14,9 @@
     "@vuepress/plugin-register-components": "^1.7.1",
     "fibers": "^5.0.0",
     "node-sass": "^5.0.0",
-    "quasar": "^1.14.3",
+    "quasar": "^1.14.5",
     "sass": "^1.29.0",
-    "sass-loader": "^10.0.5",
+    "sass-loader": "^10.1.0",
     "vuepress": "^1.7.1"
   },
   "homepage": "https://github.com/cycraft/blitzar#readme",
@@ -28,7 +28,7 @@
     "@blitzar/form": "^0.0.13",
     "@blitzar/utils": "^0.0.13",
     "copy-anything": "^2.0.1",
-    "planetar": "^0.7.8"
+    "planetar": "^0.7.9"
   },
   "gitHead": "67dabbf127033a928ec02d3a1a9da8a4d8d83d40"
 }

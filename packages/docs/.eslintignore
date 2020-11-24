@@ -10,3 +10,4 @@
 /src/pages/BlitzTable
 /src/pages/BlitzListForm
 DialogWrapper.vue
+.eslintrc.js

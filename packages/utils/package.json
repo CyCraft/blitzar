@@ -11,9 +11,9 @@
     "clean": "rimraf ./types && rimraf ./dist"
   },
   "dependencies": {
-    "commafy-anything": "^2.0.0",
+    "commafy-anything": "^2.1.0",
     "flatten-anything": "^2.0.4",
-    "is-what": "^3.11.3"
+    "is-what": "^3.12.0"
   },
   "keywords": [
     "blitzar"
