@@ -1,5 +1,5 @@
 <template>
-  <q-page class="page-docs" padding>
+  <q-page class="page-docs">
     <DocPage
       :pathToChapterFiles="pathToChapterFiles"
       :chapterOrder="chapterOrder"
@@ -12,6 +12,7 @@
 <style lang="sass">
 // $
 .page-docs
+  padding: $md
   .markdown
     +C(color, 'white')
     line-height: 1.65
@@ -23,6 +24,8 @@
     code:not(.language-js):not(.language-html),
     pre
       +C(background, code-space)
+    ol > li
+      +pb($md)
   .planetar-example-card
     +C(color, 'black')
   .planetar-api-card

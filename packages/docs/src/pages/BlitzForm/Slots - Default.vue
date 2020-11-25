@@ -53,13 +53,13 @@ const schema = [
 ]
 
 /**
-## default slot
+## Default Slot
 
-You can use the prop called "slot" to pass content to a default slot.
+You can use the prop called `slot` to pass content to a default slot.
 
-This means that in between your fields in a schema, you could include just regular HTML elements / Vue components that need to use the default slot.
+Your form fields can include HTML elements / Vue components that need to use the default slot.
 
-In the example below we first show how you can use the "default" slot to render basic HTML elements that require content in the default slot.
+In the example below we first show how you can use the default slot to render some basic HTML elements.
  */
 export default {
   components: { BlitzForm },

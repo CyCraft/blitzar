@@ -55,21 +55,19 @@ import { isNumber } from 'is-what'
 import BlitzField from './BlitzField.vue'
 
 /**
-With BlitzListForm you can pass a "schema" just like a BlitzForm. The difference is that BlitzListForm is more like a (as the name says) "list" form. 😃
+With BlitzListForm you can pass a `schema` just like a BlitzForm. The difference is that BlitzListForm is more like a (as the name says) _**list**_ form. 😃
 
-The "schema" you specify is shown as a single row. New rows are added automatically on user input.`,
+The `schema` you specify is shown as a single row. New rows are added automatically on user input.
  */
 export default {
   name: 'BlitzListForm',
   inheritAttrs: false,
   components: { BlitzField },
   props: {
-    // prop categories: behavior content general model state style
     /**
      * @category model
      */
     value: { type: Array, default: () => [] },
-    // EF props:
     /**
      * This is the information on the columns you want to be shown. An array of objects just like a BlitzForm.
      * @example [{ label: 'Amount', id: 'amount', component: 'QInput', type: 'number' }, { label: 'Currency', id: 'curr', component: 'QSelect', options: [{ label: 'USD', value: 'usd' }] }]
@@ -92,7 +90,6 @@ export default {
      * @category content
      */
     maxRows: { type: Number },
-    // props of which to inherit "description" etc. from BlitzField:
     disable: { type: Boolean },
     readonly: { type: Boolean },
   },

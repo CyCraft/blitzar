@@ -21,7 +21,7 @@
   },
   "blitz-table/gridBlitzFormOptions": {
     "type": "object",
-    "description": "The BlitzForm options you want to use for the grid cards.\n\nPlease note:\n- The 'schema' should be set via the 'schemaGrid' prop.\n- 'value' and 'id' are set automatically.\n- These are the default values, but they can be overridden: `{ actionButtons: [] }`\n- See the documentation of BlitzForm for more information on available props."
+    "description": "The BlitzForm options you want to use for the grid cards. Eg. You can pass `{ actionButtons: [] }` here to include some action buttons on each grid card.\n\nPlease note:\n- The `schema` for the grid cards should be set via the `schemaGrid` prop instead of passing it here as `schema`.\n- The BlitzForm used for each grid card will automatically get the row data.\n- See the documentation of BlitzForm for more information on the props you can set."
   },
   "blitz-table/rowStyle": {
     "type": "object|array|string|function",
@@ -33,7 +33,7 @@
   },
   "blitz-table/selectionComponentProps": {
     "type": "object",
-    "description": "A an object that represents the checkbox when \"selection\" component BlitzForm blueprint.\nDefaults to a regular HTML5 checkbox."
+    "description": "An object that represents the checkbox when the table is in \"selection\" mode. You can tell BlitzTable to use a custom checkbox component instead of the default.\nDefaults to a regular HTML5 checkbox."
   },
   "blitz-table/grid": {
     "type": "boolean"
@@ -43,11 +43,11 @@
   },
   "blitz-table/cardClass": {
     "type": "array",
-    "description": "CSS classes to apply to the card (when in grid mode).\nYou can pass a function which will be evaluated just like an evaluated prop. The first param passed will be the entire row data. The second is `item` scoped slot object from a QTable."
+    "description": "CSS classes to apply to the card (when in grid mode).\nYou can pass a function which will be evaluated just like an Evaluated Prop. The first param passed will be the entire row data. The second is `item` scoped slot object from a QTable."
   },
   "blitz-table/cardStyle": {
     "type": "array",
-    "description": "CSS style to apply to the card (when in grid mode).\nYou can pass a function which will be evaluated just like an evaluated prop. The first param passed will be the entire row data. The second is `item` scoped slot object from a QTable."
+    "description": "CSS style to apply to the card (when in grid mode).\nYou can pass a function which will be evaluated just like an Evaluated Prop. The first param passed will be the entire row data. The second is `item` scoped slot object from a QTable."
   },
   "blitz-table/mode": {
     "type": "string",

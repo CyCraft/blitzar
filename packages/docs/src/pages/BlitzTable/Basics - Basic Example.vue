@@ -19,6 +19,8 @@ import { BlitzTable } from 'blitzar'
 const rows = [
   { nameFirst: 'Eleanor', nameLast: 'Shellstrop' },
   { nameFirst: 'Chidi', nameLast: 'Anagonye' },
+  { nameFirst: 'Jason', nameLast: 'Mendoza' },
+  { nameFirst: 'Tahani', nameLast: 'Al-Jamil' },
 ]
 
 const schemaColumns = [
@@ -27,16 +29,9 @@ const schemaColumns = [
 ]
 
 /**
-# Basics
+## Basic Example
 
-`<BlitzTable />` is Quasar's QTable but with the allows you to define columns & grid-cards via the schema syntax of [BlitzForms](/docs/blitz-form).
-
-A single schema object describing the fields in your data can be used for:
-- defining the columns of a BlitzTable
-- defining the fields to show on each card for the grid-view of the BlitzTable
-- a BlitzForm to be show in a pop-up on eg. clicking a row
-
-Of course you can also use all of Quasar's QTable props on `<BlitzTable />` and they will be passed to `<QTable />`.
+Here we see a basic example for a BlitzTable. Check out the _template_ and _script_ tabs below to see how easy it is to render a data table based on the schema.
  */
 export default {
   components: { BlitzTable },

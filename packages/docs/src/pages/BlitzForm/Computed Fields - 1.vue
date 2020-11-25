@@ -32,7 +32,7 @@ const schema = [
 ]
 
 /**
-## The `parseValue` prop
+## The `parseValue` Prop
 
 ```js
 {

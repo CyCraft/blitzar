@@ -16,16 +16,16 @@ const schema = [
     component: 'input',
   },
   {
-    label: 'a div component example (see script tab)',
+    label: 'a div showing the same content as the input',
     component: 'div',
-    slots: (val, { formData }) => ({ default: formData.input }),
-    evaluatedProps: ['slots'],
+    slot: (val, { formData }) => formData.input,
+    evaluatedProps: ['slot'],
     componentStyle: 'border: dashed thin goldenrod; padding: 2em',
   },
 ]
 
 /**
-## Evaluated slots
+## Evaluated Slots
  */
 export default {
   components: { BlitzForm },

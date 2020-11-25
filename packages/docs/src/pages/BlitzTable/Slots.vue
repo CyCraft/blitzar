@@ -1,10 +1,12 @@
 <template>
   <div class="slots-demo">
+    example:
     <select class="mb-md" v-model="chosenExample">
-      <option value="0">example: v-slot:above-table</option>
-      <option value="1">example: v-slot:top-right</option>
-      <option value="2">example: all slots</option>
+      <option value="0">v-slot:above-table</option>
+      <option value="1">v-slot:top-right</option>
+      <option value="2">all slots</option>
     </select>
+    <!-- EXAMPLE: v-slot:above-table -->
     <BlitzTable
       v-if="chosenExample === '0'"
       :schemaColumns="schemaColumns"
@@ -23,6 +25,7 @@
         />
       </template>
     </BlitzTable>
+    <!-- EXAMPLE: v-slot:top-right -->
     <BlitzTable
       v-if="chosenExample === '1'"
       :schemaColumns="schemaColumns"
@@ -41,6 +44,7 @@
         />
       </template>
     </BlitzTable>
+    <!-- EXAMPLE: all slots -->
     <BlitzTable
       v-if="chosenExample === '2'"
       :schemaColumns="schemaColumns"
@@ -82,6 +86,8 @@ import { BlitzTable } from 'blitzar'
 const rows = [
   { nameFirst: 'Eleanor', nameLast: 'Shellstrop' },
   { nameFirst: 'Chidi', nameLast: 'Anagonye' },
+  { nameFirst: 'Jason', nameLast: 'Mendoza' },
+  { nameFirst: 'Tahani', nameLast: 'Al-Jamil' },
 ]
 
 const schemaColumns = [
@@ -94,12 +100,12 @@ const schemaColumns = [
 
 You can use slots with BlitzTable.
 
-## BlitzTable specific slots
+## BlitzTable Specific Slots
 
 - above-nav-row
 - above-table
 
-## Quasar's QTable slots
+## Quasar's QTable Slots
 
 You can use all Quasar slots "around" the table. However, BlitzTable uses these slots to generate its content: `body` for the rows, `item` for the cards in grid mode.
 

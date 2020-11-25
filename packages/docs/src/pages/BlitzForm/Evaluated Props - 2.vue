@@ -32,7 +32,7 @@ const schema = [
 ]
 
 /**
-## Dynamic prop based on the value of "another" field
+## Dynamic Prop Based on the Value of "Another" Field
 
 Eg. `disabled: (val, {formData}) => !formData.under18`
  */

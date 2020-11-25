@@ -33,7 +33,7 @@ const schemaColumns = [
 /**
 # Selection
 
-By default selection is implemented for both table and grid view.
+By default selection is implemented for both table and grid view. Play around with the example below to see how it works.
 
 Please note that every row NEEDS an 'id' prop in order for it to work.
  */

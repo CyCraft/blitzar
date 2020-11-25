@@ -113,7 +113,7 @@ export default {
   inheritAttrs: false,
   props: {
     /**
-     * An object with the data of the entire form. The object keys are the ids of the fields passed in the 'schema'.
+     * An object with the data of the entire form. The object keys are the ids of the fields passed in the `schema`.
      *
      * To be used with `:value` or `v-model`.
      * @type {Record<string, any>}
@@ -122,7 +122,7 @@ export default {
      */
     value: { type: Object, default: () => ({}) },
     /**
-     * A manually set 'id' of the BlitzForm. This prop is accessible in the `context` (as `formId`) of any "evaluated prop" and event.
+     * A manually set `id` of the BlitzForm. This prop is accessible in the `context` (as `formId`) of any Evaluated Prop and event.
      *
      * Read more on Evaluated Props in its dedicated page.
      * @type {string}
@@ -130,7 +130,7 @@ export default {
      */
     id: { type: String },
     /**
-     * This is the heart of your BlitzForm. It's the schema that will defined what fields will be generated.
+     * This is the heart of your BlitzForm. It's the schema that defines what fields will be generated.
      *
      * The possible props you can pass are:
      * - BlitzField props (see BlitzField API Card in the documentation)
@@ -141,16 +141,16 @@ export default {
      */
     schema: { type: Array, required: true },
     /**
-     * Buttons on top of the form that control the 'mode' of the form. The possible pre-made buttons are:
-     * - 'edit' a button which puts the form in 'edit' mode & does `emit('edit')`
-     * - 'cancel' a button which puts the form in 'view' mode & does `emit('cancel')`
-     * - 'save' a button which puts the form in 'edit' mode & does `emit('save', {newData, oldData})`
-     * - 'delete' a red button which does `emit('delete')`
-     * - 'archive' a red button which does `emit('archive')`
+     * Buttons on top of the form that control the `mode` of the form. The possible pre-made buttons are:
+     * - `'edit'` — a button which puts the form in 'edit' mode & does `emit('edit')`
+     * - `'cancel'` — a button which puts the form in 'view' mode & does `emit('cancel')`
+     * - `'save'` — a button which puts the form in 'edit' mode & does `emit('save', {newData, oldData})`
+     * - `'delete'` — a red button which does `emit('delete')`
+     * - `'archive'` — a red button which does `emit('archive')`
      *
      * You can also pass custom buttons with the same schema to generate forms.
      *
-     * See the documentation on "Action Buttons" for more info.
+     * See the documentation on Action Buttons for more info.
      * @type {('edit' | 'cancel' | 'save' | 'delete' | 'archive' | Record<string, any>)[]}
      * @example ['delete', 'cancel', 'edit', 'save']
      * @example [{component: 'button', type: 'button', slot: 'log', events: {click: console.log}}]
@@ -182,15 +182,13 @@ export default {
      */
     validator: { type: Function },
     /**
-     * The amount of columns the form should have.
-     *
-     * Each field can set a specific 'span' to be able to span multiple columns.
+     * The amount of columns the form should have. Each field can set a specific 'span' to be able to span multiple columns.
      * @type {number}
      * @category style
      */
     columnCount: { type: Number, default: 1 },
     /**
-     * The gap between each field in the form.
+     * The size of the gap between each field in the form.
      * @type {string}
      * @category style
      */
@@ -217,11 +215,11 @@ export default {
     // shared props
     /**
      * The mode represents how fields are rendered
-     * - `'edit'`: (default) Show editable fields based on the schema
-     * - `'view'`: Show each field with `readonly: true`.
-     * - `'disabled'`: Show each field with `disabled: true`.
-     * - `'raw'`: Used to show raw data of your form. No fields are generated, just divs with the labels and values. This mode is powerful because it will automatically map values to the schema provided (eg. adding pre-/suffix; mapping to options of a select; etc.)
-     * - `'add'`: The same as 'edit'
+     * - `'edit'` — (default) show editable fields based on the schema
+     * - `'view'` — show each field with `readonly: true`
+     * - `'disabled'` — show each field with `disabled: true`
+     * - `'raw'` — used to show raw data of your form (for select components, it will show the data label instead of its value)
+     * - `'add'` — the same as `'edit'`
      *
      * This prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).
      * @type {'edit' | 'view' | 'disabled' | 'raw' | 'add'}
@@ -263,7 +261,7 @@ export default {
      */
     labelClasses: { type: [Object, Array, String, Function] },
     /**
-     * An array with prop names that should be treated as "Evaluated Props" when passed a function.
+     * An array with prop names that should be treated as Evaluated Props when passed a function.
      *
      * This prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).
      * @type {string[]}

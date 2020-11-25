@@ -219,25 +219,25 @@ export default {
   components: { QField, BlitzH },
   props: {
     /**
-     * The value of the field. The BlitzForm formData is an object with the value of each field and the id for key.
+     * The value of the field. The BlitzForm `formData` is an object with the value of each field and the id for key.
      * @type {any}
      * @category model
      */
     value: { type: undefined },
     /**
-     * An 'id' is required for the BlitzForm to be able to know which fields have which value.
+     * An `id` is required for the BlitzForm to be able to know which fields have which value.
      *
-     * A string with dot notation will become a nested field in the formData.
+     * A string with dot notation will become a nested field in the `formData`.
      * @type {string}
      * @category model
      */
     id: { type: String },
     /**
-     * A defaultValue value to be used when the 'value' is `undefined`.
+     * A defaultValue value to be used when the `value` is `undefined`.
      *
      * You can also pass a function that will receive two params you can work with: `(formData, context)`
      * - `formData` is the value object of your BlitzForm. This will be undefined when BlitzField is used as stand-alone (without BlitzForm) unless you manually pass it.
-     * - `context` is either your BlitzForm or BlitzField context with many usefull props. See the documentation on "Evaluated Props" for more info.
+     * - `context` is either your BlitzForm or BlitzField context with many usefull props. See the documentation on Evaluated Props for more info.
      * @type {(formData: Record<string, any>, formContext: FormContext) => any | any}
      * @category model
      */
@@ -280,7 +280,7 @@ export default {
     /**
      * The text used in the UI for the action buttons and some error messages.
      *
-     * The example shows how the "required fields" error message is overwritten.
+     * The example shows how the error message for required fields is overwritten.
      * @type {{ archive?: string, delete?: string, cancel?: string, edit?: string, save?: string, requiredField?: string, formValidationError?: string } | EvaluatedProp<{ archive?: string, delete?: string, cancel?: string, edit?: string, save?: string, requiredField?: string, formValidationError?: string }>}
      * @example { requiredField: `Don't forget this field!` }
      * @category content
@@ -314,11 +314,11 @@ export default {
     subLabel: { type: [String, Function] },
     /**
      * The mode represents how fields are rendered
-     * - `'edit'`: (default) Show editable fields based on the schema
-     * - `'view'`: Show each field with `readonly: true`.
-     * - `'disabled'`: Show each field with `disabled: true`.
-     * - `'raw'`: Used to show raw data of your form. No fields are generated, just divs with the labels and values. This mode is powerful because it will automatically map values to the schema provided (eg. adding pre-/suffix; mapping to options of a select; etc.)
-     * - `'add'`: The same as 'edit'
+     * - `'edit'` — (default) show editable fields based on the schema
+     * - `'view'` — show each field with `readonly: true`
+     * - `'disabled'` — show each field with `disabled: true`
+     * - `'raw'` — used to show raw data of your form (for select components, it will show the data label instead of its value)
+     * - `'add'` — the same as `'edit'`
      *
      * This prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).
      * @type {'edit' | 'view' | 'disabled' | 'raw' | 'add' | EvaluatedProp<'edit' | 'view' | 'disabled' | 'raw' | 'add'>}
@@ -346,7 +346,7 @@ export default {
      */
     rules: { type: [Array, Function], default: () => [] },
     /**
-     * An array with prop names that should be treated as "Evaluated Props" when passed a function.
+     * An array with prop names that should be treated as Evaluated Props when passed a function.
      *
      * This prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).
      * @type {string[]}
@@ -389,7 +389,7 @@ export default {
      */
     internalErrors: { type: [Boolean, undefined], required: false, default: undefined },
     /**
-     * Setting to `false` will hide the field. When using as an Evaluated Prop it can used to conditionally hide fields based on the other formData.
+     * Setting to `false` will hide the field. When using as an Evaluated Prop it can used to conditionally hide fields based on the other `formData`.
      * @type {boolean | EvaluatedProp<boolean>}
      * @example (val, { mode }) => (mode === 'edit')
      * @example false
@@ -397,13 +397,13 @@ export default {
      */
     showCondition: { type: [Boolean, Function], default: true },
     /**
-     * `readonly` defaults to `true` on `mode: 'view'
+     * `readonly` defaults to `true` on `mode: 'view'`
      * @type {boolean | 'readonly' | EvaluatedProp<boolean | 'readonly'>}
      * @category state
      */
     readonly: { type: [Boolean, Function, String, undefined], default: undefined },
     /**
-     * `disabled` defaults to `true` on `mode: 'disabled'.
+     * `disabled` defaults to `true` on `mode: 'disabled'`
      * @type {boolean | 'disabled' | EvaluatedProp<boolean | 'disabled'>}
      * @category state
      */
@@ -432,7 +432,7 @@ export default {
     /**
      * Custom classes to be applied to the BlitzField. Applied like so `:class="fieldClasses"`. Can be an Evaluated Prop (this is why I opted to have a different name from `class`).
      *
-     * In a BlitzForm schema you can also just write `class: '...'` and BlitzForm will pass that as fieldClasses for you, because "class" is not a valid prop name.
+     * In a BlitzForm schema you can also just write `class: '...'` and BlitzForm will pass that as `fieldClasses` for you, because "class" is not a valid prop name.
      * @type {string | Record<string, boolean> | (string | Record<string, boolean>)[] | EvaluatedProp<string | Record<string, boolean> | (string | Record<string, boolean>)[]>}
      * @example ['dark-theme']
      * @category style

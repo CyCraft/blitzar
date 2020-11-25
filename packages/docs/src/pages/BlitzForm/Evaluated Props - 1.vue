@@ -44,7 +44,7 @@ const schema = [
 ]
 
 /**
-## Dynamic prop based on the value of the field
+## Dynamic Prop Based on the Value of the Field
 
 Eg. `subLabel: val => val === 'purple' ? 'nice!' : 'choose a color'`
  */

@@ -27,7 +27,7 @@ Vue.component('MyCheckbox', {
   props: { value: Boolean },
   render(h) {
     const toggle = () => this.$emit('input', !this.value)
-    return h('div', { on: { click: toggle } }, this.value ? '✅' : '✓')
+    return h('div', { on: { click: toggle } }, this.value ? '✅' : '[　]')
   },
 })
 
@@ -42,7 +42,7 @@ const schemaColumns = [
 ]
 
 /**
-## Styling selection
+## Styling Selection
 
 You can pass a custom checkbox component via `selectionComponentProps`, an object that represents a BlitzForm blueprint. Just like you would use in a schema. Eg.:
 
@@ -52,9 +52,9 @@ You can pass a custom checkbox component via `selectionComponentProps`, an objec
 />
 ```
 
-CSS can also overwritten by targeting these classes:
-- `.blitz-table__grid-item.selected`
+The CSS for the selected rows or grid-items can also be overwritten by targeting these classes:
 - `.blitz-table__row.selected`
+- `.blitz-table__grid-item.selected`
  */
 export default {
   components: { BlitzTable },

@@ -42,7 +42,7 @@ const schema = [
 ]
 
 /**
-## Dynamic "conditional rendering" of a field
+## Show or Hide a Field Based on Another Field
 
 Eg. `showCondition: (val, {formData}) => formData.car`
 

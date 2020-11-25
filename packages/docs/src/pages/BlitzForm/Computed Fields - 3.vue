@@ -61,7 +61,7 @@ However, as the more experienced developers will notice...
 
 I say "nay". The reason it is discouraged is because side-effects to computed properties that modify data are impossible to track. In a few months if you don't know why a certain value is being modified, you'll have a hard time finding eventually it was the side-effect from a computed property.
 
-If we understand this reason, then in our case, it is perfectly valid to do so, because we are only modifying the data of the field we are describing right there. We are simply doing something equivalent to triggering a `emit('input', val)` on a component manually, nothing wrong with that.
+If we understand this reason, then in our case, it is perfectly valid to do so, because we are only modifying the data of the field we are describing right there. We are simply doing something equivalent to triggering `emit('input', val)` on a component manually, nothing wrong with that.
 
 However, keep in mind that also this method has its own pro's and con's:
 - PRO: it can be used as stand-alone, without relying on other fields & without the need to render other fields

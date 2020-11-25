@@ -1,11 +1,11 @@
 # Computed Fields
 
-Computed fields are fields that can represent data which doesn't neccesarily exist in your data. They have a "caluculated value" based on the form data.
+Computed Fields are when you need to add a field in your form that have a _**calculated value**_ based on the form data or some other fields.
 
-Do not confuse this concept with "Evaluated Props".
+Do not confuse this concept with <span style="opacity: 0.5">#</span>[Evaluated Props](#evaluated-props).
 
-- Evaluated Props: a calculated prop of a field
-- Computed Fields: a field with a calculated value
+- Evaluated Props: a calculated _**prop of**_ a field
+- Computed Fields: a field with a calculated _**value**_
 
 An example of a Computed Field could be a full name of a person which exists of `${formData.firstName} ${formData.lastName}`
 

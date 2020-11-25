@@ -37,9 +37,9 @@ const schema = [
 ]
 
 /**
-## label slot
+## Label Slot
 
-You can use a "label" slot to pass extra content to a field's label.
+You can use a `label` slot to pass extra content to a field's label.
 
 In the example below we see usage of the label slot to add some extra content next to the title.
  */

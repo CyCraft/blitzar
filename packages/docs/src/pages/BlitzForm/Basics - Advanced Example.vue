@@ -163,7 +163,7 @@ Vue.component('SimpleOptionGroup', {
 /**
 ## Advanced Example
 
-Here you can see an advanced form rendered all with HTML5 form elements.
+Here you can see an advanced form rendered with all HTML5 form elements.
 
 If you look at the "script" you will see it's easy to use regular HTML5 elements. The only thing we had to write a quick custom component for, was the radio and checkbox groups.
 

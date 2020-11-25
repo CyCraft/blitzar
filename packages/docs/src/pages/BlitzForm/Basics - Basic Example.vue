@@ -34,9 +34,9 @@ const schema = [
 ]
 
 /**
-## Basic example
+## Basic Example
 
-Check out the template; script; style below to see how simple the code looks to render this form:
+Check out the template; script; style below to see how simple the code looks to render this form. The idea is that instead of a regular `input` you use your own Vue component like `MyInput`.
  */
 export default {
   components: { BlitzForm },

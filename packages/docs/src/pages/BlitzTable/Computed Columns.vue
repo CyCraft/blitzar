@@ -19,6 +19,8 @@ import { BlitzTable } from 'blitzar'
 const rows = [
   { nameFirst: 'Eleanor', nameLast: 'Shellstrop' },
   { nameFirst: 'Chidi', nameLast: 'Anagonye' },
+  { nameFirst: 'Jason', nameLast: 'Mendoza' },
+  { nameFirst: 'Tahani', nameLast: 'Al-Jamil' },
 ]
 
 const schemaColumns = [
@@ -37,7 +39,7 @@ const schemaColumns = [
 /**
 # Computed Columns
 
-This is an example of a table with computed columns. A computed column is when you want a column in your table that should show data which doesn't exist on your actual records.
+This is an example of a table with computed columns. A computed column is one that shows data based on other fields/columns.
 
 In this example the "full name" is computed on the fly when showing the table and immidiately made "sortable" as well.
  */

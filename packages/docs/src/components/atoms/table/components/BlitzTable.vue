@@ -199,6 +199,8 @@ import schemaToQTableColumns from '../helpers/schemaToQTableColumns.js'
 Here you can find all the information on the available props & events of BlitzTable.
 
 If any of the documentation is unclear, feel free to [open an issue](https://github.com/cycraft/blitzar/issues) to ask for clarification!
+
+BlitzTable uses Quasar's QTable under the hood. You can use any of the [QTable props](https://quasar.dev/vue-components/table#QTable-API) as well besides the ones described in the API Card below.
  */
 export default {
   name: 'BlitzTable',
@@ -242,13 +244,12 @@ export default {
      */
     actionButtons: { type: Array, default: () => ['grid'] },
     /**
-     * The BlitzForm options you want to use for the grid cards.
+     * The BlitzForm options you want to use for the grid cards. Eg. You can pass `{ actionButtons: [] }` here to include some action buttons on each grid card.
      *
      * Please note:
-     * - The 'schema' should be set via the 'schemaGrid' prop.
-     * - 'value' and 'id' are set automatically.
-     * - These are the default values, but they can be overridden: `{ actionButtons: [] }`
-     * - See the documentation of BlitzForm for more information on available props.
+     * - The `schema` for the grid cards should be set via the `schemaGrid` prop instead of passing it here as `schema`.
+     * - The BlitzForm used for each grid card will automatically get the row data.
+     * - See the documentation of BlitzForm for more information on the props you can set.
      * @category column
      */
     gridBlitzFormOptions: { type: Object, default: () => ({}) },
@@ -265,7 +266,7 @@ export default {
      */
     rowClasses: { type: [Object, Array, String, Function] },
     /**
-     * A an object that represents the checkbox when "selection" component BlitzForm blueprint.
+     * An object that represents the checkbox when the table is in "selection" mode. You can tell BlitzTable to use a custom checkbox component instead of the default.
      * Defaults to a regular HTML5 checkbox.
      * @example { component: 'MyCheckbox', class: 'table-checkbox' }
      */
@@ -288,7 +289,7 @@ export default {
     selected: { type: Array, default: () => [] },
     /**
      * CSS classes to apply to the card (when in grid mode).
-     * You can pass a function which will be evaluated just like an evaluated prop. The first param passed will be the entire row data. The second is `item` scoped slot object from a QTable.
+     * You can pass a function which will be evaluated just like an Evaluated Prop. The first param passed will be the entire row data. The second is `item` scoped slot object from a QTable.
      * @type {(rowData: Record<string, any>, gridCardProps: GridCardProps, BlitzTableContext: any) => string | Record<string, any> | (string | Record<string, any>)[]}
      * @example 'special-class'
      * @example :card-class="{ 'my-special-class': [Boolean condition] }"
@@ -297,7 +298,7 @@ export default {
     cardClass: { type: [Function, String, Array, Object] },
     /**
      * CSS style to apply to the card (when in grid mode).
-     * You can pass a function which will be evaluated just like an evaluated prop. The first param passed will be the entire row data. The second is `item` scoped slot object from a QTable.
+     * You can pass a function which will be evaluated just like an Evaluated Prop. The first param passed will be the entire row data. The second is `item` scoped slot object from a QTable.
      * @type {(rowData: Record<string, any>, gridCardProps: GridCardProps, BlitzTableContext: any) => string | Record<string, any> | (string | Record<string, any>)[]}
      * @example 'background-color: #fff'
      * @example :card-style="{ backgroundColor: '#fff' }"

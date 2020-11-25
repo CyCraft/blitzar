@@ -29,7 +29,7 @@ const carData = [
   { year: '2016', make: 'Dodge', model: 'Challanger', trim: 'd3.0' },
 ]
 
-const uniqueValues = (array) => [...new Set(array)]
+const uniqueValues = (array) => ['', ...new Set(array)]
 
 const mapForSelect = (value) => ({ component: 'option', value, slot: value })
 
@@ -104,7 +104,7 @@ const schema = [
 ]
 
 /**
-## Dynamic "options" of a select-field
+## Dynamic "Options" of a Select-Field
  */
 export default {
   components: { BlitzForm },

@@ -49,7 +49,6 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed, Ref } from '@vue/composition-api'
-import { spaceCase, pascalCase } from 'case-anything'
 import { TableOfContents } from 'planetar'
 import AnchorLink from '../components/AnchorLink.vue'
 import DropdownLink from '../components/DropdownLink.vue'
@@ -70,7 +69,7 @@ export default defineComponent({
       TOC.value.splice(0, TOC.value.length, ...newTOC)
     }
 
-    return { leftDrawerOpen, routeName, pageChapters, spaceCase, pascalCase, setTOC, TOC }
+    return { leftDrawerOpen, routeName, pageChapters, setTOC, TOC }
   },
 })
 </script>
