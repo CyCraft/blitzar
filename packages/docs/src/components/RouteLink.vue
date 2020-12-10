@@ -12,6 +12,7 @@
   text-decoration: none
   display: flex
   align-items: center
+  cursor: pointer
   &:hover
     +C(color, primary)
   &.is-active

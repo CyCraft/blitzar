@@ -9,7 +9,7 @@
     <slot>{{ text }}</slot>
     <svg
       v-if="external"
-      class="_svg q-ml-sm"
+      class="_svg ml-sm"
       xmlns="http://www.w3.org/2000/svg"
       aria-hidden="true"
       x="0px"
