@@ -10,12 +10,12 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@quasar/extras": "^1.9.10",
+    "@quasar/extras": "^1.9.11",
     "@vuepress/plugin-register-components": "^1.7.1",
     "fibers": "^5.0.0",
     "node-sass": "^5.0.0",
-    "quasar": "^1.14.5",
-    "sass": "^1.29.0",
+    "quasar": "^1.14.7",
+    "sass": "^1.30.0",
     "sass-loader": "^10.1.0",
     "vuepress": "^1.7.1"
   },

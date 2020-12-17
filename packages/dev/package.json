@@ -13,25 +13,25 @@
   "dependencies": {
     "@blitzar/form": "^0.0.13",
     "@blitzar/utils": "^0.0.13",
-    "@quasar/extras": "^1.9.10",
+    "@quasar/extras": "^1.9.11",
     "commafy-anything": "^2.1.0",
     "copy-anything": "^2.0.1",
-    "core-js": "^3.7.0",
+    "core-js": "^3.8.1",
     "flatten-anything": "^2.0.4",
     "is-what": "^3.12.0",
     "merge-anything": "^4.0.0",
     "nestify-anything": "^1.0.3",
     "path-to-prop": "^1.0.0",
     "planetar": "^0.7.9",
-    "quasar": "^1.14.5"
+    "quasar": "^1.14.7"
   },
   "devDependencies": {
-    "@quasar/app": "^2.1.8",
+    "@quasar/app": "^2.1.11",
     "babel-eslint": "^10.1.0",
-    "eslint": "^7.14.0",
+    "eslint": "^7.15.0",
     "eslint-config-prettier": "^6.15.0",
     "eslint-loader": "^4.0.2",
-    "eslint-plugin-vue": "^7.1.0"
+    "eslint-plugin-vue": "^7.3.0"
   },
   "browserslist": [
     "last 10 Chrome versions",
