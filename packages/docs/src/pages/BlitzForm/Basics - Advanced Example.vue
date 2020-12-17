@@ -13,7 +13,7 @@
 
 <script>
 import { BlitzForm } from 'blitzar'
-import Vue from 'vue'
+import SimpleOptionGroup from '../../components/SimpleOptionGroup'
 
 const schema = [
   {
@@ -27,7 +27,8 @@ const schema = [
   {
     id: 'powerOrigin',
     span: 1,
-    component: 'SimpleOptionGroup',
+    // SimpleOptionGroup is a simple wrapper I wrote for the HTML5 input with type radio, so it can be used easily with multiple options.
+    component: SimpleOptionGroup,
     type: 'radio',
     label: 'Power origin',
     subLabel: 'Where does your power come from?',
@@ -99,7 +100,8 @@ const schema = [
   {
     id: 'powerUps',
     span: 1,
-    component: 'SimpleOptionGroup',
+    // SimpleOptionGroup is a simple wrapper I wrote for the HTML5 input with type checkbox, so it can be used easily with multiple options.
+    component: SimpleOptionGroup,
     type: 'checkbox',
     label: 'Choose some power-ups',
     defaultValue: () => [],
@@ -136,29 +138,6 @@ const schema = [
     label: 'Date of submission',
   },
 ]
-
-Vue.component('SimpleOptionGroup', {
-  props: { id: String, value: [String, Array], type: String, options: Array },
-  render(h) {
-    const name = JSON.stringify(this.options)
-    const emitInput = (o) => {
-      if (this.type === 'radio') return this.$emit('input', o.value)
-      const newValue = this.value.includes(o.value)
-        ? this.value.filter((v) => v !== o.value)
-        : [...this.value, o.value]
-      this.$emit('input', newValue)
-    }
-    return h(
-      'div',
-      this.options.map((o) => [
-        h('label', { on: { input: () => emitInput(o) } }, [
-          h('input', { domProps: { type: this.type, value: o.value, name } }),
-          [` ${o.label}`, h('div')],
-        ]),
-      ])
-    )
-  },
-})
 
 /**
 ## Advanced Example

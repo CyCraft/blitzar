@@ -13,6 +13,7 @@
 
 <script>
 import { BlitzForm } from 'blitzar'
+import { showToast } from '../../helpers/toast'
 
 const schema = [
   {
@@ -20,6 +21,7 @@ const schema = [
     component: 'input',
     type: 'checkbox',
     label: 'Enable logging',
+    subLabel: 'shows hidden action button',
   },
   {
     id: 'name',
@@ -76,10 +78,10 @@ export default {
       {
         component: 'button',
         type: 'button',
-        slot: 'log the data (check console)',
+        slot: 'log the data',
         showCondition: (_, { formData }) => formData.enableLogging,
         events: {
-          click: (event, { formData }) => console.log('formData →', formData),
+          click: (event, { formData }) => showToast('formData', formData),
         },
       },
     ]
