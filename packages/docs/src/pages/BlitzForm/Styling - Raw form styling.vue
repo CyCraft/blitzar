@@ -32,7 +32,6 @@
 
 <script>
 import { BlitzForm } from 'blitzar'
-// All components that are used in the form need to be globally registered.
 
 const schema = [
   {
@@ -69,7 +68,7 @@ const schema = [
 /**
 ## Raw Form Styling
 
-This example uses `mode="raw"` to show just the raw form data. Then CSS is used to style it. See the "style" tab.
+This example uses `mode="raw"` to show just the raw form data. Then CSS is used to style it. See the _**style tab**_.
  */
 export default {
   components: { BlitzForm },

@@ -112,7 +112,7 @@ In grid mode:
 - `.blitz-field__label` — targets the field label on a card
 - `.blitz-field__component` — targets the field content
 
-Check out this example's "style tab" to see how styling is applied!
+Check out this example's _**style tab**_ to see how styling is applied!
  */
 export default {
   components: { BlitzTable },

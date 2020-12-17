@@ -72,7 +72,7 @@ const schema = [
 /**
 ## Advanced Example
 
-When you check the "script" tab of this more advanced example, you'll notice we are using some new props available on our context of the Evaluated Props. (Be sure to check out the [documentation on Evaluated Props](/docs/blitz-form#evaluated-props) of BlitzForm)
+When you check the _**script tab**_ of this more advanced example, you'll notice we are using some new props available on our context of the Evaluated Props. (Be sure to check out the [documentation on Evaluated Props](/docs/blitz-form#evaluated-props) of BlitzForm)
 
 There are 4 _extra_ props available on the context when using BlitzListForm:
 - `rowInput` (function)

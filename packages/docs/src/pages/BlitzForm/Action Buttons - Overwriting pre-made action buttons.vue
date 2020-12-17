@@ -67,7 +67,7 @@ const actionButtonDefaults = {
 
 You can overwrite how the pre-made buttons look with the `actionButtonDefaults` prop.
 
-In the example below (script tab) you can see we are overwriting some properties of the HTML5 buttons.
+In the example below you can see we are overwriting some properties of the HTML5 buttons. See the _**script tab**_.
 
 However, most likely you will pass `component: 'MyButton'` and pass your own Vue button components.
  */

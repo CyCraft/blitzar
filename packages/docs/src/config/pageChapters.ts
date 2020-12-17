@@ -23,6 +23,7 @@ export const routeNamePageChaptersMap: { [key in ROUTE_NAMES]: string[] } = {
     'Form Data - List Forms.vue',
     'Styling.md',
     'Styling - Left Labels.vue',
+    'Styling - Custom Label Positioning.vue',
     'Styling - Raw Form Styling.vue',
     'Events.md',
     'Events - Form Events.vue',

@@ -10,14 +10,20 @@
 </template>
 
 <style lang="sass">
+/** Either set a minimum or fixed width like so: */
 .styling-left-labels
-  .blitz-field__label
-    min-width: 120px
+  .blitz-field__label,
+  .blitz-field__sub-label
+    width: 150px
+
+/** OR set the width of the columns like so: */
+.styling-left-labels
+  .blitz-field
+    grid-template-columns: 150px 1fr
 </style>
 
 <script>
 import { BlitzForm } from 'blitzar'
-// All components that are used in the form need to be globally registered.
 
 const schema = [
   {
@@ -33,6 +39,7 @@ const schema = [
     id: 'powerOrigin',
     component: 'input',
     label: 'Power origin',
+    subLabel: 'where the hero power is coming from',
   },
   {
     id: 'stamina',
@@ -54,7 +61,9 @@ const schema = [
 /**
 ## Left Labels
 
-When using left labels, it's adviced to set `.blitz-field__label` to a minimum width as per the example below.
+It's easy to position all labels on the left side! Just set `labelPosition="left"` on the BlitzForm.
+
+When using left labels, by default, the label only takes up as much width as needed. It's really easy however to align all labels to be the same width. See the _**style tab**_ how this is done for the example below.
  */
 export default {
   components: { BlitzForm },
