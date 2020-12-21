@@ -136,10 +136,11 @@
 .blitz-table
   display: flex
   flex-direction: column
-  ._table-top-right
-    +flex-center()
+  ._table-top-right,
   ._table-selection-cell
-    +flex-center()
+    display: flex
+    justify-content: center
+    align-items: center
   th
     white-space: pre
   .q-table__top
@@ -177,9 +178,10 @@
 import { merge } from 'merge-anything'
 import { isPlainObject, isFunction } from 'is-what'
 import { QTable, QTr, QTd, QCard } from 'quasar'
-import BlitzGridListToggle from './BlitzGridListToggle'
 import { BlitzForm, BlitzField } from '@blitzar/form'
-import schemaToQTableColumns from '../helpers/schemaToQTableColumns.js'
+import BlitzGridListToggle from './BlitzGridListToggle'
+import { schemaToQTableColumns } from '../helpers/schemaToQTableColumns.js'
+import { setup } from '../helpers/setup.js'
 
 /**
  * @typedef GridCardProps
@@ -194,6 +196,8 @@ import schemaToQTableColumns from '../helpers/schemaToQTableColumns.js'
  * @property {boolean} expand - (reactive prop) Is row expanded? Can directly be assigned new Boolean value which changes expanded state"
  * @property {string} __trClass - Internal prop passed down to QTr (if used)
  */
+
+setup()
 
 /**
 Here you can find all the information on the available props & events of BlitzTable.

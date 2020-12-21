@@ -1,6 +1,6 @@
 import BlitzTable from './components/BlitzTable.vue'
 
-import schemaToQTableColumns from './helpers/schemaToQTableColumns.js'
+import { schemaToQTableColumns } from './helpers/schemaToQTableColumns.js'
 
 export { BlitzTable, schemaToQTableColumns }
 

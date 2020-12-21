@@ -1,7 +1,7 @@
 import { isArray, isUndefined, isFunction, isFullString, isBoolean, isPlainObject } from 'is-what'
 import { getProp } from 'path-to-prop'
 
-export default function schemaToQTableColumns(schema) {
+export function schemaToQTableColumns(schema) {
   const schemaArray = !isArray(schema) ? [schema] : schema
   return schemaArray.map((blueprint) => {
     const {

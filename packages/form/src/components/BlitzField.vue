@@ -142,6 +142,7 @@
         align-items: center
       .blitz-field__component
         grid-row: 1 / 2
+  .q-field__native,
   .blitz-field__component
     flex: 1
   /** this fixes an issue where QInput fields are larger when they have rules */
@@ -158,6 +159,25 @@
     .q-markdown--token
       white-space: pre-wrap
       word-break: break-word
+  .q-field--error .q-field__bottom
+    color: rgb(222,55,55)
+
+// prevent any shenanigans that other libraries try to pull on the inner classes we rely on
+// the fixes below are originally implemented to counteract Vuetify's leakage
+.blitz-field
+  .q-field,
+  .q-field__control,
+  .q-field__control-container,
+  .q-field__inner,
+  .q-field__native,
+  .q-field__messages
+    margin: 0
+    padding: 0
+  .q-field__bottom
+    margin: 0
+    padding: 8px 12px 0
+  .q-field__append
+    flex: initial
 </style>
 
 <script>
@@ -178,6 +198,9 @@ import { parseFieldValue } from '@blitzar/utils'
 import BlitzH from './BlitzH'
 import { defaultLang } from '../meta/lang'
 import { createRequiredRule } from '../helpers/validation.js'
+import { setup } from '../helpers/setup.js'
+
+setup()
 
 function evaluateProp(propValue, componentValue, componentInstance) {
   return isFunction(propValue) ? propValue(componentValue, componentInstance) : propValue
@@ -656,6 +679,7 @@ export default {
       const propsToPass = {
         // we always wanna pass only this prop:
         required: evalPropOrAttr('required'),
+        dark: Boolean(evalPropOrAttr('dark')),
       }
       // only pass rules when it has internal errors
       if (this.usesInternalOrNoErrors) {

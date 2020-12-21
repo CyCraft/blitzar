@@ -7,6 +7,7 @@ export const routeNamePageChaptersMap: { [key in ROUTE_NAMES]: string[] } = {
     'Basics - Advanced Example.vue',
     'Frameworks.md',
     'Frameworks - Quasar Framework.vue',
+    'Frameworks - Vuetify.vue',
     'Slots.md',
     'Slots - Default.vue',
     'Slots - Label.vue',

@@ -97,10 +97,10 @@ import { merge } from 'merge-anything'
 import { copy } from 'copy-anything'
 import { isArray, isFunction, isFullString, isPlainObject, isString } from 'is-what'
 import { nestifyObject } from 'nestify-anything'
-import { validateFormPerSchema } from '../helpers/validation'
 import { flattenPerSchema } from '@blitzar/utils'
-import { defaultLang } from '../meta/lang'
 import BlitzField from './BlitzField.vue'
+import { defaultLang } from '../meta/lang'
+import { validateFormPerSchema } from '../helpers/validation'
 
 /**
 Here you can find all the information on the available props & events of BlitzForm.

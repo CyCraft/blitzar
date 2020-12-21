@@ -143,6 +143,7 @@ const schema = [
     span: 1,
     component: 'QInput',
     label: 'Date of submission',
+    subLabel: 'Will convert input to a Date when typing eg. `2020/01/01`',
     parseInput: (val) => new Date(val),
     parseValue: (val) => date.formatDate(val, 'YYYY/MM/DD'),
     // component props:
