@@ -155,7 +155,7 @@ const schema = [
 /**
 ## Quasar Framework
 
-All fields you see here are Quasar components.
+All fields used in this example are Quasar components.
 
 Please note that Quasar cannot auto-detect the use of Quasar components in Blitzar. So you need to register them as global Vue components like so:
 

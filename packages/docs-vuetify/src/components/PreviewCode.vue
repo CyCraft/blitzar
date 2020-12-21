@@ -17,7 +17,8 @@ $c-code-space: #02122d
     padding: 1rem
     code
       background: none
-      color: white
+      color: #eeeeee
+      font-weight: 400
 </style>
 
 <script>

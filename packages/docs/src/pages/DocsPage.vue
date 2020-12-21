@@ -3,6 +3,7 @@
     <DocPage
       :pathToChapterFiles="pathToChapterFiles"
       :chapterOrder="chapterOrder"
+      :chapterOptions="chapterOptions"
       :pathsToApiCardSourceFile="pathsToApiCardSourceFile"
       @TOC="(TOC) => $emit('set-toc', TOC)"
     />
@@ -39,7 +40,7 @@
 <script lang="ts">
 import { defineComponent, computed } from '@vue/composition-api'
 import { DocPage } from 'planetar'
-import { routeNamePageChaptersMap } from '../config/pageChapters'
+import { routeNamePageChaptersMap, chapterOptions } from '../config/pageChapters'
 import { ROUTE_NAMES } from '../router/routes'
 
 export default defineComponent({
@@ -49,7 +50,7 @@ export default defineComponent({
   },
   setup(props, options) {
     const routeName = options.root.$route.name as ROUTE_NAMES
-    const pathToChapterFiles = 'pages/' + routeName
+    const pathToChapterFiles = `pages/${routeName}/`
     const chapterOrder = computed((): string[] => routeNamePageChaptersMap[routeName])
     const pathsToApiCardSourceFile = computed(() =>
       routeName === ROUTE_NAMES.TABLE
@@ -62,7 +63,7 @@ export default defineComponent({
         : ['components/atoms/form/components/BlitzListForm.vue']
     )
 
-    return { pathToChapterFiles, chapterOrder, pathsToApiCardSourceFile }
+    return { pathToChapterFiles, chapterOrder, pathsToApiCardSourceFile, chapterOptions }
   },
 })
 </script>

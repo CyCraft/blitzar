@@ -1,5 +1,12 @@
 import { ROUTE_NAMES } from '../router/routes'
 
+/**
+ * (optional) If you want to pass extra props to either the `ExampleSection` or `MarkdownSection` you can do so with the filename from `chapterOrder` as key and the props as value.
+ */
+export const chapterOptions: Record<string, Record<string, any>> = {
+  'Frameworks - Vuetify.vue': { iframe: 'https://blitzar-vuetify.web.app', iframeHeight: '1280px' },
+}
+
 export const routeNamePageChaptersMap: { [key in ROUTE_NAMES]: string[] } = {
   [ROUTE_NAMES.FORM]: [
     'Basics.md',
@@ -7,6 +14,7 @@ export const routeNamePageChaptersMap: { [key in ROUTE_NAMES]: string[] } = {
     'Basics - Advanced Example.vue',
     'Frameworks.md',
     'Frameworks - Quasar Framework.vue',
+    'Frameworks - Vuetify.md',
     'Frameworks - Vuetify.vue',
     'Slots.md',
     'Slots - Default.vue',
@@ -31,17 +39,17 @@ export const routeNamePageChaptersMap: { [key in ROUTE_NAMES]: string[] } = {
     'Events - Field Events.vue',
     'Events - Update Other Fields on Events.vue',
     'Evaluated Props.md',
-    'Evaluated Props - 1.Vue',
-    'Evaluated Props - 2.Vue',
-    'Evaluated Props - 3.Vue',
-    'Evaluated Props - 4.Vue',
-    'Evaluated Props - 5.Vue',
+    'Evaluated Props - 1.vue',
+    'Evaluated Props - 2.vue',
+    'Evaluated Props - 3.vue',
+    'Evaluated Props - 4.vue',
+    'Evaluated Props - 5.vue',
     'Computed Fields.md',
-    'Computed Fields - 1.Vue',
-    'Computed Fields - 2.Vue',
-    'Computed Fields - 3.Vue',
+    'Computed Fields - 1.vue',
+    'Computed Fields - 2.vue',
+    'Computed Fields - 3.vue',
     'Validation.vue',
-    'Validation - 2.Vue',
+    'Validation - 2.vue',
   ],
   [ROUTE_NAMES.TABLE]: [
     'Basics.md',

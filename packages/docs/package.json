@@ -28,7 +28,7 @@
     "merge-anything": "^4.0.0",
     "nestify-anything": "^1.0.3",
     "path-to-prop": "^1.0.0",
-    "planetar": "^0.7.10",
+    "planetar": "^0.7.11",
     "quasar": "^1.14.7",
     "vue-scrollactive": "^0.9.3"
   },
