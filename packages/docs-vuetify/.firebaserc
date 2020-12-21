@@ -1,0 +1,13 @@
+{
+  "projects": {
+    "default": "cycraft-ecosystem"
+  },
+  "targets": {
+    "cycraft-ecosystem": {
+      "hosting": {
+        "blitzar-vuetify": [
+          "blitzar-vuetify"
+        ]
+      }
+    }
+}

@@ -4,9 +4,7 @@
   "description": "A Vue component collection for blitzing fast prototyping ⚡",
   "module": "index.js",
   "main": "index.js",
-  "scripts": {
-    "build": "rimraf dist && vue-compile src -o dist"
-  },
+  "scripts": {},
   "author": "Luca Ban - Mesqueeb",
   "homepage": "https://github.com/cycraft/blitzar#readme",
   "keywords": [
