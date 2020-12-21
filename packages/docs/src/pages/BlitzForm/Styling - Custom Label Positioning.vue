@@ -1,11 +1,11 @@
 <template>
   <div>
-    <BlitzForm class="styling-custom-labels" :schema="schema" v-model="formData" />
+    <BlitzForm class="custom-labels-example" :schema="schema" v-model="formData" />
   </div>
 </template>
 
 <style lang="sass">
-.styling-custom-labels
+.custom-labels-example
   .blitz-field
     display: grid
     grid-template-columns: 1fr 1fr
