@@ -1,7 +1,7 @@
 <template>
   <div>
     <BlitzForm
-      class="styling-left-labels"
+      class="left-labels-example"
       labelPosition="left"
       :schema="schema"
       v-model="formData"
@@ -10,14 +10,13 @@
 </template>
 
 <style lang="sass">
-/** Either set a minimum or fixed width like so: */
-.styling-left-labels
+.left-labels-example
+  /** Either set a minimum or fixed width like so: */
   .blitz-field__label,
   .blitz-field__sub-label
     width: 150px
 
-/** OR set the width of the columns like so: */
-.styling-left-labels
+  /** OR set the width of the columns like so: */
   .blitz-field
     grid-template-columns: 150px 1fr
 </style>
