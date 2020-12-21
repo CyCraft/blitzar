@@ -7,6 +7,9 @@
       "hosting": {
         "blitzar": [
           "blitzar0"
+        ],
+        "blitzar-vuetify": [
+          "blitzar-vuetify"
         ]
       }
     }
