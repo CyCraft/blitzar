@@ -13,18 +13,24 @@
         <q-img src="media/blitzar-logo-white.svg" style="width: 20px" class="mr-xs gt-xs" />
         <div class="ml-lg">{{ $route.name }} Docs</div>
       </div>
-      <div class="ml-auto flex q-gutter-md">
-        <DropdownLink text="Components" class="px-sm gt-xs">
-          <template slot="menu">
-            <div class="q-gutter-md">
-              <RouteLink text="BlitzForm" to="/docs/blitz-form" class="_link" />
-              <RouteLink text="BlitzTable" to="/docs/blitz-table" class="_link" />
-              <RouteLink text="BlitzListForm" to="/docs/blitz-list-form" class="_link" />
-            </div>
-          </template>
-        </DropdownLink>
-        <AnchorLink href="https://github.com/cycraft/blitzar/releases" text="Changelog" external />
-        <AnchorLink href="https://github.com/cycraft/blitzar" text="Github" external />
+      <div class="ml-auto">
+        <div class="flex q-gutter-md">
+          <DropdownLink text="Components" class="px-sm gt-xs">
+            <template slot="menu">
+              <div class="q-gutter-md">
+                <RouteLink text="BlitzForm" to="/docs/blitz-form" class="_link" />
+                <RouteLink text="BlitzTable" to="/docs/blitz-table" class="_link" />
+                <RouteLink text="BlitzListForm" to="/docs/blitz-list-form" class="_link" />
+              </div>
+            </template>
+          </DropdownLink>
+          <AnchorLink
+            href="https://github.com/cycraft/blitzar/releases"
+            text="Changelog"
+            external
+          />
+          <AnchorLink href="https://github.com/cycraft/blitzar" text="Github" external />
+        </div>
       </div>
     </q-header>
     <q-drawer

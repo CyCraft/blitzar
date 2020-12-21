@@ -1,6 +1,11 @@
 <template>
-  <div :class="['route-link']" v-on="$listeners">
-    <QMenu :autoClose="true" content-class="bg-nasa pa-md border-white">
+  <div :class="['route-link']" v-on="$listeners" @mouseenter="() => (showingDropdown = true)">
+    <QMenu
+      :autoClose="true"
+      content-class="bg-nasa pa-md border-white"
+      v-model="showingDropdown"
+      @mouseleave="() => (showingDropdown = false)"
+    >
       <slot name="menu"></slot>
     </QMenu>
     <div class="_text">
@@ -46,6 +51,9 @@ export default defineComponent({
   name: 'DropdownLink',
   props: {
     text: { type: String, required: true },
+  },
+  data() {
+    return { showingDropdown: false }
   },
 })
 </script>
