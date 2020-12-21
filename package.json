@@ -16,7 +16,7 @@
     "publish": "lerna publish && npm run publish:post",
     "publish:post": "npm run start:dev && git add -A && git commit -m \"chore: post-build\" && git push",
     "deploy:docs": "npm run build:for-publish && cd packages/docs && firebase deploy --only hosting && cd ../.. && git add -A && git commit -m \"chore: deploy\" && git push && npm run publish:post",
-    "deploy:docs-vuetify": "npm run build:for-publish && cd packages/docs && firebase deploy --only hosting && cd ../.. && git add -A && git commit -m \"chore: deploy\" && git push && npm run publish:post",
+    "deploy:docs-vuetify": "npm run build:for-publish && cd packages/docs && npm run build-example && firebase deploy --only hosting && cd ../.. && git add -A && git commit -m \"chore: deploy\" && git push && npm run publish:post",
     "prepare:all": "npm run prepare:form && npm run prepare:table",
     "prepare:form": "npm run copy:form-to-docs",
     "prepare:table": "npm run copy:table-to-docs",

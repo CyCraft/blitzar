@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "vue-cli-service serve",
-    "build-vuetify": "vue-cli-service build",
+    "build-example": "vue-cli-service build",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
@@ -31,7 +31,7 @@
     "vuetify-loader": "^1.3.0"
   },
   "eslintConfig": {
-    "root": true,
+    "root": false,
     "env": {
       "node": true,
       "browser": true
