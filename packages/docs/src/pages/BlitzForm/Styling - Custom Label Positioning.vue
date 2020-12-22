@@ -48,9 +48,9 @@ const schema = [
 /**
 ## Custom Label Positioning
 
-Each field already uses CSS Grid, but it's easy to overwrite the current order of the fields with some CSS!
+It's easy to overwrite the positioning of the field label, sublabel & component with some CSS!
 
-Look at the _**style tab**_ to see how to position the label on the right and the sub-label on the bottom.
+Look at the _**style tab**_ to see how to position the _**label on the right**_ and the sub-label on the bottom.
  */
 export default {
   components: { BlitzForm },
