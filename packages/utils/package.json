@@ -1,6 +1,6 @@
 {
   "name": "@blitzar/utils",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "description": "Blitzar utils",
   "author": "Luca Ban - Mesqueeb",
   "module": "dist/index.esm.js",
