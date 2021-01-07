@@ -53,7 +53,7 @@
     </q-drawer>
 
     <q-page-container>
-      <router-view @set-toc="setTOC" :key="$route.fullPath" />
+      <router-view @set-toc="setTOC" :key="$route.fullPath.split('#')[0]" />
     </q-page-container>
   </q-layout>
 </template>
