@@ -47,7 +47,7 @@ You can listen to the `@input` event on a `<BlitzForm />` which will trigger eac
 
 There is also an `@field-input` event you can listen to which will trigger every time you type something in a specific field.
 
-(For more info on all possible events take a look at the [Api Card](#api-blitz-form) down below.)
+(For more info on all possible events take a look at the [Api Card](#api-card) down below.)
 
 Try typing a little in the example below.
  */
