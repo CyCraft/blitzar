@@ -1,6 +1,6 @@
 {
   "name": "blitzar",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "description": "A Vue component collection for blitzing fast prototyping ⚡",
   "module": "index.js",
   "main": "index.js",
@@ -25,8 +25,8 @@
     "schema"
   ],
   "dependencies": {
-    "@blitzar/form": "^0.0.14",
-    "@blitzar/table": "^0.0.14",
+    "@blitzar/form": "^0.0.15",
+    "@blitzar/table": "^0.0.15",
     "quasar": "^1.15.2"
   },
   "license": "MIT",
