@@ -11,10 +11,9 @@
   </div>
 </template>
 
-<style lang="sass" scoped>
-// $
-
-// .component-name
+<style lang="sass">
+// Don't forget to import the required styles after Vuetify Styles but before your project's custom styles.
+@import 'blitzar/styles.sass'
 </style>
 
 <script>
