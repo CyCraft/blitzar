@@ -4,6 +4,7 @@
   "description": "A Vue component collection for blitzing fast prototyping ⚡",
   "module": "index.js",
   "main": "index.js",
+  "types": "index.d.ts",
   "scripts": {},
   "author": "Luca Ban - Mesqueeb",
   "homepage": "https://github.com/cycraft/blitzar#readme",
