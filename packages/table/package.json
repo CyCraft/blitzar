@@ -1,6 +1,6 @@
 {
   "name": "@blitzar/table",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "author": "Luca Ban - Mesqueeb",
   "description": "Blitzar table component",
   "module": "src/index.js",
@@ -10,7 +10,7 @@
     "build": "rimraf dist && vue-compile src -o dist"
   },
   "dependencies": {
-    "@blitzar/form": "^0.0.15",
+    "@blitzar/form": "^0.0.16",
     "is-what": "^3.12.0",
     "merge-anything": "^4.0.0",
     "path-to-prop": "^1.0.0",
