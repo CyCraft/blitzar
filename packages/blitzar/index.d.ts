@@ -521,23 +521,23 @@ export interface BlitzFormProps extends Vue {
 export interface BlitzField extends BlitzFieldProps, Vue {}
 
 export interface BlitzForm extends BlitzFormProps, Vue {
-  fieldInput(_ref5)
+  fieldInput(payload: { id: string, value: any }): void
 
-  resetState()
+  resetState(): void
 
-  restoreBackup()
+  restoreBackup(): void
 
-  tapCancel()
+  tapCancel(): void
 
-  validate()
+  validate(): void
 
-  tapEdit()
+  tapEdit(): void
 
-  tapSave()
+  tapSave(): void
 
-  tapDelete()
+  tapDelete(): void
 
-  tapArchive()
+  tapArchive(): void
 }
 
 export const BlitzField: VueConstructor<BlitzForm>;
