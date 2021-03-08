@@ -1,6 +1,9 @@
 {
-  "name": "blitzar",
+  "name": "blitzar-monorepo",
   "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
     "audit": "npm audit fix && lerna-audit && lerna bootstrap",
     "dev": "npm run prepare:all && npm run start:dev && cd packages/docs && npm run dev",
@@ -25,10 +28,9 @@
     "replace:src-dist": "replace-in-files --string='\"module\": \"src/index.js\"' --replacement='\"module\": \"dist/index.js\"' 'packages/*/package.json'",
     "start:dev": "npm run replace:dist-src",
     "start:build": "npm run replace:src-dist",
-    "dep:install": "npm i && lerna bootstrap",
-    "dep:update-all": "ncu --target minor -u && lerna exec 'ncu --target minor -u' && npm run dep:install",
+    "dep:update-all": "ncu --target minor -u && lerna exec 'ncu --target minor -u' && npm i",
     "dep:check-for-updates": "ncu --target minor && lerna exec 'ncu --target minor'",
-    "dep:reinstall-all": "rimraf node_modules && lerna clean -y && npm run dep:install"
+    "dep:reinstall-all": "rimraf node_modules && lerna clean -y && npm i"
   },
   "devDependencies": {
     "@types/fs-extra": "^9.0.6",
@@ -51,7 +53,8 @@
     "vue-compile": "^0.6.2"
   },
   "engines": {
-    "npm": ">7.0.0"
+    "node": ">= 14",
+    "npm": ">= 7"
   },
   "author": "Luca Ban - Mesqueeb",
   "license": "MIT",
@@ -62,8 +65,5 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/cycraft/blitzar.git"
-  },
-  "dependencies": {
-    "sass": "^1.32.2"
   }
 }
