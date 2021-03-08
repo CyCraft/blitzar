@@ -1,4 +1,4 @@
-import Vue, { PluginFunction, VueConstructor } from 'vue';
+import Vue, { PluginFunction, VueConstructor } from 'vue'
 
 export interface BlitzarLang {
   archive: string
@@ -333,7 +333,7 @@ export interface BlitzFieldProps {
    */
   deleteRow: Function
 
-  [ key: string ]: any
+  [key: string]: any
 }
 
 export interface BlitzFormProps extends Vue {
@@ -481,7 +481,22 @@ export interface BlitzFormProps extends Vue {
    * @type {string[]}
    * @category behavior
    */
-  evaluatedProps: Array<string | 'component' | 'showCondition' | 'label' | 'subLabel' | 'required' | 'rules' | 'fieldStyle' | 'fieldClasses' | 'componentStyle' | 'componentClasses' | 'disable' | 'events' | 'lang'>
+  evaluatedProps: Array<
+    | string
+    | 'component'
+    | 'showCondition'
+    | 'label'
+    | 'subLabel'
+    | 'required'
+    | 'rules'
+    | 'fieldStyle'
+    | 'fieldClasses'
+    | 'componentStyle'
+    | 'componentClasses'
+    | 'disable'
+    | 'events'
+    | 'lang'
+  >
 
   /**
    * Set to true if the entire form has its own labels and you do not want the BlitzField to show a label.
@@ -507,7 +522,9 @@ export interface BlitzFormProps extends Vue {
    * @type {string[]}
    * @category behavior
    */
-  internalErrorsFor: Array<string | 'QInput' | 'QSelect' | 'QField' | 'q-input' | 'q-select' | 'q-field'>
+  internalErrorsFor: Array<
+    string | 'QInput' | 'QSelect' | 'QField' | 'q-input' | 'q-select' | 'q-field'
+  >
   /**
    * The component that should be used to generate the form. Defaults to QForm. You can pass the name of a native HTML5 element or Vue component that is globally registered. You can also import the Vue file and directly pass the imported object, just like you would when you add it to a Vue file's components prop.
    * @type {string | Function}
@@ -521,7 +538,7 @@ export interface BlitzFormProps extends Vue {
 export interface BlitzField extends BlitzFieldProps, Vue {}
 
 export interface BlitzForm extends BlitzFormProps, Vue {
-  fieldInput(payload: { id: string, value: any }): void
+  fieldInput(payload: { id: string; value: any }): void
 
   resetState(): void
 
@@ -540,11 +557,15 @@ export interface BlitzForm extends BlitzFormProps, Vue {
   tapArchive(): void
 }
 
-export const BlitzField: VueConstructor<BlitzForm>;
-export const BlitzForm: VueConstructor<BlitzFormProps>;
+export const BlitzField: VueConstructor<BlitzForm>
+export const BlitzForm: VueConstructor<BlitzFormProps>
 
 // as an alias
 export interface Schema extends Partial<BlitzFieldProps> {}
+
+export type ValidationResultField = boolean | (string | boolean)[]
+
+export type ValidationResultForm = { [fieldId: string]: ValidationResultField }
 
 /**
  * Validates a form data based on its schema
@@ -555,12 +576,16 @@ export interface Schema extends Partial<BlitzFieldProps> {}
  * @param {StringObject} lang the lang object with at least the key `requiredField` used as error message for required fields
  * @returns {ValidationResultForm}
  */
-export function validateFormPerSchema(formData: any, schema: Schema, lang: BlitzarLang)
+export function validateFormPerSchema(
+  formData: any,
+  schema: Schema,
+  lang: BlitzarLang
+): ValidationResultForm
 
 export default class Blitzar {
-  static BlitzForm: BlitzForm;
-  static BlitzField: BlitzField;
-  static BlitzH: any;
-  static BlitzListForm: any;
-  static install: PluginFunction<any>;
+  static BlitzForm: BlitzForm
+  static BlitzField: BlitzField
+  static BlitzH: any
+  static BlitzListForm: any
+  static install: PluginFunction<any>
 }
