@@ -161,23 +161,6 @@
       word-break: break-word
   .q-field--error .q-field__bottom
     color: rgb(222,55,55)
-
-// prevent any shenanigans that other libraries try to pull on the inner classes we rely on
-// the fixes below are originally implemented to counteract Vuetify's leakage
-.blitz-field
-  .q-field,
-  .q-field__control,
-  .q-field__control-container,
-  .q-field__inner,
-  .q-field__native,
-  .q-field__messages
-    margin: 0
-    padding: 0
-  .q-field__bottom
-    margin: 0
-    padding: 8px 12px 0
-  .q-field__append
-    flex: initial
 </style>
 
 <script>
