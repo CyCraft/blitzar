@@ -4,6 +4,7 @@
     "baseUrl": ".",
     "strict": true,
     "target": "es6",
+    "moduleResolution": "node",
     "types": ["node"]
   },
   "exclude": ["/dist", "node_modules"]
