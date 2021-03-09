@@ -560,6 +560,14 @@ export interface BlitzForm extends BlitzFormProps, Vue {
 export const BlitzField: VueConstructor<BlitzForm>
 export const BlitzForm: VueConstructor<BlitzFormProps>
 
+export interface BlitzH extends Vue {}
+export interface BlitzListForm extends Vue {}
+export interface BlitzTable extends Vue {}
+
+export const BlitzH: VueConstructor<BlitzH>
+export const BlitzListForm: VueConstructor<BlitzListForm>
+export const BlitzTable: VueConstructor<BlitzTable>
+
 // as an alias
 export interface Schema extends Partial<BlitzFieldProps> {}
 
@@ -573,13 +581,13 @@ export type ValidationResultForm = { [fieldId: string]: ValidationResultField }
  * @export
  * @param {PlainObject} formData the form data in an object that looks like: `{[fieldId: string]: any}`
  * @param {Schema} schema
- * @param {StringObject} lang the lang object with at least the key `requiredField` used as error message for required fields
+ * @param {StringObject} [lang] the lang object with at least the key `requiredField` used as error message for required fields
  * @returns {ValidationResultForm}
  */
 export function validateFormPerSchema(
   formData: any,
   schema: Schema,
-  lang: BlitzarLang
+  lang?: BlitzarLang
 ): ValidationResultForm
 
 export default class Blitzar {
@@ -587,5 +595,6 @@ export default class Blitzar {
   static BlitzField: BlitzField
   static BlitzH: any
   static BlitzListForm: any
+  static BlitzTable: any
   static install: PluginFunction<any>
 }
