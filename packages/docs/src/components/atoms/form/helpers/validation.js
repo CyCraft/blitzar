@@ -45,7 +45,7 @@ export function validateFieldPerSchema(payload, { rules = [], required }, contex
  * @export
  * @param {PlainObject} formData the form data in an object that looks like: `{[fieldId: string]: any}`
  * @param {Schema} schema
- * @param {StringObject} lang the lang object with at least the key `requiredField` used as error message for required fields
+ * @param {StringObject} [lang] the lang object with at least the key `requiredField` used as error message for required fields
  * @returns {ValidationResultForm}
  */
 export function validateFormPerSchema(formData, schema, lang) {
@@ -62,7 +62,7 @@ export function validateFormPerSchema(formData, schema, lang) {
   const resultPerField = Object.entries(formDataFlat).reduce((carry, [fieldId, fieldValue]) => {
     if (fieldId === 'undefined') return carry
     const blueprint = schemaObject[fieldId]
-    const context = { formData, formDataFlat, lang }
+    const context = { formData, formDataFlat, lang: lang || defaultLang() }
     carry[fieldId] = !blueprint || validateFieldPerSchema(fieldValue, blueprint, context)
     return carry
   }, {})
