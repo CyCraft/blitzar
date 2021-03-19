@@ -1,6 +1,6 @@
 {
   "name": "docs-vuetify",
-  "version": "0.0.18",
+  "version": "0.0.19",
   "private": true,
   "scripts": {
     "dev": "vue-cli-service serve",
@@ -8,7 +8,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "blitzar": "^0.0.18",
+    "blitzar": "^0.0.19",
     "core-js": "^3.9.1",
     "vue": "^2.6.12",
     "vuetify": "^2.4.7"
