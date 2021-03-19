@@ -28,7 +28,7 @@
   "dependencies": {
     "@blitzar/form": "^0.0.18",
     "@blitzar/table": "^0.0.18",
-    "quasar": "^1.15.2"
+    "quasar": "^1.15.5"
   },
   "license": "MIT",
   "bugs": "https://github.com/cycraft/blitzar/issues",
