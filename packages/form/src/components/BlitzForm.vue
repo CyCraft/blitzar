@@ -394,11 +394,12 @@ export default {
       }
     },
     schemaForcedDefaults() {
-      const { formData, formDataFlat, formId } = this
+      const { formData, formDataFlat, formId, innerMode } = this
       return {
         formData,
         formDataFlat,
         formId,
+        formMode: innerMode
       }
     },
     cSchema() {
