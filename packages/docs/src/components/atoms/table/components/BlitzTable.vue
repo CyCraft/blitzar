@@ -456,16 +456,7 @@ export default {
       return schemaToQTableColumns(this.schemaColumns)
     },
     cActionButtons() {
-      const {
-        actionButtons,
-        tapAdd,
-        tapDuplicate,
-        cSelected,
-        gridModeEnabled,
-        enableGrid,
-        disableGrid,
-        schemaGrid,
-      } = this
+      const { actionButtons, schemaGrid } = this
       const blitzTableContext = this
       const defaultsGridButton = {
         component: BlitzGridListToggle,

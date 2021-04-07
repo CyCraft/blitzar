@@ -438,7 +438,7 @@ export default {
         tapCancel,
         tapSave,
         actionButtonDefaults,
-        mode,
+        innerMode,
       } = this
       const map = {
         delete: {
@@ -458,21 +458,21 @@ export default {
         edit: {
           component: 'button',
           type: 'button',
-          showCondition: () => ['view', 'raw'].includes(mode),
+          showCondition: () => ['view', 'raw'].includes(innerMode),
           slot: innerLang['edit'],
           events: { click: tapEdit },
         },
         cancel: {
           component: 'button',
           type: 'button',
-          showCondition: () => ['edit', 'add'].includes(mode),
+          showCondition: () => ['edit', 'add'].includes(innerMode),
           slot: innerLang['cancel'],
           events: { click: tapCancel },
         },
         save: {
           component: 'button',
           type: 'button',
-          showCondition: () => ['edit', 'add'].includes(mode),
+          showCondition: () => ['edit', 'add'].includes(innerMode),
           slot: innerLang['save'],
           events: { click: tapSave },
         },
