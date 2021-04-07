@@ -3,7 +3,7 @@
   "version": "0.0.20",
   "description": "Blitzar form component",
   "author": "Luca Ban - Mesqueeb",
-  "module": "dist/index.js",
+  "module": "src/index.js",
   "main": "dist/index.js",
   "scripts": {
     "vue-int": "vue-int -i src/components -r -o vetur",
@@ -50,5 +50,5 @@
     "tags": "vetur/tags.json",
     "attributes": "vetur/attributes.json"
   },
-  "gitHead": "287c2ff365af36d72ebc950a352aace2e3112d3c"
+  "gitHead": "c687213c03a9d020e38caa1f3d4f68ba938ed8ae"
 }
