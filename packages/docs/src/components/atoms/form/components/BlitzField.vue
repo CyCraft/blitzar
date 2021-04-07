@@ -493,6 +493,14 @@ export default {
      */
     formId: { type: String },
     /**
+     * The `mode` of the BlitzForm. A BlitzField inherits the `mode` from the `BlitzForm` via its `mode` prop; however, if you had manually overwritten the mode to be something else, `formMode` can be used to check the current mode of the form. This can be useful inside an evaluated Prop.
+     *
+     * It's not something you can pass via the schema, but something that BlitzForm will automatically pass to each of its fields so you can use it in Evaluated Props.
+     * @type {'edit' | 'view' | 'disabled' | 'raw' | 'add'}
+     * @category readonly
+     */
+    formMode: { type: String },
+    /**
      * The `fieldInput` function of BlitzForm. Is passed so it can be used in events. Eg.: `events: { input: (value, { fieldInput } => fieldInput({ id: 'otherField', value }))}`
      *
      * It's not something you can pass via the schema, but something that BlitzForm will automatically pass to each of its fields so you can use it in Evaluated Props.

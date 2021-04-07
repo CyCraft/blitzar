@@ -31,6 +31,7 @@
       "formData",
       "formDataFlat",
       "formId",
+      "formMode",
       "fieldInput",
       "rowInput",
       "rowIndex",
