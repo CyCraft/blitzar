@@ -445,14 +445,12 @@ export default {
           component: 'button',
           type: 'button',
           slot: innerLang['delete'],
-          color: 'negative',
           events: { click: tapDelete },
         },
         archive: {
           component: 'button',
           type: 'button',
           slot: innerLang['archive'],
-          color: 'negative',
           events: { click: tapArchive },
         },
         edit: {
