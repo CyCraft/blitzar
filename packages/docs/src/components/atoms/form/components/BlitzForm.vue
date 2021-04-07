@@ -438,6 +438,7 @@ export default {
         tapCancel,
         tapSave,
         actionButtonDefaults,
+        mode,
       } = this
       const map = {
         delete: {
@@ -457,21 +458,21 @@ export default {
         edit: {
           component: 'button',
           type: 'button',
-          showCondition: (_, { mode }) => ['view', 'raw'].includes(mode),
+          showCondition: () => ['view', 'raw'].includes(mode),
           slot: innerLang['edit'],
           events: { click: tapEdit },
         },
         cancel: {
           component: 'button',
           type: 'button',
-          showCondition: (_, { mode }) => ['edit', 'add'].includes(mode),
+          showCondition: () => ['edit', 'add'].includes(mode),
           slot: innerLang['cancel'],
           events: { click: tapCancel },
         },
         save: {
           component: 'button',
           type: 'button',
-          showCondition: (_, { mode }) => ['edit', 'add'].includes(mode),
+          showCondition: () => ['edit', 'add'].includes(mode),
           slot: innerLang['save'],
           events: { click: tapSave },
         },
@@ -481,11 +482,12 @@ export default {
     actionButtonsSchema() {
       const {
         actionButtons,
-        schemaOverwritableDefaults,
         schemaForcedDefaults,
         actionButtonsMap,
         formDataFlat,
+        innerLang,
       } = this
+      const overwritableDefaults = { lang: innerLang, fieldInput: this.fieldInput }
       return actionButtons.map((blueprint) => {
         const _bp = isString(blueprint) ? actionButtonsMap[blueprint] : blueprint
         const slotsOverwrite = !_bp.slot
@@ -503,12 +505,7 @@ export default {
           ...slotsOverwrite,
           ...eventsOverwrites,
         }
-        const blueprintParsed = merge(
-          schemaOverwritableDefaults,
-          _bp,
-          overwrites,
-          schemaForcedDefaults
-        )
+        const blueprintParsed = merge(overwritableDefaults, _bp, overwrites, schemaForcedDefaults)
         return blueprintParsed
       })
     },
