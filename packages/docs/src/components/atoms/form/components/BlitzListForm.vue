@@ -83,7 +83,15 @@ export default {
      */
     attrsToPass: {
       type: Array,
-      default: () => ['formData', 'formDataFlat', 'formId', 'mode', 'fieldInput', 'lang'],
+      default: () => [
+        'formData',
+        'formDataFlat',
+        'formId',
+        'formMode',
+        'mode',
+        'fieldInput',
+        'lang',
+      ],
     },
     /**
      * Allows to limit the max amount of rows.
