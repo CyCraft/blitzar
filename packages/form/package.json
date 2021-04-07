@@ -1,6 +1,6 @@
 {
   "name": "@blitzar/form",
-  "version": "0.0.19",
+  "version": "0.0.20",
   "description": "Blitzar form component",
   "author": "Luca Ban - Mesqueeb",
   "module": "dist/index.js",
@@ -10,7 +10,7 @@
     "build": "rimraf dist && vue-compile src -o dist"
   },
   "dependencies": {
-    "@blitzar/utils": "^0.0.19",
+    "@blitzar/utils": "^0.0.20",
     "case-anything": "^1.1.2",
     "copy-anything": "^2.0.3",
     "filter-anything": "^2.2.1",
