@@ -12,6 +12,11 @@ npm i blitzar
 
 [blitzar.cycraft.co](https://blitzar.cycraft.co)
 
+## Motivation
+
+Check out this blog post to understand my motivation for creating Blitzar:
+[Better, Faster Vue Forms with Blitzar](https://lucaban.medium.com/better-faster-vue-forms-with-blitzar-a0d71258a3bb)
+
 ## Meet the family
 
 ![](media/familar-hero.png?raw=true)
