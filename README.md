@@ -8,6 +8,10 @@ A Vue component collection for blitzing fast prototyping ⚡
 npm i blitzar
 ```
 
+## Documentation
+
+[blitzar.cycraft.co](https://blitzar.cycraft.co)
+
 ## Meet the family
 
 ![](media/familar-hero.png?raw=true)
