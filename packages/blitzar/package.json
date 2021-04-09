@@ -1,7 +1,7 @@
 {
   "name": "blitzar",
   "version": "0.0.23",
-  "description": "A Vue component collection for blitzing fast prototyping ⚡",
+  "description": "Generate Vue Forms and Data-tables fast with a simple JSON-like syntax ⚡",
   "module": "index.js",
   "main": "index.js",
   "types": "index.d.ts",

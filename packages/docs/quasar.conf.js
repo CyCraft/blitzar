@@ -123,7 +123,7 @@ module.exports = configure(function (ctx) {
       manifest: {
         name: 'Blitzar docs',
         short_name: 'Blitzar docs',
-        description: 'A Vue component collection for blitzing fast prototyping ⚡',
+        description: 'Generate Vue Forms and Data-tables fast with a simple JSON-like syntax ⚡',
         display: 'standalone',
         orientation: 'portrait',
         background_color: '#ffffff',

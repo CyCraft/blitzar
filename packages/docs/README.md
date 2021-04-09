@@ -1,6 +1,6 @@
 # Blitzar docs (docs)
 
-A Vue component collection for blitzing fast prototyping ⚡
+Generate Vue Forms and Data-tables fast with a simple JSON-like syntax ⚡
 
 ## Install the dependencies
 ```bash
