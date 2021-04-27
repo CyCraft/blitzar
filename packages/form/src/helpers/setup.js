@@ -1,9 +1,16 @@
 import { merge } from 'merge-anything'
 import Vue from 'vue'
+import Platform from './Platform'
+
+const queues = {
+  server: [], // on SSR update
+  takeover: [], // on client takeover
+}
 
 export function setup() {
   const patchQSettings = {
     blitzar: true,
+    // platform: Platform,
     dark: { isActive: false, mode: false },
     iconSet: {
       field: {
@@ -14,6 +21,8 @@ export function setup() {
   }
   // $q not found
   if (!('$q' in Vue.prototype)) {
+    // required plugins
+    Platform.install(patchQSettings, queues)
     Vue.prototype['$q'] = patchQSettings
     return
   }
