@@ -13,6 +13,14 @@ export function setup() {
         recordsPerPage: 'Records per page:',
         allRows: 'All',
         columns: 'Columns',
+        selectedRecords: function (rows) {
+          return rows === 1
+            ? '1 record selected.'
+            : (rows === 0 ? 'No' : rows) + ' records selected.'
+        },
+        pagination: function (start, end, total) {
+          return start + '-' + end + ' of ' + total
+        },
       },
     },
     iconSet: {
