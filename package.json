@@ -8,6 +8,7 @@
     "audit": "npm audit fix && lerna-audit && lerna bootstrap",
     "dev": "npm run prepare:all && npm run start:dev && cd packages/docs && npm run dev",
     "dev:docs-vuetify": "npm run prepare:all && npm run start:dev && cd packages/docs-vuetify && npm run dev",
+    "dev:vue-cli": "npm run start:dev && cd packages/dev-vue-cli && npm run dev",
     "test": "lerna run test",
     "build": "lerna run build",
     "build:utils": "cd packages/utils && npm run build",
