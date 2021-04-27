@@ -1,9 +1,16 @@
 import { merge } from 'merge-anything'
 import Vue from 'vue'
+import Platform from './Platform'
+
+const queues = {
+  server: [], // on SSR update
+  takeover: [], // on client takeover
+}
 
 export function setup() {
   const patchQSettings = {
     blitzar: true,
+    platform: Platform,
     dark: { isActive: false, mode: false },
     lang: {
       table: {
@@ -13,15 +20,26 @@ export function setup() {
         recordsPerPage: 'Records per page:',
         allRows: 'All',
         columns: 'Columns',
+        selectedRecords: function (rows) {
+          return rows === 1
+            ? '1 record selected.'
+            : (rows === 0 ? 'No' : rows) + ' records selected.'
+        },
+        pagination: function (start, end, total) {
+          return start + '-' + end + ' of ' + total
+        },
       },
     },
     iconSet: {
       arrow: {
-        up: 'arrow_upward',
+        up:
+          'img:data:image/svg+xml;charset=utf8,<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15.3598 13.2682L9.35982 8.26824C8.33552 7.41466 9.61589 5.87822 10.6402 6.7318L16.6402 11.7318C17.6645 12.5854 16.3841 14.1218 15.3598 13.2682Z" fill="currentColor"/><path d="M3.35982 11.7318L9.35982 6.7318C10.3841 5.87822 11.6645 7.41466 10.6402 8.26824L4.64019 13.2682C3.61589 14.1218 2.33552 12.5854 3.35982 11.7318Z" fill="currentColor"/></svg>',
         right: 'arrow_forward',
-        down: 'arrow_downward',
+        down:
+          'img:data:image/svg+xml;charset=utf8,<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16.6402 8.26824L10.6402 13.2682C9.61589 14.1218 8.33552 12.5854 9.35982 11.7318L15.3598 6.7318C16.3841 5.87822 17.6645 7.41466 16.6402 8.26824Z" fill="currentColor"/><path d="M4.64018 6.7318L10.6402 11.7318C11.6645 12.5854 10.3841 14.1218 9.35982 13.2682L3.35982 8.26824C2.33552 7.41466 3.61589 5.87822 4.64018 6.7318Z" fill="currentColor"/></svg>',
         left: 'arrow_back',
-        dropdown: 'arrow_drop_down',
+        dropdown:
+          'img:data:image/svg+xml;charset=utf8,<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16.6402 8.26824L10.6402 13.2682C9.61589 14.1218 8.33552 12.5854 9.35982 11.7318L15.3598 6.7318C16.3841 5.87822 17.6645 7.41466 16.6402 8.26824Z" fill="currentColor"/><path d="M4.64018 6.7318L10.6402 11.7318C11.6645 12.5854 10.3841 14.1218 9.35982 13.2682L3.35982 8.26824C2.33552 7.41466 3.61589 5.87822 4.64018 6.7318Z" fill="currentColor"/></svg>',
       },
       chevron: { left: 'chevron_left', right: 'chevron_right' },
       pagination: {
@@ -31,7 +49,8 @@ export function setup() {
         last: 'last_page',
       },
       table: {
-        arrowUp: 'arrow_upward',
+        arrowUp:
+          'img:data:image/svg+xml;charset=utf8,<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15.3598 13.2682L9.35982 8.26824C8.33552 7.41466 9.61589 5.87822 10.6402 6.7318L16.6402 11.7318C17.6645 12.5854 16.3841 14.1218 15.3598 13.2682Z" fill="currentColor"/><path d="M3.35982 11.7318L9.35982 6.7318C10.3841 5.87822 11.6645 7.41466 10.6402 8.26824L4.64019 13.2682C3.61589 14.1218 2.33552 12.5854 3.35982 11.7318Z" fill="currentColor"/></svg>',
         warning: 'warning',
         firstPage: 'first_page',
         prevPage: 'chevron_left',
@@ -42,6 +61,8 @@ export function setup() {
   }
   // $q not found
   if (!('$q' in Vue.prototype)) {
+    // required plugins
+    Platform.install(patchQSettings, queues)
     Vue.prototype['$q'] = patchQSettings
     return
   }
