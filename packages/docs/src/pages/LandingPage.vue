@@ -4,6 +4,7 @@
       <div class="mb-xxxl column items-center">
         <q-img src="media/blitzar-logo-white.svg" style="width: 118px" />
         <h1 class="text-logo mt-md">Blitzar</h1>
+        <div>Generate Vue Forms and Data-tables fast with a simple JSON-like syntax</div>
       </div>
       <div class="pa-md q-gutter-xl flex">
         <RouteLink text="BlitzForm" to="/docs/blitz-form" />

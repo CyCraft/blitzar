@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@blitzar/utils": "^0.0.23",
-    "case-anything": "^1.1.2",
+    "case-anything": "^1.1.3",
     "copy-anything": "^2.0.3",
     "filter-anything": "^2.2.1",
     "is-what": "^3.14.1",

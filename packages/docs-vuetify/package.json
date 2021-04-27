@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "blitzar": "^0.0.23",
-    "core-js": "^3.10.0",
+    "core-js": "^3.10.1",
     "vue": "^2.6.12",
     "vuetify": "^2.4.9"
   },

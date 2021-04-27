@@ -1,8 +1,9 @@
+import { merge } from 'merge-anything'
 import Vue from 'vue'
 
 export function setup() {
-  if ('$q' in Vue.prototype) return
-  Vue.prototype['$q'] = {
+  const patchQSettings = {
+    blitzar: true,
     dark: { isActive: false, mode: false },
     iconSet: {
       field: {
@@ -10,6 +11,15 @@ export function setup() {
         error: `img:data:image/svg+xml;charset=utf8,<svg xmlns="http://www.w3.org/2000/svg" style="color:rgb(222,55,55);" width="26" height="26" viewBox="0 0 20 20"><g fill="none" fill-rule="evenodd"><path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M10 7v4"/><circle cx="10" cy="14" r="1" fill="currentColor"/><circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="2"/></g></svg>`,
       },
     },
+  }
+  // $q not found
+  if (!('$q' in Vue.prototype)) {
+    Vue.prototype['$q'] = patchQSettings
+    return
+  }
+  // $q found, but was added from Blitzar
+  if (Vue.prototype['$q']?.blitzar === true) {
+    Vue.prototype['$q'] = merge(Vue.prototype['$q'], patchQSettings)
   }
 }
 
