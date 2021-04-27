@@ -1,8 +1,9 @@
+import { merge } from 'merge-anything'
 import Vue from 'vue'
 
 export function setup() {
-  if ('$q' in Vue.prototype) return
-  Vue.prototype['$q'] = {
+  const patchQSettings = {
+    blitzar: true,
     dark: { isActive: false, mode: false },
     lang: {
       table: {
@@ -38,6 +39,15 @@ export function setup() {
         lastPage: 'last_page',
       },
     },
+  }
+  // $q not found
+  if (!('$q' in Vue.prototype)) {
+    Vue.prototype['$q'] = patchQSettings
+    return
+  }
+  // $q found, but was added from Blitzar
+  if (Vue.prototype['$q']?.blitzar === true) {
+    Vue.prototype['$q'] = merge(Vue.prototype['$q'], patchQSettings)
   }
 }
 
