@@ -602,6 +602,8 @@ export default {
       }
     },
     fieldInput({ id, value, origin }) {
+      // do not emit anything when the field had no `id` on its schema blueprint
+      if (id === undefined) return
       // no idea why I do this:
       this.edited = true
       // keep a list of edited field ids

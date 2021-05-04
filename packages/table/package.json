@@ -3,7 +3,7 @@
   "version": "0.0.25",
   "author": "Luca Ban - Mesqueeb",
   "description": "Blitzar table component",
-  "module": "src/index.js",
+  "module": "dist/index.js",
   "main": "dist/index.js",
   "scripts": {
     "vue-int": "vue-int -i src/components -r -o vetur",
