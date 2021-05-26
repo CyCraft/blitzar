@@ -75,6 +75,7 @@ export const routeNamePageChaptersMap: { [key in ROUTE_NAMES]: string[] } = {
     'Basics.md',
     'Basics - Basic Example.vue',
     'Basics - Advanced Example.vue',
+    'Basics - Multi-Row Example.vue',
     'BlitzForm Example.vue',
   ],
 }
