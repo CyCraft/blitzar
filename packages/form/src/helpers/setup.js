@@ -27,7 +27,7 @@ export function setup() {
     return
   }
   // $q found, but was added from Blitzar
-  if (Vue.prototype['$q']?.blitzar === true) {
+  if (Vue.prototype['$q'] && Vue.prototype['$q'].blitzar === true) {
     Vue.prototype['$q'] = merge(Vue.prototype['$q'], patchQSettings)
   }
 }
