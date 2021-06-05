@@ -16,9 +16,7 @@
 <style lang="sass" scoped></style>
 
 <script>
-import DialogWrapper from '../../components/DialogWrapper.vue'
-import { BlitzTable, BlitzForm } from 'blitzar'
-import { Dialog } from 'quasar'
+import { BlitzTable } from 'blitzar'
 
 const rows = [
   {

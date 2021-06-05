@@ -9,15 +9,36 @@
       flat
       bordered
     />
+    <!-- Blitzar does not come with a modal library
+         The example below uses `vue-final-modal`
+         However, you can use any modal library you want -->
+    <vue-final-modal classes="form-modal" v-model="isShowingModal">
+      <!-- show a BlitzForm in a modal -->
+      <BlitzForm
+        :schema="schemaColumns"
+        :value="modalFormData"
+        :actionButtons="['edit', 'cancel', 'save']"
+        :columnCount="2"
+        :key="remountCounter"
+        @cancel="isShowingModal = false"
+        @save="(payload) => saveModalFormData(payload)"
+      />
+    </vue-final-modal>
   </div>
 </template>
 
-<style lang="sass" scoped></style>
+<style lang="sass">
+.form-modal
+  display: flex
+  justify-content: center
+  align-items: center
+  > *
+    background: white
+    padding: 1.5rem
+</style>
 
 <script>
-import DialogWrapper from '../../components/DialogWrapper.vue'
 import { BlitzTable, BlitzForm } from 'blitzar'
-import { Dialog } from 'quasar'
 
 const rows = [
   {
@@ -127,39 +148,44 @@ const schemaColumns = [
 ## Edit on Row Click
  */
 export default {
-  components: { BlitzTable },
+  components: { BlitzTable, BlitzForm },
   data() {
-    return { rows, schemaColumns }
+    return {
+      rows,
+      schemaColumns,
+      isShowingModal: false,
+      modalFormData: null,
+      remountCounter: 0,
+    }
   },
   methods: {
     rowClick(event, rowData) {
-      const _rows = this.rows
-      Dialog.create({
-        // tell Quasar's Dialog plugin to use DialogWrapper.vue
-        component: DialogWrapper,
-        // tell DialogWrapper.vue to use a BlitzForm
-        slotComponent: BlitzForm,
-        // props bound to BlitzForm via v-bind="slotProps"
-        slotProps: {
-          actionButtons: ['edit', 'cancel', 'save'],
-          value: rowData,
-          schema: schemaColumns,
-          columnCount: 2,
-          style: 'padding: 1.5rem',
-        },
-        // events bound to BlitzForm via v-on="slotEvents"
-        slotEvents: ({ hide }) => ({
-          cancel: hide,
-          save: ({ newData }) => {
-            const { id: rowId } = rowData
-            const rowToUpdate = _rows.find((r) => r.id === rowId)
-            Object.entries(newData).forEach(([fieldId, value]) => {
-              rowToUpdate[fieldId] = value
-            })
-            hide()
-          },
-        }),
+      // set the new form data for the modal
+      this.modalFormData = rowData
+
+      // increment the `remountCounter` to force the BlitzForm to remount to display the new form data
+      this.remountCounter++
+
+      // show the modal
+      this.isShowingModal = true
+    },
+    saveModalFormData(saveEventPayload) {
+      // the updated form data from the @save event of the BlitzForm
+      const newData = saveEventPayload.newData
+
+      // the row id that is being edited
+      const rowId = this.modalFormData.id
+
+      // find the row in the local state
+      const rowToUpdate = this.rows.find((r) => r.id === rowId)
+
+      // update the rows fields
+      Object.entries(newData).forEach(([fieldId, value]) => {
+        rowToUpdate[fieldId] = value
       })
+
+      // hide the modal again
+      this.isShowingModal = false
     },
   },
 }

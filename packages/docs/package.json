@@ -30,6 +30,7 @@
     "path-to-prop": "^1.0.0",
     "planetar": "^0.7.17",
     "quasar": "^1.15.16",
+    "vue-final-modal": "^2.3.1",
     "vue-scrollactive": "^0.9.3"
   },
   "devDependencies": {

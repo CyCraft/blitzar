@@ -9,15 +9,36 @@
       flat
       bordered
     />
+    <!-- Blitzar does not come with a modal library
+         The example below uses `vue-final-modal`
+         However, you can use any modal library you want -->
+    <vue-final-modal classes="form-modal" v-model="isShowingModal">
+      <!-- show a BlitzForm in a modal -->
+      <BlitzForm
+        :schema="schemaColumns"
+        :value="modalFormData"
+        :actionButtons="['cancel', 'save']"
+        :columnCount="2"
+        :key="remountCounter"
+        @cancel="isShowingModal = false"
+        @save="(payload) => saveModalFormData(payload)"
+      />
+    </vue-final-modal>
   </div>
 </template>
 
-<style lang="sass" scoped></style>
+<style lang="sass">
+.form-modal
+  display: flex
+  justify-content: center
+  align-items: center
+  > *
+    background: white
+    padding: 1.5rem
+</style>
 
 <script>
-import DialogWrapper from '../../components/DialogWrapper.vue'
 import { BlitzTable, BlitzForm } from 'blitzar'
-import { Dialog } from 'quasar'
 
 const rows = [
   {
@@ -127,7 +148,7 @@ const schemaColumns = [
 ## Adding a New Record
  */
 export default {
-  components: { BlitzTable },
+  components: { BlitzTable, BlitzForm },
   data() {
     const addNewButton = {
       component: 'button',
@@ -135,33 +156,39 @@ export default {
       events: { click: this.showAddNewDialog },
     }
     const actionButtons = ['grid', addNewButton]
-    return { rows, schemaColumns, actionButtons }
+
+    return {
+      rows,
+      schemaColumns,
+      actionButtons,
+      isShowingModal: false,
+      modalFormData: {},
+      remountCounter: 0,
+    }
   },
   methods: {
     showAddNewDialog() {
-      Dialog.create({
-        // tell Quasar's Dialog plugin to use DialogWrapper.vue
-        component: DialogWrapper,
-        // tell DialogWrapper.vue to use a BlitzForm
-        slotComponent: BlitzForm,
-        // props bound to BlitzForm via v-bind="slotProps"
-        slotProps: {
-          actionButtons: ['cancel', 'save'],
-          value: {},
-          schema: schemaColumns,
-          columnCount: 2,
-          style: 'padding: 1.5rem',
-        },
-        // events bound to BlitzForm via v-on="slotEvents"
-        slotEvents: ({ hide }) => ({
-          cancel: hide,
-          save: ({ newData }) => {
-            const randomId = `${Math.random()}`
-            this.rows.unshift({ ...newData, id: randomId })
-            hide()
-          },
-        }),
-      })
+      // reset the form data for the modal
+      this.modalFormData = {}
+
+      // increment the `remountCounter` to force the BlitzForm to remount to display the new form data
+      this.remountCounter++
+
+      // show the modal
+      this.isShowingModal = true
+    },
+    saveModalFormData(saveEventPayload) {
+      // the updated form data from the @save event of the BlitzForm
+      const newData = saveEventPayload.newData
+
+      // create the new row to be added with a random ID
+      const newRow = { ...newData, id: `${Math.random()}` }
+
+      // add the new row with the random ID
+      this.rows.unshift(newRow)
+
+      // hide the modal again
+      this.isShowingModal = false
     },
   },
 }
