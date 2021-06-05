@@ -4,7 +4,7 @@
       <div class="mb-xxxl column items-center">
         <q-img src="media/blitzar-logo-white.svg" style="width: 118px" />
         <h1 class="text-logo mt-md">Blitzar</h1>
-        <div class="text-white" style="opacity: 0.9">
+        <div class="text-white pa-md" style="opacity: 0.9">
           Generate Vue Forms and Data-tables fast with a simple JSON-like syntax
         </div>
       </div>
