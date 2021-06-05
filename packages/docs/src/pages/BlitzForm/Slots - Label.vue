@@ -10,11 +10,23 @@
 <script>
 import { BlitzForm } from 'blitzar'
 // All components that are used in the form need to be globally registered.
-import { QTooltip } from 'quasar'
+import VueCustomTooltip from '@adamdehaven/vue-custom-tooltip'
 import Vue from 'vue'
-Vue.component('QTooltip', QTooltip)
+Vue.component('VueCustomTooltip', VueCustomTooltip)
 
 const schema = [
+  {
+    id: 'example',
+    component: 'input',
+    label: 'Example of a label slot with extra text',
+    slots: {
+      label: {
+        component: 'span',
+        slot: '(extra text)',
+        style: 'color: grey; padding-left: 0.5em',
+      },
+    },
+  },
   {
     id: 'tooltip',
     component: 'input',
@@ -22,7 +34,11 @@ const schema = [
     slots: {
       label: {
         component: 'span',
-        slot: ['⚠️', { component: 'QTooltip', slot: `Hi! I'm a tooltip! Yiiiihaaaa` }],
+        slot: {
+          component: 'VueCustomTooltip',
+          slot: 'ℹ️',
+          label: `Hi! I'm a tooltip! Yiiiihaaaa`,
+        },
       },
     },
   },
@@ -31,7 +47,11 @@ const schema = [
     component: 'input',
     label: 'Example of a label slot with multiple components',
     slots: {
-      label: ['🌈', { component: 'span', slot: '🌈', style: 'font-size: 2em' }, 'double rainbow'],
+      label: [
+        { component: 'span', slot: 'double rainbow!!', style: 'color: grey; padding: 0 1em' },
+        '🌈',
+        { component: 'span', slot: '🌈', style: 'font-size: 2em' },
+      ],
     },
   },
 ]

@@ -9,10 +9,6 @@
 
 <script>
 import { BlitzForm } from 'blitzar'
-// All components that are used in the form need to be globally registered.
-import { QBtnToggle } from 'quasar'
-import Vue from 'vue'
-Vue.component('QBtnToggle', QBtnToggle)
 
 const schema = [
   {
