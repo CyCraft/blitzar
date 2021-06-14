@@ -31,8 +31,8 @@
         :style="`grid-template-columns:${' 1fr'.repeat(columnCount)}; grid-gap: ${gridGap}`"
       >
         <BlitzField
-          v-for="field in cSchema"
-          :key="field.id"
+          v-for="(field, i) in cSchema"
+          :key="`${field.id}-${i}`"
           v-bind="{ ...field, span: undefined }"
           :value="formDataFlat[field.id]"
           @input="(value, origin) => fieldInput({ id: field.id, value, origin })"
@@ -399,7 +399,7 @@ export default {
         formData,
         formDataFlat,
         formId,
-        formMode: innerMode
+        formMode: innerMode,
       }
     },
     cSchema() {
@@ -481,13 +481,8 @@ export default {
       return merge(map, actionButtonDefaults)
     },
     actionButtonsSchema() {
-      const {
-        actionButtons,
-        schemaForcedDefaults,
-        actionButtonsMap,
-        formDataFlat,
-        innerLang,
-      } = this
+      const { actionButtons, schemaForcedDefaults, actionButtonsMap, formDataFlat, innerLang } =
+        this
       const overwritableDefaults = { lang: innerLang, fieldInput: this.fieldInput }
       return actionButtons.map((blueprint) => {
         const _bp = isString(blueprint) ? actionButtonsMap[blueprint] : blueprint
