@@ -1,12 +1,12 @@
 {
   "name": "dev-vue-cli",
-  "version": "0.0.26",
+  "version": "0.0.27",
   "private": true,
   "scripts": {
     "dev": "vue-cli-service serve"
   },
   "dependencies": {
-    "blitzar": "^0.0.26",
+    "blitzar": "^0.0.27",
     "core-js": "^3.13.0",
     "vue": "^2.6.12",
     "vue-router": "^3.5.1"
