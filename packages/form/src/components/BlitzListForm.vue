@@ -94,6 +94,15 @@ export default {
       ],
     },
     /**
+     * Pass the component names (without `.vue`) that have internal error handling. This makes sure it passes on props like `rules` and does nothing with them in the BlitzField.
+     * @type {string[]}
+     * @category behavior
+     */
+    internalErrorsFor: {
+      type: Array,
+      default: () => ['QInput', 'QSelect', 'QField', 'q-input', 'q-select', 'q-field'],
+    },
+    /**
      * Allows to limit the max amount of rows.
      * @category content
      */
@@ -123,16 +132,20 @@ export default {
       }, {})
     },
     cSchema() {
-      const { schema, disable, readonly, listFormAttrsToPass } = this
+      const { schema, disable, readonly, listFormAttrsToPass, internalErrorsFor } = this
       // slot, class, style are 3 prop names we cannot directly pass via `v-bind`.
       // - slot: we pass as `slots: { default: ... }`
       // - class: we pass as `fieldClasses`
       // - style: we pass as `fieldStyle`
       return schema.map((blueprint) => {
         const overwritableDefaults = { disable, readonly }
+        const internalErrorDefaults = internalErrorsFor.includes(blueprint.component)
+          ? { internalErrors: true }
+          : {}
         const overwrites = {
           label: '',
           subLabel: '',
+          slot: { label: undefined },
         }
         if (blueprint.slot) {
           overwrites.slots = merge(blueprint.slots || {}, { default: blueprint.slot })
@@ -142,7 +155,13 @@ export default {
         const fieldStyle = blueprint.fieldStyle || blueprint.style
         if (fieldStyle) overwrites.fieldStyle = fieldStyle
 
-        return merge(listFormAttrsToPass, overwritableDefaults, blueprint, overwrites)
+        return merge(
+          listFormAttrsToPass,
+          overwritableDefaults,
+          internalErrorDefaults,
+          blueprint,
+          overwrites
+        )
       })
     },
     schemaLabels() {
