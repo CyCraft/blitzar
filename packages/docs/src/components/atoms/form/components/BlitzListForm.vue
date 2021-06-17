@@ -145,7 +145,7 @@ export default {
         const overwrites = {
           label: '',
           subLabel: '',
-          slot: { label: undefined },
+          slots: { label: undefined },
         }
         if (blueprint.slot) {
           overwrites.slots = merge(blueprint.slots || {}, { default: blueprint.slot })
