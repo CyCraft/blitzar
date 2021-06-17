@@ -283,6 +283,10 @@
     "type": "array",
     "description": "A list of prop (attribute) names to be passed on to each single BlitzField generated in the list form.\n\nThis is useful when you want to use Evaluated Props in the schema of the mine form but need information from the top level BlitzForm."
   },
+  "blitz-list-form/internalErrorsFor": {
+    "type": "array",
+    "description": "Pass the component names (without `.vue`) that have internal error handling. This makes sure it passes on props like `rules` and does nothing with them in the BlitzField."
+  },
   "blitz-list-form/maxRows": {
     "type": "number",
     "description": "Allows to limit the max amount of rows."
