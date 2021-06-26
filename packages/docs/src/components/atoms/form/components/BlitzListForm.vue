@@ -111,6 +111,9 @@ export default {
     readonly: { type: Boolean },
   },
   computed: {
+    /**
+     * This is the value with an empty row concatinated to it.
+     */
     cValue: {
       get() {
         const { value, schema, disable, readonly, maxRows } = this
@@ -125,11 +128,15 @@ export default {
       },
     },
     listFormAttrsToPass() {
-      const { attrsToPass, getPropOrAttrOrParentProp } = this
-      return attrsToPass.reduce((carry, attrKey) => {
+      const { attrsToPass, getPropOrAttrOrParentProp, value } = this
+      const attrs = attrsToPass.reduce((carry, attrKey) => {
         carry[attrKey] = getPropOrAttrOrParentProp(attrKey)
         return carry
       }, {})
+      if (!attrs.formData) {
+        return { ...attrs, formData: value }
+      }
+      return attrs
     },
     cSchema() {
       const { schema, disable, readonly, listFormAttrsToPass, internalErrorsFor } = this
@@ -183,6 +190,7 @@ export default {
     getPropOrAttrOrParentProp(propKey) {
       if (propKey in this) return this[propKey]
       if (propKey in this.$attrs) return this.$attrs[propKey]
+      // TODO: WTF, this is such bad practice... Why did I do this... :'D
       if (propKey in this.$parent) return this.$parent[propKey]
       return this.$parent.$parent[propKey]
     },
