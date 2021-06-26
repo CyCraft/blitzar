@@ -70,7 +70,7 @@ export default {
     value: { type: Array, default: () => [] },
     /**
      * This is the information on the columns you want to be shown. An array of objects just like a BlitzForm.
-     * @example [{ label: 'Amount', id: 'amount', component: 'input', type: 'number' }, { label: 'Currency', id: 'curr', component: 'select', slot: [{ component: 'option', value: '', slot: '' }, { component: 'option', value: 'usd', slot: 'USD' }] }]
+     * @example [{ label: 'Amount', id: 'amount', component: 'input', type: 'number', style: 'color: white' }, { label: 'Currency', id: 'curr', component: 'select', slot: [{ component: 'option', value: '', slot: '' }, { component: 'option', value: 'usd', slot: 'USD' }], style: 'color: white' }]
      * @category content
      */
     schema: { type: Array, default: () => [{ component: 'input' }] },
