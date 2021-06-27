@@ -6,6 +6,7 @@
     :selected.sync="cSelected"
     :pagination.sync="pagination"
     v-on="$listeners"
+    ref="qtable"
   >
     <template v-slot:top v-if="usesTopSlot" class="blitz-table__top">
       <slot name="above-nav-row" />
@@ -176,7 +177,7 @@
 
 <script>
 import { merge } from 'merge-anything'
-import { isPlainObject, isFunction } from 'is-what'
+import { isPlainObject, isFunction, isArray } from 'is-what'
 import { QTable, QTr, QTd, QCard } from 'quasar'
 import { BlitzForm, BlitzField } from '@blitzar/form'
 import BlitzGridListToggle from './BlitzGridListToggle'
@@ -491,7 +492,8 @@ export default {
     },
     setSelectionAllRows(setTo) {
       if (setTo === true) {
-        this.cSelected = this.rows
+        const filteredRowsFromQTable = this.$refs.qtable?.filteredSortedRows
+        this.cSelected = isArray(filteredRowsFromQTable) ? filteredRowsFromQTable : this.rows
       } else {
         this.cSelected = []
       }
