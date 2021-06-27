@@ -21,6 +21,14 @@ const rows = [
   { nameFirst: 'Chidi', nameLast: 'Anagonye' },
   { nameFirst: 'Jason', nameLast: 'Mendoza' },
   { nameFirst: 'Tahani', nameLast: 'Al-Jamil' },
+  { nameFirst: 'Janet', nameLast: 'Della-Denunzio' },
+  { nameFirst: 'Michael', nameLast: 'Of the bad place' },
+  { nameFirst: 'Shawn', nameLast: 'Of the bad place' },
+  { nameFirst: 'Simone', nameLast: 'Garnett' },
+  { nameFirst: 'Derek', nameLast: 'Hofstetler' },
+  { nameFirst: 'John', nameLast: 'Wheaton' },
+  { nameFirst: 'Brent', nameLast: 'Norwalk' },
+  { nameFirst: 'Mindy', nameLast: 'St. Claire' },
 ]
 
 const schemaColumns = [

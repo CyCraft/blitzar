@@ -1,8 +1,11 @@
 <template>
-  <div class="example-selection-styling">
+  <div>
+    <input placeholder="🔍" v-model="searchText" style="margin-bottom: 1rem" />
     <BlitzTable
+      :filter="searchText"
       selection="multiple"
-      :selectionComponentProps="selectionComponentProps"
+      :selected.sync="selectionArray"
+      :actionButtons="actionButtons"
       :schemaColumns="schemaColumns"
       :schemaGrid="schemaColumns"
       :rows="rows"
@@ -13,23 +16,11 @@
   </div>
 </template>
 
-<style lang="sass">
-.example-selection-styling
-  .table-checkbox
-    cursor: pointer
-</style>
+<style lang="sass" scoped></style>
 
 <script>
 import { BlitzTable } from 'blitzar'
-import Vue from 'vue'
-
-Vue.component('MyCheckbox', {
-  props: { value: Boolean },
-  render(h) {
-    const toggle = () => this.$emit('input', !this.value)
-    return h('div', { on: { click: toggle } }, this.value ? '✅' : '[　]')
-  },
-})
+import { showToast } from '../../helpers/toast'
 
 const rows = [
   { nameFirst: 'Eleanor', nameLast: 'Shellstrop', id: 'tpmf4QaahR' },
@@ -52,25 +43,40 @@ const schemaColumns = [
 ]
 
 /**
-## Styling Selection
+## Selection with search
 
-You can pass a custom checkbox component via `selectionComponentProps`, an object that represents a BlitzForm blueprint. Just like you would use in a schema. Eg.:
+Here is an example of selection together with search.
 
-```html
-<BlitzTable
-  :selectionComponentProps="{ component: 'MyCheckbox', class: 'table-checkbox' }"
-/>
-```
-
-The CSS for the selected rows or grid-items can also be overwritten by targeting these classes:
-- `.blitz-table__row.selected`
-- `.blitz-table__grid-item.selected`
+When clicking select all it will only select
  */
 export default {
   components: { BlitzTable },
   data() {
-    const selectionComponentProps = { component: 'MyCheckbox', class: 'table-checkbox' }
-    return { rows, schemaColumns, selectionComponentProps }
+    return {
+      rows,
+      schemaColumns,
+      selectionArray: [],
+      searchText: '',
+    }
+  },
+  computed: {
+    showSelectedStudentsButton() {
+      const { selectionArray } = this
+      return {
+        component: 'button',
+        slot: 'log selected students',
+        showCondition: !!selectionArray.length,
+        events: {
+          click: () => {
+            showToast('selected students:', selectionArray)
+            console.log(`selectionArray → `, selectionArray)
+          },
+        },
+      }
+    },
+    actionButtons() {
+      return ['grid', this.showSelectedStudentsButton]
+    },
   },
 }
 </script>

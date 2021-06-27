@@ -1,15 +1,19 @@
 <template>
-  <div class="home">
+  <div>
+    <input placeholder="🔍" v-model="searchText" style="margin-bottom: 1rem" />
     <BlitzTable
+      :filter="searchText"
       :schemaColumns="schemaColumns"
       :schemaGrid="schemaColumns"
       :rows="rows"
-      title="Users"
+      title="My Lessons"
       flat
       bordered
     />
   </div>
 </template>
+
+<style lang="sass" scoped></style>
 
 <script>
 import { BlitzTable } from 'blitzar'
@@ -28,24 +32,22 @@ const rows = [
   { nameFirst: 'Brent', nameLast: 'Norwalk' },
   { nameFirst: 'Mindy', nameLast: 'St. Claire' },
 ]
-
 const schemaColumns = [
-  {
-    id: 'fullName',
-    label: 'Full name',
-    component: 'input',
-    parseValue: (val, { formData, fieldInput }) => {
-      const value = `${formData.nameFirst || ''} ${formData.nameLast || ''}`.trim()
-      fieldInput({ id: 'fullName', value })
-      return value
-    },
-  },
+  { id: 'nameFirst', label: 'First Name', component: 'input' },
+  { id: 'nameLast', label: 'Last Name', component: 'input' },
 ]
 
+/**
+ * # Search and Filter
+ */
 export default {
   components: { BlitzTable },
   data() {
-    return { rows, schemaColumns }
+    return {
+      rows,
+      schemaColumns,
+      searchText: '',
+    }
   },
 }
 </script>
