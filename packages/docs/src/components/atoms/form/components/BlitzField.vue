@@ -694,10 +694,8 @@ export default {
       const disabled = evalPropOrAttr('disabled')
       if (isBoolean(disabled) || disabled === 'disabled') {
         propsToPass.disabled = disabled
-        propsToPass.disable = disabled
       } else {
         propsToPass.disabled = evalPropOrAttr('mode') === 'disabled'
-        propsToPass.disable = evalPropOrAttr('mode') === 'disabled'
       }
       const attrsToPass = Object.keys(this.$attrs).reduce((carry, attrKey) => {
         carry[attrKey] = evalPropOrAttr(attrKey)
