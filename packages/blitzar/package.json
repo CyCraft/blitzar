@@ -1,6 +1,6 @@
 {
   "name": "blitzar",
-  "version": "0.0.32",
+  "version": "0.0.33",
   "description": "Generate Vue Forms and Data-tables fast with a simple JSON-like syntax ⚡",
   "module": "index.js",
   "main": "index.js",
@@ -26,8 +26,8 @@
     "schema"
   ],
   "dependencies": {
-    "@blitzar/form": "^0.0.32",
-    "@blitzar/table": "^0.0.32",
+    "@blitzar/form": "^0.0.33",
+    "@blitzar/table": "^0.0.33",
     "quasar": "^1.15.20"
   },
   "license": "MIT",
