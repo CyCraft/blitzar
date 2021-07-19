@@ -1,0 +1,36 @@
+@import '../variables/margin-padding'
+
+// Render CLASS tags:
+$_spaces: ('none': 0, 'auto': auto, 'xxs': $xxs, 'xs': $xs, 'sm': $sm, 'md': $md, 'lg': $lg, 'xl': $xl, 'xxl': $xxl, 'xxxl': $xxxl) !default
+
+@each $key, $value in $_spaces
+
+  .pa-#{$key}
+    +pa($value)
+  .pl-#{$key}
+    +pl($value)
+  .pr-#{$key}
+    +pr($value)
+  .pt-#{$key}
+    +pt($value)
+  .pb-#{$key}
+    +pb($value)
+  .px-#{$key}
+    +px($value)
+  .py-#{$key}
+    +py($value)
+
+  .ma-#{$key}
+    +ma($value)
+  .ml-#{$key}
+    +ml($value)
+  .mr-#{$key}
+    +mr($value)
+  .mt-#{$key}
+    +mt($value)
+  .mb-#{$key}
+    +mb($value)
+  .mx-#{$key}
+    +mx($value)
+  .my-#{$key}
+    +my($value)

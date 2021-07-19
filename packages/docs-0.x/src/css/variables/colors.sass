@@ -1,0 +1,88 @@
+
+$c-white: #fff
+$c-black: #000
+$c-code-space: #02122d
+$c-code-space-light: #0a2149
+
+/**
+ * There is no pure black in this interface, instead there is the awesomeness that is Blue-Zodiac.
+ * Use blue-zodiac instead of black, and use it’s opacity variants for text and icon colors.
+ */
+$c-blue-zodiac: rgba(#0E2348, 0.96)
+$c-science: rgba(#0E2348, 0.72)
+$c-hint: rgba(#0E2348, 0.56)
+$c-disabled: rgba(#0E2348, 0.28)
+
+/**
+ * primary is always used to signify what is of primary importance to the user. It can be applied to any action that is considered primary, and there can be up to two elements of primary importance per view. (Never more than two.)
+ */
+$c-nasa: #0B3D92
+$c-nasa-dark: #0c306c
+
+/**
+ * primary is always used to signify what is of primary importance to the user. It can be applied to any action that is considered primary, and there can be up to two elements of primary importance per view. (Never more than two.)
+ */
+$c-primary: #F6CA2E
+$c-primary-light: #F6CA2E
+$c-primary-dark: #F6CA2E
+
+/**
+ * Breezy and beautiful, Sail is used to signify what is of secondary importance to the user.
+ */
+$c-sail: #C1D9FE
+$c-sail-dark: #76ABFD
+
+/**
+ * Using Blue-Ribbon is powerful. It signifies to the user that they can take action on an item, whether that item is an icon or a text link.
+ * Listed along-side Blue-Ribbon are the colors Azure-Skies and Endeavor. These two colors work along-side Blue-Ribbon in the interface, but are named with unique names due to their presence in the logo mark.
+ */
+$c-blue-ribbon: #0563ED
+$c-azure-skies: #2989FF
+$c-endeavour: #0152A4
+
+/**
+ * The subtlety of Stone allows it to serve as background color, and as a tool to separate elements on the page. Use Stone for backgrounds, less important elements, and divider lines.
+ */
+$c-stone: #EFF3F9
+$c-stone-light: #F6F9FC
+$c-stone-dark: #D9E2F1
+
+/**
+ * Use the Error color to signify to the user that they need to take a corrective action.
+ */
+$c-error: #E52703
+
+/**
+ * Success is used to let the user know that an input was successful.
+ */
+$c-success: #07634D
+
+/**
+ * Dark mode colours
+ */
+$c-lucy-black: #1a1d26
+
+/**
+ * Color Map
+ */
+$colors: ("white": $c-white, "black": $c-black, "code-space": $c-code-space, "code-space-light": $c-code-space-light, "nasa": $c-nasa, "nasa-dark": $c-nasa-dark, "blue-zodiac": $c-blue-zodiac, "science": $c-science, "hint": $c-hint, "disabled": $c-disabled, "primary": $c-primary, "primary-light": $c-primary-light, "primary-dark": $c-primary-dark, "sail": $c-sail, "sail-dark": $c-sail-dark, "blue-ribbon": $c-blue-ribbon, "azure-skies": $c-azure-skies, "endeavour": $c-endeavour, "stone": $c-stone, "stone-light": $c-stone-light, "stone-dark": $c-stone-dark, "error": $c-error, "success": $c-success)
+
+/**
+ * Color mixin to be used like:
+ * +C(color, primary)
+ * +C(background, secondary)
+ */
+=C($attr, $color-name, $extra-stuff: "")
+  #{$attr}: map-get($colors, $color-name) #{$extra-stuff}
+  #{$attr}: var(--q-color-#{$color-name}, map-get($colors, $color-name)) #{$extra-stuff}
+
+/**
+ * For overwriting quasar variables
+ */
+$primary: $c-primary
+$secondary: $c-sail
+$accent: $c-blue-ribbon
+$positive: $c-success
+$negative: $c-error
+$info: $c-sail-dark
+$warning: $c-primary-dark

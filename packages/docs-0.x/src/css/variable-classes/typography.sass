@@ -1,0 +1,60 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap")
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans&family=Poppins:wght@400;500;600;700&display=swap")
+@import '../variables/typography'
+@import '../variables/colors'
+
+html, body
+  font-size: 16px
+
+br
+  display: block
+  content: ""
+  margin-top: 1em
+  line-height: 190%
+  vertical-align: top
+
+a
+  +C(color, 'white')
+  &:hover
+    +C(color, 'primary')
+
+h1, h2, h3, h4, h5, h6
+  margin: 0
+  margin-top: 0.6em
+  margin-bottom: 0.3em
+h1
+  +mb($md)
+h2
+  +mt($xl)
+  +mb($sm)
+
+.text-h1, h1
+  +t-h1()
+.text-h2, h2
+  +t-h2()
+.text-h3, h3
+  +t-h3()
+.text-h4, h4
+  +t-h4()
+.text-h5, h5
+  +t-h5()
+.text-h6, h6
+  +t-h6()
+.text-subtitle1
+  +t-subtitle1()
+.text-subtitle2
+  +t-subtitle2()
+.text-body1
+  +t-body1()
+.text-body2
+  +t-body2()
+.text-button
+  +t-button()
+.text-caption
+  +t-caption()
+.text-caption-semi-bold
+  +t-caption-semi-bold()
+.text-overline
+  +t-overline()
+.text-micro
+  +t-micro()

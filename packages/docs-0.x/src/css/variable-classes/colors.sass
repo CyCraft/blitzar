@@ -1,0 +1,19 @@
+@import '../variables/colors'
+
+/**
+ * Set native CSS variables
+ */
+\:root
+  @each $name, $color in $colors
+    --q-color-#{$name}: #{$color}
+
+/**
+ * Create helpers classes
+ */
+@each $name, $color in $colors
+
+  .bg-#{$name}
+    +C(background, $name)
+  .text-#{$name},
+  .c-#{$name}
+    +C(color, $name)
