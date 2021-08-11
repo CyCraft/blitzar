@@ -1,3 +1,7 @@
+---
+editLink: true
+---
+
 <script setup>
 import ComponentCodeBlock from '../../components/ComponentCodeBlock.vue'
 </script>

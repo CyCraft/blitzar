@@ -10,7 +10,7 @@
     "serve": "vitepress serve docs"
   },
   "dependencies": {
-    "@planetar/component-code-block": "^1.0.10"
+    "@planetar/component-code-block": "^1.0.11"
   },
   "devDependencies": {
     "vitepress": "^0.16.1"

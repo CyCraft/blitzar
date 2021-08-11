@@ -1,0 +1,54 @@
+/**
+ * .vitepress/theme/custom.css
+ * @see https://github.com/vuejs/vitepress/blob/master/src/client/theme-default/styles/vars.css
+ */
+:root {
+  /**
+   * Colors
+   * --------------------------------------------------------------------- */
+  --c-white: #ffffff;
+  --c-white-light: #eee;
+  --c-white-transparent: rgba(255, 255, 255, 0.5);
+  --c-white-dark: #f8f8f8;
+  --c-black: #000000;
+
+  --c-divider-light: rgba(60, 60, 67, 0.12);
+  --c-divider-dark: rgba(84, 84, 88, 0.48);
+
+  --c-text-light-1: #2c3e50;
+  --c-text-light-2: #476582;
+  --c-text-light-3: #90a4b7;
+
+  --c-brand: #f6ca2e;
+  --c-brand-light: #f6ca2e;
+  --c-brand-dark: #f6ca2e;
+
+  --c-nasa-light: #0f44a0;
+  --c-nasa: #0b3d92;
+  --c-nasa-dark: #0c306c;
+
+  --c-code-space: #02122d;
+  --c-code-space-light: #0a2149;
+
+  /**
+   * Color usage
+   * --------------------------------------------------------------------- */
+  --c-divider: var(--c-white);
+
+  --c-text: var(--c-white);
+  --c-text-light: var(--c-white-light);
+  --c-text-lighter: var(--c-white-transparent);
+
+  --c-bg: var(--c-nasa);
+  --c-bg-accent: var(--c-white-dark);
+
+  --code-inline-bg-color: var(--c-code-space);
+  --code-bg-color: var(--c-code-space);
+
+  --bar-color: #18a058;
+}
+.component-code-block {
+  --c-text: var(--c-text) !important;
+  --c-active: var(--c-brand) !important;
+  --c-border: var(--c-divider) !important;
+}
