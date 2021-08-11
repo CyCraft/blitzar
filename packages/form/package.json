@@ -18,7 +18,7 @@
     "map-anything": "^1.0.4",
     "merge-anything": "^4.0.1",
     "nestify-anything": "^1.0.3",
-    "quasar": "^1.15.20",
+    "quasar": "^1.15.23",
     "snarkdown": "^2.0.0"
   },
   "keywords": [

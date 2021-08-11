@@ -13,7 +13,7 @@
     "@planetar/component-code-block": "^1.0.10"
   },
   "devDependencies": {
-    "vitepress": "^0.15.6"
+    "vitepress": "^0.16.1"
   },
   "keywords": [
     "blitzar",
