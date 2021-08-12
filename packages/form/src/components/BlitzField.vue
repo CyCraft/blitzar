@@ -1,25 +1,24 @@
 <template>
   <div
     v-if="evalPropOrAttr('showCondition')"
-    :class="
-      [
-        'blitz-field',
-        `blitz-field--${evalPropOrAttr('mode')}`,
-        `blitz-field--${componentName}`,
-        `blitz-field--label-${labelPosition}`,
-        {
-          'blitz-field--no-label': !labelUsedHere,
-          'blitz-field--no-sub-label': !subLabelHtmlUsedHere,
-          'blitz-field--no-component': !componentName,
-        },
-        evalPropOrAttr('fieldClasses'),
-      ].flat()
-    "
-    :style="evalPropOrAttr('fieldStyle')"
+    :class="[
+      'blitz-field',
+      `blitz-field--${evalPropOrAttr('mode')}`,
+      `blitz-field--${componentName}`,
+      `blitz-field--label-${labelPosition}`,
+      {
+        'blitz-field--no-label': !labelUsedHere,
+        'blitz-field--no-sub-label': !subLabelHtmlUsedHere,
+        'blitz-field--no-component': !componentName,
+      },
+      evalPropOrAttr('fieldClasses'),
+      $attrs.class,
+    ]"
+    :style="[evalPropOrAttr('fieldStyle'), $attrs.style]"
   >
     <div
       v-if="labelUsedHere || (evalPropOrAttr('slots') && evalPropOrAttr('slots').label)"
-      :class="['blitz-field__label', evalPropOrAttr('labelClasses')].flat()"
+      :class="['blitz-field__label', evalPropOrAttr('labelClasses')]"
       :style="evalPropOrAttr('labelStyle')"
     >
       {{ labelUsedHere }}
@@ -40,59 +39,54 @@
       :options="{
         component: 'div',
         slot: parsedFieldValue,
-        class: ['blitz-field__component', evalPropOrAttr('componentClasses')].flat(),
+        class: ['blitz-field__component', evalPropOrAttr('componentClasses')],
         style: evalPropOrAttr('componentStyle'),
       }"
     />
     <!-- raw component -->
     <input
       v-else-if="usesInternalOrNoErrors && evalPropOrAttr('component') === 'input'"
-      v-model="cValue"
       v-bind="propsAndAttrsToPass"
+      v-model="cValue"
       v-on="eventsCalculated"
-      :class="['blitz-field__component', evalPropOrAttr('componentClasses')].flat()"
+      :class="['blitz-field__component', evalPropOrAttr('componentClasses')]"
       :style="evalPropOrAttr('componentStyle')"
     />
     <select
       v-else-if="usesInternalOrNoErrors && evalPropOrAttr('component') === 'select'"
-      v-model="cValue"
       v-bind="propsAndAttrsToPass"
+      v-model="cValue"
       v-on="eventsCalculated"
-      :class="['blitz-field__component', evalPropOrAttr('componentClasses')].flat()"
+      :class="['blitz-field__component', evalPropOrAttr('componentClasses')]"
       :style="evalPropOrAttr('componentStyle')"
     >
       <BlitzH v-if="defaultSlotCalculated" :options="defaultSlotCalculated" />
     </select>
     <component
       v-else-if="usesInternalOrNoErrors"
+      v-bind="propsAndAttrsToPass"
       :is="evalPropOrAttr('component')"
       v-model="cValue"
-      v-bind="propsAndAttrsToPass"
       v-on="eventsCalculated"
-      :class="['blitz-field__component', evalPropOrAttr('componentClasses')].flat()"
+      :class="['blitz-field__component', evalPropOrAttr('componentClasses')]"
       :style="evalPropOrAttr('componentStyle')"
     >
       <BlitzH v-if="defaultSlotCalculated" :options="defaultSlotCalculated" />
     </component>
-    <QField
-      v-else
-      v-model="cValue"
-      v-bind="propsAndAttrsToPassForQField"
-      class="blitz-field__component-validation"
-    >
-      <template v-slot:control>
+    <div v-else v-bind="propsAndAttrsToPassForQField" class="blitz-field__component-validation">
+      <template>
         <input
           v-if="evalPropOrAttr('component') === 'input'"
-          v-model="cValue"
           v-bind="propsAndAttrsToPass"
+          v-model="cValue"
           v-on="eventsCalculated"
           :class="['blitz-field__component', ...evalPropOrAttr('componentClasses')]"
           :style="evalPropOrAttr('componentStyle')"
         />
         <select
           v-else-if="evalPropOrAttr('component') === 'select'"
-          v-model="cValue"
           v-bind="propsAndAttrsToPass"
+          v-model="cValue"
           v-on="eventsCalculated"
           :class="['blitz-field__component', ...evalPropOrAttr('componentClasses')]"
           :style="evalPropOrAttr('componentStyle')"
@@ -101,9 +95,9 @@
         </select>
         <component
           v-else
+          v-bind="propsAndAttrsToPass"
           :is="evalPropOrAttr('component')"
           v-model="cValue"
-          v-bind="propsAndAttrsToPass"
           v-on="eventsCalculated"
           :class="['blitz-field__component', ...evalPropOrAttr('componentClasses')]"
           :style="evalPropOrAttr('componentStyle')"
@@ -111,7 +105,7 @@
           <BlitzH v-if="defaultSlotCalculated" :options="defaultSlotCalculated" />
         </component>
       </template>
-    </QField>
+    </div>
   </div>
 </template>
 
@@ -164,8 +158,9 @@
 </style>
 
 <script>
+import { defineComponent } from 'vue'
 import snarkdown from 'snarkdown'
-import { QField } from 'quasar'
+// import { QField } from 'quasar'
 import {
   isFunction,
   isPlainObject,
@@ -178,12 +173,12 @@ import {
 import { merge } from 'merge-anything'
 import { mapObject } from 'map-anything'
 import { parseFieldValue } from '@blitzar/utils'
-import BlitzH from './BlitzH'
+import BlitzH from './BlitzH.vue'
 import { defaultLang } from '../meta/lang'
 import { createRequiredRule } from '../helpers/validation.js'
-import { setup } from '../helpers/setup.js'
+// import { setup } from '../helpers/setup.js'
 
-setup()
+// setup()
 
 function evaluateProp(propValue, componentValue, componentInstance) {
   return isFunction(propValue) ? propValue(componentValue, componentInstance) : propValue
@@ -211,17 +206,18 @@ function evaluateProp(propValue, componentValue, componentInstance) {
 
 Use this API Card to check out all the possible props you can use in a single field of a schema.
  */
-export default {
+export default defineComponent({
   name: 'BlitzField',
   inheritAttrs: false,
-  components: { QField, BlitzH },
+  // components: { QField, BlitzH },
+  components: { BlitzH },
   props: {
     /**
      * The value of the field. The BlitzForm `formData` is an object with the value of each field and the id for key.
      * @type {any}
      * @category model
      */
-    value: { type: undefined },
+    modelValue: { type: undefined },
     /**
      * An `id` is required for the BlitzForm to be able to know which fields have which value.
      *
@@ -231,10 +227,10 @@ export default {
      */
     id: { type: String },
     /**
-     * A defaultValue value to be used when the `value` is `undefined`.
+     * A default value to be used when the `modelValue` is `undefined`.
      *
      * You can also pass a function that will receive two params you can work with: `(formData, context)`
-     * - `formData` is the value object of your BlitzForm. This will be undefined when BlitzField is used as stand-alone (without BlitzForm) unless you manually pass it.
+     * - `formData` is the `modelValue` object of your BlitzForm. This will be undefined when BlitzField is used as stand-alone (without BlitzForm) unless you manually pass it.
      * - `context` is either your BlitzForm or BlitzField context with many usefull props. See the documentation on Evaluated Props for more info.
      * @type {(formData: Record<string, any>, formContext: FormContext) => any | any}
      * @category model
@@ -501,7 +497,7 @@ export default {
      */
     formMode: { type: String },
     /**
-     * The `fieldInput` function of BlitzForm. Is passed so it can be used in events. Eg.: `events: { input: (value, { fieldInput } => fieldInput({ id: 'otherField', value }))}`
+     * The `fieldInput` function of BlitzForm. Is passed so it can be used in events. Eg.: `events: { '@update:modelValue': (value, { fieldInput } => fieldInput({ id: 'otherField', value }))}`
      *
      * It's not something you can pass via the schema, but something that BlitzForm will automatically pass to each of its fields so you can use it in Evaluated Props.
      * @type {(val: any, formContext: FormContext) => void}
@@ -510,7 +506,7 @@ export default {
     fieldInput: { type: Function },
     /**
      * (only present in BlitzListForm!)
-     * The `rowInput` function of BlitzForm. Is passed so it can be used in events. Eg.: `events: { input: (value, { fieldInput } => fieldInput({ id: 'otherField', value }))}`
+     * The `rowInput` function of BlitzForm. Is passed so it can be used in events. Eg.: `events: { '@update:modelValue': (value, { fieldInput } => fieldInput({ id: 'otherField', value }))}`
      *
      * It's not something you can pass via the schema, but something that BlitzListForm will automatically pass to each of its fields so you can use it in Evaluated Props.
      * @type {(val: any, formContext: FormContext) => void}
@@ -545,17 +541,24 @@ export default {
      */
     deleteRow: { type: Function },
   },
+  emits: {
+    /**
+     * @property {any} payload the updated value
+     * @property {'default' | '' | undefined} origin the cause of the `update:modelValue` event:
+     */
+    'update:modelValue': (payload, origin) => ['default', '', undefined].includes(origin),
+  },
   data() {
-    const { value, defaultValue, formData } = this
-    if (!isUndefined(value)) return { innerValue: value }
+    const { modelValue, defaultValue, formData } = this
+    if (!isUndefined(modelValue)) return { innerValue: modelValue }
     const innerValue = isFunction(defaultValue) ? defaultValue(formData, this) : defaultValue
-    this.event('input', innerValue, 'default')
+    this.event('update:modelValue', innerValue, 'default')
     return {
       innerValue,
     }
   },
   watch: {
-    value(newValue) {
+    modelValue(newValue) {
       this.innerValue = newValue
     },
   },
@@ -567,20 +570,20 @@ export default {
       return this.$attrs[propOrAttr]
     },
     /**
-     * @param {'input'} eventName
+     * @param {'update:modelValue'} eventName
      * @param {any} payload
      * @param {'default' | '' | undefined} origin
      */
     event(eventName, payload, origin) {
-      if (eventName === 'input') {
+      if (eventName === 'update:modelValue') {
         /**
          * This event enables the field to be usable with `v-model="value"`
          * @property {any} payload the updated value
-         * @property {'default' | '' | undefined} origin the cause of the input event:
+         * @property {'default' | '' | undefined} origin the cause of the `update:modelValue` event:
          * - `'default'` means that the event was emitted when the form was mounted and all fields have initialised their default values.
-         * - input events from user input won't have an origin.
+         * - `update:modelValue` events from user input won't have an origin.
          */
-        this.$emit('input', payload, origin)
+        this.$emit('update:modelValue', payload, origin)
       }
     },
   },
@@ -595,8 +598,8 @@ export default {
         const { parseInput, evalPropOrAttr } = this
         const events = evalPropOrAttr('events')
         if (isFunction(parseInput)) val = parseInput(val, this)
-        if (isFunction(events.input)) events.input(val, this)
-        this.event('input', val, ...otherArguments)
+        if (isFunction(events['update:modelValue'])) events['update:modelValue'](val, this)
+        this.event('update:modelValue', val, ...otherArguments)
       },
     },
     evaluatedPropsDataObject() {
@@ -659,8 +662,8 @@ export default {
       const context = this
       const events = evalPropOrAttr('events')
       return Object.entries(events).reduce((carry, [eventName, eventFn]) => {
-        // input event is handled in cValue
-        if (eventName === 'input') return carry
+        // `update:modelValue` event is handled in cValue
+        if (eventName === 'update:modelValue') return carry
         carry[eventName] = (val, ...otherArguments) => eventFn(val, context, ...otherArguments)
         return carry
       }, {})
@@ -740,5 +743,5 @@ export default {
       return parseFieldValue(cValue, blueprint)
     },
   },
-}
+})
 </script>

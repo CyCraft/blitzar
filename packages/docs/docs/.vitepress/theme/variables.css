@@ -47,7 +47,7 @@
 
   --bar-color: #18a058;
 }
-.component-code-block {
+.code-block-component {
   --c-text: var(--c-text) !important;
   --c-active: var(--c-brand) !important;
   --c-border: var(--c-divider) !important;

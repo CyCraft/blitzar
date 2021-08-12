@@ -1,5 +1,5 @@
 <template>
-  <div class="blitz-list-form">
+  <div class="blitz-list-form" :class="$attrs.class" :style="$attrs.style">
     <div
       class="blitz-list-form__row"
       :style="`grid-template-columns: ${gridTemplateColumnsCalculated}`"
@@ -7,8 +7,8 @@
       <BlitzField
         v-for="(subfield, fieldIndex) in schemaLabels"
         :key="fieldIndex"
-        class="blitz-list-form__sub-field"
         v-bind="subfield"
+        class="blitz-list-form__sub-field"
       />
     </div>
     <div
@@ -20,17 +20,17 @@
       <BlitzField
         v-for="(subfield, fieldIndex) in cSchema"
         :key="fieldIndex"
+        v-bind="subfield"
         class="blitz-list-form__sub-field"
         :rowIndex="rowIndex"
         :rowData="cValue[rowIndex]"
         :rowInput="(params) => setSubFieldValue({ id: params.id, value: params.value, rowIndex })"
         :deleteRow="() => deleteRow(rowIndex)"
-        v-bind="subfield"
-        :value="cValue[rowIndex][subfield.id]"
-        @input="
+        :modelValue="cValue[rowIndex][subfield.id]"
+        @update:modelValue="
           (val, origin) => setSubFieldValue({ id: subfield.id, value: val, rowIndex }, origin)
         "
-        @keyup.native.delete="onDeleteKey(rowIndex, subfield.id)"
+        @keyup.delete="onDeleteKey(rowIndex, subfield.id)"
       />
     </div>
   </div>
@@ -49,6 +49,7 @@
 </style>
 
 <script>
+import { defineComponent } from 'vue'
 import { merge } from 'merge-anything'
 import { copy } from 'copy-anything'
 import { isNumber } from 'is-what'
@@ -59,7 +60,7 @@ With BlitzListForm you can pass a `schema` just like a BlitzForm. The difference
 
 The `schema` you specify is shown as a single row. New rows are added automatically on user input.
  */
-export default {
+export default defineComponent({
   name: 'BlitzListForm',
   inheritAttrs: false,
   components: { BlitzField },
@@ -67,7 +68,7 @@ export default {
     /**
      * @category model
      */
-    value: { type: Array, default: () => [] },
+    modelValue: { type: Array, default: () => [] },
     /**
      * This is the information on the columns you want to be shown. An array of objects just like a BlitzForm.
      * @example [{ label: 'Amount', id: 'amount', component: 'input', type: 'number', style: 'color: white' }, { label: 'Currency', id: 'curr', component: 'select', slot: [{ component: 'option', value: '', slot: '' }, { component: 'option', value: 'usd', slot: 'USD' }], style: 'color: white' }]
@@ -116,25 +117,25 @@ export default {
      */
     cValue: {
       get() {
-        const { value, schema, disable, readonly, maxRows } = this
+        const { modelValue, schema, disable, readonly, maxRows } = this
         const emptyRow = schema.reduce((carry, { id }) => ({ ...carry, [id]: undefined }), {})
-        if (!disable && !readonly && (!isNumber(maxRows) || maxRows > value.length)) {
-          return value.concat([emptyRow])
+        if (!disable && !readonly && (!isNumber(maxRows) || maxRows > modelValue.length)) {
+          return modelValue.concat([emptyRow])
         }
-        return value
+        return modelValue
       },
       set(val) {
-        this.$emit('input', val)
+        this.$emit('update:modelValue', val)
       },
     },
     listFormAttrsToPass() {
-      const { attrsToPass, getPropOrAttrOrParentProp, value } = this
+      const { attrsToPass, getPropOrAttrOrParentProp, modelValue } = this
       const attrs = attrsToPass.reduce((carry, attrKey) => {
         carry[attrKey] = getPropOrAttrOrParentProp(attrKey)
         return carry
       }, {})
       if (!attrs.formData) {
-        return { ...attrs, formData: value }
+        return { ...attrs, formData: modelValue }
       }
       return attrs
     },
@@ -195,24 +196,24 @@ export default {
       return this.$parent.$parent[propKey]
     },
     deleteRow(rowIndex) {
-      const { value } = this
-      const allRows = copy(value)
+      const { modelValue } = this
+      const allRows = copy(modelValue)
       if (allRows[rowIndex] === undefined) return
       allRows.splice(rowIndex, 1)
-      this.$emit('input', allRows)
+      this.$emit('update:modelValue', allRows)
     },
     setSubFieldValue({ id, value: newValue, rowIndex }, origin) {
       // do not emit when the origin is from the default value initialisation
       if (origin === 'default') return
-      const { value: oldValue } = this
+      const { modelValue: oldValue } = this
       const allRows = copy(oldValue)
-      if (allRows[rowIndex] === undefined) this.$set(allRows, rowIndex, {})
+      if (allRows[rowIndex] === undefined) this.allRows[rowIndex] = {}
       allRows[rowIndex][id] = newValue
-      this.$emit('input', allRows)
+      this.$emit('update:modelValue', allRows)
     },
     onDeleteKey(rowIndex, fieldId) {
-      const { value, deleteRow } = this
-      const allRows = value
+      const { modelValue, deleteRow } = this
+      const allRows = modelValue
       const row = allRows[rowIndex]
       if (!row) return
       if (Object.keys(row).every((key) => row[key] === '' || row[key] === 0)) {
@@ -220,5 +221,5 @@ export default {
       }
     },
   },
-}
+})
 </script>

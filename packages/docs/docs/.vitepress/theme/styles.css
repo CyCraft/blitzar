@@ -1,3 +1,8 @@
 .custom-block.tip {
   background-color: var(--c-nasa-light);
 }
+
+.code-block {
+  margin-top: 2rem !important;
+  margin-bottom: 0 !important;
+}

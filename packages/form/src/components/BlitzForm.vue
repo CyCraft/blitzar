@@ -2,7 +2,8 @@
   <component
     :is="innerFormComponent"
     ref="refBlitzForm"
-    :class="`blitz-form blitz-form--nav-${actionButtonsPosition}`"
+    :class="[`blitz-form blitz-form--nav-${actionButtonsPosition}`, $attrs.class]"
+    :style="$attrs.style"
   >
     <template v-if="formComponent === 'QForm'">
       <!-- prevent the default behaviour of HTML5 forms being "submitted" on "enter" inside input fields -->
@@ -34,8 +35,8 @@
           v-for="(field, i) in cSchema"
           :key="`${field.id}-${i}`"
           v-bind="{ ...field, span: undefined }"
-          :value="formDataFlat[field.id]"
-          @input="(value, origin) => fieldInput({ id: field.id, value, origin })"
+          :modelValue="formDataFlat[field.id]"
+          @update:modelValue="(value, origin) => fieldInput({ id: field.id, value, origin })"
           :style="
             field.span
               ? `grid-column: ${field.span === true ? '1 / -1' : `span ${field.span}`}`
@@ -92,6 +93,7 @@
 </style>
 
 <script>
+import { defineComponent, markRaw } from 'vue'
 import { QForm } from 'quasar'
 import { merge } from 'merge-anything'
 import { copy } from 'copy-anything'
@@ -107,7 +109,7 @@ Here you can find all the information on the available props & events of BlitzFo
 
 If any of the documentation is unclear, feel free to [open an issue](https://github.com/cycraft/blitzar/issues) to ask for clarification!
  */
-export default {
+export default defineComponent({
   name: 'BlitzForm',
   components: { BlitzField, QForm },
   inheritAttrs: false,
@@ -115,12 +117,12 @@ export default {
     /**
      * An object with the data of the entire form. The object keys are the ids of the fields passed in the `schema`.
      *
-     * To be used with `:value` or `v-model`.
+     * To be used with `:modelValue` or `v-model`.
      * @type {Record<string, any>}
      * @example { name: '' }
      * @category model
      */
-    value: { type: Object, default: () => ({}) },
+    modelValue: { type: Object, default: () => ({}) },
     /**
      * A manually set `id` of the BlitzForm. This prop is accessible in the `context` (as `formId`) of any Evaluated Prop and event.
      *
@@ -321,17 +323,34 @@ export default {
      */
     formComponent: { type: [String, Function], default: 'QForm' },
   },
+  emits: {
+    'update:mode': (payload) => ['edit', 'view', 'disabled', 'raw', 'add'].includes(payload),
+    /**
+     * @param {{ id: string, value: any, origin?: 'default' | 'cancel' | '' }} payload
+     */
+    'field-input': (payload) => isPlainObject(payload),
+    /**
+     * @param {'default' | 'cancel' | '' | undefined} origin
+     */
+    'update:modelValue': (payload, origin) =>
+      isPlainObject(payload) && ['default', 'cancel', '', undefined].includes(origin),
+    edit: (payload) => !payload, // no payload
+    cancel: (payload) => !payload, // no payload
+    save: (payload) => isPlainObject(payload),
+    delete: (payload) => !payload, // no payload
+    archive: (payload) => !payload, // no payload
+  },
   data() {
-    const { mode, id, value, schema, lang } = this
+    const { mode, id, modelValue, schema, lang } = this
     // merge user provided lang onto defaults
     const innerLang = merge(defaultLang(), lang)
     const innerMode = mode
     const formId = id
-    const dataFlat = flattenPerSchema(value, schema)
+    const dataFlat = flattenPerSchema(modelValue, schema)
     const schemaArray = isArray(schema) ? schema : Object.values(schema)
     const dataFlatDefaults = schemaArray.reduce((carry, { id, defaultValue }) => {
       if (!isFullString(id)) return carry
-      carry[id] = isFunction(defaultValue) ? defaultValue(value, this) : defaultValue
+      carry[id] = isFunction(defaultValue) ? defaultValue(modelValue, this) : defaultValue
       return carry
     }, {})
     const formDataFlat = merge(dataFlatDefaults, copy(dataFlat))
@@ -344,7 +363,7 @@ export default {
       formDataFlat,
       formDataFlatBackups: [copy(formDataFlat)],
       formErrorMsg: '',
-      innerFormComponent: this.formComponent === 'QForm' ? QForm : this.formComponent,
+      innerFormComponent: this.formComponent === 'QForm' ? markRaw(QForm) : this.formComponent,
     }
   },
   watch: {
@@ -490,14 +509,16 @@ export default {
           ? {}
           : { slots: merge(_bp.slots || {}, { default: _bp.slot }) }
         const events = _bp.events || {}
-        const eventsOverwrites = !events.input
+        const eventsOverwrites = !events['update:modelValue']
           ? {}
           : {
-              events: { input: (value, origin) => fieldInput({ id: field.id, value, origin }) },
+              events: {
+                'update:modelValue': (value, origin) => fieldInput({ id: field.id, value, origin }),
+              },
             }
         const overwrites = {
           span: undefined,
-          value: formDataFlat[_bp.id],
+          modelValue: formDataFlat[_bp.id],
           ...slotsOverwrite,
           ...eventsOverwrites,
         }
@@ -532,7 +553,7 @@ export default {
     event(eventName, payload, origin) {
       if (eventName === 'update:mode') {
         /**
-         * This event makes it possible to sync the prop 'mode' like so: `:mode.sync="mode"`
+         * This event makes it possible to sync the prop 'mode' like so: `v-model:mode="mode"`
          * @property {'edit' | 'view' | 'disabled' | 'raw' | 'add'} payload event payload
          */
         this.$emit('update:mode', payload)
@@ -553,16 +574,16 @@ export default {
          */
         this.$emit('field-input', payload)
       }
-      if (eventName === 'input') {
+      if (eventName === 'update:modelValue') {
         /**
          * This event enables the form to be usable with `v-model="formData"`
          * @property {{ [id in string]: any }} payload event payload
-         * @property {'default' | 'cancel' | '' | undefined} origin the cause of the input event:
+         * @property {'default' | 'cancel' | '' | undefined} origin the cause of the `update:modelValue` event:
          * - `'default'` means that the event was emitted when the form was mounted and all fields have initialised their default values.
          * - `'cancel'` means that the 'cancel' button was clicked and the event data was reset to what it was before it was edited.
-         * - input events from user input won't have an origin.
+         * - `update:modelValue` events from user input won't have an origin.
          */
-        this.$emit('input', payload, origin)
+        this.$emit('update:modelValue', payload, origin)
       }
       if (eventName === 'edit') {
         /**
@@ -604,11 +625,11 @@ export default {
       // keep a list of edited field ids
       if (!this.editedFields.includes(id)) this.editedFields.push(id)
       // set the new value onto the formData (might be an empty object)
-      this.$set(this.formDataFlat, id, value)
-      // emit field-input with field's id and new data
+      this.formDataFlat[id] = value
+      // emit `field-input` with field's id and new data
       this.event('field-input', { id, value, origin })
-      // emit input with entire formData
-      this.event('input', this.formData, origin) // do not extract `this` from here
+      // emit `update:modelValue` with entire formData
+      this.event('update:modelValue', this.formData, origin) // do not extract `this` from here
       // if the form has a formErrorMsg, validate gain to check to see if it's solved
       if (isFullString(this.formErrorMsg)) {
         const res = validateFormPerSchema(this.formData, this.schema, this.innerLang)
@@ -633,11 +654,11 @@ export default {
       this.resetState()
       const origin = 'cancel'
       Object.entries(this.formDataFlat).forEach(([id, value]) => {
-        // emit field-input with field's id and new data
+        // emit `field-input` with field's id and new data
         this.event('field-input', { id, value, origin })
       })
-      // emit input with entire formData
-      this.event('input', this.formData, origin) // do not extract `this` from here
+      // emit `update:modelValue` with entire formData
+      this.event('update:modelValue', this.formData, origin) // do not extract `this` from here
       this.event('cancel')
     },
     validate() {
@@ -681,5 +702,5 @@ export default {
       this.event('archive')
     },
   },
-}
+})
 </script>

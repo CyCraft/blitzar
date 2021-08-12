@@ -3,7 +3,7 @@ editLink: true
 ---
 
 <script setup>
-import ComponentCodeBlock from '../../components/ComponentCodeBlock.vue'
+import CodeBlockComponent from '../../components/CodeBlockComponent.vue'
 </script>
 
 # Basics
@@ -30,7 +30,7 @@ The "component" of a field in your schema can be any Vue component you have glob
 
 Besides `id`, `label` and `component` there are many more props you can pass: `subLabel` `required` `labelPosition` `fieldClasses` `componentClasses` `parseValue` `parseInput` `events` and many more.
 
-<ComponentCodeBlock filename="blitz-form/Basics - Basic Example" />
+<CodeBlockComponent filename="blitz-form/Basics - Basic Example" />
 
 ## Value/Model
 

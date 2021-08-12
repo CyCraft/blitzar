@@ -1,13 +1,14 @@
 {
   "name": "@blitzar/form",
-  "version": "0.0.33",
+  "version": "1.0.0",
   "description": "Blitzar form component",
   "author": "Luca Ban - Mesqueeb",
-  "module": "src/index.js",
+  "module": "dist/index.js",
   "main": "dist/index.js",
   "scripts": {
     "vue-int": "vue-int -i src/components -r -o vetur",
-    "build": "rimraf dist && vue-compile src -o dist"
+    "build": "rimraf dist && vue-compile src -o dist",
+    "dev": "vue-compile src -o ../docs/components --watch"
   },
   "dependencies": {
     "@blitzar/utils": "^0.0.33",
@@ -18,7 +19,7 @@
     "map-anything": "^1.0.4",
     "merge-anything": "^4.0.1",
     "nestify-anything": "^1.0.3",
-    "quasar": "^1.15.23",
+    "quasar": "^2.0.3",
     "snarkdown": "^2.0.0"
   },
   "keywords": [
