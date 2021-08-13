@@ -74,37 +74,35 @@
       <BlitzH v-if="defaultSlotCalculated" :options="defaultSlotCalculated" />
     </component>
     <div v-else v-bind="propsAndAttrsToPassForQField" class="blitz-field__component-validation">
-      <template>
-        <input
-          v-if="evalPropOrAttr('component') === 'input'"
-          v-bind="propsAndAttrsToPass"
-          v-model="cValue"
-          v-on="eventsCalculated"
-          :class="['blitz-field__component', ...evalPropOrAttr('componentClasses')]"
-          :style="evalPropOrAttr('componentStyle')"
-        />
-        <select
-          v-else-if="evalPropOrAttr('component') === 'select'"
-          v-bind="propsAndAttrsToPass"
-          v-model="cValue"
-          v-on="eventsCalculated"
-          :class="['blitz-field__component', ...evalPropOrAttr('componentClasses')]"
-          :style="evalPropOrAttr('componentStyle')"
-        >
-          <BlitzH v-if="defaultSlotCalculated" :options="defaultSlotCalculated" />
-        </select>
-        <component
-          v-else
-          v-bind="propsAndAttrsToPass"
-          :is="evalPropOrAttr('component')"
-          v-model="cValue"
-          v-on="eventsCalculated"
-          :class="['blitz-field__component', ...evalPropOrAttr('componentClasses')]"
-          :style="evalPropOrAttr('componentStyle')"
-        >
-          <BlitzH v-if="defaultSlotCalculated" :options="defaultSlotCalculated" />
-        </component>
-      </template>
+      <input
+        v-if="evalPropOrAttr('component') === 'input'"
+        v-bind="propsAndAttrsToPass"
+        v-model="cValue"
+        v-on="eventsCalculated"
+        :class="['blitz-field__component', evalPropOrAttr('componentClasses')]"
+        :style="evalPropOrAttr('componentStyle')"
+      />
+      <select
+        v-else-if="evalPropOrAttr('component') === 'select'"
+        v-bind="propsAndAttrsToPass"
+        v-model="cValue"
+        v-on="eventsCalculated"
+        :class="['blitz-field__component', evalPropOrAttr('componentClasses')]"
+        :style="evalPropOrAttr('componentStyle')"
+      >
+        <BlitzH v-if="defaultSlotCalculated" :options="defaultSlotCalculated" />
+      </select>
+      <component
+        v-else
+        v-bind="propsAndAttrsToPass"
+        :is="evalPropOrAttr('component')"
+        v-model="cValue"
+        v-on="eventsCalculated"
+        :class="['blitz-field__component', evalPropOrAttr('componentClasses')]"
+        :style="evalPropOrAttr('componentStyle')"
+      >
+        <BlitzH v-if="defaultSlotCalculated" :options="defaultSlotCalculated" />
+      </component>
     </div>
   </div>
 </template>
@@ -549,13 +547,15 @@ export default defineComponent({
     'update:modelValue': (payload, origin) => ['default', '', undefined].includes(origin),
   },
   data() {
+    return { innerValue: this.modelValue, justMounted: false }
+  },
+  mounted() {
     const { modelValue, defaultValue, formData } = this
-    if (!isUndefined(modelValue)) return { innerValue: modelValue }
-    const innerValue = isFunction(defaultValue) ? defaultValue(formData, this) : defaultValue
-    this.event('update:modelValue', innerValue, 'default')
-    return {
-      innerValue,
+    if (isUndefined(modelValue)) {
+      const newDefaultValue = isFunction(defaultValue) ? defaultValue(formData, this) : defaultValue
+      this.event('update:modelValue', newDefaultValue, 'default')
     }
+    this.justMounted = true
   },
   watch: {
     modelValue(newValue) {
@@ -713,8 +713,8 @@ export default defineComponent({
         borderless: true,
         stackLabel: true,
         // always disable prefix suffix for QField
-        prefix: undefined,
-        suffix: undefined,
+        // prefix: undefined,
+        // suffix: undefined,
       })
     },
     labelUsedHere() {

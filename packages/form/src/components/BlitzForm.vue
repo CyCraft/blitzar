@@ -1,29 +1,25 @@
 <template>
   <component
-    :is="innerFormComponent"
+    :is="formComponent"
     ref="refBlitzForm"
     :class="[`blitz-form blitz-form--nav-${actionButtonsPosition}`, $attrs.class]"
     :style="$attrs.style"
   >
-    <template v-if="formComponent === 'QForm'">
-      <!-- prevent the default behaviour of HTML5 forms being "submitted" on "enter" inside input fields -->
-      <button type="submit" disabled style="display: none" aria-hidden="true"></button>
-      <!-- navigation buttons row (save, edit, ...) -->
-      <div
-        :class="`blitz-form__nav-row blitz-form__nav-row--${actionButtonsPosition}`"
-        v-if="isFullString(formErrorMsg) || actionButtonsSchema.length"
-      >
-        <div class="blitz-form__validation-error text-negative" v-if="isFullString(formErrorMsg)">
-          {{ formErrorMsg }}
-        </div>
-        <BlitzField
-          v-for="(blueprint, i) in actionButtonsSchema"
-          :key="blueprint.id || i"
-          v-bind="blueprint"
-          v-on="blueprint.events"
-        />
+    <!-- navigation buttons row (save, edit, ...) -->
+    <div
+      :class="`blitz-form__nav-row blitz-form__nav-row--${actionButtonsPosition}`"
+      v-if="isFullString(formErrorMsg) || actionButtonsSchema.length"
+    >
+      <div class="blitz-form__validation-error text-negative" v-if="isFullString(formErrorMsg)">
+        {{ formErrorMsg }}
       </div>
-    </template>
+      <BlitzField
+        v-for="(blueprint, i) in actionButtonsSchema"
+        :key="blueprint.id || i"
+        v-bind="blueprint"
+        v-on="blueprint.events"
+      />
+    </div>
     <!-- form contents -->
     <!-- @slot The default slot is what contains by default the actual form fields. This slot should not be used, unless you are only interested in the logic of BlitzForm and not of BlitzFields. -->
     <slot v-bind="{ schema: cSchema, formDataFlat }">
@@ -93,11 +89,10 @@
 </style>
 
 <script>
-import { defineComponent, markRaw } from 'vue'
-import { QForm } from 'quasar'
+import { defineComponent } from 'vue'
 import { merge } from 'merge-anything'
 import { copy } from 'copy-anything'
-import { isArray, isFunction, isFullString, isPlainObject, isString } from 'is-what'
+import { isArray, isFunction, isFullString, isPlainObject, isString, isAnyObject } from 'is-what'
 import { nestifyObject } from 'nestify-anything'
 import { flattenPerSchema } from '@blitzar/utils'
 import BlitzField from './BlitzField.vue'
@@ -111,7 +106,7 @@ If any of the documentation is unclear, feel free to [open an issue](https://git
  */
 export default defineComponent({
   name: 'BlitzForm',
-  components: { BlitzField, QForm },
+  components: { BlitzField },
   inheritAttrs: false,
   props: {
     /**
@@ -315,13 +310,13 @@ export default defineComponent({
       default: () => ['QInput', 'QSelect', 'QField', 'q-input', 'q-select', 'q-field'],
     },
     /**
-     * The component that should be used to generate the form. Defaults to QForm. You can pass the name of a native HTML5 element or Vue component that is globally registered. You can also import the Vue file and directly pass the imported object, just like you would when you add it to a Vue file's components prop.
+     * The component that should be used to generate the form. Defaults to a div. You can pass the name of a native HTML5 element or Vue component that is globally registered. You can also import the Vue file and directly pass the imported object, just like you would when you add it to a Vue file's components prop.
      * @type {string | Function}
      * @example 'form'
      * @example 'tr'
      * @example 'MyFormWrapper'
      */
-    formComponent: { type: [String, Function], default: 'QForm' },
+    formComponent: { type: [String, Function], default: 'div' },
   },
   emits: {
     'update:mode': (payload) => ['edit', 'view', 'disabled', 'raw', 'add'].includes(payload),
@@ -363,7 +358,6 @@ export default defineComponent({
       formDataFlat,
       formDataFlatBackups: [copy(formDataFlat)],
       formErrorMsg: '',
-      innerFormComponent: this.formComponent === 'QForm' ? markRaw(QForm) : this.formComponent,
     }
   },
   watch: {

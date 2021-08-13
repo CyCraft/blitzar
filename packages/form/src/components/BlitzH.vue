@@ -1,7 +1,8 @@
 <script>
-import { defineComponent, h } from 'vue'
-import { isArray, isPlainObject, isString } from 'is-what'
+import { defineComponent, h, resolveDynamicComponent } from 'vue'
+import { isArray, isString } from 'is-what'
 import { omit } from 'filter-anything'
+import { pascalCase } from 'case-anything'
 
 /**
  * @typedef BlitzHOption
@@ -18,7 +19,7 @@ import { omit } from 'filter-anything'
 /**
  * I'm still thinking about the best syntax for BlitzH
  */
-export default defineComponent({
+const BlitzH = defineComponent({
   name: 'BlitzH',
   functional: true,
   props: {
@@ -27,43 +28,43 @@ export default defineComponent({
      */
     options: { type: [String, Object, Array] },
   },
-  setup(props, { slots, attrs, emit }) {
-    // render(ctx) {
-    const optionsArray = isArray(props.options) ? props.options : [props.options]
+  render() {
+    const optionsArray = isArray(this.options) ? this.options : [this.options]
 
     // return the render function
-    return () =>
-      optionsArray.map((o) => {
-        if (isString(o)) return ctx._v(o)
-        let children
-        if (o.slot) {
-          children = [h('BlitzH', { props: { options: o.slot } })]
-        } else if (o.slots && o.slots.default) {
-          children = [h('BlitzH', { props: { options: o.slots.default } })]
-        }
-        return h(
-          o.component,
-          {
-            props: o,
-            attrs: omit(o, [
-              'lang',
-              'rules',
-              'label',
-              'hint',
-              'readonly',
-              'component',
-              'slots',
-              'class',
-              'style',
-              'events',
-            ]),
-            on: o.events,
-            class: o.class,
-            style: o.style,
-          },
-          children
-        )
-      })
+    return optionsArray.map((o) => {
+      if (isString(o)) return o
+      const Component = resolveDynamicComponent(o.component)
+      let children
+      if (o.slot) {
+        children = [h(BlitzH, { options: o.slot })]
+      } else if (o.slots && o.slots.default) {
+        children = [h(BlitzH, { options: o.slots.default })]
+      }
+      return h(
+        Component,
+        {
+          ...omit(o, [
+            'events',
+            'lang',
+            'rules',
+            'label',
+            'hint',
+            'readonly',
+            'component',
+            'slot',
+            'slots',
+          ]),
+          ...Object.entries(o.events || {}).reduce((carry, [eventName, handler]) => {
+            carry[`on${pascalCase(eventName)}`] = handler
+            return carry
+          }, {}),
+        },
+        children
+      )
+    })
   },
 })
+
+export default BlitzH
 </script>
