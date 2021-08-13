@@ -104,16 +104,16 @@ const schemaColumns = [
 ]
 
 /**
-# Slots
+## Slots
 
 You can use slots with BlitzTable.
 
-## BlitzTable Specific Slots
+### BlitzTable Specific Slots
 
 - above-nav-row
 - above-table
 
-## Quasar's QTable Slots
+### Quasar's QTable Slots
 
 You can use all Quasar slots "around" the table. However, BlitzTable uses these slots to generate its content: `body` for the rows, `item` for the cards in grid mode.
 

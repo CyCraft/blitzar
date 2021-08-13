@@ -46,7 +46,7 @@ function applyTeamColor(rowData) {
 }
 
 /**
-## Styling via Props
+### Styling via Props
 
 You can use these styling related props in your `schemaColumns` on a _per column_ basis:
 - `classes`

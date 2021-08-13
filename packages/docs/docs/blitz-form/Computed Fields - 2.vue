@@ -1,0 +1,55 @@
+<template>
+  <div>
+    <BlitzForm :schema="schema" v-model="formData" :columnCount="3" />
+
+    <CodeBlock :content="`// formData\n${JSON.stringify(formData, undefined, 2)}`" />
+  </div>
+</template>
+
+<script>
+import { CodeBlock } from '@planetar/code-block'
+import BlitzForm from '../../../form/src/components/BlitzForm.vue'
+
+const schema = [
+  {
+    id: 'firstName',
+    label: 'First name',
+    component: 'input',
+    events: {
+      input: (val, { formData, fieldInput }) => {
+        const { lastName = '' } = formData
+        const value = `${val} ${lastName}`.trim()
+        fieldInput({ id: 'fullName', value })
+      },
+    },
+  },
+  {
+    id: 'lastName',
+    label: 'Last name',
+    component: 'input',
+    events: {
+      input: (val, { formData, fieldInput }) => {
+        const { firstName = '' } = formData
+        const value = `${firstName} ${val}`.trim()
+        fieldInput({ id: 'fullName', value })
+      },
+    },
+  },
+  {
+    id: 'fullName',
+    label: 'Full name (computed)',
+    component: 'input',
+    disabled: true,
+  },
+]
+
+export default {
+  components: { BlitzForm, CodeBlock },
+  data() {
+    return { schema, formData: {} }
+  },
+}
+/**
+There is also a third way we can create a computed field.
+ */
+</script>

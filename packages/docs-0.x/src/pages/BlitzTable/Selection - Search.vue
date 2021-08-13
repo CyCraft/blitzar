@@ -43,7 +43,7 @@ const schemaColumns = [
 ]
 
 /**
-## Selection with search
+### Selection with search
 
 Here is an example of selection together with search.
 

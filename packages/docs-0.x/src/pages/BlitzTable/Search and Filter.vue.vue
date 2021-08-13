@@ -38,7 +38,7 @@ const schemaColumns = [
 ]
 
 /**
- * # Search and Filter
+## Search and Filter
  */
 export default {
   components: { BlitzTable },

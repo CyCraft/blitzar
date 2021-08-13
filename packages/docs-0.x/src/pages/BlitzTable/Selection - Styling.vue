@@ -52,7 +52,7 @@ const schemaColumns = [
 ]
 
 /**
-## Styling Selection
+### Styling Selection
 
 You can pass a custom checkbox component via `selectionComponentProps`, an object that represents a BlitzForm blueprint. Just like you would use in a schema. Eg.:
 

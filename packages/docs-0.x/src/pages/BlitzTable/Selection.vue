@@ -41,7 +41,7 @@ const schemaColumns = [
 ]
 
 /**
-# Selection
+## Selection
 
 By default selection is implemented for both table and grid view. Play around with the example below to see how it works.
 

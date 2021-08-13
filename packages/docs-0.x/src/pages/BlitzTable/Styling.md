@@ -1,4 +1,4 @@
-# Styling
+## Styling
 
 There are two ways you can style a BlitzTable: via CSS or via props.
 

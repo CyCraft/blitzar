@@ -37,7 +37,7 @@ const schemaColumns = [
 ]
 
 /**
-## Basic Example
+### Basic Example
 
 Here we see a basic example for a BlitzTable. Check out the _template_ and _script_ tabs below to see how easy it is to render a data table based on the schema.
  */

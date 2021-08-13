@@ -1,0 +1,39 @@
+<template>
+  <div>
+    <BlitzForm :schema="schema" v-model="formData" :columnCount="2" />
+
+    <CodeBlock :content="`// formData\n${JSON.stringify(formData, undefined, 2)}`" />
+  </div>
+</template>
+
+<script>
+import { CodeBlock } from '@planetar/code-block'
+import BlitzForm from '../../../form/src/components/BlitzForm.vue'
+import { showToast } from '../../../docs-0.x/src/helpers/toast'
+
+const schema = [
+  {
+    id: 'focusMe',
+    component: 'input',
+    label: 'Focus me',
+    events: {
+      focus: (val, { id, label }) => showToast(`focussed: 「${label}」`, ` (field id: ${id})`),
+    },
+  },
+  {
+    id: 'typeInMe',
+    component: 'input',
+    label: 'Type something',
+    events: {
+      input: (val) => showToast('Typed:', val),
+    },
+  },
+]
+
+export default {
+  components: { BlitzForm, CodeBlock },
+  data() {
+    return { schema, formData: {} }
+  },
+}
+</script>

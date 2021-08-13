@@ -74,7 +74,7 @@ const schema = [
 ]
 
 /**
-## Multi-Row Example
+### Multi-Row Example
 
 When you need each row to be multiple rows, you can do so with some CSS tweaking.
 

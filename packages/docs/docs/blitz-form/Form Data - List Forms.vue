@@ -1,14 +1,16 @@
 <template>
   <div>
     <BlitzForm :schema="schema" v-model="formData" />
-    <PreviewCode comment="formData">{{ formData }}</PreviewCode>
+
+    <CodeBlock :content="`// formData\n${JSON.stringify(formData, undefined, 2)}`" />
   </div>
 </template>
 
-<style lang="sass" scoped></style>
-
 <script>
-import { BlitzForm, BlitzListForm } from 'blitzar'
+import { CodeBlock } from '@planetar/code-block'
+import { markRaw } from 'vue'
+import BlitzForm from '../../../form/src/components/BlitzForm.vue'
+import BlitzListForm from '../../../form/src/components/BlitzListForm.vue'
 
 const schema = [
   {
@@ -19,7 +21,7 @@ const schema = [
   {
     id: 'students',
     label: 'Student Names',
-    component: BlitzListForm,
+    component: markRaw(BlitzListForm),
     schema: [
       { id: 'nameFirst', label: 'First Name', component: 'input' },
       { id: 'nameLast', label: 'Last Name', component: 'input' },
@@ -27,13 +29,8 @@ const schema = [
   },
 ]
 
-/**
-## BlitzForm Example
-
-You can use the BlitzListForm inside a BlitzForm. See how that's done in this example:
- */
 export default {
-  components: { BlitzForm },
+  components: { BlitzForm, CodeBlock },
   data() {
     return { schema, formData: {} }
   },

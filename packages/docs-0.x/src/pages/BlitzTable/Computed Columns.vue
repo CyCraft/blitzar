@@ -45,7 +45,7 @@ const schemaColumns = [
 ]
 
 /**
-# Computed Columns
+## Computed Columns
 
 This is an example of a table with computed columns. A computed column is one that shows data based on other fields/columns.
 

@@ -122,7 +122,7 @@ const schemaColumns = [
 ]
 
 /**
-## Reusable Complex Styling
+### Reusable Complex Styling
 
 Here is an example of complex styling. Above the table there is a manual implementation of a title and grid/rows toggle button.
 

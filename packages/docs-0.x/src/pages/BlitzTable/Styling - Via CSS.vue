@@ -98,7 +98,7 @@ const schemaColumns = [
 ]
 
 /**
-## Styling with CSS (Recommended)
+### Styling with CSS (Recommended)
 
 CSS classes to target:
 - `.blitz-table` — the entire table component (or set your own class like so: `<BlitzTable class="my-table" />`)

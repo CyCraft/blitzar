@@ -1,4 +1,4 @@
-# Basics
+## Basics
 
 `<BlitzTable />` is a _**data table**_ component you can use with the same `schema` syntax of [BlitzForms](/docs/blitz-form) to define your columns.
 

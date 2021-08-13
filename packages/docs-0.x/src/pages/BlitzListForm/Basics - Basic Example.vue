@@ -17,7 +17,7 @@ const schema = [
 ]
 
 /**
-## Basic Example
+### Basic Example
 
 See it in action in the example down here! Write down some student names to see the formData update.
  */

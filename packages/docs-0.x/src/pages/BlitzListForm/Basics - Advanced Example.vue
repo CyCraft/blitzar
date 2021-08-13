@@ -70,7 +70,7 @@ const schema = [
 ]
 
 /**
-## Advanced Example
+### Advanced Example
 
 When you check the _**script tab**_ of this more advanced example, you'll notice we are using some new props available on our context of the Evaluated Props. (Be sure to check out the [documentation on Evaluated Props](#evaluated-props) of BlitzForm)
 

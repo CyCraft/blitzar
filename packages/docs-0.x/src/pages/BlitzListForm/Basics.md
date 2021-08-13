@@ -1,4 +1,4 @@
-# Basics
+## Basics
 
 In some cases you might need a form that's actually a _**list**_ users can fill in. Eg. Have a form where a teacher can write down names of students in a list.
 
