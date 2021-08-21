@@ -5,23 +5,20 @@
 </template>
 
 <script>
-import { CodeBlock } from '@planetar/code-block'
-import BlitzForm from '../../../form/src/components/BlitzForm.vue'
-
 const schema = [
   {
-    component: 'h6',
-    slot: 'You can use header tags in your forms (<h6> component)',
-    componentStyle: 'color: black',
+    component: 'h4',
+    slot: 'You can use header tags in your forms (this is an <h4>)',
+    style: 'color: black',
   },
   {
     component: 'a',
     href: 'https://google.com',
-    slot: 'google.com (<a> component)',
-    componentStyle: 'color: blue',
+    slot: 'google.com (this is an <a> component)',
+    style: 'font-weight: bold',
   },
   {
-    label: `nested ol > li components`,
+    label: `you can use an ol > with nested li`,
     component: 'ol',
     slot: [
       { component: 'li', slot: 'unos' },
@@ -30,14 +27,15 @@ const schema = [
     ],
   },
   {
-    label: 'You can even use regular divs in your forms',
     component: 'div',
-    slot: 'I am a div',
-    componentStyle: 'border: dashed thin goldenrod; padding: 2em',
+    slot: `You can even use regular divs in your forms!\n\nI'm a div!`,
+    style: 'border: dashed thin goldenrod; padding: 1em',
   },
   {
-    label: 'a div in a div in a div',
+    label: 'Or nested divs!',
     component: 'div',
+    // 'style' would be applied to the entire field
+    // 'componentStyle' is applied to just the component
     componentStyle: 'border: dashed thin slateblue; padding: 1em',
     slot: {
       component: 'div',
@@ -49,10 +47,14 @@ const schema = [
       },
     },
   },
+  {
+    label: 'And images of course!',
+    component: 'img',
+    src: 'https://i.imgur.com/C87xx6T.jpeg',
+  },
 ]
 
 export default {
-  components: { BlitzForm, CodeBlock },
   data() {
     return { schema, formData: {} }
   },

@@ -6,7 +6,7 @@
   ],
   "scripts": {
     "audit": "npm audit fix && lerna-audit && lerna bootstrap",
-    "dev": "npm run dev -w docs",
+    "dev": "concurrently -n 'docs,form' -c 'cyan,blue' 'npm run dev -w=docs' 'npm run dev -w=@blitzar/form'",
     "dev-0.x": "npm run prepare:all && npm run start:dev && npm run dev -w docs-0.x",
     "dev:docs-vuetify": "npm run prepare:all && npm run start:dev && npm run dev -w docs-vuetify",
     "dev:vue-cli": "npm run start:dev && npm run dev -w dev-vue-cli",
@@ -37,9 +37,10 @@
   },
   "devDependencies": {
     "@types/fs-extra": "^9.0.12",
-    "@types/node": "^16.6.0",
+    "@types/node": "^16.7.0",
     "@types/webpack-env": "^1.16.2",
     "ava": "^3.15.0",
+    "concurrently": "^6.2.1",
     "copyfiles": "^2.4.1",
     "esm": "^3.2.25",
     "fs-extra": "^10.0.0",
@@ -53,7 +54,7 @@
     "rollup": "^2.56.2",
     "rollup-plugin-typescript2": "^0.30.0",
     "typescript": "^4.3.5",
-    "vue-compile": "^1.1.0"
+    "vue-compile": "^1.1.1"
   },
   "engines": {
     "node": ">= 14",

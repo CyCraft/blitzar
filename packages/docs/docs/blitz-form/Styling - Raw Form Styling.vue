@@ -11,29 +11,30 @@
   </div>
 </template>
 
-<style lang="sass">
-.raw-form-data-style
-  background: #F6F9FC
-  border-radius: 8px
-  padding: 1rem
-  .blitz-field
-    border-bottom: 1px solid #D9E2F1
-    padding-top: 8px
-    padding-bottom: 8px
-    line-height: 24px
-  .blitz-field__component
-    text-align: right
-  ._title
-    font-weight: 600
-    border-bottom: none
-    padding: 0
-    line-height: 20px
+<style scoped>
+.raw-form-data-style {
+  background: #f6f9fc;
+  border-radius: 8px;
+  padding: 1rem;
+}
+.blitz-field {
+  border-bottom: 1px solid #d9e2f1;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  line-height: 24px;
+}
+.blitz-field__component {
+  text-align: right;
+}
+._title {
+  font-weight: 600;
+  border-bottom: none;
+  padding: 0;
+  line-height: 20px;
+}
 </style>
 
 <script>
-import { CodeBlock } from '@planetar/code-block'
-import BlitzForm from '../../../form/src/components/BlitzForm.vue'
-
 const schema = [
   {
     label: 'Hero Details',
@@ -67,7 +68,6 @@ const schema = [
 ]
 
 export default {
-  components: { BlitzForm, CodeBlock },
   data() {
     return {
       schema,

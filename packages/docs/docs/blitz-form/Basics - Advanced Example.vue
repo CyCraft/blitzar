@@ -1,28 +1,12 @@
 <template>
   <div>
-    <BlitzForm
-      class="text-white"
-      :schema="schema"
-      v-model="formData"
-      :columnCount="2"
-      gridGap="32px"
-    />
+    <BlitzForm :schema="schema" v-model="formData" :columnCount="2" />
 
     <CodeBlock :content="`// formData\n${JSON.stringify(formData, undefined, 2)}`" />
   </div>
 </template>
 
-<style scoped>
-.text-white {
-  color: white;
-}
-</style>
-
 <script>
-import { markRaw } from 'vue'
-import { CodeBlock } from '@planetar/code-block'
-import BlitzForm from '../../../form/src/components/BlitzForm.vue'
-
 const schema = [
   {
     id: 'name',
@@ -39,7 +23,7 @@ const schema = [
     // component props:
     component: 'select',
     slot: [
-      { component: 'option', value: '', slot: '' },
+      { component: 'option', value: '', slot: 'Select one', disabled: true },
       { component: 'option', value: 'mutation', slot: 'Mutation' },
       { component: 'option', value: 'self', slot: 'Self taught' },
       { component: 'option', value: 'item', slot: 'Magic item' },
@@ -73,7 +57,7 @@ const schema = [
     label: 'Role model',
     subLabel: 'Who do you look up to?',
     slot: [
-      { component: 'option', value: '', slot: '' },
+      { component: 'option', value: '', slot: 'Select one', disabled: true },
       { component: 'option', value: 'captain-america', slot: 'Steve Rogers/Captain America' },
       { component: 'option', value: 'iron-man', slot: 'Tony Stark/Iron Man' },
       { component: 'option', value: 'thor-odinson', slot: 'Thor Odinson' },
@@ -109,7 +93,7 @@ const schema = [
     id: 'powerUps',
     span: 1,
     // See more info in the Use Custom Components chapter
-    component: markRaw(BlitzForm),
+    component: 'BlitzForm',
     label: 'Choose some power-ups',
     columnCount: 3,
     schema: [
@@ -156,7 +140,6 @@ const schema = [
 ]
 
 export default {
-  components: { BlitzForm, CodeBlock },
   data() {
     return { schema, formData: {} }
   },

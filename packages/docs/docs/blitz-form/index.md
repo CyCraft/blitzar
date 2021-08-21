@@ -2,10 +2,6 @@
 editLink: true
 ---
 
-<script setup>
-  import CodeBlockComponent from '../../components/CodeBlockComponent.vue'
-</script>
-
 # Blitz Form
 
 ## Basics
@@ -36,7 +32,7 @@ Besides `id`, `label` and `component` there are many more props you can pass: `s
 
 Check out the template; script; style below to see how simple the code looks to render this form.
 
-The form below uses regular HTML `input` and `select` fields. You can change the look of the fields with CSS or, even better, you can simply use your own Vue components for the fields.
+The form below uses regular HTML `input` and `select` fields. You can change the look of the fields with CSS or, even better, you can simply [use your own Vue components](#use-custom-components) for the fields.
 
 <CodeBlockComponent filename="blitz-form/Basics - Basic Example" />
 
@@ -58,7 +54,73 @@ If you look at the "script" you will see it's easy to use regular HTML5 elements
 
 ### Use Custom Components
 
-Todo
+The main use case of BlitzForm will be where you use your own Vue components. In this example below we see how you can simply refer to a custom component name:
+
+```js
+const schema = [
+  {
+    id: 'name',
+    label: 'Name',
+    component: 'BaseInput',
+  },
+]
+```
+
+In the example below we actually render a form using our custom component `BaseInput`. If you are interested in the source code of BaseInput, [you can find it here](https://github.com/CyCraft/blitzar/tree/production/packages/docs/components/BaseInput.vue).
+
+<CodeBlockComponent filename="blitz-form/Basics - Custom Components - Basic" />
+
+Here is another example of a simple login form:
+
+<CodeBlockComponent filename="blitz-form/Basics - Custom Components - Auth" />
+
+:::tip Please note!
+Components you want to use in BlitzForm must be [registered Globally](https://v3.vuejs.org/guide/component-registration.html).
+
+(If need to use locally registered components, see [Advanced > Using Locally Registered Components](/advanced/#using-locally-registered-components))
+:::
+
+### Use HTML5 Elements
+
+In the [Advanced Example](#advanced-example) we have shown how to use HTML5 form elements, like `input`, `select` etc.
+
+It's possible to use other HTML5 elements as well like `a`, `p`, `div`, `ol`, `ul`, etc. For these elements you need to use the prop called `slot` to pass content:
+
+```js
+{
+  component: 'p',
+  slot: 'It can be anything!',
+}
+```
+
+In this example we use a `p` paragraph to add more context in our form:
+
+```js
+// Eg.
+const schema = [
+  {
+    label: `What's your nickname?`,
+    id: 'name',
+    component: 'input',
+  },
+  {
+    component: 'p',
+    slot: 'It can be anything!',
+  },
+]
+```
+
+Here are more examples of how you can use HTML5 elements you can use in Blitz Forms:
+
+<CodeBlockComponent filename="blitz-form/Basics - HTML5 Elements" />
+
+:::tip When to use HTML5 elements in the form schema.
+This can be useful if you have form schemas saved in a Database and the user wants to display some simple HTML or an image in their form.
+:::
+
+:::tip When to **NOT** use HTML5 elements in the form schema.
+When you know what the form schema will be, adding extra flair to that form can easily be done _outside_ of the `<BlitzForm />` tag. You will have a lot more freedom.
+:::
 
 ## Frameworks
 
@@ -102,31 +164,9 @@ Vue.component('VTextField', VTextField)
 
 <!-- <CodeBlockComponent filename="blitz-form/Frameworks - Vuetify" /> -->
 
-## Slots
-
-Any field in a BlitzForm schema can also accept slots!
-
-Currently there are two supported "slots" per field:
-
-### Default Slot
-
-You can use the prop called `slot` to pass content to a default slot.
-
-Your form fields can include HTML elements / Vue components that need to use the default slot.
-
-In the example below we first show how you can use the default slot to render some basic HTML elements.
-
-<!-- <CodeBlockComponent filename="blitz-form/Slots - Default" /> -->
-
-### Label Slot
-
-You can use a `label` slot to pass extra content to a field's label.
-
-In the example below we see usage of the label slot to add some extra content next to the title.
-
-<!-- <CodeBlockComponent filename="blitz-form/Slots - Label" /> -->
-
 ## Modes
+
+### Edit/View/disabled/raw modes
 
 BlitzForm has five modes:
 
@@ -298,11 +338,19 @@ When using left labels, by default, the label only takes up as much width as nee
 
 ### Custom Label Positioning
 
-It's easy to overwrite the positioning of the field label, sublabel & component with some CSS!
+It's easy to overwrite the positioning of the field label, sub-label & component with some CSS!
 
 Look at the _**style tab**_ to see how to position the _**label on the right**_ and the sub-label on the bottom.
 
 <!-- <CodeBlockComponent filename="blitz-form/Styling - Custom Label Positioning" /> -->
+
+### Custom Label Content
+
+You can use the `label` slot to pass extra content to a field's label.
+
+In the example below we see usage of the label slot to add some extra content next to the title.
+
+<!-- <CodeBlockComponent filename="blitz-form/Styling - Custom Label Content" /> -->
 
 ### Raw Form Styling
 
@@ -378,6 +426,8 @@ Be sure to also check the documentation on [Computed Fields](#computed-fields) a
 
 ## Evaluated Props
 
+### Evaluated Props — What/When
+
 As you know, BlitzForm needs a `schema` with information on each field you want to show. Each field in your schema can have props like `label` `component` and any prop the component itself might need.
 
 However, your fields can also have _**dynamic props**_, for example based on the data of the form! Such dynamic props are called Evaluated Props.
@@ -428,6 +478,8 @@ Eg. `showCondition: (val, {formData}) => formData.car`
 <!-- <CodeBlockComponent filename="blitz-form/Evaluated Props - 5" /> -->
 
 ## Computed Fields
+
+### Computed Fields — What/When
 
 Computed Fields are when you need to add a field in your form that have a _**calculated value**_ based on the form data or some other fields.
 

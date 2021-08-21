@@ -12,14 +12,15 @@
   </div>
 </template>
 
+<style scoped>
+</style>
+
 <style lang="sass">
 // Don't forget to import the required styles after Vuetify Styles but before your project's custom styles.
 @import 'blitzar/styles.sass'
 </style>
 
 <script>
-import { CodeBlock } from '@planetar/code-block'
-import BlitzForm from '../../../form/src/components/BlitzForm.vue'
 import Vue from 'vue'
 
 import { VTextField, VRadioGroup, VRadio, VSlider, VCheckbox, VSwitch, VSelect } from 'vuetify/lib'
@@ -188,7 +189,6 @@ const schema = [
 ]
 
 export default {
-  components: { BlitzForm, CodeBlock },
   data() {
     return { schema, formData: {} }
   },

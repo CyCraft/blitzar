@@ -42,7 +42,7 @@ const schema = [
     label: 'Type',
     component: 'select',
     slot: [
-      { component: 'option', value: '', slot: '' },
+      { component: 'option', value: '', slot: 'Select one', disabled: true },
       { component: 'option', value: 'personal', slot: 'Personal' },
       { component: 'option', value: 'work', slot: 'Work' },
     ],

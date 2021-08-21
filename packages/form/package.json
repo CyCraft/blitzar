@@ -8,7 +8,7 @@
   "scripts": {
     "vue-int": "vue-int -i src/components -r -o vetur",
     "build": "rimraf dist && vue-compile src -o dist",
-    "dev": "vue-compile src -o ../docs/components --watch"
+    "dev": "vue-compile src -o ./dist --watch"
   },
   "dependencies": {
     "@blitzar/utils": "^0.0.33",

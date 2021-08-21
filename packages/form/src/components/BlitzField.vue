@@ -673,7 +673,6 @@ export default defineComponent({
       const propsToPass = {
         // we always wanna pass only this prop:
         required: evalPropOrAttr('required'),
-        dark: Boolean(evalPropOrAttr('dark')),
       }
       // only pass rules when it has internal errors
       if (this.usesInternalOrNoErrors) {
@@ -701,6 +700,10 @@ export default defineComponent({
         propsToPass.disabled = evalPropOrAttr('mode') === 'disabled'
       }
       const attrsToPass = Object.keys(this.$attrs).reduce((carry, attrKey) => {
+        if (attrKey === 'class' || attrKey === 'style') {
+          // never pass `class` and `style` attrs, because they're applied on the field
+          return carry
+        }
         carry[attrKey] = evalPropOrAttr(attrKey)
         return carry
       }, {})

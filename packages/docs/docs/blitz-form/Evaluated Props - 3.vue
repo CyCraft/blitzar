@@ -12,9 +12,6 @@
 </template>
 
 <script>
-import { CodeBlock } from '@planetar/code-block'
-import BlitzForm from '../../../form/src/components/BlitzForm.vue'
-
 const schema = [
   {
     id: 'car',
@@ -42,7 +39,6 @@ const schema = [
 ]
 
 export default {
-  components: { BlitzForm, CodeBlock },
   data() {
     return { schema, formData: {} }
   },

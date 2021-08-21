@@ -9,22 +9,21 @@
   </div>
 </template>
 
-<style lang="sass">
-.left-labels-example
-  /** Either set a minimum or fixed width like so: */
-  .blitz-field__label,
-  .blitz-field__sub-label
-    width: 150px
 
-  /** OR set the width of the columns like so: */
-  .blitz-field
-    grid-template-columns: 150px 1fr
+<style scoped>
+/** Either set a minimum or fixed width like so: */
+.blitz-field__label,
+.blitz-field__sub-label {
+  width: 150px;
+}
+
+/** OR set the width of the columns like so: */
+.blitz-field {
+  grid-template-columns: 150px 1fr;
+}
 </style>
 
 <script>
-import { CodeBlock } from '@planetar/code-block'
-import BlitzForm from '../../../form/src/components/BlitzForm.vue'
-
 const schema = [
   {
     label: 'Hero Details',
@@ -59,7 +58,6 @@ const schema = [
 ]
 
 export default {
-  components: { BlitzForm, CodeBlock },
   data() {
     return {
       schema,

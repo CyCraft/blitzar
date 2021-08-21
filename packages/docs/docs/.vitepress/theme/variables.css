@@ -48,7 +48,8 @@
   --bar-color: #18a058;
 }
 .code-block-component {
-  --c-text: var(--c-text) !important;
-  --c-active: var(--c-brand) !important;
-  --c-border: var(--c-divider) !important;
+  --c-text: var(--c-code-space) !important;
+  --c-active: var(--c-nasa) !important;
+  --c-border: var(--c-divider-light) !important;
+  background: white;
 }

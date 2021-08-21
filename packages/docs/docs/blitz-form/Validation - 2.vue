@@ -7,13 +7,10 @@
 </template>
 
 <script>
-import { CodeBlock } from '@planetar/code-block'
-import BlitzForm from '../../../form/src/components/BlitzForm.vue'
 import { validateFormPerSchema } from '../../../form/src/helpers/validation'
 import { showToast } from '../../../docs-0.x/src/helpers/toast'
 
 export default {
-  components: { BlitzForm, CodeBlock },
   data() {
     const formData = {
       name: undefined,

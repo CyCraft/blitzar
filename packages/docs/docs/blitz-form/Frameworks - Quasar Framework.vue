@@ -6,15 +6,7 @@
   </div>
 </template>
 
-<style lang="sass" scoped>
-// $
-
-// .component-name
-</style>
-
 <script>
-import { CodeBlock } from '@planetar/code-block'
-import BlitzForm from '../../../form/src/components/BlitzForm.vue'
 // All components that are used in the form need to be globally registered.
 import { QInput, QSlider, QSelect, QOptionGroup, QToggle, date } from 'quasar'
 import Vue from 'vue'
@@ -155,7 +147,6 @@ const schema = [
 ]
 
 export default {
-  components: { BlitzForm, CodeBlock },
   data() {
     return { schema, formData: {} }
   },

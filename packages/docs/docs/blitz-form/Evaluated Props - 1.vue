@@ -7,9 +7,6 @@
 </template>
 
 <script>
-import { CodeBlock } from '@planetar/code-block'
-import BlitzForm from '../../../form/src/components/BlitzForm.vue'
-
 const schema = [
   {
     id: 'color',
@@ -29,7 +26,7 @@ const schema = [
         : 'pick a color!',
     // component props:
     slot: [
-      { component: 'option', value: '', slot: '' },
+      { component: 'option', value: '', slot: 'Select one', disabled: true },
       { component: 'option', value: 'red', slot: 'red' },
       { component: 'option', value: 'blue', slot: 'blue' },
       { component: 'option', value: 'green', slot: 'green' },
@@ -40,7 +37,6 @@ const schema = [
 ]
 
 export default {
-  components: { BlitzForm, CodeBlock },
   data() {
     return { schema, formData: {} }
   },

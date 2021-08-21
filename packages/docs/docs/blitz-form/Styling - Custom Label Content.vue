@@ -7,8 +7,6 @@
 </template>
 
 <script>
-import { CodeBlock } from '@planetar/code-block'
-import BlitzForm from '../../../form/src/components/BlitzForm.vue'
 // All components that are used in the form need to be globally registered.
 import VueCustomTooltip from '@adamdehaven/vue-custom-tooltip'
 import Vue from 'vue'
@@ -57,7 +55,6 @@ const schema = [
 ]
 
 export default {
-  components: { BlitzForm, CodeBlock },
   data() {
     return { schema, formData: {} }
   },

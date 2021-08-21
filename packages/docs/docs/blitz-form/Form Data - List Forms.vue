@@ -7,11 +7,6 @@
 </template>
 
 <script>
-import { CodeBlock } from '@planetar/code-block'
-import { markRaw } from 'vue'
-import BlitzForm from '../../../form/src/components/BlitzForm.vue'
-import BlitzListForm from '../../../form/src/components/BlitzListForm.vue'
-
 const schema = [
   {
     id: 'classroomName',
@@ -21,7 +16,7 @@ const schema = [
   {
     id: 'students',
     label: 'Student Names',
-    component: markRaw(BlitzListForm),
+    component: 'BlitzListForm',
     schema: [
       { id: 'nameFirst', label: 'First Name', component: 'input' },
       { id: 'nameLast', label: 'Last Name', component: 'input' },
@@ -30,7 +25,6 @@ const schema = [
 ]
 
 export default {
-  components: { BlitzForm, CodeBlock },
   data() {
     return { schema, formData: {} }
   },

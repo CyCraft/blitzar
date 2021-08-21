@@ -7,8 +7,6 @@
 </template>
 
 <script>
-import { CodeBlock } from '@planetar/code-block'
-import BlitzForm from '../../../form/src/components/BlitzForm.vue'
 import { showToast } from '../../../docs-0.x/src/helpers/toast'
 
 const schema = [
@@ -31,7 +29,6 @@ const schema = [
 ]
 
 export default {
-  components: { BlitzForm, CodeBlock },
   data() {
     return { schema, formData: {} }
   },

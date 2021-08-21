@@ -22,9 +22,6 @@
 </template>
 
 <script>
-import { CodeBlock } from '@planetar/code-block'
-import BlitzForm from '../../../form/src/components/BlitzForm.vue'
-
 const schema = [
   {
     id: 'name',
@@ -39,7 +36,7 @@ const schema = [
     // component props:
     component: 'select',
     slot: [
-      { component: 'option', value: '', slot: '' },
+      { component: 'option', value: '', slot: 'Select one', disabled: true },
       { component: 'option', value: 'mutation', slot: 'Mutation' },
       { component: 'option', value: 'self', slot: 'Self taught' },
       { component: 'option', value: 'item', slot: 'Magic item' },
@@ -49,7 +46,6 @@ const schema = [
 ]
 
 export default {
-  components: { BlitzForm, CodeBlock },
   data() {
     const formData = {
       name: 'Thor Odinson',

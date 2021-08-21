@@ -32,7 +32,7 @@ const schemaColumns = [
     label: 'Team color',
     mode: 'edit',
     slot: [
-      { component: 'option', value: '', slot: '' },
+      { component: 'option', value: '', slot: 'Select one', disabled: true },
       { component: 'option', value: 'slateblue', slot: 'Purple' },
       { component: 'option', value: 'salmon', slot: 'Pink' },
       { component: 'option', value: 'goldenrod', slot: 'Gold' },
