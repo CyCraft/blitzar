@@ -30,7 +30,7 @@ Besides `id`, `label` and `component` there are many more props you can pass: `s
 
 ### Basic Example
 
-Check out the template; script; style below to see how simple the code looks to render this form.
+Check out the template/script/style below to see how simple the code looks to render this form.
 
 The form below uses regular HTML `input` and `select` fields. You can change the look of the fields with CSS or, even better, you can simply [use your own Vue components](#use-custom-components) for the fields.
 

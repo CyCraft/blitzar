@@ -6,6 +6,10 @@
   </div>
 </template>
 
+<style>
+/* This example has no styling */
+</style>
+
 <script>
 const schema = [
   {
