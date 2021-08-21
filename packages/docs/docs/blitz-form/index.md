@@ -46,9 +46,9 @@ There are three ways to retrieve the data that a user fills in a BlitzForm.
 
 ### Advanced Example
 
-Here you can see an advanced form rendered with all HTML5 form elements.
+Here you can see an advanced form rendered with all **HTML5 form elements**.
 
-If you look at the "script" you will see it's easy to use regular HTML5 elements. In reality however, you will probably use Blitzar with your custom Vue components. Which in explained in the _next_ chapter.
+If you look at the "script" you will see it's easy to use regular HTML5 elements. In reality however, you will probably use Blitzar with your custom Vue components. Which in explained in the [next chapter](#use-custom-components).
 
 <CodeBlockComponent filename="blitz-form/Basics - Advanced Example" />
 
@@ -75,9 +75,9 @@ Here is another example of a simple login form:
 <CodeBlockComponent filename="blitz-form/Basics - Custom Components - Auth" />
 
 :::tip Please note!
-Components you want to use in BlitzForm must be [registered Globally](https://v3.vuejs.org/guide/component-registration.html).
+Components you want to use in BlitzForm must be registered Globally! (See the [official Vue documentation](https://v3.vuejs.org/guide/component-registration.html) for more info)
 
-(If need to use locally registered components, see [Advanced > Using Locally Registered Components](/advanced/#using-locally-registered-components))
+If you need to use locally registered components, see [Advanced > Using Locally Registered Components](/advanced/#using-locally-registered-components)
 :::
 
 ### Use HTML5 Elements
