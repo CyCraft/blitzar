@@ -9,12 +9,10 @@
       :placeholder="placeholder"
       :readonly="readonly"
       :required="required"
-      :autofocus="autofocus"
-      :debounce="debounce"
+      :autocomplete="autocomplete"
       v-model="valueInner"
       data-cy="input-field"
       ref="input"
-      v-bind="$attrs"
       @blur="(e) => $emit('blur', e)"
       @focus="(e) => $emit('focus', e)"
       @keydown.13="(e) => $emit('enter', e)"
@@ -27,12 +25,10 @@
       :placeholder="placeholder"
       :readonly="readonly"
       :required="required"
-      :autofocus="autofocus"
-      :debounce="debounce"
+      :autocomplete="autocomplete"
       data-cy="input-field"
       ref="textarea"
       v-model="valueInner"
-      v-bind="$attrs"
       @blur="(e) => $emit('blur', e)"
       @focus="(e) => $emit('focus', e)"
       @keydown.13="(e) => $emit('enter', e)"
@@ -222,6 +218,11 @@ export default {
      * HTML5 attribute
      */
     required: { type: Boolean },
+    /**
+     * HTML5 attribute
+     * @category feature
+     */
+    autocomplete: { type: String },
     /**
      * HTML5 attribute (only for type="textarea")
      */
