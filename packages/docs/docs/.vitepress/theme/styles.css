@@ -12,7 +12,7 @@ main p a,
 main ol a,
 main ul a {
   position: relative;
-  padding-left: 1.2em;
+  padding-left: 1em;
 }
 main p a:hover,
 main ol a:hover,
@@ -27,9 +27,9 @@ main ul a:before {
   align-items: baseline;
   position: absolute;
   left: 0;
-  top: 0;
-  height: 1.1em;
-  width: 1.1em;
+  top: 0.1em;
+  height: 1em;
+  width: 1em;
   content: '';
 }
 /* Internal Links */
