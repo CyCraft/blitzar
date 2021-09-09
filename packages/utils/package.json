@@ -8,7 +8,8 @@
   "scripts": {
     "test": "ava",
     "build": "npm run clean && rollup -c ./build.js",
-    "clean": "rimraf ./types && rimraf ./dist"
+    "clean": "rimraf ./types && rimraf ./dist",
+    "dev": "rollup -c ./build.js --watch"
   },
   "dependencies": {
     "commafy-anything": "^2.1.0",

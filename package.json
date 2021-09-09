@@ -6,7 +6,7 @@
   ],
   "scripts": {
     "audit": "npm audit fix && lerna-audit && lerna bootstrap",
-    "dev": "concurrently -n 'docs,form' -c 'cyan,blue' 'npm run dev -w=docs' 'npm run dev -w=@blitzar/form'",
+    "dev": "concurrently -n 'docs,form,utils' -c 'green,blue,gray' 'npm run dev -w=docs' 'npm run dev -w=@blitzar/form' 'npm run dev -w=@blitzar/utils'",
     "dev-0.x": "npm run prepare:all && npm run start:dev && npm run dev -w docs-0.x",
     "dev:docs-vuetify": "npm run prepare:all && npm run start:dev && npm run dev -w docs-vuetify",
     "dev:vue-cli": "npm run start:dev && npm run dev -w dev-vue-cli",
