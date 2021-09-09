@@ -10,8 +10,9 @@
     "serve": "vitepress serve docs"
   },
   "dependencies": {
-    "@blitzar/utils": "^0.0.33",
     "@blitzar/form": "^1.0.0",
+    "@blitzar/utils": "^0.0.33",
+    "@meforma/vue-toaster": "^1.2.2",
     "@planetar/code-block": "^1.0.2",
     "is-what": "^3.14.1",
     "vue-pepicons": "^0.2.0"

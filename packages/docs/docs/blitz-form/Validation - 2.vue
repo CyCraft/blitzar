@@ -8,7 +8,7 @@
 
 <script>
 import { validateFormPerSchema } from '../../../form/src/helpers/validation'
-import { showToast } from '../../../docs-0.x/src/helpers/toast'
+import { showToast } from '../../components/toasts'
 
 export default {
   data() {

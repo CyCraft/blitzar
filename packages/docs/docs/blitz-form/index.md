@@ -174,7 +174,6 @@ BlitzForm has five modes:
 - `'view'` — show each field with `readonly: true`
 - `'disabled'` — show each field with `disabled: true`
 - `'raw'` — used to show raw data of your form (for select components, it will show the data label instead of its value)
-- `'add'` — the same as `'edit'`
 
 The same schema to render a form can be re-used to just display form data as well. Your form schema is therefore very versatile!
 
@@ -194,7 +193,7 @@ In this example below you can see how easy this is by using an Evaluated Prop fo
 
 However, in reality it's cleaner you just add the `readonly` prop to your Vue components, or if you use a component library, create a wrapper components for them.
 
-<!-- <CodeBlockComponent filename="blitz-form/Modes - Disable Fields on View Mode" /> -->
+<CodeBlockComponent filename="blitz-form/Modes - Disable Fields on View Mode" />
 
 ## Action Buttons
 
@@ -229,7 +228,7 @@ The `@save` event receives a payload with the new and old form data.
 
 Play with the pre-made action buttons below and see what happens:
 
-<!-- <CodeBlockComponent filename="blitz-form/Action Buttons - Pre-Made Action Buttons" /> -->
+<CodeBlockComponent filename="blitz-form/Action Buttons - Pre-Made Action Buttons" />
 
 ### Overwriting Pre-Made Buttons
 
@@ -239,7 +238,7 @@ In the example below you can see we are overwriting some properties of the HTML5
 
 However, most likely you will pass `component: 'MyButton'` and pass your own Vue button components.
 
-<!-- <CodeBlockComponent filename="blitz-form/Action Buttons - Overwriting Pre-Made Action Buttons" /> -->
+<CodeBlockComponent filename="blitz-form/Action Buttons - Overwriting Pre-Made Action Buttons" />
 
 ### Custom Action Buttons & Fields
 
@@ -264,7 +263,7 @@ actionButtons: [
 Being able to show/hide these button based on the `formData` can be very powerful.
 Be sure to check out the [Evaluated Props](#evaluated-props) and [Events](#events) documentation.
 
-<!-- <CodeBlockComponent filename="blitz-form/Action Buttons - Custom Action Buttons" /> -->
+<CodeBlockComponent filename="blitz-form/Action Buttons - Custom Action Buttons" />
 
 ## Form Data
 
@@ -276,7 +275,7 @@ BlitzForm copies the formData into its local state on mount, but it does not wat
 
 Therefore you need to manually re-mount as seen in the example below. Watch what happens when clearing & loading data with and without remounting.
 
-<!-- <CodeBlockComponent filename="blitz-form/Form Data - Clearing the Form" /> -->
+<CodeBlockComponent filename="blitz-form/Form Data - Clearing the Form" />
 
 ### Resetting the Form
 
@@ -284,7 +283,7 @@ A BlitzForm automatically makes a backup of form data so you can "cancel an edit
 
 In the example below there is a form with data. Try clicking "edit", then modify some data, then click "cancel".
 
-<!-- <CodeBlockComponent filename="blitz-form/Form Data - Resetting the Form" /> -->
+<CodeBlockComponent filename="blitz-form/Form Data - Resetting the Form" />
 
 ### Nested Data
 
@@ -301,7 +300,7 @@ The only thing you need to be careful with is the `@field-input` event:
 
 Try typing something in the example below:
 
-<!-- <CodeBlockComponent filename="blitz-form/Form Data - Nested Data" /> -->
+<CodeBlockComponent filename="blitz-form/Form Data - Nested Data" />
 
 ### List Forms
 
@@ -315,9 +314,9 @@ For this I prepared a special kind of form called a **BlitzListForm** that offer
 
 See it in action in the example down here! Write down some student names to see the `formData` update.
 
-(for more examples check out the [dedicated documentation](/docs/blitz-list-form) on BlitzListForm)
+<CodeBlockComponent filename="blitz-form/Form Data - List Forms" />
 
-<!-- <CodeBlockComponent filename="blitz-form/Form Data - List Forms" /> -->
+> For more info and examples on List Forms, check out the [dedicated BlitzListForm documentation](/docs/blitz-list-form)!
 
 ## Styling
 
@@ -445,7 +444,7 @@ The most important props you can access on `context`:
 
 - `formData` — this is the _**nested**_ data of all the fields inside a BlitzForm
 - `formDataFlat` — this is the **_flattened_** data of all the fields inside a BlitzForm
-- `mode` — the current mode of the BlitzForm. Can be `'view'` | `'edit'` | `'add'` | `'raw'` | `'disabled'`
+- `mode` — the current mode of the BlitzForm. Can be `'view'` | `'edit'` | `'raw'` | `'disabled'`
 
 Try to refrain from accessing props other than the ones listed above, because these are mainly used internal and could have behaviour changes that could break your app.
 

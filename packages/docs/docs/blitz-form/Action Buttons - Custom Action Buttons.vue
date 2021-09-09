@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import { showToast } from '../../../docs-0.x/src/helpers/toast'
+import { showToast } from '../../components/toasts'
 
 const schema = [
   {

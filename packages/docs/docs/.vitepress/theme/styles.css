@@ -7,6 +7,12 @@
   margin-bottom: 0 !important;
 }
 
+.c-toast--default {
+  background-color: var(--c-code-space) !important;
+  white-space: pre-line;
+  word-break: break-word;
+}
+
 /* Internal Links */
 main a:not([aria-hidden="true"])[href^='#'],
 main a:not([aria-hidden="true"])[href^='/'] {

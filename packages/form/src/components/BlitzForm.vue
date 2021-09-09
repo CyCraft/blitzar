@@ -15,9 +15,8 @@
       </div>
       <BlitzField
         v-for="(blueprint, i) in actionButtonsSchema"
-        :key="blueprint.id || i"
+        :key="`${blueprint.id}-${i}`"
         v-bind="blueprint"
-        v-on="blueprint.events"
       />
     </div>
     <!-- form contents -->
@@ -92,7 +91,7 @@
 import { defineComponent } from 'vue'
 import { merge } from 'merge-anything'
 import { copy } from 'copy-anything'
-import { isArray, isFunction, isFullString, isPlainObject, isString, isAnyObject } from 'is-what'
+import { isArray, isFunction, isFullString, isPlainObject, isString } from 'is-what'
 import { nestifyObject } from 'nestify-anything'
 import { flattenPerSchema } from '@blitzar/utils'
 import BlitzField from './BlitzField.vue'
@@ -626,9 +625,7 @@ export default defineComponent({
       this.event('update:modelValue', this.formData, origin) // do not extract `this` from here
       // if the form has a formErrorMsg, validate gain to check to see if it's solved
       if (isFullString(this.formErrorMsg)) {
-        const res = validateFormPerSchema(this.formData, this.schema, this.innerLang)
-        const errorsRemain = Object.values(res).some((val) => val !== true)
-        if (!errorsRemain) this.formErrorMsg = null
+        this.validate()
       }
     },
     resetState() {
@@ -655,39 +652,46 @@ export default defineComponent({
       this.event('update:modelValue', this.formData, origin) // do not extract `this` from here
       this.event('cancel')
     },
-    validate() {
-      // validate will focus the field with error, so only use it when the user is not typing something else
-      const { $refs, innerLang, validator, dataEdited, dataBackup, schema, formDataFlat } = this
-      return new Promise((resolve, reject) => {
-        if (isFunction(validator)) {
-          const validatorRes = validator(dataEdited, dataBackup)
-          if (isFullString(validatorRes)) reject(validatorRes)
+    /**
+     * Validate can focus the first field with an error
+     * @returns {boolean} `true` if no errors remained, `false` otherwise
+     */
+    validate(shouldFocusErrorField) {
+      const { formData, schema, innerLang, validator, dataEdited, dataBackup } = this
+      const res = validateFormPerSchema(formData, schema, innerLang)
+      const errorsRemain = Object.values(res).some((val) => val !== true)
+      console.log(`errorsRemain → `, errorsRemain)
+      if (errorsRemain) {
+        this.formErrorMsg = innerLang['formValidationError']
+        if (shouldFocusErrorField) {
+          console.log(`1 → `, 1)
         }
-        $refs.refBlitzForm
-          .validate()
-          .then((success) => {
-            if (success) return resolve()
-            reject(innerLang['formValidationError'])
-          })
-          .catch((e) => reject(innerLang['formValidationError']))
-      })
+        return false
+      }
+      if (isFunction(validator)) {
+        const validatorRes = validator(dataEdited, dataBackup)
+        console.log(`validatorRes → `, validatorRes)
+        if (isFullString(validatorRes)) {
+          this.formErrorMsg = validatorRes
+          return false
+        }
+      }
+      this.formErrorMsg = null
+      return true
     },
     tapEdit() {
       this.cMode = 'edit'
       this.event('edit')
     },
     tapSave() {
-      const { validate, dataEdited, dataBackup, resetState } = this
-      validate()
-        .then(() => {
-          const newData = copy(dataEdited)
-          const oldData = copy(dataBackup)
-          this.event('save', { newData, oldData })
-          resetState()
-        })
-        .catch((formErrorMsg) => {
-          this.formErrorMsg = formErrorMsg
-        })
+      const { validate, dataEdited, dataBackup, resetState, formData } = this
+      const allGood = validate(true)
+      if (allGood) {
+        const newData = copy(dataEdited)
+        const oldData = copy(dataBackup)
+        this.event('save', { newData, oldData, formData })
+        resetState()
+      }
     },
     tapDelete() {
       this.event('delete')

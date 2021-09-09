@@ -6,7 +6,6 @@
       <option value="view">view</option>
       <option value="disabled">disabled</option>
       <option value="raw">raw</option>
-      <option value="add">add</option>
     </select>
     <BlitzForm :schema="schema" v-model="formData" :mode="mode" :columnCount="2" />
 
@@ -15,8 +14,6 @@
 </template>
 
 <script>
-import Vue from 'vue'
-
 const schema = [
   {
     id: 'name',
@@ -38,7 +35,7 @@ const schema = [
     ],
     // make field "disabled" when the mode is 'view':
     evaluatedProps: ['disabled'],
-    disabled: (val, { mode }) => mode === 'view',
+    disabled: (val, { mode }) => ['view', 'disabled'].includes(mode),
   },
   {
     id: 'stamina',
@@ -51,7 +48,7 @@ const schema = [
     max: 100,
     // make field "disabled" when the mode is 'view':
     evaluatedProps: ['disabled'],
-    disabled: (val, { mode }) => mode === 'view',
+    disabled: (val, { mode }) => ['view', 'disabled'].includes(mode),
   },
   {
     id: 'consent',
@@ -61,7 +58,7 @@ const schema = [
     defaultValue: false,
     // make field "disabled" when the mode is 'view':
     evaluatedProps: ['disabled'],
-    disabled: (val, { mode }) => mode === 'view',
+    disabled: (val, { mode }) => ['view', 'disabled'].includes(mode),
   },
 ]
 

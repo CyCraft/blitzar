@@ -6,8 +6,8 @@
       :columnCount="2"
       :schema="schema"
       v-model="formData"
-      @save="onSave"
-      @delete="onDelete"
+      @save="(payload) => onSave(payload)"
+      @delete="() => onDelete()"
     />
   </div>
 </template>
@@ -21,7 +21,7 @@
 </style>
 
 <script>
-import { showToast } from '../../../docs-0.x/src/helpers/toast'
+import { showToast } from '../../components/toasts'
 
 const schema = [
   {
@@ -66,12 +66,11 @@ export default {
     return { schema, formData: {}, actionButtonDefaults }
   },
   methods: {
-    onSave({ newData, oldData }) {
-      showToast('@save newData', newData) // an object with only the updated fields
-      showToast('@save oldData', oldData) // the original object with all the field values
-      // if you need a combination of both:
-      const newFormData = { ...oldData, ...newData }
-      // do something with newFormData...
+    onSave({ newData, oldData, formData }) {
+      showToast('@save `newData`', newData) // an object with only the updated fields
+      showToast('@save `oldData`', oldData) // the original object with all the field values
+      showToast('@save `formData`', formData) // the formData in its current state
+      // do something...
     },
     onDelete() {
       showToast(`clicked 'delete'`)

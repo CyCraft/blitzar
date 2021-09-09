@@ -6,7 +6,6 @@
       <option value="view">view</option>
       <option value="disabled">disabled</option>
       <option value="raw">raw</option>
-      <option value="add">add</option>
     </select>
 
     <BlitzForm :schema="schema" v-model="formData" :mode="mode" :columnCount="2" />

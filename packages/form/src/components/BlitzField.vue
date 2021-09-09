@@ -158,7 +158,6 @@
 <script>
 import { defineComponent } from 'vue'
 import snarkdown from 'snarkdown'
-// import { QField } from 'quasar'
 import {
   isFunction,
   isPlainObject,
@@ -174,9 +173,6 @@ import { parseFieldValue } from '@blitzar/utils'
 import BlitzH from './BlitzH.vue'
 import { defaultLang } from '../meta/lang'
 import { createRequiredRule } from '../helpers/validation.js'
-// import { setup } from '../helpers/setup.js'
-
-// setup()
 
 function evaluateProp(propValue, componentValue, componentInstance) {
   return isFunction(propValue) ? propValue(componentValue, componentInstance) : propValue

@@ -207,7 +207,7 @@ export default defineComponent({
       if (origin === 'default') return
       const { modelValue: oldValue } = this
       const allRows = copy(oldValue)
-      if (allRows[rowIndex] === undefined) this.allRows[rowIndex] = {}
+      if (allRows[rowIndex] === undefined) allRows[rowIndex] = {}
       allRows[rowIndex][id] = newValue
       this.$emit('update:modelValue', allRows)
     },
