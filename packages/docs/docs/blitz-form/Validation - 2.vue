@@ -71,7 +71,7 @@ export default {
         label: 'Age',
         component: 'input',
         type: 'number',
-        parseInput: Number,
+        parseInput: (val) => Number(val),
         rules: [(val) => val >= 18 || 'You must be over 18'],
       },
       {

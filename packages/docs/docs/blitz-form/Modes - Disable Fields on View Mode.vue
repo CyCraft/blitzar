@@ -45,7 +45,7 @@ const schema = [
     component: 'input',
     type: 'range',
     label: 'Stamina',
-    parseInput: Number,
+    parseInput: (val) => Number(val),
     defaultValue: 50,
     min: 0,
     max: 100,

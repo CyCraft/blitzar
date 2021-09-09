@@ -36,7 +36,7 @@ const schema = [
     component: 'input',
     type: 'range',
     label: 'Stamina',
-    parseInput: Number,
+    parseInput: (val) => Number(val),
     defaultValue: 50,
     min: 0,
     max: 100,
@@ -47,7 +47,7 @@ const schema = [
     component: 'input',
     label: 'Power',
     subLabel: 'Fill in a number. (this will get formatted as a number in the formData)',
-    parseInput: Number,
+    parseInput: (val) => Number(val),
     type: 'number',
   },
   {

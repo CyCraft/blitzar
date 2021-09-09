@@ -20,7 +20,7 @@ const schema = [
     id: 'size.width',
     label: 'Width',
     component: 'input',
-    parseInput: Number,
+    parseInput: (val) => Number(val),
     // component props:
     type: 'number',
   },
@@ -28,7 +28,7 @@ const schema = [
     id: 'size.depth',
     label: 'Depth',
     component: 'input',
-    parseInput: Number,
+    parseInput: (val) => Number(val),
     // component props:
     type: 'number',
   },
@@ -36,7 +36,7 @@ const schema = [
     id: 'size.height',
     label: 'Height',
     component: 'input',
-    parseInput: Number,
+    parseInput: (val) => Number(val),
     // component props:
     type: 'number',
   },

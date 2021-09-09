@@ -57,7 +57,7 @@ const schema = [
     label: 'Amount',
     component: 'input',
     type: 'number',
-    parseInput: Number,
+    parseInput: (val) => Number(val),
   },
   {
     id: 'paid for',

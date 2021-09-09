@@ -184,7 +184,7 @@ With the HTML5 elements seen in the example below, the only field that understan
 
 `'disabled'` and `'raw'` mode on the other hand work out of the box with all these components.
 
-<!-- <CodeBlockComponent filename="blitz-form/Modes" /> -->
+<CodeBlockComponent filename="blitz-form/Modes" />
 
 ### Disable Fields on View Mode
 

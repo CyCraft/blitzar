@@ -23,7 +23,7 @@ const schema = [
     id: 'age',
     label: 'Age',
     component: 'input',
-    parseInput: Number,
+    parseInput: (val) => Number(val),
     rules: [(val) => val >= 18 || 'You must be over 18'],
     type: 'number',
   },

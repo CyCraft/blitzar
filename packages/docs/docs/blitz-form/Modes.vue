@@ -8,6 +8,7 @@
       <option value="raw">raw</option>
       <option value="add">add</option>
     </select>
+
     <BlitzForm :schema="schema" v-model="formData" :mode="mode" :columnCount="2" />
 
     <CodeBlock :content="`// formData\n${JSON.stringify(formData, undefined, 2)}`" />
@@ -15,8 +16,6 @@
 </template>
 
 <script>
-import Vue from 'vue'
-
 const schema = [
   {
     id: 'name',
@@ -42,7 +41,7 @@ const schema = [
     component: 'input',
     type: 'range',
     label: 'Stamina',
-    parseInput: Number,
+    parseInput: (val) => Number(val),
     defaultValue: 50,
     min: 0,
     max: 100,

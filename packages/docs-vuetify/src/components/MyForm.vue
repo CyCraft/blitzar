@@ -70,7 +70,7 @@ const schema = [
     component: 'VTextField',
     label: 'Power',
     subLabel: 'Fill in a number. (this will get formatted as a number in the formData)',
-    parseInput: Number,
+    parseInput: (val) => Number(val),
     // component props:
     type: 'number',
     suffix: 'PW',
