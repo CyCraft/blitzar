@@ -7,11 +7,6 @@
 </template>
 
 <script>
-// All components that are used in the form need to be globally registered.
-import VueCustomTooltip from '@adamdehaven/vue-custom-tooltip'
-import Vue from 'vue'
-Vue.component('VueCustomTooltip', VueCustomTooltip)
-
 const schema = [
   {
     id: 'example',
@@ -33,6 +28,7 @@ const schema = [
       label: {
         component: 'span',
         slot: {
+          // Make sure to globally register the custom component!
           component: 'VueCustomTooltip',
           slot: 'ℹ️',
           label: `Hi! I'm a tooltip! Yiiiihaaaa`,

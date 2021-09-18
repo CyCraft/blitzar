@@ -333,7 +333,7 @@ It's easy to position all labels on the left side! Just set `labelPosition="left
 
 When using left labels, by default, the label only takes up as much width as needed. It's really easy however to align all labels to be the same width. See the _**style tab**_ how this is done for the example below.
 
-<!-- <CodeBlockComponent filename="blitz-form/Styling - Left Labels" /> -->
+<CodeBlockComponent filename="blitz-form/Styling - Left Labels" />
 
 ### Custom Label Positioning
 
@@ -341,7 +341,7 @@ It's easy to overwrite the positioning of the field label, sub-label & component
 
 Look at the _**style tab**_ to see how to position the _**label on the right**_ and the sub-label on the bottom.
 
-<!-- <CodeBlockComponent filename="blitz-form/Styling - Custom Label Positioning" /> -->
+<CodeBlockComponent filename="blitz-form/Styling - Custom Label Positioning" />
 
 ### Custom Label Content
 
@@ -349,13 +349,13 @@ You can use the `label` slot to pass extra content to a field's label.
 
 In the example below we see usage of the label slot to add some extra content next to the title.
 
-<!-- <CodeBlockComponent filename="blitz-form/Styling - Custom Label Content" /> -->
+<CodeBlockComponent filename="blitz-form/Styling - Custom Label Content" />
 
 ### Raw Form Styling
 
 This example uses `mode="raw"` to show just the raw form data. Then CSS is used to style it. See the _**style tab**_.
 
-<!-- <CodeBlockComponent filename="blitz-form/Styling - Raw Form Styling" /> -->
+<CodeBlockComponent filename="blitz-form/Styling - Raw Form Styling" />
 
 ## Events
 

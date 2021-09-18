@@ -3,6 +3,7 @@ import DefaultTheme from 'vitepress/theme'
 import './variables.css'
 import './styles.css'
 
+import VueCustomTooltip from '@adamdehaven/vue-custom-tooltip'
 import { BlitzForm, BlitzListForm } from '@blitzar/form'
 import { CodeBlock } from '@planetar/code-block'
 import CodeBlockComponent from '../../../components/CodeBlockComponent.vue'
@@ -17,5 +18,6 @@ export default {
     app.component('CodeBlock', CodeBlock)
     app.component('CodeBlockComponent', CodeBlockComponent)
     app.component('BaseInput', BaseInput)
+    app.component('VueCustomTooltip', VueCustomTooltip)
   },
 }

@@ -48,7 +48,6 @@ const BlitzH = defineComponent({
             'events',
             'lang',
             'rules',
-            'label',
             'hint',
             'readonly',
             'component',
@@ -60,7 +59,11 @@ const BlitzH = defineComponent({
             return carry
           }, {}),
         },
-        children
+        {
+          default() {
+            return children
+          },
+        }
       )
     })
   },
