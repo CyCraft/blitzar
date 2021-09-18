@@ -13,7 +13,7 @@ const schema = [
     span: true,
     component: 'select',
     label: 'What is your favorite color?',
-    evaluatedProps: ['subLabel'],
+    dynamicProps: ['subLabel'],
     subLabel: (val) =>
       val === 'red'
         ? 'like the sun'

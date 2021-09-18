@@ -8,7 +8,7 @@
     title="Users"
     flat
     bordered
-    @input-cell="inputCell"
+    @update-cell="inputCell"
     tableHeaderClass="bg-stone t-caption-semi-bold"
   />
 </template>
@@ -71,7 +71,7 @@ Other general styling props you can use:
 - `cardContainerStyle`
 - `titleClass`
 
-In the example below we use conditional rowStyle and cardStyle as Evaluated Props. Try changing the team colors!
+In the example below we use conditional rowStyle and cardStyle as Dynamic Props. Try changing the team colors!
  */
 export default {
   components: { BlitzTable },

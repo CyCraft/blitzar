@@ -9,7 +9,7 @@
   },
   "blitz-field/defaultValue": {
     "type": "(formData: Record<string, any>, formContext: FormContext) => any | any",
-    "description": "A defaultValue value to be used when the `value` is `undefined`.\n\nYou can also pass a function that will receive two params you can work with: `(formData, context)`\n- `formData` is the value object of your BlitzForm. This will be undefined when BlitzField is used as stand-alone (without BlitzForm) unless you manually pass it.\n- `context` is either your BlitzForm or BlitzField context with many usefull props. See the documentation on Evaluated Props for more info."
+    "description": "A defaultValue value to be used when the `value` is `undefined`.\n\nYou can also pass a function that will receive two params you can work with: `(formData, context)`\n- `formData` is the value object of your BlitzForm. This will be undefined when BlitzField is used as stand-alone (without BlitzForm) unless you manually pass it.\n- `context` is either your BlitzForm or BlitzField context with many usefull props. See the documentation on Dynamic Props for more info."
   },
   "blitz-field/parseValue": {
     "type": "(val: any) => any",
@@ -65,9 +65,9 @@
     "type": "((val: any) => (true | string))[] | EvaluatedProp<((val: any) => (true | string))[]>",
     "description": "An array of rule functions that receive the value of the field as parameter and should return `true` if the rule passes or a `string` if the rule fails. The string represents the error message that is then shown underneath the field in red."
   },
-  "blitz-field/evaluatedProps": {
+  "blitz-field/dynamicProps": {
     "type": "array",
-    "description": "An array with prop names that should be treated as Evaluated Props when passed a function.\n\nThis prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields)."
+    "description": "An array with prop names that should be treated as Dynamic Props when passed a function.\n\nThis prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields)."
   },
   "blitz-field/internalLabels": {
     "type": "boolean | undefined | EvaluatedProp<boolean | undefined>",
@@ -129,19 +129,19 @@
   },
   "blitz-field/formData": {
     "type": "array",
-    "description": "This is the *nested* data of all the fields inside a BlitzForm. (When using BlitzListForm as standalone, this is an array.)\n\nIt's not something you can pass via the schema, but something that BlitzForm will automatically pass to each of its fields so you can use it in Evaluated Props."
+    "description": "This is the *nested* data of all the fields inside a BlitzForm. (When using BlitzListForm as standalone, this is an array.)\n\nIt's not something you can pass via the schema, but something that BlitzForm will automatically pass to each of its fields so you can use it in Dynamic Props."
   },
   "blitz-field/formDataFlat": {
     "type": "Record<string, any>",
-    "description": "This is the *flattened* data of all the fields inside a BlitzForm.\n\nIt's not something you can pass via the schema, but something that BlitzForm will automatically pass to each of its fields so you can use it in Evaluated Props."
+    "description": "This is the *flattened* data of all the fields inside a BlitzForm.\n\nIt's not something you can pass via the schema, but something that BlitzForm will automatically pass to each of its fields so you can use it in Dynamic Props."
   },
   "blitz-field/formId": {
     "type": "string",
-    "description": "A manually set 'id' of the BlitzForm. This only exists if you passed an id directly to the BlitzForm.\n\nIt's not something you can pass via the schema, but something that BlitzForm will automatically pass to each of its fields so you can use it in Evaluated Props."
+    "description": "A manually set 'id' of the BlitzForm. This only exists if you passed an id directly to the BlitzForm.\n\nIt's not something you can pass via the schema, but something that BlitzForm will automatically pass to each of its fields so you can use it in Dynamic Props."
   },
   "blitz-field/formMode": {
     "type": "string",
-    "description": "The `mode` of the BlitzForm. A BlitzField inherits the `mode` from the `BlitzForm` via its `mode` prop; however, if you had manually overwritten the mode to be something else, `formMode` can be used to check the current mode of the form. This can be useful inside an evaluated Prop.\n\nIt's not something you can pass via the schema, but something that BlitzForm will automatically pass to each of its fields so you can use it in Evaluated Props.",
+    "description": "The `mode` of the BlitzForm. A BlitzField inherits the `mode` from the `BlitzForm` via its `mode` prop; however, if you had manually overwritten the mode to be something else, `formMode` can be used to check the current mode of the form. This can be useful inside an evaluated Prop.\n\nIt's not something you can pass via the schema, but something that BlitzForm will automatically pass to each of its fields so you can use it in Dynamic Props.",
     "options": [
       "edit",
       "view",
@@ -150,33 +150,33 @@
       "add"
     ]
   },
-  "blitz-field/fieldInput": {
+  "blitz-field/updateField": {
     "type": "(val: any, formContext: FormContext) => void",
-    "description": "The `fieldInput` function of BlitzForm. Is passed so it can be used in events. Eg.: `events: { input: (value, { fieldInput } => fieldInput({ id: 'otherField', value }))}`\n\nIt's not something you can pass via the schema, but something that BlitzForm will automatically pass to each of its fields so you can use it in Evaluated Props."
+    "description": "The `updateField` function of BlitzForm. Is passed so it can be used in events. Eg.: `events: { 'update:modelValue': (value, { updateField } => updateField({ id: 'otherField', value }))}`\n\nIt's not something you can pass via the schema, but something that BlitzForm will automatically pass to each of its fields so you can use it in Dynamic Props."
   },
   "blitz-field/rowInput": {
     "type": "(val: any, formContext: FormContext) => void",
-    "description": "(only present in BlitzListForm!)\nThe `rowInput` function of BlitzForm. Is passed so it can be used in events. Eg.: `events: { input: (value, { fieldInput } => fieldInput({ id: 'otherField', value }))}`\n\nIt's not something you can pass via the schema, but something that BlitzListForm will automatically pass to each of its fields so you can use it in Evaluated Props."
+    "description": "(only present in BlitzListForm!)\nThe `rowInput` function of BlitzForm. Is passed so it can be used in events. Eg.: `events: { 'update:modelValue': (value, { updateField } => updateField({ id: 'otherField', value }))}`\n\nIt's not something you can pass via the schema, but something that BlitzListForm will automatically pass to each of its fields so you can use it in Dynamic Props."
   },
   "blitz-field/rowIndex": {
     "type": "number",
-    "description": "(only present in BlitzListForm!)\nThe current row index of this field.\n\nIt's not something you can pass via the schema, but something that BlitzListForm will automatically pass to each of its fields so you can use it in Evaluated Props."
+    "description": "(only present in BlitzListForm!)\nThe current row index of this field.\n\nIt's not something you can pass via the schema, but something that BlitzListForm will automatically pass to each of its fields so you can use it in Dynamic Props."
   },
   "blitz-field/rowData": {
     "type": "Record<string, any>",
-    "description": "(only present in BlitzListForm!)\nThis is the *nested* data of all the fields of the row.\n\nIt's not something you can pass via the schema, but something that BlitzListForm will automatically pass to each of its fields so you can use it in Evaluated Props."
+    "description": "(only present in BlitzListForm!)\nThis is the *nested* data of all the fields of the row.\n\nIt's not something you can pass via the schema, but something that BlitzListForm will automatically pass to each of its fields so you can use it in Dynamic Props."
   },
   "blitz-field/deleteRow": {
     "type": "() => void",
-    "description": "(only present in BlitzListForm!)\nThis is a function that you can call to delete the row.\n\nIt's not something you can pass via the schema, but something that BlitzListForm will automatically pass to each of its fields so you can use it in Evaluated Props."
+    "description": "(only present in BlitzListForm!)\nThis is a function that you can call to delete the row.\n\nIt's not something you can pass via the schema, but something that BlitzListForm will automatically pass to each of its fields so you can use it in Dynamic Props."
   },
   "blitz-form/value": {
     "type": "Record<string, any>",
-    "description": "An object with the data of the entire form. The object keys are the ids of the fields passed in the `schema`.\n\nTo be used with `:value` or `v-model`."
+    "description": "An object with the data of the entire form. The object keys are the ids of the fields passed in the `schema`.\n\nTo be used with `:modelValue` or `v-model`."
   },
   "blitz-form/id": {
     "type": "string",
-    "description": "A manually set `id` of the BlitzForm. This prop is accessible in the `context` (as `formId`) of any Evaluated Prop and event.\n\nRead more on Evaluated Props in its dedicated page."
+    "description": "A manually set `id` of the BlitzForm. This prop is accessible in the `context` (as `formId`) of any Evaluated Prop and event.\n\nRead more on Dynamic Props in its dedicated page."
   },
   "blitz-form/schema": {
     "type": "array",
@@ -249,9 +249,9 @@
     "type": "string | Record<string, boolean> | (string | Record<string, boolean>)[] | EvaluatedProp<string | Record<string, boolean> | (string | Record<string, boolean>)[]>",
     "description": "Custom classes to be applied to the label of BlitzField. Applied like so `:class=\"labelClasses\"`. Can be an Evaluated Prop.\n\nThis prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields)."
   },
-  "blitz-form/evaluatedProps": {
+  "blitz-form/dynamicProps": {
     "type": "array",
-    "description": "An array with prop names that should be treated as Evaluated Props when passed a function.\n\nThis prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields)."
+    "description": "An array with prop names that should be treated as Dynamic Props when passed a function.\n\nThis prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields)."
   },
   "blitz-form/internalLabels": {
     "type": "boolean | undefined",
@@ -281,7 +281,7 @@
   },
   "blitz-list-form/attrsToPass": {
     "type": "array",
-    "description": "A list of prop (attribute) names to be passed on to each single BlitzField generated in the list form.\n\nThis is useful when you want to use Evaluated Props in the schema of the mine form but need information from the top level BlitzForm."
+    "description": "A list of prop (attribute) names to be passed on to each single BlitzField generated in the list form.\n\nThis is useful when you want to use Dynamic Props in the schema of the mine form but need information from the top level BlitzForm."
   },
   "blitz-list-form/internalErrorsFor": {
     "type": "array",

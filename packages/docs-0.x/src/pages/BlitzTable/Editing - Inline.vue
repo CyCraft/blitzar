@@ -8,7 +8,7 @@
       title="My Lessons"
       flat
       bordered
-      @input-cell="inputCell"
+      @update-cell="inputCell"
     />
   </div>
 </template>
@@ -92,7 +92,7 @@ const schemaColumns = [
     id: 'img',
     label: 'Image',
     component: 'img',
-    evaluatedProps: ['src'],
+    dynamicProps: ['src'],
     src: (val) => val,
   },
   {

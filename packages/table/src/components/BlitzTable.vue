@@ -1,8 +1,8 @@
 <template>
   <QTable
+    v-bind="qTableProps"
     :class="`blitz-table ${qTableProps.grid ? 'blitz-table--grid' : 'blitz-table--rows'}`"
     :tableHeaderClass="qTableProps.tableHeaderClass + ` blitz-table__header`"
-    v-bind="qTableProps"
     :selected.sync="cSelected"
     :pagination.sync="pagination"
     v-on="$listeners"
@@ -16,10 +16,10 @@
         </slot>
         <slot name="top-right">
           <BlitzField
-            class="blitz-table__action-button"
             v-for="(blueprint, i) in cActionButtons"
             :key="blueprint.id || i"
             v-bind="blueprint"
+            class="blitz-table__action-button"
             v-on="blueprint.events"
           />
         </slot>
@@ -31,15 +31,15 @@
       v-for="slot in Object.keys($scopedSlots).filter((slot) => !slot.includes('top'))"
       v-slot:[slot]="scope"
     >
-      <slot :name="slot" v-bind="scope" />
+      <slot v-bind="scope" :name="slot" />
     </template>
     <!-- header for just the multiple selection -->
     <template v-slot:header-selection>
       <div class="_table-selection-cell" v-if="selectionMode">
         <BlitzField
-          class="js-blitz-header-selection"
           v-bind="{ ...selectionComponentProps, value: allRowsAreSelected }"
-          @input="setSelectionAllRows"
+          class="js-blitz-header-selection"
+          @update:modelValue="setSelectionAllRows"
         />
       </div>
     </template>
@@ -57,11 +57,11 @@
         :style="evaluate(rowStyle, rowProps)"
         :formComponent="QTr"
         :schema="schemaColumns"
-        :value="rowProps.row"
+        :modelValue="rowProps.row"
         :id="rowProps.row.id"
         :mode="mode"
         :key="rowProps.row.id + JSON.stringify(rowProps.row)"
-        @field-input="({ id, value, origin }) => onInputCell(rowProps.row.id, id, value, origin)"
+        @update-field="({ id, value, origin }) => onInputCell(rowProps.row.id, id, value, origin)"
       >
         <template v-slot="blitzFormCtx">
           <QTd v-if="selectionMode" auto-width>
@@ -88,8 +88,8 @@
                   subLabel: undefined,
                   component: colBlueprint.component || 'div',
                 }"
-                :value="blitzFormCtx.formDataFlat[colBlueprint.id]"
-                @input="(val, origin) => onInputCell(rowProps.row.id, colBlueprint.id, val, origin)"
+                :modelValue="blitzFormCtx.formDataFlat[colBlueprint.id]"
+                @update:modelValue="(val, origin) => onInputCell(rowProps.row.id, colBlueprint.id, val, origin)"
               />
             </div>
           </QTd>
@@ -98,7 +98,7 @@
     </template>
     <!-- Grid item -->
     <template v-slot:item="gridItemProps">
-      <slot name="item" v-bind="gridItemProps">
+      <slot v-bind="gridItemProps" name="item">
         <QCard
           v-if="schemaGrid"
           :class="
@@ -116,11 +116,11 @@
           :bordered="qTableProps.bordered"
         >
           <BlitzForm
-            :key="gridItemProps.row.id + JSON.stringify(gridItemProps.row)"
-            :value="gridItemProps.row"
-            :id="gridItemProps.row.id"
             v-bind="gridBlitzFormProps"
-            @field-input="
+            :key="gridItemProps.row.id + JSON.stringify(gridItemProps.row)"
+            :modelValue="gridItemProps.row"
+            :id="gridItemProps.row.id"
+            @update-field="
               ({ id: colId, value, origin }) =>
                 onInputCell(gridItemProps.row.id, colId, value, origin)
             "
@@ -462,7 +462,7 @@ export default {
       const defaultsGridButton = {
         component: BlitzGridListToggle,
         value: this.gridModeEnabled,
-        events: { input: (newVal) => (this.gridModeEnabled = newVal) },
+        events: { 'update:modelValue': (newVal) => (this.gridModeEnabled = newVal) },
       }
       return actionButtons
         .map((btn) => {
@@ -514,10 +514,10 @@ export default {
       this.event('row-click', event, rowData)
     },
     onInputCell(rowId, colId, value, origin) {
-      this.event('input-cell', { rowId, colId, value, origin })
+      this.event('update-cell', { rowId, colId, value, origin })
     },
     /**
-     * @param {'update:pagination' | 'update:selected' | 'row-click' | 'row-dblclick' | 'cell-click' | 'cell-dblclick' | 'input-cell'} eventName
+     * @param {'update:pagination' | 'update:selected' | 'row-click' | 'row-dblclick' | 'cell-click' | 'cell-dblclick' | 'update-cell'} eventName
      * @param {...any[]} args
      */
     event(eventName, ...args) {
@@ -577,12 +577,12 @@ export default {
          */
         this.$emit('cell-dblclick', ...args)
       }
-      if (eventName === 'input-cell') {
+      if (eventName === 'update-cell') {
         /**
          * Emitted when the user updates the cell, if rendered as editable by setting `mode: 'edit'` in the schema.
          * @property {{ rowId: string, colId: string, value: any, origin?: string }} payload
          */
-        this.$emit('input-cell', ...args)
+        this.$emit('update-cell', ...args)
       }
     },
   },

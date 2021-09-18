@@ -38,7 +38,7 @@ const schema = [
     events: {
       click: (e, { deleteRow }) => deleteRow(),
     },
-    evaluatedProps: ['disabled'],
+    dynamicProps: ['disabled'],
     disabled: (val, { rowIndex, formData }) => rowIndex === formData.length,
     componentClasses: 'delete-button',
   },

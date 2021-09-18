@@ -78,7 +78,7 @@ export default defineComponent({
     /**
      * A list of prop (attribute) names to be passed on to each single BlitzField generated in the list form.
      *
-     * This is useful when you want to use Evaluated Props in the schema of the mine form but need information from the top level BlitzForm.
+     * This is useful when you want to use Dynamic Props in the schema of the mine form but need information from the top level BlitzForm.
      * @example ['formData', 'mode', 'myCustomProp']
      * @category content
      */
@@ -90,7 +90,7 @@ export default defineComponent({
         'formId',
         'formMode',
         'mode',
-        'fieldInput',
+        'updateField',
         'lang',
       ],
     },

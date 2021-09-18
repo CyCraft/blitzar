@@ -31,7 +31,7 @@
           :key="`${field.id}-${i}`"
           v-bind="{ ...field, span: undefined }"
           :modelValue="formDataFlat[field.id]"
-          @update:modelValue="(value, origin) => fieldInput({ id: field.id, value, origin })"
+          @update:modelValue="(value, origin) => updateField({ id: field.id, value, origin })"
           :style="
             field.span
               ? `grid-column: ${field.span === true ? '1 / -1' : `span ${field.span}`}`
@@ -120,7 +120,7 @@ export default defineComponent({
     /**
      * A manually set `id` of the BlitzForm. This prop is accessible in the `context` (as `formId`) of any Evaluated Prop and event.
      *
-     * Read more on Evaluated Props in its dedicated page.
+     * Read more on Dynamic Props in its dedicated page.
      * @type {string}
      * @category model
      */
@@ -257,13 +257,13 @@ export default defineComponent({
      */
     labelClasses: { type: [Object, Array, String, Function] },
     /**
-     * An array with prop names that should be treated as Evaluated Props when passed a function.
+     * An array with prop names that should be treated as Dynamic Props when passed a function.
      *
      * This prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).
      * @type {string[]}
      * @category behavior
      */
-    evaluatedProps: {
+    dynamicProps: {
       type: Array,
       default: () => [
         'component',
@@ -322,7 +322,7 @@ export default defineComponent({
     /**
      * @param {{ id: string, value: any, origin?: 'default' | 'cancel' | '' }} payload
      */
-    'field-input': (payload) => isPlainObject(payload),
+    'update-field': (payload) => isPlainObject(payload),
     /**
      * @param {'default' | 'cancel' | '' | undefined} origin
      */
@@ -395,12 +395,12 @@ export default defineComponent({
         // used here & pass
         lang: innerLang,
         mode: innerMode,
-        fieldInput: this.fieldInput,
+        updateField: this.updateField,
         // just pass
         labelPosition: this.labelPosition,
         labelStyle: this.labelStyle,
         labelClasses: this.labelClasses,
-        evaluatedProps: this.evaluatedProps,
+        dynamicProps: this.dynamicProps,
         internalLabels: this.internalLabels,
         internalErrors: this.internalErrors,
       }
@@ -495,7 +495,7 @@ export default defineComponent({
     actionButtonsSchema() {
       const { actionButtons, schemaForcedDefaults, actionButtonsMap, formDataFlat, innerLang } =
         this
-      const overwritableDefaults = { lang: innerLang, fieldInput: this.fieldInput }
+      const overwritableDefaults = { lang: innerLang, updateField: this.updateField }
       return actionButtons.map((blueprint) => {
         const _bp = isString(blueprint) ? actionButtonsMap[blueprint] : blueprint
         const slotsOverwrite = !_bp.slot
@@ -506,7 +506,7 @@ export default defineComponent({
           ? {}
           : {
               events: {
-                'update:modelValue': (value, origin) => fieldInput({ id: field.id, value, origin }),
+                'update:modelValue': (value, origin) => updateField({ id: field.id, value, origin }),
               },
             }
         const overwrites = {
@@ -539,7 +539,7 @@ export default defineComponent({
   methods: {
     isFullString,
     /**
-     * @param {'update:mode' | 'field-input' | 'input' | 'edit' | 'cancel' | 'save' | 'delete' | 'archive'} eventName
+     * @param {'update:mode' | 'update-field' | 'update:modelValue' | 'edit' | 'cancel' | 'save' | 'delete' | 'archive'} eventName
      * @param {any} payload
      * @param {'default' | 'cancel' | '' | undefined} origin
      */
@@ -551,21 +551,21 @@ export default defineComponent({
          */
         this.$emit('update:mode', payload)
       }
-      if (eventName === 'field-input') {
+      if (eventName === 'update-field') {
         /**
          * This event triggers every time a field gets updated.
          *
          * The payload is an object with `id` for the field id and `value` as the new value.
          *
-         * The `origin` prop of the event payload is what caused field-input event:
+         * The `origin` prop of the event payload is what caused update-field event:
          * - `'default'` means that the event was emitted when the form was mounted and all fields have initialised their default values.
          * - `'cancel'` means that the 'cancel' button was clicked and the event data was reset to what it was before it was edited.
-         * - field-input events from user input won't have an origin.
-         * - A custom origin can be added when you execute `fieldInput` from inside an evaluatuated prop.
+         * - update-field events from user input won't have an origin.
+         * - A custom origin can be added when you execute `updateField` from inside an evaluatuated prop.
          *
          * @property {{ id: string, value: any, origin?: 'default' | 'cancel' | '' }} payload event payload
          */
-        this.$emit('field-input', payload)
+        this.$emit('update-field', payload)
       }
       if (eventName === 'update:modelValue') {
         /**
@@ -610,7 +610,7 @@ export default defineComponent({
         this.$emit('archive')
       }
     },
-    fieldInput({ id, value, origin }) {
+    updateField({ id, value, origin }) {
       // do not emit anything when the field had no `id` on its schema blueprint
       if (id === undefined) return
       // no idea why I do this:
@@ -619,8 +619,8 @@ export default defineComponent({
       if (!this.editedFields.includes(id)) this.editedFields.push(id)
       // set the new value onto the formData (might be an empty object)
       this.formDataFlat[id] = value
-      // emit `field-input` with field's id and new data
-      this.event('field-input', { id, value, origin })
+      // emit `update-field` with field's id and new data
+      this.event('update-field', { id, value, origin })
       // emit `update:modelValue` with entire formData
       this.event('update:modelValue', this.formData, origin) // do not extract `this` from here
       // if the form has a formErrorMsg, validate gain to check to see if it's solved
@@ -645,8 +645,8 @@ export default defineComponent({
       this.resetState()
       const origin = 'cancel'
       Object.entries(this.formDataFlat).forEach(([id, value]) => {
-        // emit `field-input` with field's id and new data
-        this.event('field-input', { id, value, origin })
+        // emit `update-field` with field's id and new data
+        this.event('update-field', { id, value, origin })
       })
       // emit `update:modelValue` with entire formData
       this.event('update:modelValue', this.formData, origin) // do not extract `this` from here

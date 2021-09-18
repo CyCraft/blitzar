@@ -14,8 +14,8 @@ const schema = [
     label: 'Phone nr (hyphenated)',
     subLabel: 'Type any number with `-` or `(  )`',
     events: {
-      input: (val, { fieldInput }) =>
-        fieldInput({ id: 'telClean', value: !val ? '' : val.replace(/[^\d]/g, '').trim() }),
+      'update:modelValue': (val, { updateField }) =>
+        updateField({ id: 'telClean', value: !val ? '' : val.replace(/[^\d]/g, '').trim() }),
     },
   },
   {

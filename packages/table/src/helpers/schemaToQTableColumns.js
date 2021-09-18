@@ -21,8 +21,8 @@ export function schemaToQTableColumns(schema) {
     const field = (row) => {
       const value = getProp(row, id)
       // todo: can I retrieve the BlitzField context? should I?
-      const blitzFieldContext = { formData: row, fieldInput: () => {} }
-      // fieldInput has a chance to be triggered on `parseValue`, and thus needs to be added as fn to make sure it exists on the context but does nothing. We don't want to trigger fieldInput on sorting, therefore it must be an empty fn.
+      const blitzFieldContext = { formData: row, updateField: () => {} }
+      // updateField has a chance to be triggered on `parseValue`, and thus needs to be added as fn to make sure it exists on the context but does nothing. We don't want to trigger updateField on sorting, therefore it must be an empty fn.
       const valueOrDefaultValue = !isUndefined(value)
         ? value
         : isFunction(defaultValue)

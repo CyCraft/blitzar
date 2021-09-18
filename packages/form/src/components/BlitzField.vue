@@ -182,7 +182,7 @@ function evaluateProp(propValue, componentValue, componentInstance) {
  * @typedef FormContext
  * @type {{
   formData: Record<string, any>,
-  fieldInput: (payload: { id: string, value: any }) => void,
+  updateField: (payload: { id: string, value: any }) => void,
   [key: string]: any
 }}
  */
@@ -225,7 +225,7 @@ export default defineComponent({
      *
      * You can also pass a function that will receive two params you can work with: `(formData, context)`
      * - `formData` is the `modelValue` object of your BlitzForm. This will be undefined when BlitzField is used as stand-alone (without BlitzForm) unless you manually pass it.
-     * - `context` is either your BlitzForm or BlitzField context with many usefull props. See the documentation on Evaluated Props for more info.
+     * - `context` is either your BlitzForm or BlitzField context with many usefull props. See the documentation on Dynamic Props for more info.
      * @type {(formData: Record<string, any>, formContext: FormContext) => any | any}
      * @category model
      */
@@ -334,13 +334,13 @@ export default defineComponent({
      */
     rules: { type: [Array, Function], default: () => [] },
     /**
-     * An array with prop names that should be treated as Evaluated Props when passed a function.
+     * An array with prop names that should be treated as Dynamic Props when passed a function.
      *
      * This prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).
      * @type {string[]}
      * @category behavior
      */
-    evaluatedProps: {
+    dynamicProps: {
       type: Array,
       default: () => [
         'component',
@@ -461,7 +461,7 @@ export default defineComponent({
     /**
      * This is the *nested* data of all the fields inside a BlitzForm. (When using BlitzListForm as standalone, this is an array.)
      *
-     * It's not something you can pass via the schema, but something that BlitzForm will automatically pass to each of its fields so you can use it in Evaluated Props.
+     * It's not something you can pass via the schema, but something that BlitzForm will automatically pass to each of its fields so you can use it in Dynamic Props.
      * @type {Record<string, any> | Record<string, any>[]}
      * @category readonly
      */
@@ -469,7 +469,7 @@ export default defineComponent({
     /**
      * This is the *flattened* data of all the fields inside a BlitzForm.
      *
-     * It's not something you can pass via the schema, but something that BlitzForm will automatically pass to each of its fields so you can use it in Evaluated Props.
+     * It's not something you can pass via the schema, but something that BlitzForm will automatically pass to each of its fields so you can use it in Dynamic Props.
      * @type {Record<string, any>}
      * @category readonly
      */
@@ -477,7 +477,7 @@ export default defineComponent({
     /**
      * A manually set 'id' of the BlitzForm. This only exists if you passed an id directly to the BlitzForm.
      *
-     * It's not something you can pass via the schema, but something that BlitzForm will automatically pass to each of its fields so you can use it in Evaluated Props.
+     * It's not something you can pass via the schema, but something that BlitzForm will automatically pass to each of its fields so you can use it in Dynamic Props.
      * @type {string}
      * @category readonly
      */
@@ -485,24 +485,24 @@ export default defineComponent({
     /**
      * The `mode` of the BlitzForm. A BlitzField inherits the `mode` from the `BlitzForm` via its `mode` prop; however, if you had manually overwritten the mode to be something else, `formMode` can be used to check the current mode of the form. This can be useful inside an evaluated Prop.
      *
-     * It's not something you can pass via the schema, but something that BlitzForm will automatically pass to each of its fields so you can use it in Evaluated Props.
+     * It's not something you can pass via the schema, but something that BlitzForm will automatically pass to each of its fields so you can use it in Dynamic Props.
      * @type {'edit' | 'view' | 'disabled' | 'raw' | 'add'}
      * @category readonly
      */
     formMode: { type: String },
     /**
-     * The `fieldInput` function of BlitzForm. Is passed so it can be used in events. Eg.: `events: { '@update:modelValue': (value, { fieldInput } => fieldInput({ id: 'otherField', value }))}`
+     * The `updateField` function of BlitzForm. Is passed so it can be used in events. Eg.: `events: { '@update:modelValue': (value, { updateField } => updateField({ id: 'otherField', value }))}`
      *
-     * It's not something you can pass via the schema, but something that BlitzForm will automatically pass to each of its fields so you can use it in Evaluated Props.
+     * It's not something you can pass via the schema, but something that BlitzForm will automatically pass to each of its fields so you can use it in Dynamic Props.
      * @type {(val: any, formContext: FormContext) => void}
      * @category readonly
      */
-    fieldInput: { type: Function },
+    updateField: { type: Function },
     /**
      * (only present in BlitzListForm!)
-     * The `rowInput` function of BlitzForm. Is passed so it can be used in events. Eg.: `events: { '@update:modelValue': (value, { fieldInput } => fieldInput({ id: 'otherField', value }))}`
+     * The `rowInput` function of BlitzForm. Is passed so it can be used in events. Eg.: `events: { '@update:modelValue': (value, { updateField } => updateField({ id: 'otherField', value }))}`
      *
-     * It's not something you can pass via the schema, but something that BlitzListForm will automatically pass to each of its fields so you can use it in Evaluated Props.
+     * It's not something you can pass via the schema, but something that BlitzListForm will automatically pass to each of its fields so you can use it in Dynamic Props.
      * @type {(val: any, formContext: FormContext) => void}
      * @category readonly
      */
@@ -511,7 +511,7 @@ export default defineComponent({
      * (only present in BlitzListForm!)
      * The current row index of this field.
      *
-     * It's not something you can pass via the schema, but something that BlitzListForm will automatically pass to each of its fields so you can use it in Evaluated Props.
+     * It's not something you can pass via the schema, but something that BlitzListForm will automatically pass to each of its fields so you can use it in Dynamic Props.
      * @type {number}
      * @category readonly
      */
@@ -520,7 +520,7 @@ export default defineComponent({
      * (only present in BlitzListForm!)
      * This is the *nested* data of all the fields of the row.
      *
-     * It's not something you can pass via the schema, but something that BlitzListForm will automatically pass to each of its fields so you can use it in Evaluated Props.
+     * It's not something you can pass via the schema, but something that BlitzListForm will automatically pass to each of its fields so you can use it in Dynamic Props.
      * @type {Record<string, any>}
      * @category readonly
      */
@@ -529,7 +529,7 @@ export default defineComponent({
      * (only present in BlitzListForm!)
      * This is a function that you can call to delete the row.
      *
-     * It's not something you can pass via the schema, but something that BlitzListForm will automatically pass to each of its fields so you can use it in Evaluated Props.
+     * It's not something you can pass via the schema, but something that BlitzListForm will automatically pass to each of its fields so you can use it in Dynamic Props.
      * @type {() => void}
      * @category readonly
      */
@@ -560,8 +560,8 @@ export default defineComponent({
   },
   methods: {
     evalPropOrAttr(propOrAttr) {
-      const { evaluatedPropsDataObject } = this
-      if (propOrAttr in evaluatedPropsDataObject) return evaluatedPropsDataObject[propOrAttr]
+      const { dynamicPropsDataObject } = this
+      if (propOrAttr in dynamicPropsDataObject) return dynamicPropsDataObject[propOrAttr]
       if (propOrAttr in this) return this[propOrAttr]
       return this.$attrs[propOrAttr]
     },
@@ -598,10 +598,10 @@ export default defineComponent({
         this.event('update:modelValue', val, ...otherArguments)
       },
     },
-    evaluatedPropsDataObject() {
-      const { evaluatedProps, cValue } = this
+    dynamicPropsDataObject() {
+      const { dynamicProps, cValue } = this
       const context = this
-      return evaluatedProps.reduce((carry, propKey) => {
+      return dynamicProps.reduce((carry, propKey) => {
         if (propKey === 'slots' || propKey === 'slot') {
           const slotsValue = 'slots' in context ? context['slots'] : context.$attrs['slots']
           carry['slots'] = isPlainObject(slotsValue)

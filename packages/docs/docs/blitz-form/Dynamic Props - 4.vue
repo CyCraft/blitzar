@@ -28,10 +28,8 @@ const carData = [
 
 const uniqueValues = (array) => ['', ...new Set(array)]
 
-const mapForSelect = (value) => ({ component: 'option', value, slot: value })
-
-const clearFields = (fieldIds, fieldInput) => {
-  fieldIds.forEach((id) => fieldInput({ id, value: '' }))
+const clearFields = (fieldIds, updateField) => {
+  fieldIds.forEach((id) => updateField({ id, value: '' }))
 }
 
 const schema = [
@@ -41,61 +39,62 @@ const schema = [
     component: 'select',
     events: {
       // clear fields right from input to prevent invalid data
-      input: (val, { fieldInput }) => clearFields(['make', 'model', 'trim'], fieldInput),
+      'update:modelValue': (val, { updateField }) =>
+        clearFields(['make', 'model', 'trim'], updateField),
     },
     // component props:
-    slot: uniqueValues(carData.map((d) => d.year)).map(mapForSelect),
+    slot: uniqueValues(carData.map((d) => d.year)).map((value) => ({
+      component: 'option',
+      value,
+      slot: value,
+    })),
   },
   {
     id: 'make',
     label: 'Make',
     component: 'select',
-    evaluatedProps: ['slot'],
+    dynamicProps: ['slot'],
     events: {
       // clear fields right from input to prevent invalid data
-      input: (val, { fieldInput }) => clearFields(['model', 'trim'], fieldInput),
+      'update:modelValue': (val, { updateField }) => clearFields(['model', 'trim'], updateField),
     },
     // component props:
     slot: (val, { formData }) => {
       const { year } = formData || {}
-      const result = uniqueValues(
-        carData.filter((car) => car.year === year).map((d) => d.make)
-      ).map(mapForSelect)
-      return uniqueValues(carData.filter((car) => car.year === year).map((d) => d.make)).map(
-        mapForSelect
-      )
+      const makes = carData.filter((car) => car.year === year).map((d) => d.make)
+      return uniqueValues(makes).map((value) => ({ component: 'option', value, slot: value }))
     },
   },
   {
     id: 'model',
     label: 'Model',
     component: 'select',
-    evaluatedProps: ['slot'],
+    dynamicProps: ['slot'],
     events: {
       // clear fields right from input to prevent invalid data
-      input: (val, { fieldInput }) => clearFields(['trim'], fieldInput),
+      'update:modelValue': (val, { updateField }) => clearFields(['trim'], updateField),
     },
     // component props:
     slot: (val, { formData }) => {
       const { year, make } = formData || {}
-      return uniqueValues(
-        carData.filter((car) => car.year === year && car.make === make).map((d) => d.model)
-      ).map(mapForSelect)
+      const models = carData
+        .filter((car) => car.year === year && car.make === make)
+        .map((d) => d.model)
+      return uniqueValues(models).map((value) => ({ component: 'option', value, slot: value }))
     },
   },
   {
     id: 'trim',
     label: 'Trim',
     component: 'select',
-    evaluatedProps: ['slot'],
+    dynamicProps: ['slot'],
     // component props:
     slot: (val, { formData }) => {
       const { year, make, model } = formData || {}
-      return uniqueValues(
-        carData
-          .filter((car) => car.year === year && car.make === make && car.model === model)
-          .map((d) => d.trim)
-      ).map(mapForSelect)
+      const trims = carData
+        .filter((car) => car.year === year && car.make === make && car.model === model)
+        .map((d) => d.trim)
+      return uniqueValues(trims).map((value) => ({ component: 'option', value, slot: value }))
     },
   },
 ]

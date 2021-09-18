@@ -41,7 +41,7 @@ The form below uses regular HTML `input` and `select` fields. You can change the
 There are three ways to retrieve the data that a user fills in a BlitzForm.
 
 1. You can pass an empty object as `v-model`<br />In this case BlitzForms will populate an object with the field's `id` as key and the user input as value.
-2. You can listen to the `@field-input` event which triggers every time a field's value changes. It's payload is an object that looks like: `{id, value}`.
+2. You can listen to the `@update-field` event which triggers every time a field's value changes. It's payload is an object that looks like: `{id, value}`.
 3. You can listen to the `@save` event which is triggered when the form's save button is pressed. It's payload is an object that looks like: `{newData, oldData}`. For more info see the [Action Buttons documentation](#action-buttons).
 
 ### Advanced Example
@@ -189,7 +189,7 @@ With the HTML5 elements seen in the example below, the only field that understan
 
 It's also possible you just use the `disabled` prop for fields that don't handle `readonly`.
 
-In this example below you can see how easy this is by using an Evaluated Prop for `disabled`. (Read more on [Evaluated Props](#evaluated-props) down below)
+In this example below you can see how easy this is by using an Evaluated Prop for `disabled`. (Read more on [Dynamic Props](#evaluated-props) down below)
 
 However, in reality it's cleaner you just add the `readonly` prop to your Vue components, or if you use a component library, create a wrapper components for them.
 
@@ -261,7 +261,7 @@ actionButtons: [
 ```
 
 Being able to show/hide these button based on the `formData` can be very powerful.
-Be sure to check out the [Evaluated Props](#evaluated-props) and [Events](#events) documentation.
+Be sure to check out the [Dynamic Props](#evaluated-props) and [Events](#events) documentation.
 
 <CodeBlockComponent filename="blitz-form/Action Buttons - Custom Action Buttons" />
 
@@ -293,10 +293,10 @@ Eg. a field with ID `size.width` points to `{size: {width}}` in your data.
 
 Besides writing your field IDs with dot notation, nothing further needs to be done.
 
-The only thing you need to be careful with is the `@field-input` event:
+The only thing you need to be careful with is the `@update-field` event:
 
-- Listening to the `@input` event will always return the full data nested
-- Listening to the `@field-input` event will always have the field ID with dot-notation in its payload
+- Listening to the `@update:modelValue` event will always return the full data nested
+- Listening to the `@update-field` event will always have the field ID with dot-notation in its payload
 
 Try typing something in the example below:
 
@@ -366,15 +366,15 @@ There are both form and field events.
 
 ### Form Events
 
-You can listen to the `@input` event on a `<BlitzForm />` which will trigger each time the `formData` is changed. This makes BlitzForm usable with `v-model`.
+A BlitzForm is usable with `v-model`. You can also listen to the `@update:modelValue` event that is triggered any time some `formData` changes.
 
-There is also an `@field-input` event you can listen to which will trigger every time you type something in a specific field.
-
-(For more info on all possible events take a look at the [Api Card](#api-card) down below.)
+There is also an event emitted called `@update-field`, every time you type something in a specific field.
 
 Try typing a little in the example below.
 
-<!-- <CodeBlockComponent filename="blitz-form/Events - Form Events" /> -->
+<CodeBlockComponent filename="blitz-form/Events - Form Events" />
+
+<!-- > For more info on all possible events take a look at the [Api Card](#api-card) down below. -->
 
 ### Field Events
 
@@ -384,22 +384,23 @@ An `events` prop would look like so:
 
 ```js
 events: {
-  input: ($event, context) => { },
+  'update:modelValue': ($event, context) => { },
   focus: ($event, context) => { },
   // etc...
 }
 ```
 
-Please note these things about events you set in your schema:
+When you look at the arrow function above, it will receive two arguments: `$event` and `context`.
 
-- Besides the typical `$event` parameter events receive (like `MouseClickEvent`), they will receive a second `context` parameter
+- `$event` is whatever the event that's emitted receives as payload (eg. `MouseClickEvent`).
 - `context` is the Vue component reference of the BlitzForm component, you can use this to access other properties/values
-- `context` has useful props like: `formData`, `formDataFlat`, `mode`, `formId`, ... All of these are explained in the [Evaluated Props documentation](#evaluated-props), so be sure to check that
-- `context` has a special function called `fieldInput` which can be used to modify other fields programmatically
+- `context` has useful props like `formData`, `mode`, and others.
+- `context` has a special function called `updateField` which can be used to modify other fields programmatically
+- If an event emits two or more arguments, you can access those _behind_ the `context` argument: `(arg1, context, arg2, ...otherArgs) => {}`
 
 Phew. That was a bit of a lot of information all at once. 😅 Let's look at an example:
 
-<!-- <CodeBlockComponent filename="blitz-form/Events - Field Events" /> -->
+<CodeBlockComponent filename="blitz-form/Events - Field Events" />
 
 ### Update Other Fields on Events
 
@@ -407,35 +408,35 @@ Here we see an example of one field updating the contents of another on the inpu
 
 ```js
 events: {
-  input: (val, { fieldInput }) => {
+  'update:modelValue': (val, { updateField }) => {
     // get only digits from input
     const value = !val ? '' : val.replace(/[^\d]/g, '').trim()
 
     // set field 'telClean' to this value
-    fieldInput({ id: 'telClean', value })
+    updateField({ id: 'telClean', value })
   }
 }
 ```
 
-The `fieldInput` function can be used to update other fields inside your form. It receives a single parameter which should be an object that looks like `{id, value}` with the `id` of the field you want to update and a `value` you want to update it with.
+The `updateField` function can be used to update other fields inside your form. It receives a single parameter which should be an object that looks like `{id, value}` with the `id` of the field you want to update and a `value` you want to update it with.
 
-Be sure to also check the documentation on [Computed Fields](#computed-fields) as well.
+Be sure to also check the documentation on [Computed Field Values](#computed-fields) as well.
 
-<!-- <CodeBlockComponent filename="blitz-form/Events - Update Other Fields on Events" /> -->
+<CodeBlockComponent filename="blitz-form/Events - Update Other Fields on Events" />
 
-## Evaluated Props
+## Dynamic Props
 
-### Evaluated Props — What/When
+### Dynamic Props — What/When
 
 As you know, BlitzForm needs a `schema` with information on each field you want to show. Each field in your schema can have props like `label` `component` and any prop the component itself might need.
 
-However, your fields can also have _**dynamic props**_, for example based on the data of the form! Such dynamic props are called Evaluated Props.
+However, your fields can also have _**dynamic props**_, for example based on the data of the form! Such dynamic props are called Dynamic Props.
 
 To use this you need to set the prop to a function. This function will be executed any time the data of any field changes.
 
 Your form could have a disabled field by setting `disabled: true` to that field. But you can make a field be disabled based on wether or not a checkbox in your form is checked. In this case set the `disabled` prop to `(val, context) => !!context.formData.myCheckBox`. Now that field is disabled when `myCheckBox` is true.
 
-The function you use for Evaluated Props receive 2 params `(val, context)`.
+The function you use for Dynamic Props receive 2 params `(val, context)`.
 
 - `val` — this is the current value of the field
 - `context` — this is the Vue component reference of the BlitzField, you can use this to access any other properties/values
@@ -448,46 +449,72 @@ The most important props you can access on `context`:
 
 Try to refrain from accessing props other than the ones listed above, because these are mainly used internal and could have behaviour changes that could break your app.
 
-### Dynamic Prop Based on the Value of the Field
+### A Prop Based on the modelValue of the Field
 
-Eg. `subLabel: val => val === 'purple' ? 'nice!' : 'choose a color'`
+Here we show how to make the props you pass to a field conditional — based on the `modelValue` of that field.
 
-<!-- <CodeBlockComponent filename="blitz-form/Evaluated Props - 1" /> -->
+```js
+dynamicProps: ['subLabel'],
+subLabel: val => val === 'purple' ? 'nice!' : 'choose a color'
+```
 
-### Dynamic Prop Based on the Value of "Another" Field
+<CodeBlockComponent filename="blitz-form/Dynamic Props - 1" />
 
-Eg. `disabled: (val, {formData}) => !formData.under18`
+### A Prop Based on the modelValue of "Another" Field
 
-<!-- <CodeBlockComponent filename="blitz-form/Evaluated Props - 2" /> -->
+Here we show how to make the props you pass to a field conditional — based on the `modelValue` of _**another field**_.
+
+```js
+dynamicProps: ['disabled'],
+disabled: (val, { formData }) => !formData.under18
+```
+
+<CodeBlockComponent filename="blitz-form/Dynamic Props - 2" />
 
 ### Show or Hide a Field Based on Another Field
 
-Eg. `showCondition: (val, {formData}) => formData.car`
+Here we show how to conditionally hide or show a field. `showCondition` is a special prop you can for this, defined inside your BlitzForm schema.
 
-`showCondition` is a special prop that can only be used inside the schema of a BlitzForm.
+```js
+dynamicProps: ['showCondition'],
+showCondition: (val, { formData }) => formData.car
+```
 
-<!-- <CodeBlockComponent filename="blitz-form/Evaluated Props - 3" /> -->
+Try checking the checkbox and see what happens.
 
-### Dynamic "Options" of a Select-Field
+<CodeBlockComponent filename="blitz-form/Dynamic Props - 3" />
 
-<!-- <CodeBlockComponent filename="blitz-form/Evaluated Props - 4" /> -->
+### Calculated "Options" of a Select-Field
 
-### Evaluated Slots
+Here we show how to automatically render select options based on data from a database.
 
-<!-- <CodeBlockComponent filename="blitz-form/Evaluated Props - 5" /> -->
+We then also conditionally show different select options based on the `modelValue` of the _**other selected fields**_.
 
-## Computed Fields
+<CodeBlockComponent filename="blitz-form/Dynamic Props - 4" />
 
-### Computed Fields — What/When
+### Show Content Based on Another Field
 
-Computed Fields are when you need to add a field in your form that have a _**calculated value**_ based on the form data or some other fields.
+Here we show how to show the `modelValue` of one field as the `slot` content of another.
 
-Do not confuse this concept with <span style="opacity: 0.5">#</span>[Evaluated Props](#evaluated-props).
+```js
+dynamicProps: ['slot'],
+slot: (val, { formData }) => formData.myInput
+```
 
-- Evaluated Props: a calculated _**prop of**_ a field
-- Computed Fields: a field with a calculated _**value**_
+<CodeBlockComponent filename="blitz-form/Dynamic Props - 5" />
 
-An example of a Computed Field could be a full name of a person which exists of `${formData.firstName} ${formData.lastName}`
+## Computed Field Values
+
+### Computed Field Values — What/When
+
+Computed Field Values are when you need to add a field in your form that have a _**calculated value**_ based on the form data or some other fields.
+
+Do not confuse this concept with [Dynamic Props](#evaluated-props).
+
+- Dynamic Props: a calculated _**prop of**_ a field
+- Computed Field Values: a field with a calculated _**value**_
+
+An example of a Computed Field Value could be a full name of a person which exists of `${formData.firstName} ${formData.lastName}`
 
 There are three ways we could create such a field:
 
@@ -497,40 +524,40 @@ There are three ways we could create such a field:
 {
   id: 'fullName',
   component: 'input',
-  parseValue: (val, {formData}) => `${formData.firstName || ''} ${formData.lastName || ''}`
+  parseValue: (val, { formData }) => `${formData.firstName || ''} ${formData.lastName || ''}`
 }
 ```
 
 So even though the field `fullName` has no `value` at all, it will always stay in sync with the current `formData`.
 
-When implementing a computed field this way however, `fullName` will never have that computed value emitted. This means that it won't be included in the BlitzForm events: `@input`, `@field-input` and `@save`. So it's difficult to capture and save this calculated value alongside your other data. See the next tab for another method.
+When implementing a Computed Field Value this way however, `fullName` will never have that computed value emitted. This means that it won't be included in the BlitzForm events: `@update:modelValue`, `@update-field` and `@save`. So it's difficult to capture and save this calculated value alongside your other data. See the next section for another method.
 
-<!-- <CodeBlockComponent filename="blitz-form/Computed Fields - 1" /> -->
+<CodeBlockComponent filename="blitz-form/Computed Field Values - 1" />
 
-### Update via `fieldInput`
+### Update via `updateField`
 
 It can be handy to also save the calculated value in your database so you can filter/search/sort on this field.
 
-In this case we can use the method called `fieldInput()` which is accessible on the context and first explained on the [events documentation page](#events).
+In this case we can use the method called `updateField()` which is accessible on the context and first explained on the [events documentation page](#events).
 
 ```js
 {
   id: 'firstName',
   events: {
-    input: (val, {formData, fieldInput}) => {
+    'update:modelValue': (val, {formData, updateField}) => {
       const { lastName = '' } = formData
       const value = `${val} ${lastName}`.trim()
-      fieldInput({id: 'fullName', value})
+      updateField({ id: 'fullName', value })
     }
   },
 },
 {
   id: 'lastName',
   events: {
-    input: (val, {formData, fieldInput}) => {
+    'update:modelValue': (val, {formData, updateField}) => {
       const { firstName = '' } = formData
       const value = `${firstName} ${val}`.trim()
-      fieldInput({id: 'fullName', value})
+      updateField({ id: 'fullName', value })
     }
   },
 }
@@ -538,33 +565,33 @@ In this case we can use the method called `fieldInput()` which is accessible on 
 
 This method has pro's and con's though:
 
-- PRO: you don't need to include the Computed Field (`fullName`) on the form at all
+- PRO: you don't need to include the Computed Field Value (`fullName`) on the form at all
 - CON: this is quite verbose...
-- CON: it cannot be used if you need a computed field _not_ based on other fields (eg. a timestamp returning `new Date()`)
+- CON: it cannot be used if you need a Computed Field Value _not_ based on other fields (eg. a timestamp returning `new Date()`)
 - CON: when your database already has data, you cannot use this without manually updating what's already in your database
-- CON: if you want to save the computed field to your database, you have to include this computed field in all forms the user can edit this data
+- CON: if you want to save the Computed Field Value to your database, you have to include this Computed Field Value in all forms the user can edit this data
 
-<!-- <CodeBlockComponent filename="blitz-form/Computed Fields - 2" /> -->
+<CodeBlockComponent filename="blitz-form/Computed Field Values - 2" />
 
-### Combine `parseValue` & `fieldInput`
+### Combine `parseValue` & `updateField`
 
-The third way to create a computed field is this:
+The third way to create a Computed Field Value is this:
 
 ```js
 {
   id: 'fullName',
   component: 'input',
-  parseValue: (val, {formData, fieldInput}) => {
-    const value = `${formData.firstName || ''} ${formData.lastName || ''}`.trim()
-    if (val !== value) fieldInput({id: 'fullName', value})
-    return value
+  parseValue: (val, {formData, updateField}) => {
+    const newValue = `${formData.firstName || ''} ${formData.lastName || ''}`.trim()
+    if (val !== newValue) updateField({ id: 'fullName', value: newValue })
+    return newValue
   },
-  // If you want to hide the computed field you can set:
+  // If you want to hide the Computed Field Value you can set:
   // showCondition: false
 }
 ```
 
-Basically you write your logic inside the `parseValue` prop of your computed field, and also trigger a `fieldInput` action from within here.
+Basically you write your logic inside the `parseValue` prop of your Computed Field Value, and also trigger a `updateField` action from within here.
 
 However, as the more experienced developers will notice...
 
@@ -572,19 +599,19 @@ However, as the more experienced developers will notice...
 
 I say "nay". The reason it is discouraged is because side-effects to computed properties that modify data are impossible to track. In a few months if you don't know why a certain value is being modified, you'll have a hard time finding eventually it was the side-effect from a computed property.
 
-If we understand this reason, then in our case, it is perfectly valid to do so, because we are only modifying the data of the field we are describing right there. We are simply doing something equivalent to triggering `emit('input', val)` on a component manually, nothing wrong with that.
+If we understand this reason, then in our case, it is perfectly valid to do so, because we are only modifying the data of the field we are describing right there. We are simply doing something equivalent to triggering `emit('update:modelValue', val)` on a component manually, nothing wrong with that.
 
 However, keep in mind that also this method has its own pro's and con's:
 
 - PRO: it can be used as stand-alone, without relying on other fields & without the need to render other fields
-- PRO: because it just uses `parseValue` it's less verbose (opposed to listening to input events of other fields)
+- PRO: because it just uses `parseValue` it's less verbose (opposed to listening to `update:modelValue` events of other fields)
 - PRO: the logic for this field is contained in its own options object
-- PRO: even if your database already has data, a computed field like this can be added at a later date
-- CON: if you want to save the computed field to your database, you have to include this computed field in all forms the user can edit this data
+- PRO: even if your database already has data, a Computed Field Value like this can be added at a later date
+- CON: if you want to save the Computed Field Value to your database, you have to include this Computed Field Value in all forms the user can edit this data
 
 Hint: add `showCondition: false` if you want to hide the field but still have it save its content in the formData.
 
-<!-- <CodeBlockComponent filename="blitz-form/Computed Fields - 3" /> -->
+<CodeBlockComponent filename="blitz-form/Computed Field Values - 3" />
 
 ## Validation
 

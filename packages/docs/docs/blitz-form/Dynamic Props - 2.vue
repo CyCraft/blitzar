@@ -22,7 +22,7 @@ const schema = [
     defaultValue: false,
     label: 'Do you have parental consent?',
     subLabel: 'Only applicable when under 18',
-    evaluatedProps: ['disabled'],
+    dynamicProps: ['disabled'],
     // component props:
     disabled: (val, { formData }) => !formData.under18,
   },

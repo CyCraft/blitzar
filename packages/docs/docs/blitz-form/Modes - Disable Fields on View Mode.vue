@@ -34,7 +34,7 @@ const schema = [
       { component: 'option', value: 'gear', slot: 'Gear' },
     ],
     // make field "disabled" when the mode is 'view':
-    evaluatedProps: ['disabled'],
+    dynamicProps: ['disabled'],
     disabled: (val, { mode }) => ['view', 'disabled'].includes(mode),
   },
   {
@@ -47,7 +47,7 @@ const schema = [
     min: 0,
     max: 100,
     // make field "disabled" when the mode is 'view':
-    evaluatedProps: ['disabled'],
+    dynamicProps: ['disabled'],
     disabled: (val, { mode }) => ['view', 'disabled'].includes(mode),
   },
   {
@@ -57,7 +57,7 @@ const schema = [
     label: 'Do you agree with our terms?',
     defaultValue: false,
     // make field "disabled" when the mode is 'view':
-    evaluatedProps: ['disabled'],
+    dynamicProps: ['disabled'],
     disabled: (val, { mode }) => ['view', 'disabled'].includes(mode),
   },
 ]

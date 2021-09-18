@@ -3,8 +3,8 @@
     <BlitzForm
       :schema="schema"
       v-model="formData"
-      @field-input="logFieldInput"
-      @input="logFormInput"
+      @update-field="logupdateField"
+      @update:modelValue="logFormInput"
       :columnCount="2"
     />
 
@@ -43,11 +43,11 @@ export default {
     return { schema, formData: {} }
   },
   methods: {
-    logFieldInput(eventPayload) {
-      showToast('@field-input', eventPayload)
+    logupdateField(eventPayload) {
+      showToast('@update-field', eventPayload)
     },
     logFormInput(eventPayload, origin) {
-      showToast('@input', eventPayload, origin)
+      showToast('@update:modelValue', eventPayload, origin)
     },
   },
 }

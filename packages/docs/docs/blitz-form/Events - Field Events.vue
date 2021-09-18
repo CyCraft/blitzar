@@ -23,7 +23,7 @@ const schema = [
     component: 'input',
     label: 'Type something',
     events: {
-      input: (val) => showToast('Typed:', val),
+      'update:modelValue': (val) => showToast('Typed:', val),
     },
   },
 ]

@@ -23,9 +23,9 @@ const schema = [
     component: 'input',
     label: 'Full name (computed)',
     disabled: true,
-    parseValue: (val, { formData, fieldInput }) => {
+    parseValue: (val, { formData, updateField }) => {
       const value = `${formData.firstName || ''} ${formData.lastName || ''}`.trim()
-      if (val !== value) fieldInput({ id: 'fullName', value })
+      if (val !== value) updateField({ id: 'fullName', value })
       return value
     },
   },

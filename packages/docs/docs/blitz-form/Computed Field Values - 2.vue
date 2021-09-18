@@ -13,10 +13,10 @@ const schema = [
     label: 'First name',
     component: 'input',
     events: {
-      input: (val, { formData, fieldInput }) => {
+      'update:modelValue': (val, { formData, updateField }) => {
         const { lastName = '' } = formData
         const value = `${val} ${lastName}`.trim()
-        fieldInput({ id: 'fullName', value })
+        updateField({ id: 'fullName', value })
       },
     },
   },
@@ -25,10 +25,10 @@ const schema = [
     label: 'Last name',
     component: 'input',
     events: {
-      input: (val, { formData, fieldInput }) => {
+      'update:modelValue': (val, { formData, updateField }) => {
         const { firstName = '' } = formData
         const value = `${firstName} ${val}`.trim()
-        fieldInput({ id: 'fullName', value })
+        updateField({ id: 'fullName', value })
       },
     },
   },
@@ -45,7 +45,4 @@ export default {
     return { schema, formData: {} }
   },
 }
-/**
-There is also a third way we can create a computed field.
- */
 </script>

@@ -84,7 +84,7 @@ const schemaColumns = [
     id: 'img',
     label: 'Image',
     component: 'img',
-    evaluatedProps: ['src'],
+    dynamicProps: ['src'],
     src: (val) => val,
     mode: 'view',
   },

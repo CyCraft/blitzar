@@ -32,7 +32,7 @@ export interface BlitzFieldProps {
    *
    * You can also pass a function that will receive two params you can work with: `(formData, context)`
    * - `formData` is the value object of your BlitzForm. This will be undefined when BlitzField is used as stand-alone (without BlitzForm) unless you manually pass it.
-   * - `context` is either your BlitzForm or BlitzField context with many usefull props. See the documentation on Evaluated Props for more info.
+   * - `context` is either your BlitzForm or BlitzField context with many usefull props. See the documentation on Dynamic Props for more info.
    * @type {(formData: Record<string, any>, formContext: FormContext) => any | any}
    * @category model
    */
@@ -73,7 +73,7 @@ export interface BlitzFieldProps {
    * The last example below shows how this is actually used under the hood.
    * @type {{ label?: string | Record<string, any> | Record<string, any>[], default?: string | Record<string, any> | Record<string, any>[] } | EvaluatedProp<{ label?: string | Record<string, any> | Record<string, any>[], default?: string | Record<string, any> | Record<string, any>[] }>}
    * @example { label: { component: 'MyTooltip', tip: 'hi' } } }
-   * @example <slot name="label"><component :is="slots.label.component" v-bind="slots.label" /></slot>
+   * @example <slot name="label"><component v-bind="slots.label" :is="slots.label.component" /></slot>
    * @category content
    */
   slots: object | Function
@@ -141,13 +141,13 @@ export interface BlitzFieldProps {
   rules: any
 
   /**
-   * An array with prop names that should be treated as Evaluated Props when passed a function.
+   * An array with prop names that should be treated as Dynamic Props when passed a function.
    *
    * This prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).
    * @type {string[]}
    * @category behavior
    */
-  evaluatedProps: string[]
+  dynamicProps: string[]
 
   /**
    * Set to `true` if the component has its own labels and you do not want the BlitzField to show a label.
@@ -260,7 +260,7 @@ export interface BlitzFieldProps {
   /**
    * This is the *nested* data of all the fields inside a BlitzForm. (When using BlitzListForm as standalone, this is an array.)
    *
-   * It's not something you can pass via the schema, but something that BlitzForm will automatically pass to each of its fields so you can use it in Evaluated Props.
+   * It's not something you can pass via the schema, but something that BlitzForm will automatically pass to each of its fields so you can use it in Dynamic Props.
    * @type {Record<string, any> | Record<string, any>[]}
    * @category readonly
    */
@@ -269,7 +269,7 @@ export interface BlitzFieldProps {
   /**
    * This is the *flattened* data of all the fields inside a BlitzForm.
    *
-   * It's not something you can pass via the schema, but something that BlitzForm will automatically pass to each of its fields so you can use it in Evaluated Props.
+   * It's not something you can pass via the schema, but something that BlitzForm will automatically pass to each of its fields so you can use it in Dynamic Props.
    * @type {Record<string, any>}
    * @category readonly
    */
@@ -278,26 +278,26 @@ export interface BlitzFieldProps {
   /**
    * A manually set 'id' of the BlitzForm. This only exists if you passed an id directly to the BlitzForm.
    *
-   * It's not something you can pass via the schema, but something that BlitzForm will automatically pass to each of its fields so you can use it in Evaluated Props.
+   * It's not something you can pass via the schema, but something that BlitzForm will automatically pass to each of its fields so you can use it in Dynamic Props.
    * @type {string}
    * @category readonly
    */
   formId: string
 
   /**
-   * The `fieldInput` function of BlitzForm. Is passed so it can be used in events. Eg.: `events: { input: (value, { fieldInput } => fieldInput({ id: 'otherField', value }))}`
+   * The `updateField` function of BlitzForm. Is passed so it can be used in events. Eg.: `events: { 'update:modelValue': (value, { updateField } => updateField({ id: 'otherField', value }))}`
    *
-   * It's not something you can pass via the schema, but something that BlitzForm will automatically pass to each of its fields so you can use it in Evaluated Props.
+   * It's not something you can pass via the schema, but something that BlitzForm will automatically pass to each of its fields so you can use it in Dynamic Props.
    * @type {(val: any, formContext: FormContext) => void}
    * @category readonly
    */
-  fieldInput: Function
+  updateField: Function
 
   /**
    * (only present in BlitzListForm!)
-   * The `rowInput` function of BlitzForm. Is passed so it can be used in events. Eg.: `events: { input: (value, { fieldInput } => fieldInput({ id: 'otherField', value }))}`
+   * The `rowInput` function of BlitzForm. Is passed so it can be used in events. Eg.: `events: { 'update:modelValue': (value, { updateField } => updateField({ id: 'otherField', value }))}`
    *
-   * It's not something you can pass via the schema, but something that BlitzListForm will automatically pass to each of its fields so you can use it in Evaluated Props.
+   * It's not something you can pass via the schema, but something that BlitzListForm will automatically pass to each of its fields so you can use it in Dynamic Props.
    * @type {(val: any, formContext: FormContext) => void}
    * @category readonly
    */
@@ -307,7 +307,7 @@ export interface BlitzFieldProps {
    * (only present in BlitzListForm!)
    * The current row index of this field.
    *
-   * It's not something you can pass via the schema, but something that BlitzListForm will automatically pass to each of its fields so you can use it in Evaluated Props.
+   * It's not something you can pass via the schema, but something that BlitzListForm will automatically pass to each of its fields so you can use it in Dynamic Props.
    * @type {number}
    * @category readonly
    */
@@ -317,7 +317,7 @@ export interface BlitzFieldProps {
    * (only present in BlitzListForm!)
    * This is the *nested* data of all the fields of the row.
    *
-   * It's not something you can pass via the schema, but something that BlitzListForm will automatically pass to each of its fields so you can use it in Evaluated Props.
+   * It's not something you can pass via the schema, but something that BlitzListForm will automatically pass to each of its fields so you can use it in Dynamic Props.
    * @type {Record<string, any>}
    * @category readonly
    */
@@ -327,7 +327,7 @@ export interface BlitzFieldProps {
    * (only present in BlitzListForm!)
    * This is a function that you can call to delete the row.
    *
-   * It's not something you can pass via the schema, but something that BlitzListForm will automatically pass to each of its fields so you can use it in Evaluated Props.
+   * It's not something you can pass via the schema, but something that BlitzListForm will automatically pass to each of its fields so you can use it in Dynamic Props.
    * @type {() => void}
    * @category readonly
    */
@@ -340,17 +340,17 @@ export interface BlitzFormProps extends Vue {
   /**
    * An object with the data of the entire form. The object keys are the ids of the fields passed in the `schema`.
    *
-   * To be used with `:value` or `v-model`.
+   * To be used with `:modelValue` or `v-model`.
    * @type {Record<string, any>}
    * @example { name: '' }
    * @category model
    */
-  value: any
+   modelValue: any
 
   /**
    * A manually set `id` of the BlitzForm. This prop is accessible in the `context` (as `formId`) of any Evaluated Prop and event.
    *
-   * Read more on Evaluated Props in its dedicated page.
+   * Read more on Dynamic Props in its dedicated page.
    * @type {string}
    * @category model
    */
@@ -475,13 +475,13 @@ export interface BlitzFormProps extends Vue {
   labelClasses: any
 
   /**
-   * An array with prop names that should be treated as Evaluated Props when passed a function.
+   * An array with prop names that should be treated as Dynamic Props when passed a function.
    *
    * This prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).
    * @type {string[]}
    * @category behavior
    */
-  evaluatedProps: Array<
+  dynamicProps: Array<
     | string
     | 'component'
     | 'showCondition'
@@ -538,7 +538,7 @@ export interface BlitzFormProps extends Vue {
 export interface BlitzField extends BlitzFieldProps, Vue {}
 
 export interface BlitzForm extends BlitzFormProps, Vue {
-  fieldInput(payload: { id: string; value: any }): void
+  updateField(payload: { id: string; value: any }): void
 
   resetState(): void
 

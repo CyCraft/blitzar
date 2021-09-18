@@ -34,9 +34,9 @@ const schemaColumns = [
     id: 'fullName',
     label: 'Full name',
     component: 'input',
-    parseValue: (val, { formData, fieldInput }) => {
+    parseValue: (val, { formData, updateField }) => {
       const value = `${formData.nameFirst || ''} ${formData.nameLast || ''}`.trim()
-      fieldInput({ id: 'fullName', value })
+      updateField({ id: 'fullName', value })
       return value
     },
   },

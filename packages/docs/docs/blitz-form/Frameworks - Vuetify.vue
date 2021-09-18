@@ -124,12 +124,12 @@ const schema = [
     component: 'div',
     label: 'Choose some power-ups',
     defaultValue: () => [],
-    evaluatedProps: ['slot'],
+    dynamicProps: ['slot'],
     // component props:
-    slot: (powerUpsArray, { fieldInput }) => {
+    slot: (powerUpsArray, { updateField }) => {
       const change = (value) => (bool) => {
-        if (!bool) fieldInput({ id: 'powerUps', value: powerUpsArray.filter((v) => v !== value) })
-        if (bool) fieldInput({ id: 'powerUps', value: [...powerUpsArray, value] })
+        if (!bool) updateField({ id: 'powerUps', value: powerUpsArray.filter((v) => v !== value) })
+        if (bool) updateField({ id: 'powerUps', value: [...powerUpsArray, value] })
       }
       return [
         {

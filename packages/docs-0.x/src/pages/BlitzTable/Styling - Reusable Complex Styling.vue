@@ -14,9 +14,9 @@
     </div>
     <!-- Then we embed BlitzTable and pass any other props with `v-bind="propsToPass"` -->
     <BlitzTable
+      v-bind="propsToPass"
       :class="`complex-table ${grid ? 'mode-grid' : 'mode-rows'}`"
       :grid="grid"
-      v-bind="propsToPass"
     />
   </div>
 </template>

@@ -4,8 +4,8 @@
       :schema="schema"
       :columnCount="3"
       v-model="formData"
-      @field-input="logFieldInput"
-      @input="logFormInput"
+      @update-field="logupdateField"
+      @update:modelValue="logFormInput"
     />
 
     <CodeBlock :content="`// formData\n${JSON.stringify(formData, undefined, 2)}`" />
@@ -47,11 +47,11 @@ export default {
     return { schema, formData: {} }
   },
   methods: {
-    logFieldInput(eventPayload) {
-      showToast('@field-input', eventPayload)
+    logupdateField(eventPayload) {
+      showToast('@update-field', eventPayload)
     },
     logFormInput(eventPayload, origin) {
-      showToast('@input', eventPayload, origin)
+      showToast('@update:modelValue', eventPayload, origin)
     },
   },
 }

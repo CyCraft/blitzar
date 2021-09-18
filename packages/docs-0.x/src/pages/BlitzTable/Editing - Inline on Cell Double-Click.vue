@@ -8,7 +8,7 @@
       flat
       bordered
       @cell-dblclick="cellDblclick"
-      @input-cell="inputCell"
+      @update-cell="inputCell"
     />
   </div>
 </template>
@@ -92,7 +92,7 @@ const schemaColumns = [
     id: 'img',
     label: 'Image',
     component: 'img',
-    evaluatedProps: ['src'],
+    dynamicProps: ['src'],
     src: (val) => val,
     mode: 'view',
   },
@@ -123,7 +123,7 @@ const schemaColumns = [
  */
 const editingLogic = (blueprintId, { editingColId, editingRowId, saveLastEdit, stopEditing }) => ({
   // mode is an Evaluated Prop. See BlitzForm documentation for more info:
-  evaluatedProps: ['mode'],
+  dynamicProps: ['mode'],
   mode: (val, { formData }) =>
     editingColId === blueprintId && formData.id === editingRowId ? 'edit' : 'raw',
   events: {

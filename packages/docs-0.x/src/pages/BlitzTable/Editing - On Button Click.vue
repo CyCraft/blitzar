@@ -15,7 +15,7 @@
       <!-- show a BlitzForm in a modal -->
       <BlitzForm
         :schema="schemaColumns.slice(1)"
-        :value="modalFormData"
+        :modelValue="modalFormData"
         :actionButtons="['edit', 'cancel', 'save']"
         :columnCount="2"
         :key="remountCounter"
@@ -173,7 +173,7 @@ export default {
           id: 'img',
           label: 'Image',
           component: 'img',
-          evaluatedProps: ['src'],
+          dynamicProps: ['src'],
           src: (val) => val,
           mode: 'view',
         },

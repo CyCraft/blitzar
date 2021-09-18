@@ -7,7 +7,7 @@
 <script>
 const schema = [
   {
-    id: 'input',
+    id: 'myInput',
     label: 'Type something',
     component: 'input',
   },
@@ -15,7 +15,7 @@ const schema = [
     label: 'a div showing the same content as the input',
     component: 'div',
     slot: (val, { formData }) => formData.input,
-    evaluatedProps: ['slot'],
+    dynamicProps: ['slot'],
     componentStyle: 'border: dashed thin goldenrod; padding: 2em',
   },
 ]

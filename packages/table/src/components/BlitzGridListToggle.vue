@@ -1,5 +1,5 @@
 <template>
-  <div class="blitz-grid-list-toggle" @click="$emit('input', !value)">
+  <div class="blitz-grid-list-toggle" @click="$emit('update:modelValue', !value)">
     <!-- grid icon -->
     <svg
       v-if="!value"
