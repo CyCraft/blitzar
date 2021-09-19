@@ -633,6 +633,11 @@ export default defineComponent({
       this.editedFields = []
       this.formDataFlatBackups.push(copy(this.formDataFlat))
       this.formErrorMsg = ''
+      for (const [i, blueprint] of this.cSchema.entries()) {
+        const refField = this.$refs[`ref-field-${i}`]
+        if (!refField) continue
+        refField.resetDirtyAndErrors()
+      }
     },
     restoreBackup() {
       if (!this.formDataFlatBackups.length) return

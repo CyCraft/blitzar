@@ -565,6 +565,7 @@ export default defineComponent({
 
       return evalPropOrAttr('error') || null
     },
+    // validate() IS CALLED FROM REFERENCE!!
     /**
      * Validates a field
      * @param {boolean} [focusIfError] — Wether or not it should focus the field with an error. Defaults to `false`
@@ -590,6 +591,7 @@ export default defineComponent({
       }
       return result
     },
+    // resetDirtyAndErrors() IS CALLED FROM REFERENCE!!
     resetDirtyAndErrors() {
       this.isDirty = false
       this.showingErrorBeforeSave = false
