@@ -1,21 +1,12 @@
 <template>
   <div>
-    <BlitzForm :schema="schema" v-model="formData" :columnCount="2" gridGap="32px" />
+    <BlitzForm :key="remount" :schema="schema" v-model="formData" :columnCount="2" gridGap="32px" />
 
     <CodeBlock :content="`// formData\n${JSON.stringify(formData, undefined, 2)}`" />
   </div>
 </template>
 
 <script>
-// All components that are used in the form need to be globally registered.
-import { QInput, QSlider, QSelect, QOptionGroup, QToggle, date } from 'quasar'
-import Vue from 'vue'
-Vue.component('QInput', QInput)
-Vue.component('QSlider', QSlider)
-Vue.component('QSelect', QSelect)
-Vue.component('QOptionGroup', QOptionGroup)
-Vue.component('QToggle', QToggle)
-
 const schema = [
   {
     id: 'name',
@@ -139,7 +130,7 @@ const schema = [
     label: 'Date of submission',
     subLabel: 'Will convert input to a Date when typing eg. `2020/01/01`',
     parseInput: (val) => new Date(val),
-    parseValue: (val) => date.formatDate(val, 'YYYY/MM/DD'),
+    // parseValue: (val) => date.formatDate(val, 'YYYY/MM/DD'),
     // component props:
     mask: '####/##/##',
     placeholder: 'YYYY/MM/DD',
@@ -148,7 +139,13 @@ const schema = [
 
 export default {
   data() {
-    return { schema, formData: {} }
+    return { schema, formData: {}, remount: 0 }
+  },
+  mounted () {
+    console.log(`window.Quasar → `, window.Quasar)
+    console.log(`window.vueApp → `, window.vueApp)
+    
+    setTimeout(() => this.remount++, 100)
   },
 }
 </script>

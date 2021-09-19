@@ -1,8 +1,9 @@
 <template>
-  <PCodeBlockComponent
-    :importComponentInstanceFn="() => import(`../docs/${filename}.vue`)"
-    :importComponentRawFn="() => import(`../docs/${filename}.vue?raw`)"
-  />
+  <ClientOnly
+    ><PCodeBlockComponent
+      :importComponentInstanceFn="() => import(`../docs/${filename}.vue`)"
+      :importComponentRawFn="() => import(`../docs/${filename}.vue?raw`)"
+  /></ClientOnly>
 </template>
 
 <script>

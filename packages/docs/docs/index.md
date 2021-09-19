@@ -1,13 +1,18 @@
 ---
 navbar: false
-sidebar: false
-editLink: false
+home: true
+heroImage: /assets/blitzar-logo-white.svg
+heroAlt: Blitzar Logo
+heroText: Blitzar
+tagline: Form & table generator for Vue 3
+actionText: Get Started
+actionLink: /blitz-form/
+features:
+  - title: Simple & JSON
+    details: Generate entire forms based on a simple JSON schema
+  - title: Flexible
+    details: Supports ALL Vue components & All HTML elements
+  - title: Powerful
+    details: Arrow functions allow for validation/conditional fields/changing props
+footer: MIT Licensed 　・　 Copyright © 2018-present 　・　 Mesqueeb — Luca Ban
 ---
-
-![Blitzar Logo](./assets/blitzar-logo-white.svg)
-
-Form & table generator for Vue 3.
-
-Usable with custom components; Render via a simple JSON schema.
-
-[Blitz Form](/blitz-form/)

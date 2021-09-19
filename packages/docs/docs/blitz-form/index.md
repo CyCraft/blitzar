@@ -130,39 +130,11 @@ In the Vue ecosystem there are many component frameworks, and they're all compat
 
 Click on your favorite framework to see an example:
 
-- [Quasar Framework](#quasar-framework)
-- [Vuetify](#vuetify)
+- [Quasar Framework](/example-quasar/)
+- _Vuetify_
 - _Nuxt (coming soon)_
 - _Tailwind (coming soon)_
 - _Bulma (coming soon)_
-
-### Quasar Framework
-
-All fields used in this example are Quasar components.
-
-Please note that Quasar cannot auto-detect the use of Quasar components in Blitzar. So you need to register them as global Vue components in `quasar.conf.js` OR manually like so:
-
-```js
-import { QInput } from 'quasar'
-
-Vue.component('QInput', QInput)
-```
-
-<!-- <CodeBlockComponent filename="blitz-form/Frameworks - Quasar Framework" /> -->
-
-### Vuetify
-
-All fields used in this example are Vuetify components.
-
-Please note that Vuetify cannot auto-detect the use of Vuetify components in Blitzar. So you need to register them as global Vue components like so:
-
-```js
-import { VTextField } from 'vuetify/lib'
-
-Vue.component('VTextField', VTextField)
-```
-
-<!-- <CodeBlockComponent filename="blitz-form/Frameworks - Vuetify" /> -->
 
 ## Modes
 
