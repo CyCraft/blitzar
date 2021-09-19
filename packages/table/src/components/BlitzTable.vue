@@ -294,7 +294,7 @@ export default {
     selected: { type: Array, default: () => [] },
     /**
      * CSS classes to apply to the card (when in grid mode).
-     * You can pass a function which will be evaluated just like an Evaluated Prop. The first param passed will be the entire row data. The second is `item` scoped slot object from a QTable.
+     * You can pass a function which will be evaluated just like an Dynamic Prop. The first param passed will be the entire row data. The second is `item` scoped slot object from a QTable.
      * @type {(rowData: Record<string, any>, gridCardProps: GridCardProps, BlitzTableContext: any) => string | Record<string, any> | (string | Record<string, any>)[]}
      * @example 'special-class'
      * @example :card-class="{ 'my-special-class': [Boolean condition] }"
@@ -303,7 +303,7 @@ export default {
     cardClass: { type: [Function, String, Array, Object] },
     /**
      * CSS style to apply to the card (when in grid mode).
-     * You can pass a function which will be evaluated just like an Evaluated Prop. The first param passed will be the entire row data. The second is `item` scoped slot object from a QTable.
+     * You can pass a function which will be evaluated just like an Dynamic Prop. The first param passed will be the entire row data. The second is `item` scoped slot object from a QTable.
      * @type {(rowData: Record<string, any>, gridCardProps: GridCardProps, BlitzTableContext: any) => string | Record<string, any> | (string | Record<string, any>)[]}
      * @example 'background-color: #fff'
      * @example :card-style="{ backgroundColor: '#fff' }"

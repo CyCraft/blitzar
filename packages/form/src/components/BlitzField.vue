@@ -340,7 +340,7 @@ export default defineComponent({
      */
     showErrorsOn: { type: String, default: 'interaction' },
     /**
-     * Setting to `false` will hide the field. When using as an Evaluated Prop it can used to conditionally hide fields based on the other `formData`.
+     * Setting to `false` will hide the field. When using as an Dynamic Prop it can used to conditionally hide fields based on the other `formData`.
      * @type {boolean | DynamicProp<boolean>}
      * @example (val, { mode }) => (mode === 'edit')
      * @example false
@@ -372,7 +372,7 @@ export default defineComponent({
       validator: (prop) => ['top', 'left'].includes(prop),
     },
     /**
-     * Custom styling to be applied to the BlitzField. Applied like so `:style="fieldStyle"`. Can be an Evaluated Prop (this is why I opted to have a different name from `style`).
+     * Custom styling to be applied to the BlitzField. Applied like so `:style="fieldStyle"`. Can be an Dynamic Prop (this is why I opted to have a different name from `style`).
      *
      * In a BlitzForm schema you can also just write `style: '...'` and BlitzForm will pass that as fieldStyle for you, because "style" is not a valid prop name.
      * @type {string | Record<string, boolean> | (string | Record<string, boolean>)[] | DynamicProp<string | Record<string, boolean> | (string | Record<string, boolean>)[]>}
@@ -381,7 +381,7 @@ export default defineComponent({
      */
     fieldStyle: { type: [Object, Array, String, Function] },
     /**
-     * Custom classes to be applied to the BlitzField. Applied like so `:class="fieldClasses"`. Can be an Evaluated Prop (this is why I opted to have a different name from `class`).
+     * Custom classes to be applied to the BlitzField. Applied like so `:class="fieldClasses"`. Can be an Dynamic Prop (this is why I opted to have a different name from `class`).
      *
      * In a BlitzForm schema you can also just write `class: '...'` and BlitzForm will pass that as `fieldClasses` for you, because "class" is not a valid prop name.
      * @type {string | Record<string, boolean> | (string | Record<string, boolean>)[] | DynamicProp<string | Record<string, boolean> | (string | Record<string, boolean>)[]>}
@@ -390,21 +390,21 @@ export default defineComponent({
      */
     fieldClasses: { type: [Object, Array, String, Function] },
     /**
-     * Custom styling to be applied to the inner component of BlitzField. Applied like so `:style="componentStyle"`. Can be an Evaluated Prop.
+     * Custom styling to be applied to the inner component of BlitzField. Applied like so `:style="componentStyle"`. Can be an Dynamic Prop.
      * @type {string | Record<string, boolean> | (string | Record<string, boolean>)[] | DynamicProp<string | Record<string, boolean> | (string | Record<string, boolean>)[]>}
      * @example 'padding: 1em;'
      * @category style
      */
     componentStyle: { type: [Object, Array, String, Function] },
     /**
-     * Custom classes to be applied to the inner component of BlitzField. Applied like so `:class="componentClasses"`. Can be an Evaluated Prop.
+     * Custom classes to be applied to the inner component of BlitzField. Applied like so `:class="componentClasses"`. Can be an Dynamic Prop.
      * @type {string | Record<string, boolean> | (string | Record<string, boolean>)[] | DynamicProp<string | Record<string, boolean> | (string | Record<string, boolean>)[]>}
      * @example ['dark-theme']
      * @category style
      */
     componentClasses: { type: [Object, Array, String, Function] },
     /**
-     * Custom styling to be applied to the label of BlitzField. Applied like so `:style="componentStyle"`. Can be an Evaluated Prop.
+     * Custom styling to be applied to the label of BlitzField. Applied like so `:style="componentStyle"`. Can be an Dynamic Prop.
      *
      * This prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).
      * @type {string | Record<string, boolean> | (string | Record<string, boolean>)[] | DynamicProp<string | Record<string, boolean> | (string | Record<string, boolean>)[]>}
@@ -413,7 +413,7 @@ export default defineComponent({
      */
     labelStyle: { type: [Object, Array, String, Function] },
     /**
-     * Custom classes to be applied to the label of BlitzField. Applied like so `:class="labelClasses"`. Can be an Evaluated Prop.
+     * Custom classes to be applied to the label of BlitzField. Applied like so `:class="labelClasses"`. Can be an Dynamic Prop.
      *
      * This prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).
      * @type {string | Record<string, boolean> | (string | Record<string, boolean>)[] | DynamicProp<string | Record<string, boolean> | (string | Record<string, boolean>)[]>}
@@ -446,7 +446,7 @@ export default defineComponent({
      */
     formId: { type: String },
     /**
-     * The `mode` of the BlitzForm. A BlitzField inherits the `mode` from the `BlitzForm` via its `mode` prop; however, if you had manually overwritten the mode to be something else, `formMode` can be used to check the current mode of the form. This can be useful inside an evaluated Prop.
+     * The `mode` of the BlitzForm. A BlitzField inherits the `mode` from the `BlitzForm` via its `mode` prop; however, if you had manually overwritten the mode to be something else, `formMode` can be used to check the current mode of the form. This can be useful inside an Dynamic Prop.
      *
      * It's not something you can pass via the schema, but something that BlitzForm will automatically pass to each of its fields so you can use it in Dynamic Props.
      * @type {'edit' | 'view' | 'disabled' | 'raw' | 'add'}

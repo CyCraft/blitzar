@@ -123,7 +123,7 @@ export default defineComponent({
      */
     modelValue: { type: Object, default: () => ({}) },
     /**
-     * A manually set `id` of the BlitzForm. This prop is accessible in the `context` (as `formId`) of any Evaluated Prop and event.
+     * A manually set `id` of the BlitzForm. This prop is accessible in the `context` (as `formId`) of any Dynamic Prop and event.
      *
      * Read more on Dynamic Props in its dedicated page.
      * @type {string}
@@ -237,7 +237,7 @@ export default defineComponent({
       validator: (prop) => ['top', 'left'].includes(prop),
     },
     /**
-     * Custom styling to be applied to the label of BlitzField. Applied like so `:style="componentStyle"`. Can be an Evaluated Prop.
+     * Custom styling to be applied to the label of BlitzField. Applied like so `:style="componentStyle"`. Can be an Dynamic Prop.
      *
      * This prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).
      * @type {string | Record<string, boolean> | (string | Record<string, boolean>)[] | DynamicProp<string | Record<string, boolean> | (string | Record<string, boolean>)[]>}
@@ -246,7 +246,7 @@ export default defineComponent({
      */
     labelStyle: { type: [Object, Array, String, Function] },
     /**
-     * Custom classes to be applied to the label of BlitzField. Applied like so `:class="labelClasses"`. Can be an Evaluated Prop.
+     * Custom classes to be applied to the label of BlitzField. Applied like so `:class="labelClasses"`. Can be an Dynamic Prop.
      *
      * This prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).
      * @type {string | Record<string, boolean> | (string | Record<string, boolean>)[] | DynamicProp<string | Record<string, boolean> | (string | Record<string, boolean>)[]>}
