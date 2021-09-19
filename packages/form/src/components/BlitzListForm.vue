@@ -99,7 +99,7 @@ export default defineComponent({
      * @category content
      */
     maxRows: { type: Number },
-    disable: { type: Boolean },
+    disabled: { type: Boolean },
     readonly: { type: Boolean },
   },
   computed: {
@@ -108,9 +108,9 @@ export default defineComponent({
      */
     cValue: {
       get() {
-        const { modelValue, schema, disable, readonly, maxRows } = this
+        const { modelValue, schema, disabled, readonly, maxRows } = this
         const emptyRow = schema.reduce((carry, { id }) => ({ ...carry, [id]: undefined }), {})
-        if (!disable && !readonly && (!isNumber(maxRows) || maxRows > modelValue.length)) {
+        if (!disabled && !readonly && (!isNumber(maxRows) || maxRows > modelValue.length)) {
           return modelValue.concat([emptyRow])
         }
         return modelValue
@@ -131,13 +131,13 @@ export default defineComponent({
       return attrs
     },
     cSchema() {
-      const { schema, disable, readonly, listFormAttrsToPass } = this
+      const { schema, disabled, readonly, listFormAttrsToPass } = this
       // slot, class, style are 3 prop names we cannot directly pass via `v-bind`.
       // - slot: we pass as `slots: { default: ... }`
       // - class: we pass as `fieldClasses`
       // - style: we pass as `fieldStyle`
       return schema.map((blueprint) => {
-        const overwritableDefaults = { disable, readonly }
+        const overwritableDefaults = { disabled, readonly }
         const overwrites = {
           label: '',
           subLabel: '',

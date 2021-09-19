@@ -19,11 +19,11 @@ For this I prepared a special kind of form called a `<BlitzListForm />` that off
 
 See it in action in the example down here! Write down some student names to see the formData update.
 
-<!-- <CodeBlockComponent filename="blitz-list-form/Basics - Basic Example" /> -->
+<CodeBlockComponent filename="blitz-list-form/Basics - Basic Example" />
 
 ### Advanced Example
 
-When you check the _**script tab**_ of this more advanced example, you'll notice we are using some new props available on our context of the Dynamic Props. (Be sure to check out the [documentation on Dynamic Props](#evaluated-props) of BlitzForm)
+When you check the _**script tab**_ of this more advanced example, you'll notice we are using some new props available on our context of the Dynamic Props. (Be sure to check out the documentation at [Advanced > Dynamic Props](/advanced/#dynamic-props))
 
 There are 4 _extra_ props available on the context when using BlitzListForm:
 - `rowInput` (function)
@@ -34,7 +34,7 @@ There are 4 _extra_ props available on the context when using BlitzListForm:
 
 This example uses `deleteRow` and `rowIndex` to create a list form where you can delete rows from:
 
-<!-- <CodeBlockComponent filename="blitz-list-form/Basics - Advanced Example" /> -->
+<CodeBlockComponent filename="blitz-list-form/Basics - Advanced Example" />
 
 ### Multi-Row Example
 
@@ -42,10 +42,10 @@ When you need each row to be multiple rows, you can do so with some CSS tweaking
 
 See the _**style tab**_ how this is done for the example below.
 
-<!-- <CodeBlockComponent filename="blitz-list-form/Basics - Multi-Row Example" /> -->
+<CodeBlockComponent filename="blitz-list-form/Basics - Multi-Row Example" />
 
 ## BlitzForm Example
 
 You can use the BlitzListForm inside a BlitzForm. See how that's done in this example:
 
-<!-- <CodeBlockComponent filename="blitz-list-form/BlitzForm Example" /> -->
+<CodeBlockComponent filename="blitz-list-form/BlitzForm Example" />

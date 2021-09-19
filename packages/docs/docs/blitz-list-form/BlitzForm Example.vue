@@ -1,15 +1,12 @@
 <template>
   <div>
     <BlitzForm :schema="schema" v-model="formData" />
-    <PreviewCode comment="formData">{{ formData }}</PreviewCode>
+
+    <CodeBlock :content="`// formData\n${JSON.stringify(formData, undefined, 2)}`" />
   </div>
 </template>
 
-<style lang="sass" scoped></style>
-
 <script>
-import { BlitzForm, BlitzListForm } from 'blitzar'
-
 const schema = [
   {
     id: 'classroomName',
@@ -19,7 +16,7 @@ const schema = [
   {
     id: 'students',
     label: 'Student Names',
-    component: BlitzListForm,
+    component: 'BlitzListForm',
     schema: [
       { id: 'nameFirst', label: 'First Name', component: 'input' },
       { id: 'nameLast', label: 'Last Name', component: 'input' },
@@ -28,10 +25,8 @@ const schema = [
 ]
 
 export default {
-  components: { BlitzForm },
   data() {
     return { schema, formData: {} }
   },
-  methods: {},
 }
 </script>

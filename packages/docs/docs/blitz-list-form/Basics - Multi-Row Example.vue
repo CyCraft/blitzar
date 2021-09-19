@@ -1,35 +1,44 @@
 <template>
   <div>
-    <b>Expenses</b><br />
+    <strong>Expenses</strong><br /><br />
+    
     <BlitzListForm class="my-multi-row-form" :schema="schema" v-model="formData" />
-    <PreviewCode comment="formData">{{ formData }}</PreviewCode>
+    
+    <CodeBlock :content="`// formData\n${JSON.stringify(formData, undefined, 2)}`" />
   </div>
 </template>
 
-<style lang="sass">
-.my-multi-row-form
-  .blitz-list-form__row
-    grid-template-columns: 20px 1fr 1fr 100px !important
-    > *:last-child
-      grid-column: 2 / -1
+<style lang="scss">
+.my-multi-row-form {
+  
+  .blitz-list-form__row {
+    grid-template-columns: 20px 1fr 1fr 100px !important;
+  }
+  .blitz-list-form__row > *:last-child {
+    grid-column: 2 / -1;
+  }
 
-.delete-button
-  height: 20px
-  width: 20px
-  color: white
-  background: crimson
-  border: none
-  font-weight: 900
-  border-radius: 100%
-  outline: none
-  display: flex
-  justify-content: center
-  align-items: center
+  .delete-button {
+    height: 20px;
+    width: 20px;
+    line-height: 1;
+    color: white;
+    background: crimson;
+    border: none;
+    font-weight: 900;
+    border-radius: 100%;
+    outline: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .delete-button:disabled {
+    opacity: 0.5;
+  }
+}
 </style>
 
 <script>
-import { BlitzListForm } from 'blitzar'
-
 const schema = [
   // the `deleteRow` function and `rowIndex` props used below are only available in schemas of a BlitzListForm!
   {
@@ -74,10 +83,8 @@ const schema = [
 ]
 
 export default {
-  components: { BlitzListForm },
   data() {
     return { schema, formData: [] }
   },
-  methods: {},
 }
 </script>

@@ -273,7 +273,6 @@ export default defineComponent({
         'fieldClasses',
         'componentStyle',
         'componentClasses',
-        'disable',
         'events',
         'lang',
       ],

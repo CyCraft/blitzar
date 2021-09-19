@@ -14,7 +14,7 @@ const schema = [
   {
     label: 'a div showing the same content as the input',
     component: 'div',
-    slot: (val, { formData }) => formData.input,
+    slot: (val, { formData }) => formData.myInput,
     dynamicProps: ['slot'],
     componentStyle: 'border: dashed thin goldenrod; padding: 2em',
   },
