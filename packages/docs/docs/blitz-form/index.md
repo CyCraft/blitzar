@@ -2,7 +2,7 @@
 editLink: true
 ---
 
-# Blitz Form
+# BlitzForm
 
 ## Basics
 
