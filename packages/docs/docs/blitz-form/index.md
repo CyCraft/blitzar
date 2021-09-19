@@ -615,11 +615,53 @@ Hint: add `showCondition: false` if you want to hide the field but still have it
 
 ## Validation
 
-BlitzForms have validation enabled by default when clicking the save button or when executing `validate` on the BlitzForm ref.
+### Showing errors
 
-<!-- <CodeBlockComponent filename="blitz-form/Validation" /> -->
+BlitzForm comes with lightweight built-in field validation.
 
-There is also the possibility to do programatic validation. BlitzForms provides a helper function which can be used without the need of rendering the form at all. It can be used like so:
+Showing an "error" underneath a field can be done by setting a field's `error` to a Dynamic Prop:
+
+```js
+// Eg.
+{
+  id: 'age',
+  component: 'input',
+  dynamicProps: ['error'],
+  error: (val) => Number(val) >= 18 ? null : 'You have to be over 18!'
+}
+```
+
+- The function you provide will receive the field's `modelValue` as argument
+- If the value is O.K., then you can return `null`
+- If the value does not pass your validation, then you must return the error you want to show underneath the field
+
+Be sure to also check out the documentation on [Dynamic Props](#dynamic-props) to see what other powerful things you can do with the `error` field.
+
+### Validation on Every Keystroke
+
+By default errors will get validated and shown on every keystroke.
+
+Type something below to see the effect:
+
+<CodeBlockComponent filename="blitz-form/Validation - On Every Keystroke" />
+
+### Validation on Save
+
+You can set `showErrorsOn: 'save'` on the BlitzForm to make sure that the errors only show when you click save. (The default is `showErrorsOn: 'interaction'`)
+
+You can also use `showErrorsOn: 'save-focus'` to not only show the error but also automatically focus the field.
+
+Typing below won't show errors, but try clicking **save** and see the errors show up, then play around with the different options for `showErrorsOn`:
+
+<CodeBlockComponent filename="blitz-form/Validation - On Save" />
+
+:::tip Please note!
+If you use `showErrorsOn: 'save-focus'` and custom components, you must make sure those components have a method called `focus`. (because focus is done by calling the `focus` method on the component ref)
+:::
+
+### Validate formData Programatically
+
+You can also do programatic validation. BlitzForms provides a helper function which can be used without the need of rendering the form at all. It can be used like so:
 
 ```js
 import { validateFormPerSchema } from 'blitzar'
@@ -627,4 +669,4 @@ import { validateFormPerSchema } from 'blitzar'
 validateFormPerSchema(formData, schema)
 ```
 
-<!-- <CodeBlockComponent filename="blitz-form/Validation - 2" /> -->
+<CodeBlockComponent filename="blitz-form/Validation - Programatically" />

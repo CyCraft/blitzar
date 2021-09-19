@@ -29,6 +29,7 @@
         <BlitzField
           v-for="(field, i) in cSchema"
           :key="`${field.id}-${i}`"
+          :ref="`ref-field-${i}`"
           v-bind="{ ...field, span: undefined }"
           :modelValue="formDataFlat[field.id]"
           @update:modelValue="(value, origin) => updateField({ id: field.id, value, origin })"
@@ -55,6 +56,7 @@
   &--nav-left,
   &--nav-right
     flex-direction: row
+
 .blitz-form__form
   flex: 1
   display: grid
@@ -62,6 +64,7 @@
   justify-items: stretch
   > .-title
     grid-column: 1 / -1
+
 .blitz-form__nav-row
   min-height: 42px
   display: grid
@@ -85,18 +88,20 @@
     order: 0
     grid-auto-flow: row
     margin-right: $md
+
+.blitz-form__validation-error
+  color: crimson
 </style>
 
 <script>
 import { defineComponent } from 'vue'
 import { merge } from 'merge-anything'
 import { copy } from 'copy-anything'
-import { isArray, isFunction, isFullString, isPlainObject, isString } from 'is-what'
+import { isArray, isFunction, isFullString, isPlainObject, isString, isBoolean } from 'is-what'
 import { nestifyObject } from 'nestify-anything'
 import { flattenPerSchema } from '@blitzar/utils'
 import BlitzField from './BlitzField.vue'
 import { defaultLang } from '../meta/lang'
-import { validateFormPerSchema } from '../helpers/validation'
 
 /**
 Here you can find all the information on the available props & events of BlitzForm.
@@ -171,13 +176,6 @@ export default defineComponent({
       validator: (prop) => ['top', 'bottom', 'right', 'left'].includes(prop),
     },
     /**
-     * A function which serves as global validator for your form. It will receive the edited data as first param and the original data (before user edits) as second. It should return true if all is OK or a string with error message.
-     * @type {(newData: Record<string, any>, oldData: Record<string, any>) => (true | string)}
-     * @example (newData, oldData) => newData.pass1 === newData.pass2 || 'passwords don't match'
-     * @category behavior
-     */
-    validator: { type: Function },
-    /**
      * The amount of columns the form should have. Each field can set a specific 'span' to be able to span multiple columns.
      * @type {number}
      * @category style
@@ -191,7 +189,7 @@ export default defineComponent({
     gridGap: { type: String, default: '1em' },
     /**
      * The text used in the UI for the action buttons and some error messages.
-     * @type {{ archive?: string, delete?: string, cancel?: string, edit?: string, save?: string, requiredField?: string, formValidationError?: string } | EvaluatedProp<{ archive?: string, delete?: string, cancel?: string, edit?: string, save?: string, requiredField?: string, formValidationError?: string }>}
+     * @type {{ archive?: string, delete?: string, cancel?: string, edit?: string, save?: string, requiredField?: string, formValidationError?: string } | DynamicProp<{ archive?: string, delete?: string, cancel?: string, edit?: string, save?: string, requiredField?: string, formValidationError?: string }>}
      * @example { cancel: 'キャンセル', edit: '編集', save: '保存' }
      * @category content
      */
@@ -242,7 +240,7 @@ export default defineComponent({
      * Custom styling to be applied to the label of BlitzField. Applied like so `:style="componentStyle"`. Can be an Evaluated Prop.
      *
      * This prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).
-     * @type {string | Record<string, boolean> | (string | Record<string, boolean>)[] | EvaluatedProp<string | Record<string, boolean> | (string | Record<string, boolean>)[]>}
+     * @type {string | Record<string, boolean> | (string | Record<string, boolean>)[] | DynamicProp<string | Record<string, boolean> | (string | Record<string, boolean>)[]>}
      * @example 'font-weight: 200;'
      * @category style
      */
@@ -251,7 +249,7 @@ export default defineComponent({
      * Custom classes to be applied to the label of BlitzField. Applied like so `:class="labelClasses"`. Can be an Evaluated Prop.
      *
      * This prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).
-     * @type {string | Record<string, boolean> | (string | Record<string, boolean>)[] | EvaluatedProp<string | Record<string, boolean> | (string | Record<string, boolean>)[]>}
+     * @type {string | Record<string, boolean> | (string | Record<string, boolean>)[] | DynamicProp<string | Record<string, boolean> | (string | Record<string, boolean>)[]>}
      * @example ['text-h6']
      * @category style
      */
@@ -271,7 +269,6 @@ export default defineComponent({
         'label',
         'subLabel',
         'required',
-        'rules',
         'fieldStyle',
         'fieldClasses',
         'componentStyle',
@@ -282,32 +279,33 @@ export default defineComponent({
       ],
     },
     /**
-     * Set to true if the entire form has its own labels and you do not want the BlitzField to show a label.
-     *
-     * When `true` subLabels will be passed as a prop called 'hint'.
+     * Set to `true` if the component will take care of showing the `label` and `subLabel`. Both of these props will be passed to the component and not shown in BlitzField.
      *
      * This prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).
      * @type {boolean | undefined}
      * @category behavior
      */
-    internalLabels: { type: [Boolean, undefined], required: false, default: undefined },
+    internalLabels: { type: [Boolean, undefined], default: undefined },
     /**
-     * Set to true if the entire form has its own error handling. This makes sure it passes on props like `rules` and does nothing with them in the BlitzField.
+     * Set to true if the component has its own error handling. This makes sure it passes on props like `error` and does nothing with them in the BlitzField.
      *
      * This prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).
      * @type {boolean | undefined}
      * @category behavior
      */
-    internalErrors: { type: [Boolean, undefined], required: false, default: undefined },
+    internalErrors: { type: [Boolean, undefined], default: undefined },
     /**
-     * Pass the component names (without `.vue`) that have internal error handling. This makes sure it passes on props like `rules` and does nothing with them in the BlitzField.
-     * @type {string[]}
+     * - 'interaction' — evaluates & shows errors on every interaction or keystroke
+     * - 'save' — only evaluates & shows errors when clicking 'save'
+     * - 'save-focus' — only evaluates & shows errors when clicking 'save', then focuses the first field with an error
+     * - 'never' — never evaluate or show errors
+     * - 'always' — always evaluate and show errors, even without user interaction
+     *
+     * This prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).
+     * @type {'interaction' | 'save' | 'save-focus' | 'never' | 'always'}
      * @category behavior
      */
-    internalErrorsFor: {
-      type: Array,
-      default: () => ['QInput', 'QSelect', 'QField', 'q-input', 'q-select', 'q-field'],
-    },
+    showErrorsOn: { type: String, default: 'interaction' },
     /**
      * The component that should be used to generate the form. Defaults to a div. You can pass the name of a native HTML5 element or Vue component that is globally registered. You can also import the Vue file and directly pass the imported object, just like you would when you add it to a Vue file's components prop.
      * @type {string | Function}
@@ -396,6 +394,7 @@ export default defineComponent({
         lang: innerLang,
         mode: innerMode,
         updateField: this.updateField,
+        showErrorsOn: this.showErrorsOn,
         // just pass
         labelPosition: this.labelPosition,
         labelStyle: this.labelStyle,
@@ -419,22 +418,21 @@ export default defineComponent({
       // - slot: we pass as `slots: { default: ... }`
       // - class: we pass as `fieldClasses`
       // - style: we pass as `fieldStyle`
-      const { schema, schemaOverwritableDefaults, schemaForcedDefaults, internalErrorsFor } = this
+      const { schema, schemaOverwritableDefaults, schemaForcedDefaults } = this
+
       return schema.map((blueprint) => {
-        const internalErrorDefaults = internalErrorsFor.includes(blueprint.component)
-          ? { internalErrors: true }
-          : {}
         const overwrites = {}
         if (blueprint.slot) {
           overwrites.slots = merge(blueprint.slots || {}, { default: blueprint.slot })
         }
         const fieldClasses = blueprint.fieldClasses || blueprint.class
         if (fieldClasses) overwrites.fieldClasses = fieldClasses
+
         const fieldStyle = blueprint.fieldStyle || blueprint.style
         if (fieldStyle) overwrites.fieldStyle = fieldStyle
+
         const blueprintParsed = merge(
           schemaOverwritableDefaults,
-          internalErrorDefaults,
           blueprint,
           overwrites,
           schemaForcedDefaults
@@ -506,7 +504,8 @@ export default defineComponent({
           ? {}
           : {
               events: {
-                'update:modelValue': (value, origin) => updateField({ id: field.id, value, origin }),
+                'update:modelValue': (value, origin) =>
+                  updateField({ id: field.id, value, origin }),
               },
             }
         const overwrites = {
@@ -653,31 +652,30 @@ export default defineComponent({
       this.event('cancel')
     },
     /**
-     * Validate can focus the first field with an error
-     * @returns {boolean} `true` if no errors remained, `false` otherwise
+     * Validate all fields for potential errors
+     * @param {boolean} [focusIfError] — Wether or not it should focus the field with an error. Defaults to `false`
+     * @returns {null | string} The result of the first field it finds with an error, or `null` if no errors were found.
      */
-    validate(shouldFocusErrorField) {
-      const { formData, schema, innerLang, validator, dataEdited, dataBackup } = this
-      const res = validateFormPerSchema(formData, schema, innerLang)
-      const errorsRemain = Object.values(res).some((val) => val !== true)
-      console.log(`errorsRemain → `, errorsRemain)
-      if (errorsRemain) {
-        this.formErrorMsg = innerLang['formValidationError']
-        if (shouldFocusErrorField) {
-          console.log(`1 → `, 1)
-        }
-        return false
-      }
-      if (isFunction(validator)) {
-        const validatorRes = validator(dataEdited, dataBackup)
-        console.log(`validatorRes → `, validatorRes)
-        if (isFullString(validatorRes)) {
-          this.formErrorMsg = validatorRes
-          return false
+    validate(focusIfError) {
+      const { cSchema, innerLang, showErrorsOn } = this
+
+      if (showErrorsOn === 'never') return null
+
+      const shouldFocus = isBoolean(focusIfError) ? focusIfError : showErrorsOn === 'save-focus'
+
+      for (const [i, blueprint] of cSchema.entries()) {
+        const refField = this.$refs[`ref-field-${i}`]
+        if (!refField) continue
+
+        const result = refField.validate(shouldFocus)
+
+        if (isFullString(result)) {
+          this.formErrorMsg = innerLang['formValidationError']
+          return result
         }
       }
       this.formErrorMsg = null
-      return true
+      return null
     },
     tapEdit() {
       this.cMode = 'edit'
@@ -685,13 +683,13 @@ export default defineComponent({
     },
     tapSave() {
       const { validate, dataEdited, dataBackup, resetState, formData } = this
-      const allGood = validate(true)
-      if (allGood) {
-        const newData = copy(dataEdited)
-        const oldData = copy(dataBackup)
-        this.event('save', { newData, oldData, formData })
-        resetState()
-      }
+      const foundError = validate()
+      if (foundError) return
+
+      const newData = copy(dataEdited)
+      const oldData = copy(dataBackup)
+      this.event('save', { newData, oldData, formData })
+      resetState()
     },
     tapDelete() {
       this.event('delete')

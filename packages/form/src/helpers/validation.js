@@ -1,19 +1,14 @@
 import { flattenPerSchema } from '@blitzar/utils'
-import { isArray, isFunction } from 'is-what'
+import { isArray, isFullString, isFunction } from 'is-what'
 import { defaultLang } from '../meta/lang'
 
-export function createRequiredRule(requiredFieldErrorMsg) {
-  return (val) => val === 0 || !!val || requiredFieldErrorMsg
+export function createRequiredErrorFn(requiredFieldErrorMsg) {
+  return (val) => (val === 0 || !!val) ? null : requiredFieldErrorMsg
 }
 
 /**
- * @typedef ValidationResultField
- * @type {boolean | (string | boolean)[]}
- */
-
-/**
  * @typedef ValidationResultForm
- * @type {{ [fieldId: string]: ValidationResultField }}
+ * @type {{ [fieldId: string]: null | string }}
  */
 
 /**
@@ -21,22 +16,21 @@ export function createRequiredRule(requiredFieldErrorMsg) {
  *
  * @export
  * @param {*} payload
- * @param {Blueprint} { rules = [], required }
+ * @param {Blueprint} blueprint
  * @param {Context} context
- * @returns {ValidationResultField}
+ * @returns {null | string}
  */
-export function validateFieldPerSchema(payload, { rules = [], required }, context = {}) {
+export function validateFieldPerSchema(payload, blueprint, context = {}) {
   const lang = context.lang || defaultLang()
-  const rulesEvaluated = !isFunction(rules) ? rules : rules(payload, context)
-  const requiredEvaluated = !isFunction(required) ? required : required(payload, context)
-  const requiredRule = createRequiredRule(lang.requiredField)
-  const rulesToTest = !requiredEvaluated ? rulesEvaluated : [requiredRule, ...rulesEvaluated]
-  const results = rulesToTest.reduce((carry, rule) => {
-    carry.push(rule(payload))
-    return carry
-  }, [])
-  const hasAnError = Object.values(results).some((result) => result !== true)
-  return !hasAnError || results
+  const requiredErrorFn = createRequiredErrorFn(lang.requiredField)
+
+  const requiredResult = requiredErrorFn(payload)
+  if (isFullString(requiredResult)) return requiredResult
+
+  if (!blueprint.error) return null
+  
+  const errorResult = !isFunction(blueprint.error) ? blueprint.error : blueprint.error(payload, context)
+  return errorResult
 }
 
 /**
@@ -59,12 +53,16 @@ export function validateFormPerSchema(formData, schema, lang) {
     .reduce((carry, key) => ({ ...carry, [key]: null }), {}) // prettier-ignore
   const formDataFlatCurrent = flattenPerSchema(formData, schema)
   const formDataFlat = { ...formDataFlatEmpty, ...formDataFlatCurrent }
+  
   const resultPerField = Object.entries(formDataFlat).reduce((carry, [fieldId, fieldValue]) => {
     if (fieldId === 'undefined') return carry
+    
     const blueprint = schemaObject[fieldId]
     const context = { formData, formDataFlat, lang: lang || defaultLang() }
-    carry[fieldId] = !blueprint || validateFieldPerSchema(fieldValue, blueprint, context)
+    
+    carry[fieldId] = !blueprint ? null : validateFieldPerSchema(fieldValue, blueprint, context)
     return carry
   }, {})
+  
   return resultPerField
 }

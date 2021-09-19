@@ -23,17 +23,19 @@ const schema = [
     id: 'age',
     label: 'Age',
     component: 'input',
-    parseInput: (val) => Number(val),
-    rules: [(val) => val >= 18 || 'You must be over 18'],
     type: 'number',
+    parseInput: (val) => Number(val),
+    dynamicProps: ['error'],
+    error: (val) => Number(val) >= 18 ? null : 'You have to be over 18!',
   },
   {
     id: 'consent',
     label: 'Do you agree with our terms?',
     component: 'input',
     type: 'checkbox',
-    rules: [(val) => val || 'You must accept our terms'],
     defaultValue: false,
+    dynamicProps: ['error'],
+    error: (val) => val === true ? null : 'You must accept our terms',
   },
 ]
 

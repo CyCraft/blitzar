@@ -20,27 +20,27 @@
     "description": "A function that modifies a value after user input but before the value is emitted. (see `parseValue` for the reverse)"
   },
   "blitz-field/component": {
-    "type": "string | Function | EvaluatedProp<string | Function>",
+    "type": "string | Function | DynamicProp<string | Function>",
     "description": "The component to be used for the field. Is mounted via `<component :is=\"component\" />`. You can pass the name of a native HTML5 element or Vue component that is globally registered. You can also import the Vue file and directly pass the imported object, just like you would when you add it to a Vue file's components prop."
   },
   "blitz-field/slots": {
-    "type": "{ label?: string | Record<string, any> | Record<string, any>[], default?: string | Record<string, any> | Record<string, any>[] } | EvaluatedProp<{ label?: string | Record<string, any> | Record<string, any>[], default?: string | Record<string, any> | Record<string, any>[] }>",
+    "type": "{ label?: string | Record<string, any> | Record<string, any>[], default?: string | Record<string, any> | Record<string, any>[] } | DynamicProp<{ label?: string | Record<string, any> | Record<string, any>[], default?: string | Record<string, any> | Record<string, any>[] }>",
     "description": "An Object with keys for the slot names and an object for values. The object you pass to a slot is itself applied as a `<component is=\"\" />`.\n\nThe last example below shows how this is actually used under the hood."
   },
   "blitz-field/lang": {
-    "type": "{ archive?: string, delete?: string, cancel?: string, edit?: string, save?: string, requiredField?: string, formValidationError?: string } | EvaluatedProp<{ archive?: string, delete?: string, cancel?: string, edit?: string, save?: string, requiredField?: string, formValidationError?: string }>",
+    "type": "{ archive?: string, delete?: string, cancel?: string, edit?: string, save?: string, requiredField?: string, formValidationError?: string } | DynamicProp<{ archive?: string, delete?: string, cancel?: string, edit?: string, save?: string, requiredField?: string, formValidationError?: string }>",
     "description": "The text used in the UI for the action buttons and some error messages.\n\nThe example shows how the error message for required fields is overwritten."
   },
   "blitz-field/label": {
-    "type": "string | EvaluatedProp<string>",
+    "type": "string | DynamicProp<string>",
     "description": "The field label."
   },
   "blitz-field/subLabel": {
-    "type": "string | EvaluatedProp<string>",
+    "type": "string | DynamicProp<string>",
     "description": "A smaller label for extra info."
   },
   "blitz-field/mode": {
-    "type": "'edit' | 'view' | 'disabled' | 'raw' | 'add' | EvaluatedProp<'edit' | 'view' | 'disabled' | 'raw' | 'add'>",
+    "type": "'edit' | 'view' | 'disabled' | 'raw' | 'add' | DynamicProp<'edit' | 'view' | 'disabled' | 'raw' | 'add'>",
     "description": "The mode represents how fields are rendered\n- `'edit'` — (default) show editable fields based on the schema\n- `'view'` — show each field with `readonly: true`\n- `'disabled'` — show each field with `disabled: true`\n- `'raw'` — used to show raw data of your form (for select components, it will show the data label instead of its value)\n- `'add'` — the same as `'edit'`\n\nThis prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).",
     "options": [
       "edit",
@@ -54,15 +54,15 @@
     ]
   },
   "blitz-field/events": {
-    "type": "Record<string, (event: any, formContext: FormContext) => any> | EvaluatedProp<Record<string, (event: any, formContext: FormContext) => any>>",
+    "type": "Record<string, (event: any, formContext: FormContext) => any> | DynamicProp<Record<string, (event: any, formContext: FormContext) => any>>",
     "description": "An Object with an event name as key and the handler function as value. The function you pass will receive the native event payload as first parameter and the BlitzField context (the component instance) as second: `($event, context) => {}`"
   },
   "blitz-field/required": {
-    "type": "boolean | EvaluatedProp<boolean>",
+    "type": "boolean | DynamicProp<boolean>",
     "description": "Whether or not the field is required or not. If a field is marked 'required' it will add a default rule like so: `[val => (val !== null && val !== undefined) || 'Field is required']`. The default message can be set in the `lang` prop as `requiredField`."
   },
   "blitz-field/rules": {
-    "type": "((val: any) => (true | string))[] | EvaluatedProp<((val: any) => (true | string))[]>",
+    "type": "((val: any) => (true | string))[] | DynamicProp<((val: any) => (true | string))[]>",
     "description": "An array of rule functions that receive the value of the field as parameter and should return `true` if the rule passes or a `string` if the rule fails. The string represents the error message that is then shown underneath the field in red."
   },
   "blitz-field/dynamicProps": {
@@ -70,33 +70,33 @@
     "description": "An array with prop names that should be treated as Dynamic Props when passed a function.\n\nThis prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields)."
   },
   "blitz-field/internalLabels": {
-    "type": "boolean | undefined | EvaluatedProp<boolean | undefined>",
+    "type": "boolean | undefined | DynamicProp<boolean | undefined>",
     "description": "Set to `true` if the component has its own labels and you do not want the BlitzField to show a label.\n\nWhen `true` subLabels will also be hidden and passed to the component instead as a prop called 'hint'.\n\nThis prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields)."
   },
   "blitz-field/internalErrors": {
-    "type": "boolean | undefined | EvaluatedProp<boolean | undefined>",
+    "type": "boolean | undefined | DynamicProp<boolean | undefined>",
     "description": "Set to true if the component has its own error handling. This makes sure it passes on props like `rules` and does nothing with them in the BlitzField.\n\nThis prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields)."
   },
   "blitz-field/showCondition": {
-    "type": "boolean | EvaluatedProp<boolean>",
+    "type": "boolean | DynamicProp<boolean>",
     "description": "Setting to `false` will hide the field. When using as an Evaluated Prop it can used to conditionally hide fields based on the other `formData`."
   },
   "blitz-field/readonly": {
-    "type": "boolean | 'readonly' | EvaluatedProp<boolean | 'readonly'>",
+    "type": "boolean | 'readonly' | DynamicProp<boolean | 'readonly'>",
     "description": "`readonly` defaults to `true` on `mode: 'view'`",
     "options": [
       "readonly"
     ]
   },
   "blitz-field/disabled": {
-    "type": "boolean | 'disabled' | EvaluatedProp<boolean | 'disabled'>",
+    "type": "boolean | 'disabled' | DynamicProp<boolean | 'disabled'>",
     "description": "`disabled` defaults to `true` on `mode: 'disabled'`",
     "options": [
       "disabled"
     ]
   },
   "blitz-field/labelPosition": {
-    "type": "'top' | 'left' | EvaluatedProp<'top' | 'left'>",
+    "type": "'top' | 'left' | DynamicProp<'top' | 'left'>",
     "description": "The position of the label in comparison to the field.\n\nThis prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).",
     "options": [
       "top",
@@ -104,27 +104,27 @@
     ]
   },
   "blitz-field/fieldStyle": {
-    "type": "string | Record<string, boolean> | (string | Record<string, boolean>)[] | EvaluatedProp<string | Record<string, boolean> | (string | Record<string, boolean>)[]>",
+    "type": "string | Record<string, boolean> | (string | Record<string, boolean>)[] | DynamicProp<string | Record<string, boolean> | (string | Record<string, boolean>)[]>",
     "description": "Custom styling to be applied to the BlitzField. Applied like so `:style=\"fieldStyle\"`. Can be an Evaluated Prop (this is why I opted to have a different name from `style`).\n\nIn a BlitzForm schema you can also just write `style: '...'` and BlitzForm will pass that as fieldStyle for you, because \"style\" is not a valid prop name."
   },
   "blitz-field/fieldClasses": {
-    "type": "string | Record<string, boolean> | (string | Record<string, boolean>)[] | EvaluatedProp<string | Record<string, boolean> | (string | Record<string, boolean>)[]>",
+    "type": "string | Record<string, boolean> | (string | Record<string, boolean>)[] | DynamicProp<string | Record<string, boolean> | (string | Record<string, boolean>)[]>",
     "description": "Custom classes to be applied to the BlitzField. Applied like so `:class=\"fieldClasses\"`. Can be an Evaluated Prop (this is why I opted to have a different name from `class`).\n\nIn a BlitzForm schema you can also just write `class: '...'` and BlitzForm will pass that as `fieldClasses` for you, because \"class\" is not a valid prop name."
   },
   "blitz-field/componentStyle": {
-    "type": "string | Record<string, boolean> | (string | Record<string, boolean>)[] | EvaluatedProp<string | Record<string, boolean> | (string | Record<string, boolean>)[]>",
+    "type": "string | Record<string, boolean> | (string | Record<string, boolean>)[] | DynamicProp<string | Record<string, boolean> | (string | Record<string, boolean>)[]>",
     "description": "Custom styling to be applied to the inner component of BlitzField. Applied like so `:style=\"componentStyle\"`. Can be an Evaluated Prop."
   },
   "blitz-field/componentClasses": {
-    "type": "string | Record<string, boolean> | (string | Record<string, boolean>)[] | EvaluatedProp<string | Record<string, boolean> | (string | Record<string, boolean>)[]>",
+    "type": "string | Record<string, boolean> | (string | Record<string, boolean>)[] | DynamicProp<string | Record<string, boolean> | (string | Record<string, boolean>)[]>",
     "description": "Custom classes to be applied to the inner component of BlitzField. Applied like so `:class=\"componentClasses\"`. Can be an Evaluated Prop."
   },
   "blitz-field/labelStyle": {
-    "type": "string | Record<string, boolean> | (string | Record<string, boolean>)[] | EvaluatedProp<string | Record<string, boolean> | (string | Record<string, boolean>)[]>",
+    "type": "string | Record<string, boolean> | (string | Record<string, boolean>)[] | DynamicProp<string | Record<string, boolean> | (string | Record<string, boolean>)[]>",
     "description": "Custom styling to be applied to the label of BlitzField. Applied like so `:style=\"componentStyle\"`. Can be an Evaluated Prop.\n\nThis prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields)."
   },
   "blitz-field/labelClasses": {
-    "type": "string | Record<string, boolean> | (string | Record<string, boolean>)[] | EvaluatedProp<string | Record<string, boolean> | (string | Record<string, boolean>)[]>",
+    "type": "string | Record<string, boolean> | (string | Record<string, boolean>)[] | DynamicProp<string | Record<string, boolean> | (string | Record<string, boolean>)[]>",
     "description": "Custom classes to be applied to the label of BlitzField. Applied like so `:class=\"labelClasses\"`. Can be an Evaluated Prop.\n\nThis prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields)."
   },
   "blitz-field/formData": {
@@ -219,7 +219,7 @@
     "description": "The size of the gap between each field in the form."
   },
   "blitz-form/lang": {
-    "type": "{ archive?: string, delete?: string, cancel?: string, edit?: string, save?: string, requiredField?: string, formValidationError?: string } | EvaluatedProp<{ archive?: string, delete?: string, cancel?: string, edit?: string, save?: string, requiredField?: string, formValidationError?: string }>",
+    "type": "{ archive?: string, delete?: string, cancel?: string, edit?: string, save?: string, requiredField?: string, formValidationError?: string } | DynamicProp<{ archive?: string, delete?: string, cancel?: string, edit?: string, save?: string, requiredField?: string, formValidationError?: string }>",
     "description": "The text used in the UI for the action buttons and some error messages."
   },
   "blitz-form/mode": {
@@ -242,11 +242,11 @@
     ]
   },
   "blitz-form/labelStyle": {
-    "type": "string | Record<string, boolean> | (string | Record<string, boolean>)[] | EvaluatedProp<string | Record<string, boolean> | (string | Record<string, boolean>)[]>",
+    "type": "string | Record<string, boolean> | (string | Record<string, boolean>)[] | DynamicProp<string | Record<string, boolean> | (string | Record<string, boolean>)[]>",
     "description": "Custom styling to be applied to the label of BlitzField. Applied like so `:style=\"componentStyle\"`. Can be an Evaluated Prop.\n\nThis prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields)."
   },
   "blitz-form/labelClasses": {
-    "type": "string | Record<string, boolean> | (string | Record<string, boolean>)[] | EvaluatedProp<string | Record<string, boolean> | (string | Record<string, boolean>)[]>",
+    "type": "string | Record<string, boolean> | (string | Record<string, boolean>)[] | DynamicProp<string | Record<string, boolean> | (string | Record<string, boolean>)[]>",
     "description": "Custom classes to be applied to the label of BlitzField. Applied like so `:class=\"labelClasses\"`. Can be an Evaluated Prop.\n\nThis prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields)."
   },
   "blitz-form/dynamicProps": {

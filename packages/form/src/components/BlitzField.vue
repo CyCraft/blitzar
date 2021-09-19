@@ -31,8 +31,6 @@
       </slot>
     </div>
     <div v-if="subLabelHtmlUsedHere" class="blitz-field__sub-label" v-html="subLabelHtmlUsedHere" />
-    <!-- no component -->
-    <template v-if="!evalPropOrAttr('component')"></template>
     <!-- raw component -->
     <BlitzH
       v-else-if="evalPropOrAttr('mode') === 'raw'"
@@ -45,16 +43,18 @@
     />
     <!-- raw component -->
     <input
-      v-else-if="usesInternalOrNoErrors && evalPropOrAttr('component') === 'input'"
+      v-else-if="evalPropOrAttr('component') === 'input'"
       v-bind="propsAndAttrsToPass"
+      ref="ref-component"
       v-model="cValue"
       v-on="eventsCalculated"
       :class="['blitz-field__component', evalPropOrAttr('componentClasses')]"
       :style="evalPropOrAttr('componentStyle')"
     />
     <select
-      v-else-if="usesInternalOrNoErrors && evalPropOrAttr('component') === 'select'"
+      v-else-if="evalPropOrAttr('component') === 'select'"
       v-bind="propsAndAttrsToPass"
+      ref="ref-component"
       v-model="cValue"
       v-on="eventsCalculated"
       :class="['blitz-field__component', evalPropOrAttr('componentClasses')]"
@@ -63,8 +63,9 @@
       <BlitzH v-if="defaultSlotCalculated" :options="defaultSlotCalculated" />
     </select>
     <component
-      v-else-if="usesInternalOrNoErrors"
+      v-else-if="evalPropOrAttr('component')"
       v-bind="propsAndAttrsToPass"
+      ref="ref-component"
       :is="evalPropOrAttr('component')"
       v-model="cValue"
       v-on="eventsCalculated"
@@ -73,37 +74,7 @@
     >
       <BlitzH v-if="defaultSlotCalculated" :options="defaultSlotCalculated" />
     </component>
-    <div v-else v-bind="propsAndAttrsToPassForQField" class="blitz-field__component-validation">
-      <input
-        v-if="evalPropOrAttr('component') === 'input'"
-        v-bind="propsAndAttrsToPass"
-        v-model="cValue"
-        v-on="eventsCalculated"
-        :class="['blitz-field__component', evalPropOrAttr('componentClasses')]"
-        :style="evalPropOrAttr('componentStyle')"
-      />
-      <select
-        v-else-if="evalPropOrAttr('component') === 'select'"
-        v-bind="propsAndAttrsToPass"
-        v-model="cValue"
-        v-on="eventsCalculated"
-        :class="['blitz-field__component', evalPropOrAttr('componentClasses')]"
-        :style="evalPropOrAttr('componentStyle')"
-      >
-        <BlitzH v-if="defaultSlotCalculated" :options="defaultSlotCalculated" />
-      </select>
-      <component
-        v-else
-        v-bind="propsAndAttrsToPass"
-        :is="evalPropOrAttr('component')"
-        v-model="cValue"
-        v-on="eventsCalculated"
-        :class="['blitz-field__component', evalPropOrAttr('componentClasses')]"
-        :style="evalPropOrAttr('componentStyle')"
-      >
-        <BlitzH v-if="defaultSlotCalculated" :options="defaultSlotCalculated" />
-      </component>
-    </div>
+    <div v-if="errorCalculated" class="blitz-field__error">{{ errorCalculated }}</div>
   </div>
 </template>
 
@@ -126,7 +97,8 @@
     grid-auto-rows: 1fr
     .blitz-field__sub-label
       grid-row: 2 / 3
-    .blitz-field__component
+    .blitz-field__component,
+    .blitz-field__error
       grid-row: 1 / 3
     &.blitz-field--no-sub-label
       .blitz-field__label
@@ -134,25 +106,14 @@
         align-items: center
       .blitz-field__component
         grid-row: 1 / 2
-  .q-field__native,
-  .blitz-field__component
-    flex: 1
-  /** this fixes an issue where QInput fields are larger when they have rules */
-  .blitz-field__component-validation
-    .q-field__control,
-    .q-field__native
-      min-height: 40px
 
 // style
 .blitz-field
   .blitz-field__sub-label
     opacity: 0.8
     font-weight: 300
-    .q-markdown--token
-      white-space: pre-wrap
-      word-break: break-word
-  .q-field--error .q-field__bottom
-    color: rgb(222,55,55)
+  .blitz-field__error
+    color: crimson
 </style>
 
 <script>
@@ -172,7 +133,7 @@ import { mapObject } from 'map-anything'
 import { parseFieldValue } from '@blitzar/utils'
 import BlitzH from './BlitzH.vue'
 import { defaultLang } from '../meta/lang'
-import { createRequiredRule } from '../helpers/validation.js'
+import { createRequiredErrorFn } from '../helpers/validation.js'
 
 function evaluateProp(propValue, componentValue, componentInstance) {
   return isFunction(propValue) ? propValue(componentValue, componentInstance) : propValue
@@ -187,7 +148,7 @@ function evaluateProp(propValue, componentValue, componentInstance) {
 }}
  */
 /**
- * @typedef EvaluatedProp<T>
+ * @typedef DynamicProp<T>
  * @type {(val: any, formContext: FormContext) => T}
  */
 /**
@@ -249,7 +210,7 @@ export default defineComponent({
     parseInput: { type: Function },
     /**
      * The component to be used for the field. Is mounted via `<component :is="component" />`. You can pass the name of a native HTML5 element or Vue component that is globally registered. You can also import the Vue file and directly pass the imported object, just like you would when you add it to a Vue file's components prop.
-     * @type {string | Function | EvaluatedProp<string | Function>}
+     * @type {string | Function | DynamicProp<string | Function>}
      * @example 'input'
      * @example 'MyCustomField'
      * @category content
@@ -259,7 +220,7 @@ export default defineComponent({
      * An Object with keys for the slot names and an object for values. The object you pass to a slot is itself applied as a `<component is="" />`.
      *
      * The last example below shows how this is actually used under the hood.
-     * @type {{ label?: string | Record<string, any> | Record<string, any>[], default?: string | Record<string, any> | Record<string, any>[] } | EvaluatedProp<{ label?: string | Record<string, any> | Record<string, any>[], default?: string | Record<string, any> | Record<string, any>[] }>}
+     * @type {{ label?: string | Record<string, any> | Record<string, any>[], default?: string | Record<string, any> | Record<string, any>[] } | DynamicProp<{ label?: string | Record<string, any> | Record<string, any>[], default?: string | Record<string, any> | Record<string, any>[] }>}
      * @example { label: { component: 'MyTooltip', tip: 'hi' } } }
      * @example <slot name="label"><component :is="slots.label.component" v-bind="slots.label" /></slot>
      * @category content
@@ -269,7 +230,7 @@ export default defineComponent({
      * The text used in the UI for the action buttons and some error messages.
      *
      * The example shows how the error message for required fields is overwritten.
-     * @type {{ archive?: string, delete?: string, cancel?: string, edit?: string, save?: string, requiredField?: string, formValidationError?: string } | EvaluatedProp<{ archive?: string, delete?: string, cancel?: string, edit?: string, save?: string, requiredField?: string, formValidationError?: string }>}
+     * @type {{ archive?: string, delete?: string, cancel?: string, edit?: string, save?: string, requiredField?: string, formValidationError?: string } | DynamicProp<{ archive?: string, delete?: string, cancel?: string, edit?: string, save?: string, requiredField?: string, formValidationError?: string }>}
      * @example { requiredField: `Don't forget this field!` }
      * @category content
      */
@@ -288,14 +249,14 @@ export default defineComponent({
     },
     /**
      * The field label.
-     * @type {string | EvaluatedProp<string>}
+     * @type {string | DynamicProp<string>}
      * @example 'Your Name'
      * @category content
      */
     label: { type: [String, Function] },
     /**
      * A smaller label for extra info.
-     * @type {string | EvaluatedProp<string>}
+     * @type {string | DynamicProp<string>}
      * @example 'first and last'
      * @category content
      */
@@ -309,30 +270,23 @@ export default defineComponent({
      * - `'add'` — the same as `'edit'`
      *
      * This prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).
-     * @type {'edit' | 'view' | 'disabled' | 'raw' | 'add' | EvaluatedProp<'edit' | 'view' | 'disabled' | 'raw' | 'add'>}
+     * @type {'edit' | 'view' | 'disabled' | 'raw' | 'add' | DynamicProp<'edit' | 'view' | 'disabled' | 'raw' | 'add'>}
      * @category state
      */
     mode: { type: [String, Function], default: 'edit' },
     /**
      * An Object with an event name as key and the handler function as value. The function you pass will receive the native event payload as first parameter and the BlitzField context (the component instance) as second: `($event, context) => {}`
-     * @type {Record<string, (event: any, formContext: FormContext) => any> | EvaluatedProp<Record<string, (event: any, formContext: FormContext) => any>>}
+     * @type {Record<string, (event: any, formContext: FormContext) => any> | DynamicProp<Record<string, (event: any, formContext: FormContext) => any>>}
      * @example { click: (val, { formData }) => console.log(formData) }
      * @category behavior
      */
     events: { type: [Object, Function], default: () => ({}) },
     /**
      * Whether or not the field is required or not. If a field is marked 'required' it will add a default rule like so: `[val => (val !== null && val !== undefined) || 'Field is required']`. The default message can be set in the `lang` prop as `requiredField`.
-     * @type {boolean | EvaluatedProp<boolean>}
+     * @type {boolean | DynamicProp<boolean>}
      * @category behavior
      */
     required: { type: [Boolean, Function] },
-    /**
-     * An array of rule functions that receive the value of the field as parameter and should return `true` if the rule passes or a `string` if the rule fails. The string represents the error message that is then shown underneath the field in red.
-     * @type {((val: any) => (true | string))[] | EvaluatedProp<((val: any) => (true | string))[]>}
-     * @example [val => (val && val.length <= 3) || 'Maximum 3 characters']
-     * @category behavior
-     */
-    rules: { type: [Array, Function], default: () => [] },
     /**
      * An array with prop names that should be treated as Dynamic Props when passed a function.
      *
@@ -345,10 +299,10 @@ export default defineComponent({
       default: () => [
         'component',
         'showCondition',
+        'error',
+        'required',
         'label',
         'subLabel',
-        'required',
-        'rules',
         'fieldStyle',
         'fieldClasses',
         'componentStyle',
@@ -359,26 +313,36 @@ export default defineComponent({
       ],
     },
     /**
-     * Set to `true` if the component has its own labels and you do not want the BlitzField to show a label.
-     *
-     * When `true` subLabels will also be hidden and passed to the component instead as a prop called 'hint'.
+     * Set to `true` if the component will take care of showing the `label` and `subLabel`. Both of these props will be passed to the component and not shown in BlitzField.
      *
      * This prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).
-     * @type {boolean | undefined | EvaluatedProp<boolean | undefined>}
+     * @type {boolean | undefined | DynamicProp<boolean | undefined>}
      * @category style
      */
     internalLabels: { type: [Boolean, undefined], required: false, default: undefined },
     /**
-     * Set to true if the component has its own error handling. This makes sure it passes on props like `rules` and does nothing with them in the BlitzField.
+     * Set to true if the component has its own error handling. This makes sure it passes on props like `error` and does nothing with them in the BlitzField.
      *
      * This prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).
-     * @type {boolean | undefined | EvaluatedProp<boolean | undefined>}
+     * @type {boolean | undefined | DynamicProp<boolean | undefined>}
      * @category behavior
      */
     internalErrors: { type: [Boolean, undefined], required: false, default: undefined },
     /**
+     * - 'interaction' — evaluates & shows errors on every interaction or keystroke
+     * - 'save' — only evaluates & shows errors when clicking 'save'
+     * - 'save-focus' — only evaluates & shows errors when clicking 'save', then focuses the first field with an error
+     * - 'never' — never evaluate or show errors
+     * - 'always' — always evaluate and show errors, even without user interaction
+     *
+     * This prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).
+     * @type {'interaction' | 'save' | 'save-focus' | 'never' | 'always'}
+     * @category behavior
+     */
+    showErrorsOn: { type: String, default: 'interaction' },
+    /**
      * Setting to `false` will hide the field. When using as an Evaluated Prop it can used to conditionally hide fields based on the other `formData`.
-     * @type {boolean | EvaluatedProp<boolean>}
+     * @type {boolean | DynamicProp<boolean>}
      * @example (val, { mode }) => (mode === 'edit')
      * @example false
      * @category state
@@ -386,13 +350,13 @@ export default defineComponent({
     showCondition: { type: [Boolean, Function], default: true },
     /**
      * `readonly` defaults to `true` on `mode: 'view'`
-     * @type {boolean | 'readonly' | EvaluatedProp<boolean | 'readonly'>}
+     * @type {boolean | 'readonly' | DynamicProp<boolean | 'readonly'>}
      * @category state
      */
     readonly: { type: [Boolean, Function, String, undefined], default: undefined },
     /**
      * `disabled` defaults to `true` on `mode: 'disabled'`
-     * @type {boolean | 'disabled' | EvaluatedProp<boolean | 'disabled'>}
+     * @type {boolean | 'disabled' | DynamicProp<boolean | 'disabled'>}
      * @category state
      */
     disabled: { type: [Boolean, Function, String, undefined], default: undefined },
@@ -400,7 +364,7 @@ export default defineComponent({
      * The position of the label in comparison to the field.
      *
      * This prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).
-     * @type {'top' | 'left' | EvaluatedProp<'top' | 'left'>}
+     * @type {'top' | 'left' | DynamicProp<'top' | 'left'>}
      * @category style
      */
     labelPosition: {
@@ -412,7 +376,7 @@ export default defineComponent({
      * Custom styling to be applied to the BlitzField. Applied like so `:style="fieldStyle"`. Can be an Evaluated Prop (this is why I opted to have a different name from `style`).
      *
      * In a BlitzForm schema you can also just write `style: '...'` and BlitzForm will pass that as fieldStyle for you, because "style" is not a valid prop name.
-     * @type {string | Record<string, boolean> | (string | Record<string, boolean>)[] | EvaluatedProp<string | Record<string, boolean> | (string | Record<string, boolean>)[]>}
+     * @type {string | Record<string, boolean> | (string | Record<string, boolean>)[] | DynamicProp<string | Record<string, boolean> | (string | Record<string, boolean>)[]>}
      * @example 'padding: 0.5em; color: white'
      * @category style
      */
@@ -421,21 +385,21 @@ export default defineComponent({
      * Custom classes to be applied to the BlitzField. Applied like so `:class="fieldClasses"`. Can be an Evaluated Prop (this is why I opted to have a different name from `class`).
      *
      * In a BlitzForm schema you can also just write `class: '...'` and BlitzForm will pass that as `fieldClasses` for you, because "class" is not a valid prop name.
-     * @type {string | Record<string, boolean> | (string | Record<string, boolean>)[] | EvaluatedProp<string | Record<string, boolean> | (string | Record<string, boolean>)[]>}
+     * @type {string | Record<string, boolean> | (string | Record<string, boolean>)[] | DynamicProp<string | Record<string, boolean> | (string | Record<string, boolean>)[]>}
      * @example ['dark-theme']
      * @category style
      */
     fieldClasses: { type: [Object, Array, String, Function] },
     /**
      * Custom styling to be applied to the inner component of BlitzField. Applied like so `:style="componentStyle"`. Can be an Evaluated Prop.
-     * @type {string | Record<string, boolean> | (string | Record<string, boolean>)[] | EvaluatedProp<string | Record<string, boolean> | (string | Record<string, boolean>)[]>}
+     * @type {string | Record<string, boolean> | (string | Record<string, boolean>)[] | DynamicProp<string | Record<string, boolean> | (string | Record<string, boolean>)[]>}
      * @example 'padding: 1em;'
      * @category style
      */
     componentStyle: { type: [Object, Array, String, Function] },
     /**
      * Custom classes to be applied to the inner component of BlitzField. Applied like so `:class="componentClasses"`. Can be an Evaluated Prop.
-     * @type {string | Record<string, boolean> | (string | Record<string, boolean>)[] | EvaluatedProp<string | Record<string, boolean> | (string | Record<string, boolean>)[]>}
+     * @type {string | Record<string, boolean> | (string | Record<string, boolean>)[] | DynamicProp<string | Record<string, boolean> | (string | Record<string, boolean>)[]>}
      * @example ['dark-theme']
      * @category style
      */
@@ -444,7 +408,7 @@ export default defineComponent({
      * Custom styling to be applied to the label of BlitzField. Applied like so `:style="componentStyle"`. Can be an Evaluated Prop.
      *
      * This prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).
-     * @type {string | Record<string, boolean> | (string | Record<string, boolean>)[] | EvaluatedProp<string | Record<string, boolean> | (string | Record<string, boolean>)[]>}
+     * @type {string | Record<string, boolean> | (string | Record<string, boolean>)[] | DynamicProp<string | Record<string, boolean> | (string | Record<string, boolean>)[]>}
      * @example 'font-weight: 200;'
      * @category style
      */
@@ -453,7 +417,7 @@ export default defineComponent({
      * Custom classes to be applied to the label of BlitzField. Applied like so `:class="labelClasses"`. Can be an Evaluated Prop.
      *
      * This prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).
-     * @type {string | Record<string, boolean> | (string | Record<string, boolean>)[] | EvaluatedProp<string | Record<string, boolean> | (string | Record<string, boolean>)[]>}
+     * @type {string | Record<string, boolean> | (string | Record<string, boolean>)[] | DynamicProp<string | Record<string, boolean> | (string | Record<string, boolean>)[]>}
      * @example ['text-h6']
      * @category style
      */
@@ -543,7 +507,15 @@ export default defineComponent({
     'update:modelValue': (payload, origin) => ['default', '', undefined].includes(origin),
   },
   data() {
-    return { innerValue: this.modelValue, justMounted: false }
+    return {
+      innerValue: this.modelValue,
+      justMounted: false,
+      isDirty: false,
+      /**
+       * Only relevant when `showErrorsOn: 'save'`
+       */
+      showingErrorBeforeSave: false,
+    }
   },
   mounted() {
     const { modelValue, defaultValue, formData } = this
@@ -582,6 +554,47 @@ export default defineComponent({
         this.$emit('update:modelValue', payload, origin)
       }
     },
+    /** @type {null | string} */
+    evaluateError() {
+      const { evalPropOrAttr, langCalculated, cValue } = this
+
+      const isRequired = evalPropOrAttr('required')
+      const requiredErrorFn = createRequiredErrorFn(langCalculated['requiredField'])
+      const requiredErrorResult = !isRequired ? null : requiredErrorFn(cValue)
+
+      if (isFullString(requiredErrorResult)) return requiredErrorResult
+
+      return evalPropOrAttr('error') || null
+    },
+    /**
+     * Validates a field
+     * @param {boolean} [focusIfError] — Wether or not it should focus the field with an error. Defaults to `false`
+     * @returns {null | string} the result of the error validation
+     */
+    validate(focusIfError) {
+      const { evaluateError, evalPropOrAttr } = this
+
+      this.showingErrorBeforeSave = true
+
+      const result = evaluateError()
+      const shouldFocus = isBoolean(focusIfError)
+        ? focusIfError
+        : evalPropOrAttr('showErrorsOn') === 'save-focus'
+
+      if (shouldFocus && isFullString(result) && evalPropOrAttr('mode') === 'edit') {
+        const component = this.$refs['ref-component']
+        if (component) {
+          try {
+            component.focus()
+          } catch (error) {}
+        }
+      }
+      return result
+    },
+    resetDirtyAndErrors() {
+      this.isDirty = false
+      this.showingErrorBeforeSave = false
+    },
   },
   computed: {
     cValue: {
@@ -591,6 +604,8 @@ export default defineComponent({
         return innerValue
       },
       set(val, ...otherArguments) {
+        this.isDirty = true
+        this.showingErrorBeforeSave = false
         const { parseInput, evalPropOrAttr } = this
         const events = evalPropOrAttr('events')
         if (isFunction(parseInput)) val = parseInput(val, this)
@@ -626,12 +641,6 @@ export default defineComponent({
       const { name } = component || {}
       return name
     },
-    usesInternalOrNoErrors() {
-      const { evalPropOrAttr, componentName, rulesCalculated } = this
-      const internalErrors = evalPropOrAttr('internalErrors')
-      if (internalErrors !== undefined) return internalErrors
-      return !rulesCalculated.length
-    },
     usesInternalLabels() {
       const { evalPropOrAttr, componentName } = this
       const internalLabels = evalPropOrAttr('internalLabels')
@@ -643,15 +652,25 @@ export default defineComponent({
       const lang = evalPropOrAttr('lang') || {}
       return merge(defaults, lang)
     },
-    rulesCalculated() {
-      const { evalPropOrAttr, langCalculated } = this
-      const required = evalPropOrAttr('required')
-      const rules = evalPropOrAttr('rules')
-      if (required) {
-        const requiredRule = createRequiredRule(langCalculated['requiredField'])
-        return [requiredRule, ...rules]
+    /** @type {null | string} */
+    errorCalculated() {
+      const { evalPropOrAttr, evaluateError, isDirty, showingErrorBeforeSave } = this
+
+      if (evalPropOrAttr('internalErrors') || evalPropOrAttr('showErrorsOn') === 'never') {
+        return null
       }
-      return rules
+      if (evalPropOrAttr('showErrorsOn') === 'always') {
+        return evaluateError()
+      }
+      if (evalPropOrAttr('showErrorsOn') === 'interaction') {
+        if (!isDirty) return null
+        return evaluateError()
+      }
+      if (['save-focus', 'save'].includes(evalPropOrAttr('showErrorsOn'))) {
+        if (!showingErrorBeforeSave) return null
+        return evaluateError()
+      }
+      return evaluateError()
     },
     eventsCalculated() {
       const { evalPropOrAttr } = this
@@ -670,11 +689,11 @@ export default defineComponent({
         // we always wanna pass only this prop:
         required: evalPropOrAttr('required'),
       }
-      // only pass rules when it has internal errors
-      if (this.usesInternalOrNoErrors) {
-        propsToPass.rules = this.rulesCalculated
+      // only pass `error` when it has internal errors
+      if (evalPropOrAttr('internalErrors')) {
+        propsToPass.error = evalPropOrAttr('error')
       }
-      // only pass label and hint when it has internal labels
+      // only pass `label` and `hint` when it has internal labels
       if (this.usesInternalLabels) {
         propsToPass.label = evalPropOrAttr('label')
         propsToPass.hint = evalPropOrAttr('subLabel') || evalPropOrAttr('hint')
@@ -704,17 +723,6 @@ export default defineComponent({
         return carry
       }, {})
       return { ...propsToPass, ...attrsToPass }
-    },
-    propsAndAttrsToPassForQField() {
-      return merge(this.propsAndAttrsToPass, {
-        rules: this.rulesCalculated,
-        // defaults for UI
-        borderless: true,
-        stackLabel: true,
-        // always disable prefix suffix for QField
-        // prefix: undefined,
-        // suffix: undefined,
-      })
     },
     labelUsedHere() {
       const { usesInternalLabels, evalPropOrAttr } = this

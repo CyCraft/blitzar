@@ -1,7 +1,7 @@
 <template>
   <div>
-    Mode:
-    <select name="mode" id="mode" v-model="mode" class="q-mb-md">
+    mode:
+    <select name="mode" id="mode" v-model="mode" style="margin-bottom: 1rem">
       <option value="edit">edit</option>
       <option value="view">view</option>
       <option value="disabled">disabled</option>

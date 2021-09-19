@@ -1,12 +1,13 @@
 <template>
   <div>
-    Mode:
-    <select name="mode" id="mode" v-model="mode" class="q-mb-md">
+    mode:
+    <select name="mode" id="mode" v-model="mode" style="margin-bottom: 1rem">
       <option value="edit">edit</option>
       <option value="view">view</option>
       <option value="disabled">disabled</option>
       <option value="raw">raw</option>
     </select>
+
     <BlitzForm :schema="schema" v-model="formData" :mode="mode" :columnCount="2" />
 
     <CodeBlock :content="`// formData\n${JSON.stringify(formData, undefined, 2)}`" />
