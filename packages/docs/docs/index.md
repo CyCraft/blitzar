@@ -16,3 +16,31 @@ features:
     details: Arrow functions allow for validation/conditional fields/changing props
 footer: MIT Licensed 　・　 Copyright © 2018-present 　・　 Mesqueeb — Luca Ban
 ---
+
+<style>
+.home-hero a {
+  color: white !important;
+}
+.home-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.home-content ul {
+  display: flex;
+  flex-wrap: wrap;
+}
+.home-content li {
+  font-weight: 700;
+  display: block;
+  padding: 0.8rem 1rem;
+  white-space: nowrap;
+}
+</style>
+
+### Components
+
+- [BlitzForm](/blitz-form/)
+- [BlitzListForm](/blitz-list-form/)
+- [BlitzTable](/blitz-table/)
