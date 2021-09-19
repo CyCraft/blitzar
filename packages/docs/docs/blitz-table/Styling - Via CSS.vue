@@ -6,6 +6,7 @@
       :rows="rows"
       title="Default table"
     />
+    
     <BlitzTable
       :class="`styled-table ${grid ? 'mode-grid' : 'mode-rows'}`"
       :schemaColumns="schemaColumns"
@@ -75,8 +76,6 @@
 </style>
 
 <script>
-import { BlitzTable } from 'blitzar'
-
 const rows = [
   { nameFirst: 'Eleanor', nameLast: 'Shellstrop' },
   { nameFirst: 'Chidi', nameLast: 'Anagonye' },
@@ -98,7 +97,6 @@ const schemaColumns = [
 ]
 
 export default {
-  components: { BlitzTable },
   data() {
     return { rows, schemaColumns, grid: false }
   },

@@ -13,11 +13,7 @@
   </div>
 </template>
 
-<style lang="sass" scoped></style>
-
 <script>
-import { BlitzTable } from 'blitzar'
-
 const rows = [
   {
     id: 'Lorem',
@@ -136,7 +132,6 @@ const editingLogic = (blueprintId, { editingColId, editingRowId, saveLastEdit, s
 })
 
 export default {
-  components: { BlitzTable },
   data() {
     return { rows, schemaColumns, editingColId: '', editingRowId: '', lastEdit: null }
   },

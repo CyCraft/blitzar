@@ -14,10 +14,7 @@
   </div>
 </template>
 
-<style lang="sass" scoped></style>
-
 <script>
-import { BlitzTable } from 'blitzar'
 import { showToast } from '../../helpers/toast'
 
 const rows = [
@@ -41,7 +38,6 @@ const schemaColumns = [
 ]
 
 export default {
-  components: { BlitzTable },
   data() {
     return { rows, schemaColumns, selectionArray: [] }
   },

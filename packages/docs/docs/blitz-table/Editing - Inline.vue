@@ -13,11 +13,7 @@
   </div>
 </template>
 
-<style lang="sass" scoped></style>
-
 <script>
-import { BlitzTable } from 'blitzar'
-
 const rows = [
   {
     id: 'Lorem',
@@ -117,7 +113,6 @@ const schemaColumns = [
 ]
 
 export default {
-  components: { BlitzTable },
   data() {
     return { rows, schemaColumns }
   },

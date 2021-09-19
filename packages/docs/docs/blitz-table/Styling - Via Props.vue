@@ -13,11 +13,7 @@
   />
 </template>
 
-<style lang="sass"></style>
-
 <script>
-import { BlitzTable } from 'blitzar'
-
 const rows = [
   { id: 'e', nameFirst: 'Eleanor', nameLast: 'Shellstrop', teamColor: '' },
   { id: 'c', nameFirst: 'Chidi', nameLast: 'Anagonye', teamColor: '' },
@@ -46,7 +42,6 @@ function applyTeamColor(rowData) {
 }
 
 export default {
-  components: { BlitzTable },
   data() {
     const rowStyle = applyTeamColor
     const cardStyle = applyTeamColor

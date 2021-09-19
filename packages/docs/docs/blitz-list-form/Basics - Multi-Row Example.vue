@@ -1,16 +1,15 @@
 <template>
   <div>
     <strong>Expenses</strong><br /><br />
-    
+
     <BlitzListForm class="my-multi-row-form" :schema="schema" v-model="formData" />
-    
+
     <CodeBlock :content="`// formData\n${JSON.stringify(formData, undefined, 2)}`" />
   </div>
 </template>
 
 <style lang="scss">
 .my-multi-row-form {
-  
   .blitz-list-form__row {
     grid-template-columns: 20px 1fr 1fr 100px !important;
   }

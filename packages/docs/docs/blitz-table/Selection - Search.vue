@@ -1,6 +1,7 @@
 <template>
   <div>
     <input placeholder="🔍" v-model="searchText" style="margin-bottom: 1rem" />
+    
     <BlitzTable
       :filter="searchText"
       selection="multiple"
@@ -16,10 +17,7 @@
   </div>
 </template>
 
-<style lang="sass" scoped></style>
-
 <script>
-import { BlitzTable } from 'blitzar'
 import { showToast } from '../../helpers/toast'
 
 const rows = [
@@ -43,7 +41,6 @@ const schemaColumns = [
 ]
 
 export default {
-  components: { BlitzTable },
   data() {
     return {
       rows,

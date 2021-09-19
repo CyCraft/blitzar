@@ -6,6 +6,7 @@
       <option value="1">v-slot:top-right</option>
       <option value="2">all slots</option>
     </select>
+
     <!-- EXAMPLE: v-slot:above-table -->
     <BlitzTable
       v-if="chosenExample === '0'"
@@ -25,6 +26,7 @@
         />
       </template>
     </BlitzTable>
+
     <!-- EXAMPLE: v-slot:top-right -->
     <BlitzTable
       v-if="chosenExample === '1'"
@@ -44,6 +46,7 @@
         />
       </template>
     </BlitzTable>
+
     <!-- EXAMPLE: all slots -->
     <BlitzTable
       v-if="chosenExample === '2'"
@@ -71,18 +74,19 @@
   </div>
 </template>
 
-<style lang="sass">
-.slots-demo
-  .blitz-field__label
-    font-weight: 100
-  ._slot-preview
-    padding: 1rem
-    border: thin solid goldenrod
+<style lang="scss">
+.slots-demo {
+  .blitz-field__label {
+    font-weight: 100;
+  }
+  ._slot-preview {
+    padding: 1rem;
+    border: thin solid goldenrod;
+  }
+}
 </style>
 
 <script>
-import { BlitzTable } from 'blitzar'
-
 const rows = [
   { nameFirst: 'Eleanor', nameLast: 'Shellstrop' },
   { nameFirst: 'Chidi', nameLast: 'Anagonye' },
@@ -104,7 +108,6 @@ const schemaColumns = [
 ]
 
 export default {
-  components: { BlitzTable },
   data() {
     return {
       chosenExample: '0',

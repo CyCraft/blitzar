@@ -26,19 +26,20 @@
   </div>
 </template>
 
-<style lang="sass">
-.form-modal
-  display: flex
-  justify-content: center
-  align-items: center
-  > *
-    background: white
-    padding: 1.5rem
+<style>
+.form-modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.form-modal > * {
+  background: white;
+  padding: 1.5rem;
+}
 </style>
 
 <script>
-import { BlitzTable, BlitzForm } from 'blitzar'
-
 const rows = [
   {
     id: 'Lorem',
@@ -93,7 +94,6 @@ const rows = [
 ]
 
 export default {
-  components: { BlitzTable, BlitzForm },
   data() {
     return {
       rows,

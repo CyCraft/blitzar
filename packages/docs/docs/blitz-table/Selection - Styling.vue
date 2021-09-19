@@ -13,14 +13,13 @@
   </div>
 </template>
 
-<style lang="sass">
-.example-selection-styling
-  .table-checkbox
-    cursor: pointer
+<style>
+.example-selection-styling .table-checkbox {
+  cursor: pointer;
+}
 </style>
 
 <script>
-import { BlitzTable } from 'blitzar'
 import Vue from 'vue'
 
 Vue.component('MyCheckbox', {
@@ -52,7 +51,6 @@ const schemaColumns = [
 ]
 
 export default {
-  components: { BlitzTable },
   data() {
     const selectionComponentProps = { component: 'MyCheckbox', class: 'table-checkbox' }
     return { rows, schemaColumns, selectionComponentProps }

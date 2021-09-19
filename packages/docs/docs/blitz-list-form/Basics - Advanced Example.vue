@@ -1,7 +1,7 @@
 <template>
   <div>
     <strong>Expenses</strong><br /><br />
-    
+
     <BlitzListForm :schema="schema" v-model="formData" />
 
     <CodeBlock :content="`// formData\n${JSON.stringify(formData, undefined, 2)}`" />

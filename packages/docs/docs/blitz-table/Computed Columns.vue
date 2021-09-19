@@ -11,11 +11,7 @@
   </div>
 </template>
 
-<style lang="sass" scoped></style>
-
 <script>
-import { BlitzTable } from 'blitzar'
-
 const rows = [
   { nameFirst: 'Eleanor', nameLast: 'Shellstrop' },
   { nameFirst: 'Chidi', nameLast: 'Anagonye' },
@@ -45,7 +41,6 @@ const schemaColumns = [
 ]
 
 export default {
-  components: { BlitzTable },
   data() {
     return { rows, schemaColumns }
   },

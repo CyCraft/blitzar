@@ -26,6 +26,7 @@ See it in action in the example down here! Write down some student names to see 
 When you check the _**script tab**_ of this more advanced example, you'll notice we are using some new props available on our context of the Dynamic Props. (Be sure to check out the documentation at [Advanced > Dynamic Props](/advanced/#dynamic-props))
 
 There are 4 _extra_ props available on the context when using BlitzListForm:
+
 - `rowInput` (function)
 - `deleteRow` (function)
 - `rowIndex` (number)
