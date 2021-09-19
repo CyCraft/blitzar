@@ -633,7 +633,7 @@ Showing an "error" underneath a field can be done by setting a field's `error` t
 
 - The function you provide will receive the field's `modelValue` as argument
 - If the value is O.K., then you can return `null`
-- If the value does not pass your validation, then you must return the error you want to show underneath the field
+- If the value does not pass your validation, then you must **return the error you want to show** underneath the field
 
 Be sure to also check out the documentation on [Dynamic Props](#dynamic-props) to see what other powerful things you can do with the `error` field.
 
