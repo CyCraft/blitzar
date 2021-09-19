@@ -164,7 +164,6 @@ Use this API Card to check out all the possible props you can use in a single fi
 export default defineComponent({
   name: 'BlitzField',
   inheritAttrs: false,
-  // components: { QField, BlitzH },
   components: { BlitzH },
   props: {
     /**
