@@ -14,48 +14,35 @@
 }
 
 /* Internal Links */
-main a:not([aria-hidden="true"])[href^='#'],
-main a:not([aria-hidden="true"])[href^='/'] {
-  position: relative;
-  padding-left: 1em;
-}
-main a:not([aria-hidden="true"]):hover {
-  opacity: 0.9;
-}
-main a:not([aria-hidden="true"])[href^='#']:before,
-main a:not([aria-hidden="true"])[href^='/']:before {
+main a:not([aria-hidden='true'])[href^='#']:before,
+main a:not([aria-hidden='true'])[href^='/']:before {
   opacity: 0.5;
   display: inline-block;
-  align-items: baseline;
-  position: absolute;
-  left: 0;
-  top: 0.1em;
+  transform: translateY(0.1em);
   height: 1em;
   width: 1em;
   content: '';
   background: url("data:image/svg+xml,%3Csvg style='color: %23f6ca2e' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cline x1='4' y1='7.25' x2='16' y2='7.25' stroke='currentColor' stroke-width='2' stroke-linecap='round'/%3E%3Cline x1='4' y1='12.75' x2='16' y2='12.75' stroke='currentColor' stroke-width='2' stroke-linecap='round'/%3E%3Cpath d='M7.75 4L6.75 16' stroke='currentColor' stroke-width='2' stroke-linecap='round'/%3E%3Cpath d='M13.25 4L12.25 16' stroke='currentColor' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
 }
-
-/* External Links */
-main a:not([aria-hidden="true"])[href^='https://'] {
-  position: relative;
-  padding-right: 1em;
-}
-main a:not([aria-hidden="true"]):hover {
+main a:not([aria-hidden='true'])[href^='#']:hover:before,
+main a:not([aria-hidden='true'])[href^='/']:hover:before {
   opacity: 0.9;
 }
+
+/* External Links */
 /* prettier-ignore */
 main a:not([aria-hidden="true"])[href^='https://']:after {
   opacity: 0.5;
   display: inline-block;
-  align-items: baseline;
-  position: absolute;
-  right: 0;
-  top: 0.1em;
   height: 1em;
   width: 1em;
+  transform: translateY(.1em);
   content: '';
   background: url("data:image/svg+xml,%3Csvg style='color: %23f6ca2e' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10.7071 10.7071C10.3166 11.0976 9.68342 11.0976 9.29289 10.7071C8.90237 10.3166 8.90237 9.68342 9.29289 9.29289L15.2929 3.29289C15.6834 2.90237 16.3166 2.90237 16.7071 3.29289C17.0976 3.68342 17.0976 4.31658 16.7071 4.70711L10.7071 10.7071Z' fill='currentColor'/%3E%3Cpath d='M15 15V11.5C15 10.9477 15.4477 10.5 16 10.5C16.5523 10.5 17 10.9477 17 11.5V16C17 16.5523 16.5523 17 16 17H4C3.44772 17 3 16.5523 3 16V4C3 3.44772 3.44772 3 4 3H8.5C9.05228 3 9.5 3.44772 9.5 4C9.5 4.55228 9.05228 5 8.5 5H5V15H15Z' fill='currentColor'/%3E%3Cpath d='M17 8C17 8.55228 16.5523 9 16 9C15.4477 9 15 8.55228 15 8V4C15 3.44772 15.4477 3 16 3C16.5523 3 17 3.44772 17 4V8Z' fill='currentColor'/%3E%3Cpath d='M12 5C11.4477 5 11 4.55228 11 4C11 3.44772 11.4477 3 12 3H16C16.5523 3 17 3.44772 17 4C17 4.55228 16.5523 5 16 5H12Z' fill='currentColor'/%3E%3C/svg%3E%0A");
   background-repeat: no-repeat;
+}
+/* prettier-ignore */
+main a:not([aria-hidden="true"])[href^='https://']:hover:after {
+  opacity: 0.9;
 }
