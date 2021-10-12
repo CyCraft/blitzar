@@ -33,7 +33,7 @@
     <div v-if="subLabelHtmlUsedHere" class="blitz-field__sub-label" v-html="subLabelHtmlUsedHere" />
     <!-- raw component -->
     <BlitzH
-      v-else-if="evalPropOrAttr('mode') === 'raw'"
+      v-if="evalPropOrAttr('mode') === 'raw'"
       :options="{
         component: 'div',
         slot: parsedFieldValue,
