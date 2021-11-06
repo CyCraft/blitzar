@@ -4,6 +4,18 @@ editLink: true
 
 # BlitzForm
 
+## Installation
+
+Currently BlitzForm and BlitzListForm are fully compatible with Vue 3 and usable.
+
+For now you have to install the Vue 3 version like so:
+
+```sh
+npm i @blitzar/form@next
+```
+
+BlitzTable is WIP and will be released soon.
+
 ## Basics
 
 `<BlitzForm />` is a Vue component that allows you to easily create forms by passing a _**schema**_. Based on this schema the form is generated for you. No more writing clunky HTML forms! 🎉

@@ -3,7 +3,7 @@ navbar: false
 home: true
 heroImage: /assets/blitzar-logo-white.svg
 heroAlt: Blitzar Logo
-heroText: Blitzar
+heroText: Blitzar (Vue 3 Beta)
 tagline: Form & table generator for Vue 3
 actionText: Get Started
 actionLink: /blitz-form/
