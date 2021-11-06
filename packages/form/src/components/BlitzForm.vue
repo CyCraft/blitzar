@@ -213,16 +213,15 @@ export default defineComponent({
      * - `'view'` — show each field with `readonly: true`
      * - `'disabled'` — show each field with `disabled: true`
      * - `'raw'` — used to show raw data of your form (for select components, it will show the data label instead of its value)
-     * - `'add'` — the same as `'edit'`
      *
      * This prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).
-     * @type {'edit' | 'view' | 'disabled' | 'raw' | 'add'}
+     * @type {'edit' | 'view' | 'disabled' | 'raw'}
      * @category state
      */
     mode: {
       type: String,
       default: 'edit',
-      validator: (prop) => ['edit', 'view', 'disabled', 'raw', 'add'].includes(prop),
+      validator: (prop) => ['edit', 'view', 'disabled', 'raw'].includes(prop),
     },
     /**
      * The position of the label in comparison to the field.
@@ -315,7 +314,7 @@ export default defineComponent({
     formComponent: { type: [String, Function], default: 'div' },
   },
   emits: {
-    'update:mode': (payload) => ['edit', 'view', 'disabled', 'raw', 'add'].includes(payload),
+    'update:mode': (payload) => ['edit', 'view', 'disabled', 'raw'].includes(payload),
     /**
      * @param {{ id: string, value: any, origin?: 'default' | 'cancel' | '' }} payload
      */
@@ -475,14 +474,14 @@ export default defineComponent({
         cancel: {
           component: 'button',
           type: 'button',
-          showCondition: () => ['edit', 'add'].includes(innerMode),
+          showCondition: () => innerMode === 'edit',
           slot: innerLang['cancel'],
           events: { click: tapCancel },
         },
         save: {
           component: 'button',
           type: 'button',
-          showCondition: () => ['edit', 'add'].includes(innerMode),
+          showCondition: () => innerMode === 'edit',
           slot: innerLang['save'],
           events: { click: tapSave },
         },
@@ -545,7 +544,7 @@ export default defineComponent({
       if (eventName === 'update:mode') {
         /**
          * This event makes it possible to sync the prop 'mode' like so: `v-model:mode="mode"`
-         * @property {'edit' | 'view' | 'disabled' | 'raw' | 'add'} payload event payload
+         * @property {'edit' | 'view' | 'disabled' | 'raw'} payload event payload
          */
         this.$emit('update:mode', payload)
       }

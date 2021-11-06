@@ -109,10 +109,9 @@ export interface BlitzFieldProps {
    * - `'view'` — show each field with `readonly: true`
    * - `'disabled'` — show each field with `disabled: true`
    * - `'raw'` — used to show raw data of your form (for select components, it will show the data label instead of its value)
-   * - `'add'` — the same as `'edit'`
    *
    * This prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).
-   * @type {'edit' | 'view' | 'disabled' | 'raw' | 'add' | DynamicProp<'edit' | 'view' | 'disabled' | 'raw' | 'add'>}
+   * @type {'edit' | 'view' | 'disabled' | 'raw' | DynamicProp<'edit' | 'view' | 'disabled' | 'raw'>}
    * @category state
    */
   mode: string | Function
@@ -345,7 +344,7 @@ export interface BlitzFormProps extends Vue {
    * @example { name: '' }
    * @category model
    */
-   modelValue: any
+  modelValue: any
 
   /**
    * A manually set `id` of the BlitzForm. This prop is accessible in the `context` (as `formId`) of any Evaluated Prop and event.
@@ -429,10 +428,9 @@ export interface BlitzFormProps extends Vue {
    * - `'view'` — show each field with `readonly: true`
    * - `'disabled'` — show each field with `disabled: true`
    * - `'raw'` — used to show raw data of your form (for select components, it will show the data label instead of its value)
-   * - `'add'` — the same as `'edit'`
    *
    * This prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).
-   * @type {'edit' | 'view' | 'disabled' | 'raw' | 'add'}
+   * @type {'edit' | 'view' | 'disabled' | 'raw'}
    * @category state
    */
   mode: string

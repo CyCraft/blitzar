@@ -79,8 +79,11 @@ We then also conditionally show different select options based on the `modelValu
 Here we show how to show the `modelValue` of one field as the `slot` content of another.
 
 ```js
-dynamicProps: ['slot'],
-slot: (val, { formData }) => formData.myInput
+{
+  component: 'div',
+  dynamicProps: ['slot'],
+  slot: (val, { formData }) => formData.myInput
+}
 ```
 
 <CodeBlockComponent filename="blitz-form/Dynamic Props - 5" />
