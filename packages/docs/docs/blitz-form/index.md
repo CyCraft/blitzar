@@ -10,7 +10,7 @@ Currently BlitzForm and BlitzListForm are fully compatible with Vue 3 and usable
 
 For now you have to install the Vue 3 version like so:
 
-```sh
+```
 npm i @blitzar/form@next
 ```
 
