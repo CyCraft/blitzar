@@ -263,12 +263,12 @@ export default defineComponent({
     /**
      * The mode represents how fields are rendered
      * - `'edit'` — (default) show editable fields based on the schema
-     * - `'view'` — show each field with `readonly: true`
+     * - `'readonly'` — show each field with `readonly: true`
      * - `'disabled'` — show each field with `disabled: true`
      * - `'raw'` — used to show raw data of your form (for select components, it will show the data label instead of its value)
      *
      * This prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).
-     * @type {'edit' | 'view' | 'disabled' | 'raw' | DynamicProp<'edit' | 'view' | 'disabled' | 'raw'>}
+     * @type {'edit' | 'readonly' | 'disabled' | 'raw' | DynamicProp<'edit' | 'readonly' | 'disabled' | 'raw'>}
      * @category state
      */
     mode: { type: [String, Function], default: 'edit' },
@@ -346,7 +346,7 @@ export default defineComponent({
      */
     showCondition: { type: [Boolean, Function], default: true },
     /**
-     * `readonly` defaults to `true` on `mode: 'view'`
+     * `readonly` defaults to `true` on `mode: 'readonly'`
      * @type {boolean | 'readonly' | DynamicProp<boolean | 'readonly'>}
      * @category state
      */
@@ -447,7 +447,7 @@ export default defineComponent({
      * The `mode` of the BlitzForm. A BlitzField inherits the `mode` from the `BlitzForm` via its `mode` prop; however, if you had manually overwritten the mode to be something else, `formMode` can be used to check the current mode of the form. This can be useful inside an Dynamic Prop.
      *
      * It's not something you can pass via the schema, but something that BlitzForm will automatically pass to each of its fields so you can use it in Dynamic Props.
-     * @type {'edit' | 'view' | 'disabled' | 'raw'}
+     * @type {'edit' | 'readonly' | 'disabled' | 'raw'}
      * @category readonly
      */
     formMode: { type: String },
@@ -704,7 +704,7 @@ export default defineComponent({
       if (isBoolean(readonly) || readonly === 'readonly') {
         propsToPass.readonly = readonly
       } else {
-        propsToPass.readonly = evalPropOrAttr('mode') === 'view'
+        propsToPass.readonly = evalPropOrAttr('mode') === 'readonly'
       }
       // if disabled is set as prop
       const disabled = evalPropOrAttr('disabled')

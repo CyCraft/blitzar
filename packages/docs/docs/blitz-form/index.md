@@ -143,15 +143,15 @@ Click on your favorite framework to see an example:
 BlitzForm has five modes:
 
 - `'edit'` — (default) show editable fields based on the schema
-- `'view'` — show each field with `readonly: true`
+- `'readonly'` — show each field with `readonly: true`
 - `'disabled'` — show each field with `disabled: true`
 - `'raw'` — used to show raw data of your form (for select components, it will show the data label instead of its value)
 
 The same schema to render a form can be re-used to just display form data as well. Your form schema is therefore very versatile!
 
-Please note however, that in order for `'view'` mode to work, you will need to make sure that all components you use in your form, have proper handling when BlitzForm passes `readonly: true` to them.
+Please note however, that in order for `'readonly'` mode to work, you will need to make sure that all components you use in your form, have proper handling when BlitzForm passes `readonly: true` to them.
 
-With the HTML5 elements seen in the example below, the only field that understands `readonly: true` is the `input` component. Try switching the mode to `'view'` and you will see that all other fields are still editable; so you'll need to use Vue components that handle `readonly: true`, or write wrapper Vue components for these HTML5 elements.
+With the HTML5 elements seen in the example below, the only field that understands `readonly: true` is the `input` component. Try switching the mode to `'readonly'` and you will see that all other fields are still editable; so you'll need to use Vue components that handle `readonly: true`, or write wrapper Vue components for these HTML5 elements.
 
 `'disabled'` and `'raw'` mode on the other hand work out of the box with all these components.
 
@@ -182,8 +182,8 @@ Pre-made buttons can be added to your form by just passing the string of the but
 When added you will see the buttons like the preview below. They each have a functionality:
 
 - `'edit'` — adds a button that puts the form in "edit" mode
-- `'cancel'` — adds a button that puts the form back into "view" mode & reverts any changes to the form data
-- `'save'` — adds a button that puts the form back into "view" mode & keeps the modified content
+- `'cancel'` — adds a button that puts the form back into "readonly" mode & reverts any changes to the form data
+- `'save'` — adds a button that puts the form back into "readonly" mode & keeps the modified content
 - `'delete'` `'archive'` — adds a button that emits a delete or archive event (you must implement your own logic)
 
 The buttons that are added emit the events: `@edit` `@cancel` `@save` `@delete` `@archive`

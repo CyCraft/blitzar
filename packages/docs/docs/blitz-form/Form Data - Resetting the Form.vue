@@ -1,7 +1,7 @@
 <template>
   <div>
     <BlitzForm
-      mode="view"
+      mode="readonly"
       :schema="schema"
       v-model="formData"
       :columnCount="2"

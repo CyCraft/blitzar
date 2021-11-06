@@ -117,7 +117,7 @@ const schemaColumns = [
     component: 'img',
     dynamicProps: ['src'],
     src: (val) => val,
-    mode: 'view',
+    mode: 'readonly',
   },
   {
     id: 'grade',

@@ -27,7 +27,7 @@ The most important props you can access on `context`:
 
 - `formData` — this is the _**nested**_ data of all the fields inside a BlitzForm
 - `formDataFlat` — this is the **_flattened_** data of all the fields inside a BlitzForm
-- `mode` — the current mode of the BlitzForm. Can be `'view'` | `'edit'` | `'raw'` | `'disabled'`
+- `mode` — the current mode of the BlitzForm. Can be `'edit'` | `'readonly'` | `'raw'` | `'disabled'`
 
 Try to refrain from accessing props other than the ones listed above, because these are mainly used internal and could have behaviour changes that could break your app.
 

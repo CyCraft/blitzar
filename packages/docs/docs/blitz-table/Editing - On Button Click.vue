@@ -141,7 +141,7 @@ export default {
           id: 'edit-btn',
           component: 'button',
           slot: 'Edit',
-          mode: 'view',
+          mode: 'readonly',
           events: {
             click: (event, { formData }) => {
               openModal(formData)
@@ -170,7 +170,7 @@ export default {
           component: 'img',
           dynamicProps: ['src'],
           src: (val) => val,
-          mode: 'view',
+          mode: 'readonly',
         },
         {
           id: 'grade',

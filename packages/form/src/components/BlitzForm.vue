@@ -144,7 +144,7 @@ export default defineComponent({
     /**
      * Buttons on top of the form that control the `mode` of the form. The possible pre-made buttons are:
      * - `'edit'` — a button which puts the form in 'edit' mode & does `emit('edit')`
-     * - `'cancel'` — a button which puts the form in 'view' mode & does `emit('cancel')`
+     * - `'cancel'` — a button which puts the form in 'readonly' mode & does `emit('cancel')`
      * - `'save'` — a button which puts the form in 'edit' mode & does `emit('save', {newData, oldData})`
      * - `'delete'` — a red button which does `emit('delete')`
      * - `'archive'` — a red button which does `emit('archive')`
@@ -210,18 +210,18 @@ export default defineComponent({
     /**
      * The mode represents how fields are rendered
      * - `'edit'` — (default) show editable fields based on the schema
-     * - `'view'` — show each field with `readonly: true`
+     * - `'readonly'` — show each field with `readonly: true`
      * - `'disabled'` — show each field with `disabled: true`
      * - `'raw'` — used to show raw data of your form (for select components, it will show the data label instead of its value)
      *
      * This prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).
-     * @type {'edit' | 'view' | 'disabled' | 'raw'}
+     * @type {'edit' | 'readonly' | 'disabled' | 'raw'}
      * @category state
      */
     mode: {
       type: String,
       default: 'edit',
-      validator: (prop) => ['edit', 'view', 'disabled', 'raw'].includes(prop),
+      validator: (prop) => ['edit', 'readonly', 'disabled', 'raw'].includes(prop),
     },
     /**
      * The position of the label in comparison to the field.
@@ -314,7 +314,7 @@ export default defineComponent({
     formComponent: { type: [String, Function], default: 'div' },
   },
   emits: {
-    'update:mode': (payload) => ['edit', 'view', 'disabled', 'raw'].includes(payload),
+    'update:mode': (payload) => ['edit', 'readonly', 'disabled', 'raw'].includes(payload),
     /**
      * @param {{ id: string, value: any, origin?: 'default' | 'cancel' | '' }} payload
      */
@@ -467,7 +467,7 @@ export default defineComponent({
         edit: {
           component: 'button',
           type: 'button',
-          showCondition: () => ['view', 'raw'].includes(innerMode),
+          showCondition: () => ['readonly', 'raw'].includes(innerMode),
           slot: innerLang['edit'],
           events: { click: tapEdit },
         },
@@ -544,7 +544,7 @@ export default defineComponent({
       if (eventName === 'update:mode') {
         /**
          * This event makes it possible to sync the prop 'mode' like so: `v-model:mode="mode"`
-         * @property {'edit' | 'view' | 'disabled' | 'raw'} payload event payload
+         * @property {'edit' | 'readonly' | 'disabled' | 'raw'} payload event payload
          */
         this.$emit('update:mode', payload)
       }
@@ -583,13 +583,13 @@ export default defineComponent({
       }
       if (eventName === 'cancel') {
         /**
-         * (no payload) The cancel-button was tapped and the form was put back into "view" mode & reverted to its original state
+         * (no payload) The cancel-button was tapped and the form was put back into "readonly" mode & reverted to its original state
          */
         this.$emit('cancel')
       }
       if (eventName === 'save') {
         /**
-         * The save-button was tapped and the form was put back into "view" mode & kept the modified content
+         * The save-button was tapped and the form was put back into "readonly" mode & kept the modified content
          * @property {{newData: { [id in string]: any }, oldData: { [id in string]: any }}} payload event payload
          */
         this.$emit('save', payload)
@@ -626,7 +626,7 @@ export default defineComponent({
       }
     },
     resetState() {
-      this.cMode = 'view'
+      this.cMode = 'readonly'
       this.edited = false
       this.editedFields = []
       this.formDataFlatBackups.push(copy(this.formDataFlat))

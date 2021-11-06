@@ -3,7 +3,7 @@
     mode:
     <select name="mode" id="mode" v-model="mode" style="margin-bottom: 1rem">
       <option value="edit">edit</option>
-      <option value="view">view</option>
+      <option value="readonly">readonly</option>
       <option value="disabled">disabled</option>
       <option value="raw">raw</option>
     </select>
@@ -34,9 +34,9 @@ const schema = [
       { component: 'option', value: 'item', slot: 'Magic item' },
       { component: 'option', value: 'gear', slot: 'Gear' },
     ],
-    // make field "disabled" when the mode is 'view':
+    // make field "disabled" when the mode is 'readonly':
     dynamicProps: ['disabled'],
-    disabled: (val, { mode }) => ['view', 'disabled'].includes(mode),
+    disabled: (val, { mode }) => ['readonly', 'disabled'].includes(mode),
   },
   {
     id: 'stamina',
@@ -47,9 +47,9 @@ const schema = [
     defaultValue: 50,
     min: 0,
     max: 100,
-    // make field "disabled" when the mode is 'view':
+    // make field "disabled" when the mode is 'readonly':
     dynamicProps: ['disabled'],
-    disabled: (val, { mode }) => ['view', 'disabled'].includes(mode),
+    disabled: (val, { mode }) => ['readonly', 'disabled'].includes(mode),
   },
   {
     id: 'consent',
@@ -57,9 +57,9 @@ const schema = [
     type: 'checkbox',
     label: 'Do you agree with our terms?',
     defaultValue: false,
-    // make field "disabled" when the mode is 'view':
+    // make field "disabled" when the mode is 'readonly':
     dynamicProps: ['disabled'],
-    disabled: (val, { mode }) => ['view', 'disabled'].includes(mode),
+    disabled: (val, { mode }) => ['readonly', 'disabled'].includes(mode),
   },
 ]
 
@@ -67,7 +67,7 @@ export default {
   data() {
     return {
       schema,
-      mode: 'view',
+      mode: 'readonly',
       formData: {
         name: 'Johnny Silverhand',
         powerOrigin: 'self',

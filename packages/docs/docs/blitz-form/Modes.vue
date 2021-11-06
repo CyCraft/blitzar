@@ -3,7 +3,7 @@
     mode:
     <select name="mode" id="mode" v-model="mode" style="margin-bottom: 1rem">
       <option value="edit">edit</option>
-      <option value="view">view</option>
+      <option value="readonly">readonly</option>
       <option value="disabled">disabled</option>
       <option value="raw">raw</option>
     </select>
@@ -58,7 +58,7 @@ export default {
   data() {
     return {
       schema,
-      mode: 'view',
+      mode: 'readonly',
       formData: {
         name: 'Johnny Silverhand',
         powerOrigin: 'self',

@@ -106,12 +106,12 @@ export interface BlitzFieldProps {
   /**
    * The mode represents how fields are rendered
    * - `'edit'` — (default) show editable fields based on the schema
-   * - `'view'` — show each field with `readonly: true`
+   * - `'readonly'` — show each field with `readonly: true`
    * - `'disabled'` — show each field with `disabled: true`
    * - `'raw'` — used to show raw data of your form (for select components, it will show the data label instead of its value)
    *
    * This prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).
-   * @type {'edit' | 'view' | 'disabled' | 'raw' | DynamicProp<'edit' | 'view' | 'disabled' | 'raw'>}
+   * @type {'edit' | 'readonly' | 'disabled' | 'raw' | DynamicProp<'edit' | 'readonly' | 'disabled' | 'raw'>}
    * @category state
    */
   mode: string | Function
@@ -178,7 +178,7 @@ export interface BlitzFieldProps {
   showCondition: boolean
 
   /**
-   * `readonly` defaults to `true` on `mode: 'view'`
+   * `readonly` defaults to `true` on `mode: 'readonly'`
    * @type {boolean | 'readonly' | DynamicProp<boolean | 'readonly'>}
    * @category state
    */
@@ -370,7 +370,7 @@ export interface BlitzFormProps extends Vue {
   /**
    * Buttons on top of the form that control the `mode` of the form. The possible pre-made buttons are:
    * - `'edit'` — a button which puts the form in 'edit' mode & does `emit('edit')`
-   * - `'cancel'` — a button which puts the form in 'view' mode & does `emit('cancel')`
+   * - `'cancel'` — a button which puts the form in 'readonly' mode & does `emit('cancel')`
    * - `'save'` — a button which puts the form in 'edit' mode & does `emit('save', {newData, oldData})`
    * - `'delete'` — a red button which does `emit('delete')`
    * - `'archive'` — a red button which does `emit('archive')`
@@ -425,12 +425,12 @@ export interface BlitzFormProps extends Vue {
   /**
    * The mode represents how fields are rendered
    * - `'edit'` — (default) show editable fields based on the schema
-   * - `'view'` — show each field with `readonly: true`
+   * - `'readonly'` — show each field with `readonly: true`
    * - `'disabled'` — show each field with `disabled: true`
    * - `'raw'` — used to show raw data of your form (for select components, it will show the data label instead of its value)
    *
    * This prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).
-   * @type {'edit' | 'view' | 'disabled' | 'raw'}
+   * @type {'edit' | 'readonly' | 'disabled' | 'raw'}
    * @category state
    */
   mode: string
