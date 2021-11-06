@@ -6,6 +6,9 @@
     "cycraft-ecosystem": {
       "hosting": {
         "blitzar": [
+          "blitzar-next"
+        ],
+        "blitzar0": [
           "blitzar0"
         ],
         "blitzar-vuetify": [
