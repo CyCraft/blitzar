@@ -301,7 +301,7 @@ See it in action in the example down here! Write down some student names to see 
 
 <CodeBlockComponent filename="blitz-form/Form Data - List Forms" />
 
-> For more info and examples on List Forms, check out the [dedicated BlitzListForm documentation](/docs/blitz-list-form)!
+> For more info and examples on List Forms, check out the [dedicated BlitzListForm documentation](/blitz-list-form/)!
 
 ## Styling
 

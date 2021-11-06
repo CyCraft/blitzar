@@ -6,7 +6,7 @@ editLink: true
 
 ## Basics
 
-`<BlitzTable />` is a _**data table**_ component you can use with the same `schema` syntax of [BlitzForms](/docs/blitz-form) to define your columns.
+`<BlitzTable />` is a _**data table**_ component you can use with the same `schema` syntax of [BlitzForms](/blitz-form/) to define your columns.
 
 A schema array describes the columns/fields for:
 
@@ -42,7 +42,7 @@ There are various ways to implement the ability to edit table data. Below I show
 
 ### Edit on Button Click
 
-Since a `<BlitzTable />` is based on the [BlitzForms](/docs/blitz-form) schema system, it's possible to easily implement stuff like inline editing; popup editing; or show an editable form on a row click.
+Since a `<BlitzTable />` is based on the [BlitzForms](/blitz-form/) schema system, it's possible to easily implement stuff like inline editing; popup editing; or show an editable form on a row click.
 
 <!-- <CodeBlockComponent filename="blitz-table/Editing - On Button Click" /> -->
 
@@ -79,12 +79,11 @@ Please note that every row NEEDS an 'id' prop in order for it to work.
 You can pass a custom checkbox component via `selectionComponentProps`, an object that represents a BlitzForm blueprint. Just like you would use in a schema. Eg.:
 
 ```html
-<BlitzTable
-  :selectionComponentProps="{ component: 'MyCheckbox', class: 'table-checkbox' }"
-/>
+<BlitzTable :selectionComponentProps="{ component: 'MyCheckbox', class: 'table-checkbox' }" />
 ```
 
 The CSS for the selected rows or grid-items can also be overwritten by targeting these classes:
+
 - `.blitz-table__row.selected`
 - `.blitz-table__grid-item.selected`
 
@@ -111,7 +110,7 @@ You can use slots with BlitzTable.
 
 You can use all Quasar slots "around" the table. However, BlitzTable uses these slots to generate its content: `body` for the rows, `item` for the cards in grid mode.
 
-If you find yourself in a spot where you also want to use slots for the rows or items, you are probably better off using a regular QTable, perhaps in combination with a [BlitzForm](/docs/blitz-form). Feel free to look at my source code for how I built the BlitzTable component.
+If you find yourself in a spot where you also want to use slots for the rows or items, you are probably better off using a regular QTable, perhaps in combination with a [BlitzForm](/blitz-form/). Feel free to look at my source code for how I built the BlitzTable component.
 
 <!-- <CodeBlockComponent filename="blitz-table/Slots" /> -->
 
@@ -124,6 +123,7 @@ I believe that styling should be done in CSS as much as possible. When doing sty
 ### Styling with CSS (Recommended)
 
 CSS classes to target:
+
 - `.blitz-table` — the entire table component (or set your own class like so: `<BlitzTable class="my-table" />`)
 - `.blitz-table--rows` — the table when its in "table mode"
 - `.blitz-table--grid` — the table when its in "grid mode"
@@ -134,11 +134,13 @@ CSS classes to target:
 - `.blitz-table__footer` — the table footer with pagination etc.
 
 In table mode:
+
 - `tr` — targets rows (including the header row)
 - `th` — targets header cells
 - `td` — targets body cells
 
 In grid mode:
+
 - `.blitz-table__grid-item` — targets the grid card
 - `.blitz-field__label` — targets the field label on a card
 - `.blitz-field__component` — targets the field content
@@ -171,6 +173,7 @@ To make sure you can still use any BlitzTable props on your wrapper component, y
 ### Styling via Props
 
 You can use these styling related props in your `schemaColumns` on a _per column_ basis:
+
 - `classes`
 - `style`
 - `headerClasses`
@@ -179,12 +182,14 @@ You can use these styling related props in your `schemaColumns` on a _per column
 - `cellStyle` — can be an Evaluated Prop function that receives the `rowData`
 
 Props usable on the table:
+
 - `rowStyle` — can be an Evaluated Prop function that receives the `rowData`
 - `rowClasses` — can be an Evaluated Prop function that receives the `rowData`
 - `cardClass` — can be an Evaluated Prop function that receives the `rowData`
 - `cardStyle` — can be an Evaluated Prop function that receives the `rowData`
 
 Other general styling props you can use:
+
 - `tableClass`
 - `tableStyle`
 - `tableHeaderClass`
