@@ -150,7 +150,7 @@ Click on your favorite framework to see an example:
 
 ## Modes
 
-### Edit/View/disabled/raw modes
+### Edit/Readonly/disabled/raw modes
 
 BlitzForm has five modes:
 
@@ -169,7 +169,7 @@ With the HTML5 elements seen in the example below, the only field that understan
 
 <CodeBlockComponent filename="blitz-form/Modes" />
 
-### Disable Fields on View Mode
+### Disable Fields on Readonly Mode
 
 It's also possible you just use the `disabled` prop for fields that don't handle `readonly`.
 
@@ -177,7 +177,7 @@ In this example below you can see how easy this is by using a Dynamic Prop for `
 
 However, in reality it's cleaner you just add the `readonly` prop to your Vue components, or if you use a component library, create a wrapper components for them.
 
-<CodeBlockComponent filename="blitz-form/Modes - Disable Fields on View Mode" />
+<CodeBlockComponent filename="blitz-form/Modes - Disable Fields on Readonly Mode" />
 
 ## Action Buttons
 

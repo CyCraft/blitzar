@@ -43,4 +43,4 @@ footer: MIT Licensed 　・　 Copyright © 2018-present 　・　 Mesqueeb — 
 
 - [BlitzForm](/blitz-form/)
 - [BlitzListForm](/blitz-list-form/)
-- [BlitzTable](/blitz-table/)
+<!-- - [BlitzTable](/blitz-table/) -->
