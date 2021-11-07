@@ -36,6 +36,8 @@ const schema = [
     component: 'input',
     type: 'range',
     label: 'Stamina',
+    subLabel: (value) => `value: ${value}`,
+    dynamicProps: ['subLabel'],
     parseInput: (val) => Number(val),
     defaultValue: 50,
     min: 0,
