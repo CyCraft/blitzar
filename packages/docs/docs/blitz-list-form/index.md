@@ -19,7 +19,7 @@ For this I prepared a special kind of form called a `<BlitzListForm />` that off
 
 See it in action in the example down here! Write down some student names to see the formData update.
 
-<CodeBlockComponent filename="blitz-list-form/Basics - Basic Example" />
+<CodeBlockComponent :importFn="() => import('./Basics - Basic Example.vue')" :importFnRaw="() => import('./Basics - Basic Example.vue?raw')" />
 
 ### Advanced Example
 
@@ -35,7 +35,7 @@ There are 4 _extra_ props available on the context when using BlitzListForm:
 
 This example uses `deleteRow` and `rowIndex` to create a list form where you can delete rows from:
 
-<CodeBlockComponent filename="blitz-list-form/Basics - Advanced Example" />
+<CodeBlockComponent :importFn="() => import('./Basics - Advanced Example.vue')" :importFnRaw="() => import('./Basics - Advanced Example.vue?raw')" />
 
 ### Multi-Row Example
 
@@ -43,10 +43,10 @@ When you need each row to be multiple rows, you can do so with some CSS tweaking
 
 See the _**style tab**_ how this is done for the example below.
 
-<CodeBlockComponent filename="blitz-list-form/Basics - Multi-Row Example" />
+<CodeBlockComponent :importFn="() => import('./Basics - Multi-Row Example.vue')" :importFnRaw="() => import('./Basics - Multi-Row Example.vue?raw')" />
 
 ## BlitzForm Example
 
 You can use the BlitzListForm inside a BlitzForm. See how that's done in this example:
 
-<CodeBlockComponent filename="blitz-list-form/BlitzForm Example" />
+<CodeBlockComponent :importFn="() => import('./BlitzForm Example.vue')" :importFnRaw="() => import('./BlitzForm Example.vue?raw')" />

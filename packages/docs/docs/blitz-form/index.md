@@ -46,7 +46,7 @@ Check out the template/script/style below to see how simple the code looks to re
 
 The form below uses regular HTML `input` and `select` fields. You can change the look of the fields with CSS or, even better, you can simply [use your own Vue components](#use-custom-components) for the fields.
 
-<CodeBlockComponent filename="blitz-form/Basics - Basic Example" />
+<CodeBlockComponent :importFn="() => import('./Basics - Basic Example.vue')" :importFnRaw="() => import('./Basics - Basic Example.vue?raw')" />
 
 ### Form Data / v-model
 
@@ -62,7 +62,7 @@ Here you can see an advanced form rendered with all **HTML5 form elements**.
 
 If you look at the "script" you will see it's easy to use regular HTML5 elements. In reality however, you will probably use Blitzar with your custom Vue components. Which in explained in the [next chapter](#use-custom-components).
 
-<CodeBlockComponent filename="blitz-form/Basics - Advanced Example" />
+<CodeBlockComponent :importFn="() => import('./Basics - Advanced Example.vue')" :importFnRaw="() => import('./Basics - Advanced Example.vue?raw')" />
 
 ### Use Custom Components
 
@@ -80,11 +80,11 @@ const schema = [
 
 In the example below we actually render a form using our custom component `BaseInput`. If you are interested in the source code of BaseInput, [you can find it here](https://github.com/CyCraft/blitzar/tree/production/packages/docs/components/BaseInput.vue).
 
-<CodeBlockComponent filename="blitz-form/Basics - Custom Components - Basic" />
+<CodeBlockComponent :importFn="() => import('./Basics - Custom Components - Basic.vue')" :importFnRaw="() => import('./Basics - Custom Components - Basic.vue?raw')" />
 
 Here is another example of a simple login form:
 
-<CodeBlockComponent filename="blitz-form/Basics - Custom Components - Auth" />
+<CodeBlockComponent :importFn="() => import('./Basics - Custom Components - Auth.vue')" :importFnRaw="() => import('./Basics - Custom Components - Auth.vue?raw')" />
 
 :::tip Please note!
 Components you want to use in BlitzForm must be registered Globally! (See the [official Vue documentation](https://v3.vuejs.org/guide/component-registration.html) for more info)
@@ -124,7 +124,7 @@ const schema = [
 
 Here are more examples of how you can use HTML5 elements you can use in Blitz Forms:
 
-<CodeBlockComponent filename="blitz-form/Basics - HTML5 Elements" />
+<CodeBlockComponent :importFn="() => import('./Basics - HTML5 Elements.vue')" :importFnRaw="() => import('./Basics - HTML5 Elements.vue?raw')" />
 
 :::tip When to use HTML5 elements in the form schema.
 This can be useful if you have form schemas saved in a Database and the user wants to display some simple HTML or an image in their form.
@@ -142,11 +142,13 @@ In the Vue ecosystem there are many component frameworks, and they're all compat
 
 Click on your favorite framework to see an example:
 
-- [Quasar Framework](/example-quasar/)
-- _Vuetify_
-- _Nuxt (coming soon)_
-- _Tailwind (coming soon)_
-- _Bulma (coming soon)_
+- Quasar Framework _(example coming soon)_
+- Vuetify _(example coming soon)_
+- Nuxt _(example coming soon)_
+- Tailwind _(example coming soon)_
+- Bulma _(example coming soon)_
+
+**All the frameworks above are compatible!** But the examples for these conflict with my documentation website. So creating live examples is a little bit of work! Coming soon!
 
 ## Modes
 
@@ -167,7 +169,7 @@ With the HTML5 elements seen in the example below, the only field that understan
 
 `'disabled'` and `'raw'` mode on the other hand work out of the box with all these components.
 
-<CodeBlockComponent filename="blitz-form/Modes" />
+<CodeBlockComponent :importFn="() => import('./Modes.vue')" :importFnRaw="() => import('./Modes.vue?raw')" />
 
 ### Disable Fields on Readonly Mode
 
@@ -177,7 +179,7 @@ In this example below you can see how easy this is by using a Dynamic Prop for `
 
 However, in reality it's cleaner you just add the `readonly` prop to your Vue components, or if you use a component library, create a wrapper components for them.
 
-<CodeBlockComponent filename="blitz-form/Modes - Disable Fields on Readonly Mode" />
+<CodeBlockComponent :importFn="() => import('./Modes - Disable Fields on Readonly Mode.vue')" :importFnRaw="() => import('./Modes - Disable Fields on Readonly Mode.vue?raw')" />
 
 ## Action Buttons
 
@@ -212,7 +214,7 @@ The `@save` event receives a payload with the new and old form data.
 
 Play with the pre-made action buttons below and see what happens:
 
-<CodeBlockComponent filename="blitz-form/Action Buttons - Pre-Made Action Buttons" />
+<CodeBlockComponent :importFn="() => import('./Action Buttons - Pre-Made Action Buttons.vue')" :importFnRaw="() => import('./Action Buttons - Pre-Made Action Buttons.vue?raw')" />
 
 ### Overwriting Pre-Made Buttons
 
@@ -222,7 +224,7 @@ In the example below you can see we are overwriting some properties of the HTML5
 
 However, most likely you will pass `component: 'MyButton'` and pass your own Vue button components.
 
-<CodeBlockComponent filename="blitz-form/Action Buttons - Overwriting Pre-Made Action Buttons" />
+<CodeBlockComponent :importFn="() => import('./Action Buttons - Overwriting Pre-Made Action Buttons.vue')" :importFnRaw="() => import('./Action Buttons - Overwriting Pre-Made Action Buttons.vue?raw')" />
 
 ### Custom Action Buttons & Fields
 
@@ -246,7 +248,7 @@ actionButtons: [
 
 Being able to show/hide these button based on the `formData` can be very powerful.
 
-<CodeBlockComponent filename="blitz-form/Action Buttons - Custom Action Buttons" />
+<CodeBlockComponent :importFn="() => import('./Action Buttons - Custom Action Buttons.vue')" :importFnRaw="() => import('./Action Buttons - Custom Action Buttons.vue?raw')" />
 
 > Be sure to check out the [Events](#events) documentation for explanation on those `events` in the schema.
 
@@ -260,7 +262,7 @@ BlitzForm copies the formData into its local state on mount, but it does not wat
 
 Therefore you need to manually re-mount as seen in the example below. Watch what happens when clearing & loading data with and without remounting.
 
-<CodeBlockComponent filename="blitz-form/Form Data - Clearing the Form" />
+<CodeBlockComponent :importFn="() => import('./Form Data - Clearing the Form.vue')" :importFnRaw="() => import('./Form Data - Clearing the Form.vue?raw')" />
 
 ### Resetting the Form
 
@@ -268,7 +270,7 @@ A BlitzForm automatically makes a backup of form data so you can "cancel an edit
 
 In the example below there is a form with data. Try clicking "edit", then modify some data, then click "cancel".
 
-<CodeBlockComponent filename="blitz-form/Form Data - Resetting the Form" />
+<CodeBlockComponent :importFn="() => import('./Form Data - Resetting the Form.vue')" :importFnRaw="() => import('./Form Data - Resetting the Form.vue?raw')" />
 
 ### Nested Data
 
@@ -285,7 +287,7 @@ The only thing you need to be careful with is the `@update-field` event:
 
 Try typing something in the example below:
 
-<CodeBlockComponent filename="blitz-form/Form Data - Nested Data" />
+<CodeBlockComponent :importFn="() => import('./Form Data - Nested Data.vue')" :importFnRaw="() => import('./Form Data - Nested Data.vue?raw')" />
 
 ### List Forms
 
@@ -299,7 +301,7 @@ For this I prepared a special kind of form called a **BlitzListForm** that offer
 
 See it in action in the example down here! Write down some student names to see the `formData` update.
 
-<CodeBlockComponent filename="blitz-form/Form Data - List Forms" />
+<CodeBlockComponent :importFn="() => import('./Form Data - List Forms.vue')" :importFnRaw="() => import('./Form Data - List Forms.vue?raw')" />
 
 > For more info and examples on List Forms, check out the [dedicated BlitzListForm documentation](/blitz-list-form/)!
 
@@ -318,7 +320,7 @@ It's easy to position all labels on the left side! Just set `labelPosition="left
 
 When using left labels, by default, the label only takes up as much width as needed. It's really easy however to align all labels to be the same width. See the _**style tab**_ how this is done for the example below.
 
-<CodeBlockComponent filename="blitz-form/Styling - Left Labels" />
+<CodeBlockComponent :importFn="() => import('./Styling - Left Labels.vue')" :importFnRaw="() => import('./Styling - Left Labels.vue?raw')" />
 
 ### Custom Label Positioning
 
@@ -326,7 +328,7 @@ It's easy to overwrite the positioning of the field label, sub-label & component
 
 Look at the _**style tab**_ to see how to position the _**label on the right**_ and the sub-label on the bottom.
 
-<CodeBlockComponent filename="blitz-form/Styling - Custom Label Positioning" />
+<CodeBlockComponent :importFn="() => import('./Styling - Custom Label Positioning.vue')" :importFnRaw="() => import('./Styling - Custom Label Positioning.vue?raw')" />
 
 ### Custom Label Content
 
@@ -334,13 +336,13 @@ You can use the `label` slot to pass extra content to a field's label.
 
 In the example below we see usage of the label slot to add some extra content next to the title.
 
-<CodeBlockComponent filename="blitz-form/Styling - Custom Label Content" />
+<CodeBlockComponent :importFn="() => import('./Styling - Custom Label Content.vue')" :importFnRaw="() => import('./Styling - Custom Label Content.vue?raw')" />
 
 ### Raw Form Styling
 
 This example uses `mode="raw"` to show just the raw form data. Then CSS is used to style it. See the _**style tab**_.
 
-<CodeBlockComponent filename="blitz-form/Styling - Raw Form Styling" />
+<CodeBlockComponent :importFn="() => import('./Styling - Raw Form Styling.vue')" :importFnRaw="() => import('./Styling - Raw Form Styling.vue?raw')" />
 
 ## Events
 
@@ -357,7 +359,7 @@ There is also an event emitted called `@update-field`, every time you type somet
 
 Try typing a little in the example below.
 
-<CodeBlockComponent filename="blitz-form/Events - Form Events" />
+<CodeBlockComponent :importFn="() => import('./Events - Form Events.vue')" :importFnRaw="() => import('./Events - Form Events.vue?raw')" />
 
 <!-- > For more info on all possible events take a look at the [Api Card](#api-card) down below. -->
 
@@ -385,7 +387,7 @@ When you look at the arrow function above, it will receive two arguments: `$even
 
 Phew. That was a bit of a lot of information all at once. 😅 Let's look at an example:
 
-<CodeBlockComponent filename="blitz-form/Events - Field Events" />
+<CodeBlockComponent :importFn="() => import('./Events - Field Events.vue')" :importFnRaw="() => import('./Events - Field Events.vue?raw')" />
 
 ### Update Other Fields on Events
 
@@ -405,7 +407,7 @@ events: {
 
 The `updateField` function can be used to update other fields inside your form. It receives a single parameter which should be an object that looks like `{id, value}` with the `id` of the field you want to update and a `value` you want to update it with.
 
-<CodeBlockComponent filename="blitz-form/Events - Update Other Fields on Events" />
+<CodeBlockComponent :importFn="() => import('./Events - Update Other Fields on Events.vue')" :importFnRaw="() => import('./Events - Update Other Fields on Events.vue?raw')" />
 
 ## Validation
 
@@ -437,7 +439,7 @@ By default errors will get validated and shown on every keystroke.
 
 Type something below to see the effect:
 
-<CodeBlockComponent filename="blitz-form/Validation - On Every Keystroke" />
+<CodeBlockComponent :importFn="() => import('./Validation - On Every Keystroke.vue')" :importFnRaw="() => import('./Validation - On Every Keystroke.vue?raw')" />
 
 ### Validation on Save
 
@@ -447,7 +449,7 @@ You can also use `showErrorsOn: 'save-focus'` to not only show the error but als
 
 Typing below won't show errors, but try clicking **save** and see the errors show up, then play around with the different options for `showErrorsOn`:
 
-<CodeBlockComponent filename="blitz-form/Validation - On Save" />
+<CodeBlockComponent :importFn="() => import('./Validation - On Save.vue')" :importFnRaw="() => import('./Validation - On Save.vue?raw')" />
 
 :::tip Please note!
 If you use `showErrorsOn: 'save-focus'` and custom components, you must make sure those components have a method called `focus`. (because focus is done by calling the `focus` method on the component ref)
@@ -463,7 +465,7 @@ import { validateFormPerSchema } from 'blitzar'
 validateFormPerSchema(formData, schema)
 ```
 
-<CodeBlockComponent filename="blitz-form/Validation - Programatically" />
+<CodeBlockComponent :importFn="() => import('./Validation - Programatically.vue')" :importFnRaw="() => import('./Validation - Programatically.vue?raw')" />
 
 ## Advanced
 

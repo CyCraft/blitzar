@@ -1,8 +1,8 @@
 <template>
   <ClientOnly
     ><PCodeBlockComponent
-      :importComponentInstanceFn="() => import(`../docs/${filename}.vue`)"
-      :importComponentRawFn="() => import(`../docs/${filename}.vue?raw`)"
+      :importComponentInstanceFn="importFn"
+      :importComponentRawFn="importFnRaw"
   /></ClientOnly>
 </template>
 
@@ -14,7 +14,14 @@ export default defineComponent({
   name: 'CodeBlockComponent',
   components: { PCodeBlockComponent },
   props: {
-    filename: { type: String },
+    /**
+     * @example () => import(`../docs/Filename.vue`)
+     */
+    importFn: { type: Function, required: true },
+    /**
+     * @example () => import(`../docs/Filename.vue?raw`)
+     */
+    importFnRaw: { type: Function, required: true },
   },
   setup() {},
 })

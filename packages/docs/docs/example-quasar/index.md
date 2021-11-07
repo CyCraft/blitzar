@@ -33,8 +33,6 @@ app.component('QInput', QInput)
 
 <CodeBlockComponent filename="example-quasar/BlitzForm" />
 
-
-
 --
 
 <!-- ### Vuetify
