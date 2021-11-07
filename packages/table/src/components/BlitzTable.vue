@@ -1,188 +1,139 @@
 <template>
-  <QTable
-    v-bind="qTableProps"
-    :class="`blitz-table ${qTableProps.grid ? 'blitz-table--grid' : 'blitz-table--rows'}`"
-    :tableHeaderClass="qTableProps.tableHeaderClass + ` blitz-table__header`"
-    :selected.sync="cSelected"
-    :pagination.sync="pagination"
-    v-on="$listeners"
-    ref="qtable"
+  <Dataset
+    v-slot="{ ds }"
+    :dsData="rows"
+    :dsFilterFields="{}"
+    :dsSortby="['name']"
+    :dsSearchIn="['balance', 'birthdate', 'name', 'company', 'email', 'phone', 'address', 'favoriteAnimal']"
+    :dsSearchAs="{}"
   >
-    <template v-slot:top v-if="usesTopSlot" class="blitz-table__top">
-      <slot name="above-nav-row" />
-      <div class="blitz-table__nav-row">
-        <slot name="top-left">
-          <div class="q-table__title" v-if="title">{{ title }}</div>
-        </slot>
-        <slot name="top-right">
-          <BlitzField
-            v-for="(blueprint, i) in cActionButtons"
-            :key="blueprint.id || i"
-            v-bind="blueprint"
-            class="blitz-table__action-button"
-            v-on="blueprint.events"
-          />
-        </slot>
+    <!-- <div class="row mb-2" :dataPageCount="ds.dsPagecount">
+      <div class="col-md-6 mb-2 mb-md-0">
+        <DatasetShow :dsShowEntries="selected" @changed="selected = $event" />
       </div>
-      <slot name="above-table" />
-    </template>
-    <!-- Pass on all scoped slots -->
-    <template
-      v-for="slot in Object.keys($scopedSlots).filter((slot) => !slot.includes('top'))"
-      v-slot:[slot]="scope"
-    >
-      <slot v-bind="scope" :name="slot" />
-    </template>
-    <!-- header for just the multiple selection -->
-    <template v-slot:header-selection>
-      <div class="_table-selection-cell" v-if="selectionMode">
-        <BlitzField
-          v-bind="{ ...selectionComponentProps, value: allRowsAreSelected }"
-          class="js-blitz-header-selection"
-          @update:modelValue="setSelectionAllRows"
-        />
+      <div class="col-md-6">
+        <DatasetSearch dsSearchPlaceholder="Search..." />
       </div>
-    </template>
-    <!-- table body -->
-    <template v-slot:body="rowProps">
-      <BlitzForm
-        :class="
-          [
-            'blitz-table__row',
-            'blitz-row',
-            rowProps.row.id ? `blitz-row__${rowProps.row.id}` : '',
-            evaluate(rowClasses, rowProps),
-          ].flat()
-        "
-        :style="evaluate(rowStyle, rowProps)"
-        :formComponent="QTr"
-        :schema="schemaColumns"
-        :modelValue="rowProps.row"
-        :id="rowProps.row.id"
-        :mode="mode"
-        :key="rowProps.row.id + JSON.stringify(rowProps.row)"
-        @update-field="({ id, value, origin }) => onInputCell(rowProps.row.id, id, value, origin)"
-      >
-        <template v-slot="blitzFormCtx">
-          <QTd v-if="selectionMode" auto-width>
-            <div class="_table-selection-cell">
-              <BlitzField v-bind="selectionComponentProps" v-model="rowProps.selected" />
+    </div> -->
+    <div v-if="viewInner === 'table'">
+      <table>
+        <thead>
+          <tr>
+            <th
+              v-for="(column, i) in schemaColumns"
+              :key="i"
+            >{{ column.label || '' }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <DatasetItem class="">
+            <template #default="{ row, rowIndex }">
+              <BlitzForm
+                :formComponent="'tr'"
+                :class="
+                  [
+                    'blitz-table__row',
+                    'blitz-row',
+                    // rowProps.row.id ? `blitz-row__${rowProps.row.id}` : '',
+                    // evaluate(rowClasses, rowProps),
+                  ]
+                "
+                :schema="schemaColumns"
+                :modelValue="row"
+              >
+                <template v-slot="blitzFormCtx">
+                    <!-- :class="['blitz-cell', evaluate(field.cellClasses, rowProps)]" -->
+                    <!-- :style="evaluate(field.cellStyle, rowProps)" -->
+                    <!-- @click="(e) => onCellClick(e, rowProps.row, field.id)" -->
+                    <!-- @dblclick="(e) => onCellDblclick(e, rowProps.row, field.id)" -->
+                  <td
+                    v-for="field in blitzFormCtx.schema"
+                    :key="field.id"
+                  >
+                    <BlitzField
+                      v-bind="{
+                        ...field,
+                        span: undefined,
+                        label: undefined,
+                        subLabel: undefined,
+                        component: field.component || 'div',
+                      }"
+                      :modelValue="blitzFormCtx.formDataFlat[field.id]"
+                    />
+                    <!-- @update:modelValue="(val, origin) => onInputCell(rowProps.row.id, field.id, val, origin)" -->
+                  </td>
+                </template>
+              </BlitzForm>
+                <!-- :style="evaluate(rowStyle, rowProps)"
+                :id="rowProps.row.id"
+                :mode="mode"
+                :key="rowProps.row.id + JSON.stringify(rowProps.row)"
+                @update-field="({ id, value, origin }) => onInputCell(rowProps.row.id, id, value, origin)" -->
+            </template>
+            <template #noDataFound>
+              <div class="col-md-12 pt-2">
+                <p class="text-center">No results found</p>
+              </div>
+            </template>
+          </DatasetItem>
+        </tbody>
+      </table>
+    </div>
+    
+    <div v-if="viewInner === 'grid'">
+    </div>
+    
+    <!-- <div class="row">
+      <div class="col-md-12">
+        <DatasetItem class="form-row mb-3">
+          <template #default="{ row, rowIndex }">
+            <div class="col-md-4">
+              <div class="card mb-2">
+                <div class="card-body pt-3 pb-2 px-3">
+                  <h5 class="card-title text-truncate mb-2" :title="`Index: ${rowIndex}`">
+                    <span :class="['font-16', statusClass[row.onlineStatus]]">⬤</span>
+                    {{ row.name }}
+                  </h5>
+                  <h6 class="card-subtitle text-truncate text-muted">{{ row.email }}</h6>
+                  <p class="card-text text-truncate mb-0">{{ row.balance }}</p>
+                  <p class="card-text text-truncate text-right">{{ row.birthdate }}</p>
+                </div>
+              </div>
             </div>
-          </QTd>
-          <QTd
-            v-for="colBlueprint in blitzFormCtx.schema"
-            :key="colBlueprint.id"
-            :props="rowProps"
-            :class="['blitz-cell', evaluate(colBlueprint.cellClasses, rowProps)].flat()"
-            :style="evaluate(colBlueprint.cellStyle, rowProps)"
-            @click="(e) => onCellClick(e, rowProps.row, colBlueprint.id)"
-            @dblclick="(e) => onCellDblclick(e, rowProps.row, colBlueprint.id)"
-          >
-            <!-- somehow an extra div is required otherwise buttons won't render properly -->
-            <div>
-              <BlitzField
-                v-bind="{
-                  ...colBlueprint,
-                  span: undefined,
-                  label: undefined,
-                  subLabel: undefined,
-                  component: colBlueprint.component || 'div',
-                }"
-                :modelValue="blitzFormCtx.formDataFlat[colBlueprint.id]"
-                @update:modelValue="(val, origin) => onInputCell(rowProps.row.id, colBlueprint.id, val, origin)"
-              />
+          </template>
+          <template #noDataFound>
+            <div class="col-md-12 pt-2">
+              <p class="text-center">No results found</p>
             </div>
-          </QTd>
-        </template>
-      </BlitzForm>
-    </template>
-    <!-- Grid item -->
-    <template v-slot:item="gridItemProps">
-      <slot v-bind="gridItemProps" name="item">
-        <QCard
-          v-if="schemaGrid"
-          :class="
-            [
-              'blitz-table__grid-item',
-              gridItemProps.selected ? 'selected' : [],
-              evaluate(cardClass, gridItemProps),
-            ].flat()
-          "
-          :style="evaluate(cardStyle, gridItemProps)"
-          @click="(e) => onRowClick(e, gridItemProps.row, 'grid', gridItemProps)"
-          :dark="qTableProps.dark"
-          :square="qTableProps.square"
-          :flat="qTableProps.flat"
-          :bordered="qTableProps.bordered"
-        >
-          <BlitzForm
-            v-bind="gridBlitzFormProps"
-            :key="gridItemProps.row.id + JSON.stringify(gridItemProps.row)"
-            :modelValue="gridItemProps.row"
-            :id="gridItemProps.row.id"
-            @update-field="
-              ({ id: colId, value, origin }) =>
-                onInputCell(gridItemProps.row.id, colId, value, origin)
-            "
-          />
-        </QCard>
-      </slot>
-    </template>
-  </QTable>
+          </template>
+        </DatasetItem>
+      </div>
+    </div> -->
+    <!-- <div class="d-flex flex-md-row flex-column justify-content-between align-items-center">
+      <DatasetInfo class="mb-2 mb-md-0" />
+      <DatasetPager />
+    </div> -->
+  </Dataset>
 </template>
 
 <style lang="sass">
 @import '../index.sass'
-
-.blitz-table
-  display: flex
-  flex-direction: column
-  ._table-top-right,
-  ._table-selection-cell
-    display: flex
-    justify-content: center
-    align-items: center
-  th
-    white-space: pre
-  .q-table__top
-    display: flex
-    flex-wrap: nowrap
-    flex-direction: column
-    align-items: stretch
-  &.q-table--grid .q-table__middle
-    min-height: 0
-    margin-bottom: 0
-  // td:before
-  //   background: none !important // todo: prevent this line from being necessary in BlitzTable
-
-.blitz-table__nav-row
-  display: grid
-  justify-content: stretch
-  align-content: start
-  align-items: center
-  grid-gap: $md
-  grid-auto-flow: column
-  grid-template-columns: 1fr
-
-.blitz-table__grid-item
-  margin: $sm
-  padding: $md
-  transition: all 200ms
-  .blitz-field__sub-label
-    display: none
-  &.selected
-    background: #efefef
-    transform: scale(0.9)
 </style>
 
 <script>
 import { merge } from 'merge-anything'
 import { isPlainObject, isFunction, isArray } from 'is-what'
-import { QTable, QTr, QTd, QCard } from 'quasar'
 import { BlitzForm, BlitzField } from '@blitzar/form'
-import BlitzGridListToggle from './BlitzGridListToggle'
+import BlitzGridListToggle from './BlitzGridListToggle.vue'
 import { schemaToQTableColumns } from '../helpers/schemaToQTableColumns.js'
-import { setup } from '../helpers/setup.js'
+import {
+  Dataset,
+  DatasetItem,
+  DatasetInfo,
+  DatasetPager,
+  DatasetSearch,
+  DatasetShow
+} from 'vue-dataset'
 
 /**
  * @typedef GridCardProps
@@ -198,25 +149,25 @@ import { setup } from '../helpers/setup.js'
  * @property {string} __trClass - Internal prop passed down to QTr (if used)
  */
 
-setup()
-
 /**
 Here you can find all the information on the available props & events of BlitzTable.
 
 If any of the documentation is unclear, feel free to [open an issue](https://github.com/cycraft/blitzar/issues) to ask for clarification!
 
-BlitzTable uses Quasar's QTable under the hood. You can use any of the [QTable props](https://quasar.dev/vue-components/table#QTable-API) as well besides the ones described in the API Card below.
+BlitzTable ~~uses Quasar's QTable~~ under the hood.
  */
 export default {
   name: 'BlitzTable',
   inheritAttrs: false,
   components: {
-    QTable,
-    QTr,
-    QTd,
-    QCard,
     BlitzForm,
     BlitzField,
+    Dataset,
+    DatasetItem,
+    DatasetInfo,
+    DatasetPager,
+    DatasetSearch,
+    DatasetShow
   },
   props: {
     /**
@@ -225,14 +176,14 @@ export default {
      * @example [{ id: 'nameFirst', label: 'First Name', component: 'input' }, { id: 'nameLast', label: 'Last Name', component: 'input' }]
      * @category column
      */
-    schemaColumns: { type: Array, required: true },
+    schemaColumns: { type: Array, default: undefined },
     /**
      * The schema for the grid cards you want to generate. (BlitzForm schema format)
      * @type {Record<string, any>[]}
      * @example [{ id: 'nameFirst', label: 'First Name', component: 'input' }, { id: 'nameLast', label: 'Last Name', component: 'input' }]
      * @category column
      */
-    schemaGrid: { type: [Array, Object] },
+    schemaGrid: { type: [Array, Object], default: undefined },
     /**
      * Rows of data to display. Use `rows` instead of the QTables `data`. Renamed for clarity.
      * @type {Record<string, any>[]}
@@ -241,249 +192,144 @@ export default {
      */
     rows: { type: Array, required: true },
     /**
-     * Action buttons to add to the top right of the table. An array of objects just like a BlitzForm schema.
-     *
-     * There is also one preset button to toggle between grid- and list-view. This is shown by default, or can be included in the schema array as just the string 'grid' like the example below.
-     * @example ['grid', { component: 'button', slot: 'log it', events: { click: console.log } }]
-     * @category content
+     * Defaults to 'table' if `schemaColumns` is provided
+     * Defaults to 'grid' if `schemaGrid` is provided
+     * @type {'table' | 'grid'}
      */
-    actionButtons: { type: Array, default: () => ['grid'] },
-    /**
-     * The BlitzForm options you want to use for the grid cards. Eg. You can pass `{ actionButtons: [] }` here to include some action buttons on each grid card.
-     *
-     * Please note:
-     * - The `schema` for the grid cards should be set via the `schemaGrid` prop instead of passing it here as `schema`.
-     * - The BlitzForm used for each grid card will automatically get the row data.
-     * - See the documentation of BlitzForm for more information on the props you can set.
-     * @category column
-     */
-    gridBlitzFormOptions: { type: Object, default: () => ({}) },
-    /**
-     * Custom styling to be applied to each row. Applied like so `:style="rowStyle"`
-     * @example 'padding: 1em;'
-     * @category style
-     */
-    rowStyle: { type: [Object, Array, String, Function] },
-    /**
-     * Custom classes to be applied to each row. Applied like so `:class="rowClasses"`
-     * @example ['dark-theme']
-     * @category style
-     */
-    rowClasses: { type: [Object, Array, String, Function] },
-    /**
-     * An object that represents the checkbox when the table is in "selection" mode. You can tell BlitzTable to use a custom checkbox component instead of the default.
-     * Defaults to a regular HTML5 checkbox.
-     * @example { component: 'MyCheckbox', class: 'table-checkbox' }
-     */
-    selectionComponentProps: {
-      type: Object,
-      default: () => ({
-        component: 'input',
-        type: 'checkbox',
-      }),
-    },
-    // Inherited props used here:
-    /**
-     * @category inherited prop
-     */
-    grid: { type: Boolean, default: false },
-    /**
-     * @category inherited prop
-     * @type {Record<string, any>[]}
-     */
-    selected: { type: Array, default: () => [] },
-    /**
-     * CSS classes to apply to the card (when in grid mode).
-     * You can pass a function which will be evaluated just like an Dynamic Prop. The first param passed will be the entire row data. The second is `item` scoped slot object from a QTable.
-     * @type {(rowData: Record<string, any>, gridCardProps: GridCardProps, BlitzTableContext: any) => string | Record<string, any> | (string | Record<string, any>)[]}
-     * @example 'special-class'
-     * @example :card-class="{ 'my-special-class': [Boolean condition] }"
-     * @category inherited prop
-     */
-    cardClass: { type: [Function, String, Array, Object] },
-    /**
-     * CSS style to apply to the card (when in grid mode).
-     * You can pass a function which will be evaluated just like an Dynamic Prop. The first param passed will be the entire row data. The second is `item` scoped slot object from a QTable.
-     * @type {(rowData: Record<string, any>, gridCardProps: GridCardProps, BlitzTableContext: any) => string | Record<string, any> | (string | Record<string, any>)[]}
-     * @example 'background-color: #fff'
-     * @example :card-style="{ backgroundColor: '#fff' }"
-     * @category inherited prop
-     */
-    cardStyle: { type: [Function, String, Array, Object] },
-    /**
-     * By default the rows show just the raw data without showing field components. If you set `mode: 'edit'` your entire table will show the actual (editable) component as per your schema.
-     * @category content
-     */
-    mode: { type: String, default: 'raw' },
-    // Inherited props with different defaults:
-    // Modified inherited props:
-    /**
-     * Do not use this! Use `rows` instead of the QTables `data`. Renamed for clarity.
-     * @category modified prop
-     */
-    data: { type: Array },
-    /**
-     * Do not use this! Use `schemaColumns` instead. This is the prop QTable uses to define its columns. BlitzTable uses `schemaColumns` instead.
-     * @category modified prop
-     */
-    columns: {},
-    /**
-     * A title to be placed above your table.
-     * @category modified prop
-     */
-    title: { type: String },
-    /**
-     * Do not use this! This is fixed to `id` in a BlitzTable and cannot be changed.
-     * @category modified prop
-     */
-    rowKey: {},
-  },
-  created() {
-    // some validation on creation
-    const needsSchemaGrid = this.grid === true || this.actionButtons.includes('grid')
-    if (needsSchemaGrid && this.schemaGrid === undefined) {
-      throw new Error(
-        '[BlitzTable] You need to defined a prop called "schemaGrid" if you want to use a grid layout as well!'
-      )
-    }
-  },
-  mounted() {
-    const footerEl = this.$el.querySelector('.q-table__bottom')
-    if (footerEl) footerEl.classList.add('blitz-table__footer')
-    const topEl = this.$el.querySelector('.q-table__top')
-    if (topEl) topEl.classList.add('blitz-table__top')
-    const titleEl = this.$el.querySelector('.q-table__title')
-    if (titleEl) titleEl.classList.add('blitz-table__title')
+    view: { type: String, default: undefined },
+    // /**
+    //  * Action buttons to add to the top right of the table. An array of objects just like a BlitzForm schema.
+    //  *
+    //  * There is also one preset button to toggle between grid- and list-view. This is shown by default, or can be included in the schema array as just the string 'grid' like the example below.
+    //  * @example ['grid', { component: 'button', slot: 'log it', events: { click: console.log } }]
+    //  * @category content
+    //  */
+    // actionButtons: { type: Array, default: () => ['grid'] },
+    // /**
+    //  * The BlitzForm options you want to use for the grid cards. Eg. You can pass `{ actionButtons: [] }` here to include some action buttons on each grid card.
+    //  *
+    //  * Please note:
+    //  * - The `schema` for the grid cards should be set via the `schemaGrid` prop instead of passing it here as `schema`.
+    //  * - The BlitzForm used for each grid card will automatically get the row data.
+    //  * - See the documentation of BlitzForm for more information on the props you can set.
+    //  * @category column
+    //  */
+    // gridBlitzFormOptions: { type: Object, default: () => ({}) },
+    // /**
+    //  * Custom styling to be applied to each row. Applied like so `:style="rowStyle"`
+    //  * @example 'padding: 1em;'
+    //  * @category style
+    //  */
+    // rowStyle: { type: [Object, Array, String, Function] },
+    // /**
+    //  * Custom classes to be applied to each row. Applied like so `:class="rowClasses"`
+    //  * @example ['dark-theme']
+    //  * @category style
+    //  */
+    // rowClasses: { type: [Object, Array, String, Function] },
+    // /**
+    //  * An object that represents the checkbox when the table is in "selection" mode. You can tell BlitzTable to use a custom checkbox component instead of the default.
+    //  * Defaults to a regular HTML5 checkbox.
+    //  * @example { component: 'MyCheckbox', class: 'table-checkbox' }
+    //  */
+    // selectionComponentProps: {
+    //   type: Object,
+    //   default: () => ({
+    //     component: 'input',
+    //     type: 'checkbox',
+    //   }),
+    // },
+    // // Inherited props used here:
+    // /**
+    //  * @category inherited prop
+    //  */
+    // grid: { type: Boolean, default: false },
+    // /**
+    //  * @category inherited prop
+    //  * @type {Record<string, any>[]}
+    //  */
+    // selected: { type: Array, default: () => [] },
+    // /**
+    //  * CSS classes to apply to the card (when in grid mode).
+    //  * You can pass a function which will be evaluated just like an Dynamic Prop. The first param passed will be the entire row data. The second is `item` scoped slot object from a QTable.
+    //  * @type {(rowData: Record<string, any>, gridCardProps: GridCardProps, BlitzTableContext: any) => string | Record<string, any> | (string | Record<string, any>)[]}
+    //  * @example 'special-class'
+    //  * @example :card-class="{ 'my-special-class': [Boolean condition] }"
+    //  * @category inherited prop
+    //  */
+    // cardClass: { type: [Function, String, Array, Object] },
+    // /**
+    //  * CSS style to apply to the card (when in grid mode).
+    //  * You can pass a function which will be evaluated just like an Dynamic Prop. The first param passed will be the entire row data. The second is `item` scoped slot object from a QTable.
+    //  * @type {(rowData: Record<string, any>, gridCardProps: GridCardProps, BlitzTableContext: any) => string | Record<string, any> | (string | Record<string, any>)[]}
+    //  * @example 'background-color: #fff'
+    //  * @example :card-style="{ backgroundColor: '#fff' }"
+    //  * @category inherited prop
+    //  */
+    // cardStyle: { type: [Function, String, Array, Object] },
+    // /**
+    //  * By default the rows show just the raw data without showing field components. If you set `mode: 'edit'` your entire table will show the actual (editable) component as per your schema.
+    //  * @category content
+    //  */
+    // mode: { type: String, default: 'raw' },
+    // // Inherited props with different defaults:
+    // // Modified inherited props:
+    // /**
+    //  * Do not use this! Use `rows` instead of the QTables `data`. Renamed for clarity.
+    //  * @category modified prop
+    //  */
+    // data: { type: Array },
+    // /**
+    //  * Do not use this! Use `schemaColumns` instead. This is the prop QTable uses to define its columns. BlitzTable uses `schemaColumns` instead.
+    //  * @category modified prop
+    //  */
+    // columns: {},
+    // /**
+    //  * A title to be placed above your table.
+    //  * @category modified prop
+    //  */
+    // title: { type: String },
+    // /**
+    //  * Do not use this! This is fixed to `id` in a BlitzTable and cannot be changed.
+    //  * @category modified prop
+    //  */
+    // rowKey: {},
   },
   data() {
-    const { grid, selected } = this
-    const innerSelected = selected
-    const gridModeEnabled = grid
+    const { view, schemaColumns, schemaGrid } = this
+    const hasColumns = !!schemaColumns
+    const hasGrid = !!schemaGrid
+
+    // const { grid, selected } = this
+    // const innerSelected = selected
+    // const gridModeEnabled = grid
     // const innerFilter = filter
     return {
+      viewInner: view || (!hasColumns && hasGrid ? 'grid' : 'table'),
       // innerFilter,
-      innerSelected,
-      gridModeEnabled,
-      defaultPagination: {
-        rowsPerPage: 10,
+      // innerSelected,
+      // gridModeEnabled,
+      // defaultPagination: {
+      //   rowsPerPage: 10,
+      // },
+      statusClass: {
+        Active: 'text-success',
+        Away: 'text-warning',
+        'Do not disturb': 'text-danger',
+        Invisible: 'text-secondary'
       },
-      QTr,
+      selected: 5
     }
   },
   watch: {
-    grid(newValue) {
-      this.gridModeEnabled = newValue
+    view(newValue) {
+      this.viewInner = newValue
     },
-    selected(newValue) {
-      this.innerSelected = newValue
+    viewInner(newValue) {
+      this.$emit('update:view', newValue)
     },
   },
   computed: {
-    selectionMode() {
-      const { qTableProps } = this
-      return qTableProps.selection === 'single' || qTableProps.selection === 'multiple'
-    },
-    allRowsAreSelected() {
-      const { rows, cSelected } = this
-      return rows.length > 0 && rows.length === cSelected.length
-    },
-    pagination: {
-      get() {
-        return this.qTableProps.pagination || this.defaultPagination
-      },
-      set(newPagination) {
-        if (this.qTableProps.pagination) {
-          return this.event('update:pagination', newPagination)
-        }
-        this.defaultPagination = newPagination
-      },
-    },
-    usesTopSlot() {
-      const { title, cActionButtons, $scopedSlots: slot } = this
-      return (
-        title ||
-        cActionButtons.length ||
-        slot['above-table'] ||
-        slot['above-nav-row'] ||
-        slot['top-left'] ||
-        slot['top-right']
-      )
-    },
-    qTableProps() {
-      const propsToNotPass = ['cardStyle', 'cardClass']
-      const propsToPass = merge(this.$attrs, {
-        // Quasar props with modified behavior:
-        data: this.rows,
-        columns: this.cColumns,
-        rowKey: 'id',
-        grid: this.gridModeEnabled,
-        // Quasar props with modified defaults:
-        // filter: this.$attrs.filter || this.innerFilter,
-        // Quasar props just to pass:
-      })
-      return Object.entries(propsToPass).reduce((carry, [key, val]) => {
-        if (propsToNotPass.includes(key)) return carry
-        carry[key] = val
-        return carry
-      }, {})
-    },
-    gridBlitzFormProps() {
-      const { gridBlitzFormOptions, schemaGrid, mode } = this
-      const defaults = {
-        schema: schemaGrid,
-        mode,
-      }
-      return merge(defaults, gridBlitzFormOptions)
-    },
-    cSelected: {
-      get() {
-        return this.innerSelected
-      },
-      set(val) {
-        // set indeterminate
-        const isIndeterminate = val.length && val.length < this.rows.length
-        const headerCheckbox = this.$el.querySelector('.js-blitz-header-selection input')
-        if (isIndeterminate && headerCheckbox) {
-          headerCheckbox.indeterminate = true
-        }
-        if (!isIndeterminate && headerCheckbox) {
-          headerCheckbox.indeterminate = false
-        }
-        this.innerSelected = val
-        this.event('update:selected', val)
-      },
-    },
-    cColumns() {
-      return schemaToQTableColumns(this.schemaColumns)
-    },
-    cActionButtons() {
-      const { actionButtons, schemaGrid } = this
-      const blitzTableContext = this
-      const defaultsGridButton = {
-        component: BlitzGridListToggle,
-        value: this.gridModeEnabled,
-        events: { 'update:modelValue': (newVal) => (this.gridModeEnabled = newVal) },
-      }
-      return actionButtons
-        .map((btn) => {
-          if (btn === 'grid' && schemaGrid) {
-            // return // 以下の機能は未完成
-            return defaultsGridButton
-          }
-          if (isPlainObject(btn)) {
-            if (!isPlainObject(btn.events)) return btn
-            const { click } = btn.events
-            if (isFunction(click)) btn.events.click = (val) => click(val, blitzTableContext)
-            return btn
-          }
-        })
-        .filter((btn) => isPlainObject(btn))
-        .map((blueprint) => {
-          if (!blueprint.slot) return blueprint
-          const slots = blueprint.slots || {}
-          return { ...blueprint, slots: { ...slots, default: blueprint.slot } }
-        })
-    },
   },
   methods: {
     evaluate(propValue, rowProps) {

@@ -20,13 +20,13 @@ Under the hood BlitzTable uses Quasar's QTable but applies custom logic to be ab
 
 Here we see a basic example for a BlitzTable. Check out the _template_ and _script_ tabs below to see how easy it is to render a data table based on the schema.
 
-<!-- <CodeBlockComponent filename="blitz-table/Basics - Basic Example" /> -->
+<CodeBlockComponent :importFn="() => import('./Basics - Basic Example.vue')" :importFnRaw="() => import('./Basics - Basic Example.vue?raw')" />
 
 ## Advanced
 
 This is a more advanced example that renders an image in the row.
 
-<!-- <CodeBlockComponent filename="blitz-table/Advanced" /> -->
+<!-- <CodeBlockComponent :importFn="() => import('./Advanced.vue')" :importFnRaw="() => import('./Advanced.vue?raw')" /> -->
 
 ## Computed Columns
 
@@ -34,7 +34,7 @@ This is an example of a table with computed columns. A computed column is one th
 
 In this example the "full name" is computed on the fly when showing the table and immidiately made "sortable" as well.
 
-<!-- <CodeBlockComponent filename="blitz-table/Computed Columns" /> -->
+<!-- <CodeBlockComponent :importFn="() => import('./Computed Columns.vue')" :importFnRaw="() => import('./Computed Columns.vue?raw')" /> -->
 
 ## Editing
 
@@ -44,27 +44,27 @@ There are various ways to implement the ability to edit table data. Below I show
 
 Since a `<BlitzTable />` is based on the [BlitzForms](/blitz-form/) schema system, it's possible to easily implement stuff like inline editing; popup editing; or show an editable form on a row click.
 
-<!-- <CodeBlockComponent filename="blitz-table/Editing - On Button Click" /> -->
+<!-- <CodeBlockComponent :importFn="() => import('./Editing - On Button Click.vue')" :importFnRaw="() => import('./Editing - On Button Click.vue?raw')" /> -->
 
 ### Edit on Row Click
 
-<!-- <CodeBlockComponent filename="blitz-table/Editing - On Row Click" /> -->
+<!-- <CodeBlockComponent :importFn="() => import('./Editing - On Row Click.vue')" :importFnRaw="() => import('./Editing - On Row Click.vue?raw')" /> -->
 
 ### Edit Inline
 
-<!-- <CodeBlockComponent filename="blitz-table/Editing - Inline" /> -->
+<!-- <CodeBlockComponent :importFn="() => import('./Editing - Inline.vue')" :importFnRaw="() => import('./Editing - Inline.vue?raw')" /> -->
 
 ### Edit Inline on Cell Double-Click
 
-<!-- <CodeBlockComponent filename="blitz-table/Editing - Inline on Cell Double-Click" /> -->
+<!-- <CodeBlockComponent :importFn="() => import('./Editing - Inline on Cell Double-Click.vue')" :importFnRaw="() => import('./Editing - Inline on Cell Double-Click.vue?raw')" /> -->
 
 ### Adding a New Record
 
-<!-- <CodeBlockComponent filename="blitz-table/Editing - Adding a New Record" /> -->
+<!-- <CodeBlockComponent :importFn="() => import('./Editing - Adding a New Record.vue')" :importFnRaw="() => import('./Editing - Adding a New Record.vue?raw')" /> -->
 
 ## Search and Filter
 
-<!-- <CodeBlockComponent filename="blitz-table/Search and Filter" /> -->
+<!-- <CodeBlockComponent :importFn="() => import('./Search and Filter.vue')" :importFnRaw="() => import('./Search and Filter.vue?raw')" /> -->
 
 ## Selection
 
@@ -72,7 +72,7 @@ By default selection is implemented for both table and grid view. Play around wi
 
 Please note that every row NEEDS an 'id' prop in order for it to work.
 
-<!-- <CodeBlockComponent filename="blitz-table/Selection" /> -->
+<!-- <CodeBlockComponent :importFn="() => import('./Selection.vue')" :importFnRaw="() => import('./Selection.vue?raw')" /> -->
 
 ### Styling Selection
 
@@ -87,7 +87,7 @@ The CSS for the selected rows or grid-items can also be overwritten by targeting
 - `.blitz-table__row.selected`
 - `.blitz-table__grid-item.selected`
 
-<!-- <CodeBlockComponent filename="blitz-table/Selection - Styling" /> -->
+<!-- <CodeBlockComponent :importFn="() => import('./Selection - Styling.vue')" :importFnRaw="() => import('./Selection - Styling.vue?raw')" /> -->
 
 ### Selection with search
 
@@ -95,7 +95,7 @@ Here is an example of selection together with search.
 
 When clicking select all it will only select
 
-<!-- <CodeBlockComponent filename="blitz-table/Selection - Search" /> -->
+<!-- <CodeBlockComponent :importFn="() => import('./Selection - Search.vue')" :importFnRaw="() => import('./Selection - Search.vue?raw')" /> -->
 
 ## Slots
 
@@ -112,7 +112,7 @@ You can use all Quasar slots "around" the table. However, BlitzTable uses these 
 
 If you find yourself in a spot where you also want to use slots for the rows or items, you are probably better off using a regular QTable, perhaps in combination with a [BlitzForm](/blitz-form/). Feel free to look at my source code for how I built the BlitzTable component.
 
-<!-- <CodeBlockComponent filename="blitz-table/Slots" /> -->
+<!-- <CodeBlockComponent :importFn="() => import('./Slots.vue')" :importFnRaw="() => import('./Slots.vue?raw')" /> -->
 
 ## Styling
 
@@ -147,7 +147,7 @@ In grid mode:
 
 Check out this example's _**style tab**_ to see how styling is applied!
 
-<!-- <CodeBlockComponent filename="blitz-table/Styling - Via CSS" /> -->
+<!-- <CodeBlockComponent :importFn="() => import('./Styling - Via CSS.vue')" :importFnRaw="() => import('./Styling - Via CSS.vue?raw')" /> -->
 
 #### Row Hover Color
 
@@ -168,7 +168,7 @@ It is still possible to make this re-usable throughout your app! You can create 
 
 To make sure you can still use any BlitzTable props on your wrapper component, you can simply pass all `$attrs` to BlitzTable. Check the _script_ tab of this example to see how this is done.
 
-<!-- <CodeBlockComponent filename="blitz-table/Styling - Reusable Complex Styling" /> -->
+<!-- <CodeBlockComponent :importFn="() => import('./Styling - Reusable Complex Styling.vue')" :importFnRaw="() => import('./Styling - Reusable Complex Styling.vue?raw')" /> -->
 
 ### Styling via Props
 
@@ -200,4 +200,4 @@ Other general styling props you can use:
 
 In the example below we use conditional rowStyle and cardStyle as Dynamic Props. Try changing the team colors!
 
-<!-- <CodeBlockComponent filename="blitz-table/Styling - Via Props" /> -->
+<!-- <CodeBlockComponent :importFn="() => import('./Styling - Via Props.vue')" :importFnRaw="() => import('./Styling - Via Props.vue?raw')" /> -->

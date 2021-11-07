@@ -1,8 +1,8 @@
 <template>
-  <div class="blitz-grid-list-toggle" @click="$emit('update:modelValue', !value)">
+  <div class="blitz-grid-list-toggle" @click="$emit('update:modelValue', !modelValue)">
     <!-- grid icon -->
     <svg
-      v-if="!value"
+      v-if="!modelValue"
       xmlns="http://www.w3.org/2000/svg"
       width="24"
       height="24"
@@ -21,7 +21,7 @@
     </svg>
     <!-- list icon -->
     <svg
-      v-if="value"
+      v-if="modelValue"
       xmlns="http://www.w3.org/2000/svg"
       width="24"
       height="24"
@@ -46,8 +46,7 @@
 <style lang="sass" scoped>
 .blitz-grid-list-toggle
   display: flex
-  color: black // fallback
-  color: var(--q-color-primary, black)
+  color: black
   cursor: pointer
 </style>
 
@@ -56,10 +55,10 @@ export default {
   name: 'BlitzGridListToggle',
   props: {
     /**
-     * `value: true` represents "grid mode" so shows a "list icon"
-     * `value: false` represents "list mode" so shows a "grid icon"
+     * `modelValue: true` represents "grid mode" so shows a "list icon"
+     * `modelValue: false` represents "list mode" so shows a "grid icon"
      */
-    value: Boolean,
+    modelValue: Boolean,
   },
   computed: {},
   methods: {},

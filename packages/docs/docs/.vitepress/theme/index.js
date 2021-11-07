@@ -5,6 +5,7 @@ import './styles.css'
 
 import VueCustomTooltip from '@adamdehaven/vue-custom-tooltip'
 import { BlitzForm, BlitzListForm } from '@blitzar/form'
+import { BlitzTable } from '@blitzar/table'
 import { CodeBlock } from '@planetar/code-block'
 import CodeBlockComponent from '../../../components/CodeBlockComponent.vue'
 import BaseInput from '../../../components/BaseInput.vue'
@@ -15,6 +16,7 @@ export default {
     // register global components
     app.component('BlitzForm', BlitzForm)
     app.component('BlitzListForm', BlitzListForm)
+    app.component('BlitzTable', BlitzTable)
     app.component('CodeBlock', CodeBlock)
     app.component('CodeBlockComponent', CodeBlockComponent)
     app.component('BaseInput', BaseInput)

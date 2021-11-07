@@ -5,6 +5,7 @@
     "baseUrl": ".",
     "strict": true,
     "moduleResolution": "node",
+    "allowJs": true,
     "types": ["node"]
   },
   "exclude": ["/dist", "node_modules"]

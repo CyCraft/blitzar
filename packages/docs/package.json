@@ -11,7 +11,8 @@
   },
   "dependencies": {
     "@adamdehaven/vue-custom-tooltip": "^2.6.0",
-    "@blitzar/form": "^1.0.1",
+    "@blitzar/form": "^1.0.2",
+    "@blitzar/table": "^1.0.2",
     "@blitzar/utils": "^0.0.33",
     "@hunterliu/code-block": "^1.0.4",
     "@meforma/vue-toaster": "^1.2.2",
