@@ -152,7 +152,7 @@ Click on your favorite framework to see an example:
 
 ## Modes
 
-### Edit/Readonly/disabled/raw modes
+### Edit/Readonly/Disabled/Raw Modes
 
 BlitzForm has five modes:
 
@@ -411,7 +411,7 @@ The `updateField` function can be used to update other fields inside your form. 
 
 ## Validation
 
-### Showing errors
+### Showing Errors
 
 BlitzForm comes with lightweight built-in field validation.
 
