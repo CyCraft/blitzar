@@ -684,10 +684,7 @@ export default defineComponent({
     },
     propsAndAttrsToPass() {
       const { evalPropOrAttr } = this
-      const propsToPass = {
-        // we always wanna pass only this prop:
-        required: evalPropOrAttr('required'),
-      }
+      const propsToPass = {}
       // only pass `error` when it has internal errors
       if (evalPropOrAttr('internalErrors')) {
         propsToPass.error = evalPropOrAttr('error')
@@ -708,10 +705,17 @@ export default defineComponent({
       }
       // if disabled is set as prop
       const disabled = evalPropOrAttr('disabled')
-      if (isBoolean(disabled) || disabled === 'disabled') {
-        propsToPass.disabled = disabled
+      if ((isBoolean(disabled) && disabled) || disabled === 'disabled' || evalPropOrAttr('mode') === 'disabled') {
+        propsToPass.disabled = true
       } else {
-        propsToPass.disabled = evalPropOrAttr('mode') === 'disabled'
+        propsToPass.disabled = undefined // removes the attribute
+      }
+      // only pass required when positive and not disabled:
+      const required = evalPropOrAttr('required')
+      if (isBoolean(required) && required) {
+        propsToPass.required = propsToPass.disabled ? undefined : true
+      } else {
+        propsToPass.required = undefined // removes the attribute
       }
       const attrsToPass = Object.keys(this.$attrs).reduce((carry, attrKey) => {
         if (attrKey === 'class' || attrKey === 'style') {
