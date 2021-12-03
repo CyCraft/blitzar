@@ -1,5 +1,5 @@
 import { flattenPerSchema } from '@blitzar/utils'
-import { isFullString, isFunction } from 'is-what'
+import { isBoolean, isFullString, isFunction } from 'is-what'
 import type { BlitzFieldProps, FormContext, Lang, Schema } from '@blitzar/types'
 import { defaultLang } from './lang'
 
@@ -22,17 +22,41 @@ export function validateFieldPerSchema(
   blueprint: BlitzFieldProps,
   context: FormContext
 ): null | string {
-  const lang = context.lang || defaultLang()
-  const requiredErrorFn = createRequiredErrorFn(lang.requiredField)
+  // check whether the field is shown
+  let isVisible = true
+  if (isFunction(blueprint.showCondition)) {
+    isVisible = blueprint.showCondition(payload, context)
+  }
+  if (!isVisible) return null
 
-  const requiredResult = requiredErrorFn(payload)
-  if (isFullString(requiredResult)) return requiredResult
+  // check whether the field is required
+  let isRequired = false
+  if (isFunction(blueprint.required)) {
+    isRequired = blueprint.required(payload, context)
+  } else if (isBoolean(blueprint.required)) {
+    isRequired = blueprint.required
+  }
+
+  const lang = context.lang || defaultLang()
+  if (isRequired) {
+    const requiredErrorFn = createRequiredErrorFn(lang.requiredField)
+    const requiredResult = requiredErrorFn(payload)
+    if (isFullString(requiredResult)) return requiredResult
+  }
 
   if (!blueprint.error) return null
 
-  const errorResult = !isFunction(blueprint.error)
+  let errorResult = !isFunction(blueprint.error)
     ? blueprint.error
     : blueprint.error(payload, context)
+  // report provided error message if error result is true
+  if (isBoolean(errorResult)) {
+    if (errorResult) {
+      return blueprint.errorMessage ? blueprint.errorMessage : lang.fieldValidationError
+    }
+    return null
+  }
+
   return errorResult
 }
 
