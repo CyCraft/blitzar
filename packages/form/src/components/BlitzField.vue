@@ -561,7 +561,15 @@ export default defineComponent({
 
       if (isFullString(requiredErrorResult)) return requiredErrorResult
 
-      return evalPropOrAttr('error') || null
+      const errorStatus = evalPropOrAttr('error')
+      if (isBoolean(errorStatus)) {
+        if (errorStatus) {
+          const errorMessage = evalPropOrAttr('errorMessage')
+          return errorMessage ? errorMessage : langCalculated['fieldValidationError']
+        }
+        return null
+      }
+      return errorStatus || null
     },
     // validate() IS CALLED FROM REFERENCE!!
     /**
