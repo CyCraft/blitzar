@@ -281,7 +281,7 @@ export default defineComponent({
     events: { type: [Object, Function], default: () => ({}) },
     /**
      * Whether or not the field is required or not. If a field is marked 'required' it will add a default rule like so: `[val => (val !== null && val !== undefined) || 'Field is required']`. The default message can be set in the `lang` prop as `requiredField`.
-     * @type {boolean | DynamicProp<boolean>}
+     * @type {boolean | 'required' | DynamicProp<boolean | 'required'>}
      * @category behavior
      */
     required: { type: [Boolean, Function] },
@@ -584,7 +584,7 @@ export default defineComponent({
         if (component) {
           try {
             component.focus()
-          } catch (error) {}
+          } catch (error) { }
         }
       }
       return result
@@ -696,26 +696,20 @@ export default defineComponent({
       } else {
         propsToPass.hint = evalPropOrAttr('hint')
       }
-      // if readonly is set as prop
+      // set the component's 'readonly' attr/prop
       const readonly = evalPropOrAttr('readonly')
-      if (isBoolean(readonly) || readonly === 'readonly') {
-        propsToPass.readonly = readonly
-      } else {
-        propsToPass.readonly = evalPropOrAttr('mode') === 'readonly'
+      if (readonly === true || readonly === 'readonly' || evalPropOrAttr('mode') === 'readonly') {
+        propsToPass.readonly = true
       }
-      // if disabled is set as prop
+      // set the component's 'disabled' attr/prop
       const disabled = evalPropOrAttr('disabled')
-      if ((isBoolean(disabled) && disabled) || disabled === 'disabled' || evalPropOrAttr('mode') === 'disabled') {
+      if (disabled === true || disabled === 'disabled' || evalPropOrAttr('mode') === 'disabled') {
         propsToPass.disabled = true
-      } else {
-        propsToPass.disabled = undefined // removes the attribute
       }
-      // only pass required when positive and not disabled:
+      // set the component's 'required' attr/prop (only when not readonly or disabled)
       const required = evalPropOrAttr('required')
-      if (isBoolean(required) && required) {
-        propsToPass.required = propsToPass.disabled ? undefined : true
-      } else {
-        propsToPass.required = undefined // removes the attribute
+      if ((required === true || required === 'required') && !propsToPass.disabled && !propsToPass.readonly) {
+        propsToPass.required = true
       }
       const attrsToPass = Object.keys(this.$attrs).reduce((carry, attrKey) => {
         if (attrKey === 'class' || attrKey === 'style') {
