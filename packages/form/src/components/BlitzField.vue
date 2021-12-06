@@ -558,7 +558,6 @@ export default defineComponent({
       const isRequired = evalPropOrAttr('required')
       const requiredErrorFn = createRequiredErrorFn(langCalculated['requiredField'])
       const requiredErrorResult = !isRequired ? null : requiredErrorFn(cValue)
-
       if (isFullString(requiredErrorResult)) return requiredErrorResult
 
       const errorStatus = evalPropOrAttr('error')

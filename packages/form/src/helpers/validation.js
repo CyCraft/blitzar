@@ -3,7 +3,7 @@ import { isArray, isBoolean, isFullString, isFunction } from 'is-what'
 import { defaultLang } from '../meta/lang'
 
 export function createRequiredErrorFn(requiredFieldErrorMsg) {
-  return (val) => !(val === null || val === undefined) ? null : requiredFieldErrorMsg
+  return (val) => (val === 0 || !!val) ? null : requiredFieldErrorMsg
 }
 
 /**
