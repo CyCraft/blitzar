@@ -1,5 +1,5 @@
 <template>
-  <div class="blitz-grid-list-toggle" @click="$emit('update:modelValue', !modelValue)">
+  <div class="blitz-table-field-grid-toggle" @click="$emit('update:modelValue', !modelValue)">
     <!-- grid icon -->
     <svg
       v-if="!modelValue"
@@ -44,15 +44,14 @@
 </template>
 
 <style lang="sass" scoped>
-.blitz-grid-list-toggle
+.blitz-table-field-grid-toggle
   display: flex
-  color: black
   cursor: pointer
 </style>
 
 <script>
 export default {
-  name: 'BlitzGridListToggle',
+  name: 'BlitzTableFieldGridToggle',
   props: {
     /**
      * `modelValue: true` represents "grid mode" so shows a "list icon"

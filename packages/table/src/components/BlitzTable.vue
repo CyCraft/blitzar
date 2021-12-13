@@ -1,139 +1,49 @@
 <template>
-  <Dataset
-    v-slot="{ ds }"
-    :dsData="rows"
-    :dsFilterFields="{}"
-    :dsSortby="['name']"
-    :dsSearchIn="['balance', 'birthdate', 'name', 'company', 'email', 'phone', 'address', 'favoriteAnimal']"
-    :dsSearchAs="{}"
-  >
-    <!-- <div class="row mb-2" :dataPageCount="ds.dsPagecount">
-      <div class="col-md-6 mb-2 mb-md-0">
-        <DatasetShow :dsShowEntries="selected" @changed="selected = $event" />
-      </div>
-      <div class="col-md-6">
-        <DatasetSearch dsSearchPlaceholder="Search..." />
-      </div>
-    </div> -->
-    <div v-if="viewInner === 'table'">
-      <table>
-        <thead>
-          <tr>
-            <th
-              v-for="(column, i) in schemaColumns"
-              :key="i"
-            >{{ column.label || '' }}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <DatasetItem class="">
-            <template #default="{ row, rowIndex }">
-              <BlitzForm
-                :formComponent="'tr'"
-                :class="
-                  [
-                    'blitz-table__row',
-                    'blitz-row',
-                    // rowProps.row.id ? `blitz-row__${rowProps.row.id}` : '',
-                    // evaluate(rowClasses, rowProps),
-                  ]
-                "
-                :schema="schemaColumns"
-                :modelValue="row"
-              >
-                <template v-slot="blitzFormCtx">
-                    <!-- :class="['blitz-cell', evaluate(field.cellClasses, rowProps)]" -->
-                    <!-- :style="evaluate(field.cellStyle, rowProps)" -->
-                    <!-- @click="(e) => onCellClick(e, rowProps.row, field.id)" -->
-                    <!-- @dblclick="(e) => onCellDblclick(e, rowProps.row, field.id)" -->
-                  <td
-                    v-for="field in blitzFormCtx.schema"
-                    :key="field.id"
-                  >
-                    <BlitzField
-                      v-bind="{
-                        ...field,
-                        span: undefined,
-                        label: undefined,
-                        subLabel: undefined,
-                        component: field.component || 'div',
-                      }"
-                      :modelValue="blitzFormCtx.formDataFlat[field.id]"
-                    />
-                    <!-- @update:modelValue="(val, origin) => onInputCell(rowProps.row.id, field.id, val, origin)" -->
-                  </td>
-                </template>
-              </BlitzForm>
-                <!-- :style="evaluate(rowStyle, rowProps)"
-                :id="rowProps.row.id"
-                :mode="mode"
-                :key="rowProps.row.id + JSON.stringify(rowProps.row)"
-                @update-field="({ id, value, origin }) => onInputCell(rowProps.row.id, id, value, origin)" -->
-            </template>
-            <template #noDataFound>
-              <div class="col-md-12 pt-2">
-                <p class="text-center">No results found</p>
-              </div>
-            </template>
-          </DatasetItem>
-        </tbody>
-      </table>
-    </div>
-    
-    <div v-if="viewInner === 'grid'">
-    </div>
-    
-    <!-- <div class="row">
-      <div class="col-md-12">
-        <DatasetItem class="form-row mb-3">
-          <template #default="{ row, rowIndex }">
-            <div class="col-md-4">
-              <div class="card mb-2">
-                <div class="card-body pt-3 pb-2 px-3">
-                  <h5 class="card-title text-truncate mb-2" :title="`Index: ${rowIndex}`">
-                    <span :class="['font-16', statusClass[row.onlineStatus]]">⬤</span>
-                    {{ row.name }}
-                  </h5>
-                  <h6 class="card-subtitle text-truncate text-muted">{{ row.email }}</h6>
-                  <p class="card-text text-truncate mb-0">{{ row.balance }}</p>
-                  <p class="card-text text-truncate text-right">{{ row.birthdate }}</p>
-                </div>
-              </div>
-            </div>
-          </template>
-          <template #noDataFound>
-            <div class="col-md-12 pt-2">
-              <p class="text-center">No results found</p>
-            </div>
-          </template>
-        </DatasetItem>
-      </div>
-    </div> -->
-    <!-- <div class="d-flex flex-md-row flex-column justify-content-between align-items-center">
-      <DatasetInfo class="mb-2 mb-md-0" />
-      <DatasetPager />
-    </div> -->
-  </Dataset>
+  <div class="blitz-table" v-bind="$attrs">
+    <Dataset
+      :dsData="rows"
+      :dsFilterFields="{}"
+      :dsSortby="dsSortby"
+      :dsSearchIn="[]"
+      :dsSearchAs="{}"
+      :dsSortAs="{}"
+      v-slot="{ ds }"
+    >
+      <BlitzTableInner
+        :ds="ds"
+        :schemaColumns="schemaColumnsComputed"
+        :schemaGrid="schemaGrid"
+        :rows="rows"
+        v-model:isGrid="isGridInner"
+        v-model:sortState="sortState"
+        :mode="mode"
+        :titleField="applyBlitzFieldOverwrites(titleField)"
+        :searchField="applyBlitzFieldOverwrites(searchField)"
+        :gridToggleField="applyBlitzFieldOverwrites(gridToggleField)"
+        :pagesField="applyBlitzFieldOverwrites(pagesField)"
+        :rowsPerPageField="applyBlitzFieldOverwrites(rowsPerPageField)"
+        :shownRowsInfoField="applyBlitzFieldOverwrites(shownRowsInfoField)"
+      />
+    </Dataset>
+  </div>
 </template>
 
 <style lang="sass">
-@import '../index.sass'
+/* RESETS */
+.blitz-table
+  *
+    box-sizing: border-box
+  table, ul
+    margin: 0
 </style>
 
 <script>
+import { watch, ref, defineComponent, computed } from 'vue'
 import { merge } from 'merge-anything'
-import { isPlainObject, isFunction, isArray } from 'is-what'
-import { BlitzForm, BlitzField } from '@blitzar/form'
-import BlitzGridListToggle from './BlitzGridListToggle.vue'
-import { schemaToQTableColumns } from '../helpers/schemaToQTableColumns.js'
-import {
-  Dataset,
-  DatasetItem,
-  DatasetInfo,
-  DatasetPager,
-  DatasetSearch,
-  DatasetShow
-} from 'vue-dataset'
+import { isFunction, isArray, isFullArray, isBoolean, isFullString } from 'is-what'
+import { getBlitzFieldOverwrites } from '@blitzar/form'
+import BlitzTableInner from './BlitzTableInner.vue'
+import { Dataset } from 'vue-dataset'
 
 /**
  * @typedef GridCardProps
@@ -150,25 +60,21 @@ import {
  */
 
 /**
-Here you can find all the information on the available props & events of BlitzTable.
-
-If any of the documentation is unclear, feel free to [open an issue](https://github.com/cycraft/blitzar/issues) to ask for clarification!
-
-BlitzTable ~~uses Quasar's QTable~~ under the hood.
+ * @typedef DatasetProps
+ * @type {{
+ *   dsData: { [id in string]: any }[];
+ *   dsFilterFields: { [id in string]: string | (val: any) => boolean };
+ *   dsSortby: string[];
+ *   dsSearchIn: string[];
+ *   dsSearchAs: { [id in string]: (val: any) => boolean };
+ *   dsSortAs: { [id in string]: (val: any) => any };
+ * }}
+ * @see https://next--vue-dataset-demo.netlify.app/components/#props
  */
-export default {
+
+export default defineComponent({
   name: 'BlitzTable',
-  inheritAttrs: false,
-  components: {
-    BlitzForm,
-    BlitzField,
-    Dataset,
-    DatasetItem,
-    DatasetInfo,
-    DatasetPager,
-    DatasetSearch,
-    DatasetShow
-  },
+  components: { BlitzTableInner, Dataset },
   props: {
     /**
      * The schema for the columns you want to generate. (BlitzForm schema format)
@@ -192,19 +98,10 @@ export default {
      */
     rows: { type: Array, required: true },
     /**
-     * Defaults to 'table' if `schemaColumns` is provided
-     * Defaults to 'grid' if `schemaGrid` is provided
-     * @type {'table' | 'grid'}
+     * Defaults to `false` (table-view) if `schemaColumns` is provided
+     * Defaults to `true` (grid-view) if `schemaGrid` is provided (and no `schemaColumns`)
      */
-    view: { type: String, default: undefined },
-    // /**
-    //  * Action buttons to add to the top right of the table. An array of objects just like a BlitzForm schema.
-    //  *
-    //  * There is also one preset button to toggle between grid- and list-view. This is shown by default, or can be included in the schema array as just the string 'grid' like the example below.
-    //  * @example ['grid', { component: 'button', slot: 'log it', events: { click: console.log } }]
-    //  * @category content
-    //  */
-    // actionButtons: { type: Array, default: () => ['grid'] },
+    isGrid: { type: Boolean, default: undefined },
     // /**
     //  * The BlitzForm options you want to use for the grid cards. Eg. You can pass `{ actionButtons: [] }` here to include some action buttons on each grid card.
     //  *
@@ -267,11 +164,11 @@ export default {
     //  * @category inherited prop
     //  */
     // cardStyle: { type: [Function, String, Array, Object] },
-    // /**
-    //  * By default the rows show just the raw data without showing field components. If you set `mode: 'edit'` your entire table will show the actual (editable) component as per your schema.
-    //  * @category content
-    //  */
-    // mode: { type: String, default: 'raw' },
+    /**
+     * By default the rows show just the raw data without showing field components. If you set `mode: 'edit'` your entire table will show the actual (editable) component as per your schema.
+     * @category content
+     */
+    mode: { type: String, default: 'raw' },
     // // Inherited props with different defaults:
     // // Modified inherited props:
     // /**
@@ -284,53 +181,108 @@ export default {
     //  * @category modified prop
     //  */
     // columns: {},
-    // /**
-    //  * A title to be placed above your table.
-    //  * @category modified prop
-    //  */
-    // title: { type: String },
-    // /**
-    //  * Do not use this! This is fixed to `id` in a BlitzTable and cannot be changed.
-    //  * @category modified prop
-    //  */
-    // rowKey: {},
-  },
-  data() {
-    const { view, schemaColumns, schemaGrid } = this
-    const hasColumns = !!schemaColumns
-    const hasGrid = !!schemaGrid
 
-    // const { grid, selected } = this
-    // const innerSelected = selected
-    // const gridModeEnabled = grid
-    // const innerFilter = filter
+    /**
+     * A field as per BlitzField syntax.
+     *
+     * Anything you pass here will just be added as title element and receive `.blitz-table--title` as class.
+     *
+     * TODO: add @example
+     */
+    titleField: { type: Object },
+    /**
+     * An input field as per BlitzField syntax.
+     *
+     * It must be compatible with `v-model` and accept a String as `modelValue`.
+     *
+     * Will receive `.blitz-table--search` as class.
+     *
+     * TODO: add @example
+     */
+    searchField: { type: Object },
+    /**
+     * A toggle field as per BlitzField syntax.
+     *
+     * It must be compatible with `v-model` and accept a Boolean as `modelValue`:
+     * - `false` will be interpreted as the table view `isGrid: false` (the default)
+     * - `true` will be interpreted as the grid view `isGrid: true`
+     *
+     * Will receive `.blitz-table--grid-toggle` as class.
+     *
+     * TODO: add @example
+     */
+    gridToggleField: { type: Object },
+    /**
+     * A select or input field as per BlitzField syntax.
+     *
+     * It must be compatible with `v-model` and accept a Number as `modelValue`.
+     *
+     * Other props it receives and can be used are:
+     *
+     * - `showingFrom: Number` — eg. `1` when showing from row 1 to 5
+     * - `showingTo: Number` — eg. `5` when showing from row 1 to 5
+     * - `rowCount: Number` — eg. `100` when there are 100 rows visible, this can differ from the total row count because the rows might be searched/filtered
+     *
+     * Will receive `.blitz-table--rows-per-page` as class.
+     *
+     * TODO: add @example
+     */
+    rowsPerPageField: { type: Object },
+    shownRowsInfoField: { type: Object },
+    pagesField: { type: Object },
+  },
+  setup(props, { emit }) {
+    const hasColumns = isFullArray(props.schemaColumns)
+    const hasGrid = isFullArray(props.schemaGrid)
+
+    const isGridInner = ref(isBoolean(props.isGrid) ? props.isGrid : !hasColumns && hasGrid)
+    watch(
+      () => isGridInner,
+      (newVal, oldVal) => (newVal !== oldVal ? emit('update:isGrid', val) : null)
+    )
+    watch(
+      () => props.isGrid,
+      (newVal, oldVal) => (newVal !== oldVal ? (isGridInner.value = newVal) : null)
+    )
+
+    function applyBlitzFieldOverwrites(field) {
+      if (!field) return undefined
+      return merge(field, getBlitzFieldOverwrites(field))
+    }
+
+    /** SORT related state */
+    /**
+     * @type {{ id: null | string, direction: 'asc' | 'desc' | 'none' }}
+     */
+    const sortState = ref({
+      id: null,
+      direction: 'none',
+    })
+    // apply default `sortable` to columns
+    const schemaColumnsComputed = computed(() =>
+      props.schemaColumns.map((col) => {
+        if (isBoolean(col.sortable)) return col
+
+        return { ...col, sortable: isFullString(col.id) }
+      })
+    )
+
+    const dsSortby = computed(() => {
+      if (!sortState.value.id) return []
+      if (sortState.value.direction === 'desc') return [`-${sortState.value.id}`]
+      return [sortState.value.id]
+    })
+
     return {
-      viewInner: view || (!hasColumns && hasGrid ? 'grid' : 'table'),
-      // innerFilter,
-      // innerSelected,
-      // gridModeEnabled,
-      // defaultPagination: {
-      //   rowsPerPage: 10,
-      // },
-      statusClass: {
-        Active: 'text-success',
-        Away: 'text-warning',
-        'Do not disturb': 'text-danger',
-        Invisible: 'text-secondary'
-      },
-      selected: 5
+      sortState,
+      dsSortby,
+      applyBlitzFieldOverwrites,
+      isGridInner,
+      schemaColumnsComputed,
     }
   },
-  watch: {
-    view(newValue) {
-      this.viewInner = newValue
-    },
-    viewInner(newValue) {
-      this.$emit('update:view', newValue)
-    },
-  },
-  computed: {
-  },
+  watch: {},
+  computed: {},
   methods: {
     evaluate(propValue, rowProps) {
       if (!isFunction(propValue)) return propValue || ''
@@ -432,5 +384,5 @@ export default {
       }
     },
   },
-}
+})
 </script>

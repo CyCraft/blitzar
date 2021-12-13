@@ -103,6 +103,23 @@ import { flattenPerSchema } from '@blitzar/utils'
 import BlitzField from './BlitzField.vue'
 import { defaultLang } from '../meta/lang'
 
+export function getBlitzFieldOverwrites(field) {
+  if (!field) return {}
+
+  const overwrites = {}
+
+  if (field.slot) {
+    overwrites.slots = merge(field.slots || {}, { default: field.slot })
+  }
+  const fieldClasses = field.fieldClasses || field.class
+  if (fieldClasses) overwrites.fieldClasses = fieldClasses
+
+  const fieldStyle = field.fieldStyle || field.style
+  if (fieldStyle) overwrites.fieldStyle = fieldStyle
+
+  return overwrites
+}
+
 /**
 Here you can find all the information on the available props & events of BlitzForm.
 
@@ -418,25 +435,14 @@ export default defineComponent({
       // - style: we pass as `fieldStyle`
       const { schema, schemaOverwritableDefaults, schemaForcedDefaults } = this
 
-      return schema.map((blueprint) => {
-        const overwrites = {}
-        if (blueprint.slot) {
-          overwrites.slots = merge(blueprint.slots || {}, { default: blueprint.slot })
-        }
-        const fieldClasses = blueprint.fieldClasses || blueprint.class
-        if (fieldClasses) overwrites.fieldClasses = fieldClasses
-
-        const fieldStyle = blueprint.fieldStyle || blueprint.style
-        if (fieldStyle) overwrites.fieldStyle = fieldStyle
-
-        const blueprintParsed = merge(
+      return schema.map((field) =>
+        merge(
           schemaOverwritableDefaults,
-          blueprint,
-          overwrites,
+          field,
+          getBlitzFieldOverwrites(field),
           schemaForcedDefaults
         )
-        return blueprintParsed
-      })
+      )
     },
     actionButtonsMap() {
       const {

@@ -1,15 +1,5 @@
 import BlitzTable from './components/BlitzTable.vue'
+import BlitzTableFieldGridToggle from './components/BlitzTableFieldGridToggle.vue'
+import BlitzTableFieldShownRowsInfo from './components/BlitzTableFieldShownRowsInfo.vue'
 
-import { schemaToQTableColumns } from './helpers/schemaToQTableColumns.js'
-
-export { BlitzTable, schemaToQTableColumns }
-
-export default {
-  BlitzTable,
-
-  schemaToQTableColumns,
-
-  install(Vue) {
-    Vue.component(BlitzTable.name, BlitzTable)
-  },
-}
+export { BlitzTable, BlitzTableFieldGridToggle, BlitzTableFieldShownRowsInfo }

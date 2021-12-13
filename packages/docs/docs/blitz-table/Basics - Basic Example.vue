@@ -1,53 +1,222 @@
 <template>
   <div>
     <!-- :schemaGrid="schemaColumns" -->
-    <h3>Users</h3>
-    
-    <BlitzTable
-      :schemaColumns="schemaColumns"
-      :rows="rows"
-    />
+    <BlitzTable :schemaColumns="schemaColumns" :rows="rows" />
   </div>
 </template>
 
-<script>
+<style>
+/* .blitz-table--title
+.blitz-table--search
+.blitz-table--grid-toggle
+.blitz-table--table */
+</style>
 
+<script>
 const schemaColumns = [
-  { id: 'firstName', label: 'First Name', component: 'input' },
-  { id: 'lastName', label: 'Last Name', component: 'input' },
+  { id: 'firstName', label: 'First Name' },
+  { id: 'lastName', label: 'Last Name' },
+  { id: 'company', label: 'Company' },
+  { id: 'birthdate', label: 'Birthdate' },
+  { id: 'balance', label: 'Balance', parseValue: (val) => val.toLocaleString() },
+]
+
+const rows = [
+  {
+    _id: 'EA265B20-45F2-953C-C534-3E2A7862059C',
+    isActive: false,
+    onlineStatus: 'Do not disturb',
+    balance: 93683,
+    birthdate: '1946-07-22',
+    favoriteColor: 'orange',
+    firstName: 'Harper',
+    lastName: 'Nolan',
+    name: 'Harper Nolan',
+    company: 'Tortor At Risus LLC',
+    email: 'amet@posuerevulputate.co.uk',
+    phone: '(0111) 194 7651',
+    address: 'P.O. Box 298, 5571 Mauris Rd.',
+    favoriteAnimal: 'owl',
+    avatarUrl: 'https://gravatar.com/avatar/8aa5e7a6220f2a87684a9f4e6286e343?s=100&d=robohash&r=x',
+  },
+  {
+    _id: '544E559A-303A-1F35-F1DF-AE2E110465D1',
+    isActive: true,
+    onlineStatus: 'Active',
+    balance: 69632,
+    birthdate: '1945-11-27',
+    favoriteColor: 'green',
+    firstName: 'Whoopi',
+    lastName: 'David',
+    name: 'Whoopi David',
+    company: 'Ipsum Institute',
+    email: 'laoreet.ipsum@varius.co.uk',
+    phone: '0800 1111',
+    address: 'Ap #473-9010 Risus. Rd.',
+    favoriteAnimal: 'pig',
+    avatarUrl: 'https://gravatar.com/avatar/157d9779e38597d649c3a589596f7fec?s=100&d=robohash&r=x',
+  },
+  {
+    _id: '7D35F637-F6BD-B371-6BA7-A202D315158E',
+    isActive: false,
+    onlineStatus: 'Away',
+    balance: 75903,
+    birthdate: '1955-10-01',
+    favoriteColor: 'yellow',
+    firstName: 'Peter',
+    lastName: 'Mendez',
+    name: 'Peter Mendez',
+    company: 'Curabitur Dictum LLC',
+    email: 'ridiculus.mus.Aenean@urnaVivamus.com',
+    phone: '0800 291 4995',
+    address: '3403 Nam Av.',
+    favoriteAnimal: 'duck',
+    avatarUrl: 'https://gravatar.com/avatar/af10cb1913f489661ddcc27a0df0d77c?s=100&d=robohash&r=x',
+  },
+  {
+    _id: 'F018C6B0-754B-2575-06BA-D1A71E5FB8D6',
+    isActive: true,
+    onlineStatus: 'Invisible',
+    balance: 53509,
+    birthdate: '1977-06-21',
+    favoriteColor: 'blue',
+    firstName: 'Harrison',
+    lastName: 'Miller',
+    name: 'Harrison Miller',
+    company: 'Enim Etiam Imperdiet Industries',
+    email: 'ullamcorper@facilisisegetipsum.edu',
+    phone: '055 0463 3183',
+    address: '237-8362 Non Rd.',
+    favoriteAnimal: 'dog',
+    avatarUrl: 'https://gravatar.com/avatar/77648b2c4016c9f2ad8e51f62c567aad?s=100&d=robohash&r=x',
+  },
+  {
+    _id: '02425634-296F-9223-B9A5-1E7CCB5CBE5F',
+    isActive: true,
+    onlineStatus: 'Away',
+    balance: 93450,
+    birthdate: '2017-11-27',
+    favoriteColor: 'red',
+    firstName: 'Wendy',
+    lastName: 'Strong',
+    name: 'Wendy Strong',
+    company: 'Ac PC',
+    email: 'arcu.Nunc.mauris@nequeMorbi.com',
+    phone: '07624 617656',
+    address: '777 Nunc Rd.',
+    favoriteAnimal: 'dog',
+    avatarUrl: 'https://gravatar.com/avatar/94e387e372ce00bfc46912cdabba71c1?s=100&d=robohash&r=x',
+  },
+  {
+    _id: 'D95F44CA-F6EA-06A6-A876-4063D80C6771',
+    isActive: false,
+    onlineStatus: 'Active',
+    balance: 64590,
+    birthdate: '1975-12-10',
+    favoriteColor: 'brown',
+    firstName: 'Kyla',
+    lastName: 'Dalton',
+    name: 'Kyla Dalton',
+    company: 'Urna Nec Luctus PC',
+    email: 'Lorem.ipsum@ligulaDonec.co.uk',
+    phone: '(01734) 407876',
+    address: '733 Cras Av.',
+    favoriteAnimal: 'duck',
+    avatarUrl: 'https://gravatar.com/avatar/5c37fd1216ab5844e034b8f995b2f2b0?s=100&d=robohash&r=x',
+  },
+  {
+    _id: '78F1C44D-A3A0-5588-EEE8-CD32D6EC9A82',
+    isActive: true,
+    onlineStatus: 'Invisible',
+    balance: 72444,
+    birthdate: '2001-07-31',
+    favoriteColor: 'purple',
+    firstName: 'Aimee',
+    lastName: 'Stephens',
+    name: 'Aimee Stephens',
+    company: 'Tempus Incorporated',
+    email: 'elit.pellentesque@nonmassa.net',
+    phone: '(016977) 4021',
+    address: '637-9327 Turpis. Street',
+    favoriteAnimal: 'cow',
+    avatarUrl: 'https://gravatar.com/avatar/257cd304a6fb8ede98e1443688015740?s=100&d=robohash&r=x',
+  },
+  {
+    _id: '81ADEC11-C56A-CFBC-5215-513C85D8F00F',
+    isActive: true,
+    onlineStatus: 'Active',
+    balance: 99856,
+    birthdate: '1972-01-28',
+    favoriteColor: 'yellow',
+    firstName: 'Phelan',
+    lastName: 'Jennings',
+    name: 'Phelan Jennings',
+    company: 'Consectetuer Adipiscing Elit LLP',
+    email: 'magna.Ut@mifringilla.ca',
+    phone: '070 6855 6126',
+    address: 'Ap #955-983 Diam. Rd.',
+    favoriteAnimal: 'cat',
+    avatarUrl: 'https://gravatar.com/avatar/f6bf5644c987fc803cb3f22cbd98e7c5?s=100&d=robohash&r=x',
+  },
+  {
+    _id: '0B146A52-FD9A-3F40-7ABE-3A1A615616EC',
+    isActive: false,
+    onlineStatus: 'Active',
+    balance: 83325,
+    birthdate: '1966-11-17',
+    favoriteColor: 'green',
+    firstName: 'Xena',
+    lastName: 'Emerson',
+    name: 'Xena Emerson',
+    company: 'Mollis Foundation',
+    email: 'velit@nisisemsemper.co.uk',
+    phone: '(015095) 87009',
+    address: 'Ap #454-7539 Leo. Road',
+    favoriteAnimal: 'chicken',
+    avatarUrl: 'https://gravatar.com/avatar/cf8acbcd872e3a25f932ea867bc571b9?s=100&d=robohash&r=x',
+  },
+  {
+    _id: 'FD4A7941-F0C9-3C36-2055-1B5E843921FF',
+    isActive: true,
+    onlineStatus: 'Invisible',
+    balance: 50981,
+    birthdate: '1995-07-26',
+    favoriteColor: 'purple',
+    firstName: 'Althea',
+    lastName: 'Mcdaniel',
+    name: 'Althea Mcdaniel',
+    company: 'Non Foundation',
+    email: 'risus.Donec.egestas@dolorquamelementum.co.uk',
+    phone: '076 7503 7535',
+    address: 'P.O. Box 926, 8983 Pede. Rd.',
+    favoriteAnimal: 'horse',
+    avatarUrl: 'https://gravatar.com/avatar/f87730a01438b56a1956e171e2ea964e?s=100&d=robohash&r=x',
+  },
+  {
+    _id: '0272FCAF-F0C1-89A7-8890-4C217237935E',
+    isActive: false,
+    onlineStatus: 'Do not disturb',
+    balance: 97869,
+    birthdate: '1945-10-01',
+    favoriteColor: 'yellow',
+    firstName: 'Shad',
+    lastName: 'Beard',
+    name: 'Shad Beard',
+    company: 'Mollis Incorporated',
+    email: 'mauris.eu.elit@arcu.co.uk',
+    phone: '07225 341240',
+    address: 'Ap #813-9479 Enim Street',
+    favoriteAnimal: 'duck',
+    avatarUrl: 'https://gravatar.com/avatar/295ac161a5bc657024e4310aaa287471?s=100&d=robohash&r=x',
+  },
 ]
 
 export default {
-  data() {
+  setup() {
     return {
-      rows: [
-        {
-          "_id": "EA265B20-45F2-953C-C534-3E2A7862059C",
-          "isActive": false,
-          "onlineStatus": "Do not disturb",
-          "balance": 93683,
-          "birthdate": "1946-07-22",
-          "favoriteColor": "orange",
-          "firstName": "Harper",
-          "lastName": "Nolan",
-          "name": "Harper Nolan",
-          "company": "Tortor At Risus LLC",
-          "email": "amet@posuerevulputate.co.uk",
-          "phone": "(0111) 194 7651",
-          "address": "P.O. Box 298, 5571 Mauris Rd.",
-          "favoriteAnimal": "owl"
-        },
-        // other rows loaded asynchronously
-      ],
-      schemaColumns
+      rows,
+      schemaColumns,
     }
-  },
-  mounted() {
-    import('./users.json').then(_module => {
-      const users = _module.default
-      console.log(`users → `, users)
-      this.rows = users
-    })
   },
 }
 </script>

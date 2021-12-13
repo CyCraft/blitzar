@@ -2,7 +2,7 @@
 editLink: true
 ---
 
-# BlitzListForm
+# BlitzTable
 
 ## Basics
 
@@ -22,17 +22,37 @@ Here we see a basic example for a BlitzTable. Check out the _template_ and _scri
 
 <CodeBlockComponent :importFn="() => import('./Basics - Basic Example.vue')" :importFnRaw="() => import('./Basics - Basic Example.vue?raw')" />
 
-## Advanced
+### Advanced Example
 
-This is a more advanced example that renders an image in the row.
+This is a more advanced example with title field, search field and grid toggle. It also parses some of the data to show it differently in the table. All the concepts used here are explained one by one in the following chapters.
 
-<!-- <CodeBlockComponent :importFn="() => import('./Advanced.vue')" :importFnRaw="() => import('./Advanced.vue?raw')" /> -->
+<CodeBlockComponent :importFn="() => import('./Basics - Advanced Example.vue')" :importFnRaw="() => import('./Basics - Advanced Example.vue?raw')" />
 
-## Computed Columns
+## Grid View
 
-This is an example of a table with computed columns. A computed column is one that shows data based on other fields/columns.
+<!-- <CodeBlockComponent :importFn="() => import('./Search and Filter.vue')" :importFnRaw="() => import('./Search and Filter.vue?raw')" /> -->
 
-In this example the "full name" is computed on the fly when showing the table and immidiately made "sortable" as well.
+## Search and Filter Data
+
+<!-- <CodeBlockComponent :importFn="() => import('./Search and Filter.vue')" :importFnRaw="() => import('./Search and Filter.vue?raw')" /> -->
+
+## Sorting Rows
+
+<!-- <CodeBlockComponent :importFn="() => import('./Search and Filter.vue')" :importFnRaw="() => import('./Search and Filter.vue?raw')" /> -->
+
+## Column Features
+
+Because every column is based on a BlitzForm field, there is quite some flexibility what you can do with a column. Below are some examples of this.
+
+### Mutating Columns
+
+<!-- <CodeBlockComponent :importFn="() => import('./Search and Filter.vue')" :importFnRaw="() => import('./Search and Filter.vue?raw')" /> -->
+
+### Combining Columns
+
+This is an example of a table with combined columns. A combined column is one that shows data based on other fields/columns.
+
+In this example the "full name" is combined on the fly when showing the table and immidiately made "sortable" as well.
 
 <!-- <CodeBlockComponent :importFn="() => import('./Computed Columns.vue')" :importFnRaw="() => import('./Computed Columns.vue?raw')" /> -->
 
@@ -61,10 +81,6 @@ Since a `<BlitzTable />` is based on the [BlitzForms](/blitz-form/) schema syste
 ### Adding a New Record
 
 <!-- <CodeBlockComponent :importFn="() => import('./Editing - Adding a New Record.vue')" :importFnRaw="() => import('./Editing - Adding a New Record.vue?raw')" /> -->
-
-## Search and Filter
-
-<!-- <CodeBlockComponent :importFn="() => import('./Search and Filter.vue')" :importFnRaw="() => import('./Search and Filter.vue?raw')" /> -->
 
 ## Selection
 
