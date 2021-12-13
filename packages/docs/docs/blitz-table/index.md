@@ -22,11 +22,21 @@ Here we see a basic example for a BlitzTable. Check out the _template_ and _scri
 
 <CodeBlockComponent :importFn="() => import('./Basics - Basic Example.vue')" :importFnRaw="() => import('./Basics - Basic Example.vue?raw')" />
 
-### Advanced Example
+### Example using Blitzar Components
 
 This is a more advanced example with title field, search field and grid toggle. It also parses some of the data to show it differently in the table. All the concepts used here are explained one by one in the following chapters.
 
-<CodeBlockComponent :importFn="() => import('./Basics - Advanced Example.vue')" :importFnRaw="() => import('./Basics - Advanced Example.vue?raw')" />
+<CodeBlockComponent :importFn="() => import('./Basics - Example Blitzar Components.vue')" :importFnRaw="() => import('./Basics - Example Blitzar Components.vue?raw')" />
+
+### Using Custom Components
+
+<!-- the whole idea is to .... blablablabla -->
+
+### Example using HTML5 Components
+
+<!-- the whole idea is to .... blablablabla -->
+
+<CodeBlockComponent :importFn="() => import('./Basics - Example HTML5 Components.vue')" :importFnRaw="() => import('./Basics - Example HTML5 Components.vue?raw')" />
 
 ## Grid View
 

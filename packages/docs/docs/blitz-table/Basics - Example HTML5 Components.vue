@@ -5,10 +5,11 @@
       :schemaColumns="schemaColumnsAndGrid"
       :schemaGrid="schemaColumnsAndGrid"
       :rows="rows"
+      :rowsPerPage="5"
       :titleField="{ component: 'h3', slot: 'Users' }"
       :searchField="{ component: 'input', placeholder: 'Search...' }"
       :gridToggleField="{ label: 'grid', component: 'input', type: 'checkbox' }"
-      :pagesField="{
+      :paginationField="{
         label: 'Current page:',
         component: 'input',
         type: 'number',
@@ -29,15 +30,8 @@
   </div>
 </template>
 
-<style>
-/* .blitz-table--title
-.blitz-table--search
-.blitz-table--grid-toggle
-.blitz-table--table */
-</style>
-
 <script>
-import { BlitzTableFieldShownRowsInfo } from '@blitzar/table'
+import { onMounted, ref } from 'vue'
 
 const schemaColumnsAndGrid = [
   {
@@ -65,37 +59,39 @@ const schemaColumnsAndGrid = [
 ]
 
 export default {
-  data() {
-    return {
-      rows: [
-        {
-          _id: 'EA265B20-45F2-953C-C534-3E2A7862059C',
-          isActive: false,
-          onlineStatus: 'Do not disturb',
-          balance: 93683,
-          birthdate: '1946-07-22',
-          favoriteColor: 'orange',
-          firstName: 'Harper',
-          lastName: 'Nolan',
-          name: 'Harper Nolan',
-          company: 'Tortor At Risus LLC',
-          email: 'amet@posuerevulputate.co.uk',
-          phone: '(0111) 194 7651',
-          address: 'P.O. Box 298, 5571 Mauris Rd.',
-          favoriteAnimal: 'owl',
-          avatarUrl:
-            'https://gravatar.com/avatar/8aa5e7a6220f2a87684a9f4e6286e343?s=100&d=robohash&r=x',
-        },
-        // other rows loaded asynchronously
-      ],
-      schemaColumnsAndGrid,
-    }
-  },
-  mounted() {
-    import('./users.json').then((_module) => {
+  setup() {
+    const rows = ref([
+      {
+        _id: 'EA265B20-45F2-953C-C534-3E2A7862059C',
+        isActive: false,
+        onlineStatus: 'Do not disturb',
+        balance: 93683,
+        birthdate: '1946-07-22',
+        favoriteColor: 'orange',
+        firstName: 'Harper',
+        lastName: 'Nolan',
+        name: 'Harper Nolan',
+        company: 'Tortor At Risus LLC',
+        email: 'amet@posuerevulputate.co.uk',
+        phone: '(0111) 194 7651',
+        address: 'P.O. Box 298, 5571 Mauris Rd.',
+        favoriteAnimal: 'owl',
+        avatarUrl:
+          'https://gravatar.com/avatar/8aa5e7a6220f2a87684a9f4e6286e343?s=100&d=robohash&r=x',
+      },
+      // other rows loaded asynchronously
+    ])
+
+    onMounted(async () => {
+      const _module = await import('./users.json')
       const users = _module.default
-      this.rows = users
+      rows.value = users
     })
+
+    return {
+      schemaColumnsAndGrid,
+      rows,
+    }
   },
 }
 </script>

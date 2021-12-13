@@ -17,10 +17,11 @@
         v-model:isGrid="isGridInner"
         v-model:sortState="sortState"
         :mode="mode"
+        :rowsPerPage="rowsPerPage"
         :titleField="applyBlitzFieldOverwrites(titleField)"
         :searchField="applyBlitzFieldOverwrites(searchField)"
         :gridToggleField="applyBlitzFieldOverwrites(gridToggleField)"
-        :pagesField="applyBlitzFieldOverwrites(pagesField)"
+        :paginationField="applyBlitzFieldOverwrites(paginationField)"
         :rowsPerPageField="applyBlitzFieldOverwrites(rowsPerPageField)"
         :shownRowsInfoField="applyBlitzFieldOverwrites(shownRowsInfoField)"
       />
@@ -169,19 +170,7 @@ export default defineComponent({
      * @category content
      */
     mode: { type: String, default: 'raw' },
-    // // Inherited props with different defaults:
-    // // Modified inherited props:
-    // /**
-    //  * Do not use this! Use `rows` instead of the QTables `data`. Renamed for clarity.
-    //  * @category modified prop
-    //  */
-    // data: { type: Array },
-    // /**
-    //  * Do not use this! Use `schemaColumns` instead. This is the prop QTable uses to define its columns. BlitzTable uses `schemaColumns` instead.
-    //  * @category modified prop
-    //  */
-    // columns: {},
-
+    rowsPerPage: { type: Number, default: 10 },
     /**
      * A field as per BlitzField syntax.
      *
@@ -229,7 +218,7 @@ export default defineComponent({
      */
     rowsPerPageField: { type: Object },
     shownRowsInfoField: { type: Object },
-    pagesField: { type: Object },
+    paginationField: { type: Object },
   },
   setup(props, { emit }) {
     const hasColumns = isFullArray(props.schemaColumns)

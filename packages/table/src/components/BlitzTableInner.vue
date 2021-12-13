@@ -18,13 +18,13 @@
   <table class="blitz-table--table blitz-table--content">
     <thead>
       <tr>
-        <BlitzTableFieldTh
+        <BlitzTh
           v-for="(column, i) in schemaColumns"
           :key="i"
           :column="column"
           :sortState="sortState"
           @update:sortState="(val) => emit('update:sortState', val)"
-          >{{ column.label || '' }}</BlitzTableFieldTh
+          >{{ column.label || '' }}</BlitzTh
         >
       </tr>
     </thead>
@@ -107,10 +107,10 @@
   </table>
 
   <BlitzField
-    v-if="pagesField"
+    v-if="paginationField"
     labelPosition="left"
-    class="blitz-table--pages"
-    v-bind="pagesField"
+    class="blitz-table--pagination"
+    v-bind="{ ...paginationField, ...paginationFieldProps }"
     v-model="currentPage"
   />
 
@@ -119,7 +119,7 @@
     labelPosition="left"
     class="blitz-table--rows-per-page"
     v-bind="rowsPerPageField"
-    v-model="rowsPerPage"
+    v-model="rowsPerPageInner"
   />
 
   <BlitzField
@@ -133,8 +133,9 @@
 /* GRID */
 .blitz-table
   display: grid
+  align-items: center
   grid-gap: 1rem
-  grid-template-areas: 'title title' 'search grid-toggle' 'content content' 'pages pages' 'rows-per-page rows-per-page' 'shown-rows-info shown-rows-info'
+  grid-template-areas: 'title title' 'search grid-toggle' 'content content' 'pagination pagination' 'rows-per-page shown-rows-info'
   .blitz-table--title
     grid-area: title
   .blitz-table--search
@@ -143,8 +144,8 @@
     grid-area: grid-toggle
   .blitz-table--content
     grid-area: content
-  .blitz-table--pages
-    grid-area: pages
+  .blitz-table--pagination
+    grid-area: pagination
   .blitz-table--rows-per-page
     grid-area: rows-per-page
   .blitz-table--shown-rows-info
@@ -164,7 +165,7 @@ import { computed, ref, defineComponent } from 'vue'
 import { DatasetItem } from 'vue-dataset'
 import { BlitzForm, BlitzField } from '@blitzar/form'
 import { isFunction } from 'is-what'
-import BlitzTableFieldTh from './BlitzTableFieldTh.vue'
+import BlitzTh from './BlitzTh.vue'
 
 /*
  * dsPages — The array used to create pagination links
@@ -225,7 +226,7 @@ export default defineComponent({
   components: {
     BlitzForm,
     BlitzField,
-    BlitzTableFieldTh,
+    BlitzTh,
     DatasetItem,
   },
   props: {
@@ -237,10 +238,11 @@ export default defineComponent({
     isGrid: { type: Boolean, required: true },
     sortState: { type: Object, required: true },
     mode: { type: String, required: true },
+    rowsPerPage: { type: Number, default: 10 },
     titleField: { type: Object },
     searchField: { type: Object },
     gridToggleField: { type: Object },
-    pagesField: { type: Object },
+    paginationField: { type: Object },
     rowsPerPageField: { type: Object },
     shownRowsInfoField: { type: Object },
   },
@@ -254,7 +256,6 @@ export default defineComponent({
     'update-cell',
   ],
   setup(props, { emit }) {
-    window.ds = props.ds
     /** SEARCH FIELD */
     const searchTextInner = ref('')
     let searchTimeout = null
@@ -288,9 +289,13 @@ export default defineComponent({
         props.ds.setActive(Number(val))
       },
     })
+    const paginationFieldProps = computed(() => ({
+      pageCount: props.ds.dsPagecount,
+      pagesShown: props.ds.dsPages,
+    }))
 
     /** ROWS PER PAGE FIELD */
-    const rowsPerPage = computed({
+    const rowsPerPageInner = computed({
       get() {
         return props.ds.dsShowEntries
       },
@@ -298,10 +303,12 @@ export default defineComponent({
         props.ds.showEntries(Number(val))
       },
     })
-    // if there is no pagesField provided
-    if (!props.pagesField) {
+    // if there is no paginationField provided
+    if (!props.paginationField) {
       // then set the amount of rows per page to the total row count:
-      rowsPerPage.value = props.ds.dsData.length
+      rowsPerPageInner.value = props.ds.dsData.length
+    } else {
+      rowsPerPageInner.value = props.rowsPerPage
     }
 
     /** SHOWN ROWS INFO FIELD */
@@ -326,7 +333,8 @@ export default defineComponent({
       searchText,
       isGridMode,
       currentPage,
-      rowsPerPage,
+      paginationFieldProps,
+      rowsPerPageInner,
       shownRowsInfoFieldProps,
     }
   },

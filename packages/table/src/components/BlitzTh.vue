@@ -2,7 +2,7 @@
   <th
     v-bind="$attrs"
     :class="[
-      'blitz-table-field-th',
+      'blitz-field-th',
       column.sortable === true ? '_sortable' : '',
       column.id === sortState.id ? `_${sortState.direction}` : '',
     ]"
@@ -46,7 +46,7 @@
   top: 4px;
   opacity: 0.3;
 }
-.blitz-table-field-th._sortable {
+.blitz-field-th._sortable {
   cursor: pointer;
   user-select: none;
   &._asc {
@@ -66,7 +66,7 @@
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: 'BlitzTableFieldTh',
+  name: 'BlitzTh',
   props: {
     /** The BlitzField object used for the columns */
     column: { type: Object, required: true },
