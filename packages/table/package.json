@@ -12,9 +12,9 @@
     "dev": "vue-compile src -o ./dist --watch"
   },
   "dependencies": {
-    "@blitzar/form": "^1.0.2",
+    "@blitzar/form": "^1.0.3",
     "is-what": "^3.14.1",
-    "merge-anything": "^4.0.1",
+    "merge-anything": "^4.0.2",
     "path-to-prop": "^1.0.0",
     "vue-dataset": "github:mesqueeb/vue-dataset",
     "vue-pepicons": "^0.2.0"
