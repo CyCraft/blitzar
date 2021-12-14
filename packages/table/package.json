@@ -17,7 +17,7 @@
     "merge-anything": "^4.0.2",
     "path-to-prop": "^1.0.0",
     "vue-dataset": "github:mesqueeb/vue-dataset",
-    "vue-pepicons": "^0.2.0"
+    "vue-pepicons": "^0.2.1"
   },
   "license": "MIT",
   "keywords": [
