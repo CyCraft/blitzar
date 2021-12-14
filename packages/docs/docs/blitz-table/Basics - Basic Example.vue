@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- :schemaGrid="schemaColumns" -->
     <BlitzTable :schemaColumns="schemaColumns" :rows="rows" />
   </div>
 </template>

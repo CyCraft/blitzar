@@ -54,9 +54,13 @@ This is a more advanced example with title field, search field and grid toggle. 
 
 Because every column is based on a BlitzForm field, there is quite some flexibility what you can do with a column. Below are some examples of this.
 
+### Nested Data
+
+<CodeBlockComponent :importFn="() => import('./Column Features - Nested Data.vue')" :importFnRaw="() => import('./Column Features - Nested Data.vue?raw')" />
+
 ### Mutating Columns
 
-<!-- <CodeBlockComponent :importFn="() => import('./Search and Filter.vue')" :importFnRaw="() => import('./Search and Filter.vue?raw')" /> -->
+<CodeBlockComponent :importFn="() => import('./Column Features - Mutating Columns.vue')" :importFnRaw="() => import('./Column Features - Mutating Columns.vue?raw')" />
 
 ### Combining Columns
 
@@ -64,7 +68,7 @@ This is an example of a table with combined columns. A combined column is one th
 
 In this example the "full name" is combined on the fly when showing the table and immidiately made "sortable" as well.
 
-<!-- <CodeBlockComponent :importFn="() => import('./Computed Columns.vue')" :importFnRaw="() => import('./Computed Columns.vue?raw')" /> -->
+<CodeBlockComponent :importFn="() => import('./Column Features - Combining Columns.vue')" :importFnRaw="() => import('./Column Features - Combining Columns.vue?raw')" />
 
 ## Editing
 

@@ -5,7 +5,6 @@
       :schemaGrid="schemaColumnsAndGrid"
       :rows="rows"
       :rowsPerPage="5"
-      :titleField="{ component: 'h3', slot: 'Users' }"
       :searchField="{ component: blitzInput, placeholder: 'Search...', clearable: true }"
       :gridToggleField="{ component: blitzGridToggle }"
       :paginationField="{ component: blitzPagination }"
@@ -41,16 +40,8 @@ const blitzGridToggle = markRaw(BlitzGridToggle)
 const blitzPagination = markRaw(BlitzPagination)
 
 const schemaColumnsAndGrid = [
-  {
-    id: 'avatarUrl',
-    label: 'Avatar',
-    component: 'img',
-    mode: 'edit',
-    src: (val) => val,
-    dynamicProps: ['src'],
-  },
   { id: 'firstName', label: 'First Name' },
-  { id: 'lastName', label: 'Last Name' },
+  { id: 'lastName', label: 'Last Name', parseValue: (val) => val.toUpperCase() },
   { id: 'company', label: 'Company' },
   {
     id: 'birthdate',
@@ -74,8 +65,6 @@ export default {
         firstName: 'Harper',
         lastName: 'Nolan',
         company: 'Tortor At Risus LLC',
-        avatarUrl:
-          'https://gravatar.com/avatar/8aa5e7a6220f2a87684a9f4e6286e343?s=100&d=robohash&r=x',
       },
       // other rows loaded asynchronously
     ])

@@ -2,11 +2,11 @@
   <div class="blitz-table" v-bind="$attrs">
     <Dataset
       :dsData="rows"
+      :dsSortby="dsSortbyComputed"
       :dsFilterFields="{}"
-      :dsSortby="dsSortby"
       :dsSearchIn="[]"
-      :dsSearchAs="{}"
-      :dsSortAs="{}"
+      :dsSearchAs="dsSearchAsComputed"
+      :dsSortAs="dsSortAsComputed"
       v-slot="{ ds }"
     >
       <BlitzTableInner
@@ -31,9 +31,11 @@
 
 <style lang="sass">
 /* RESETS */
+.blitz-table,
+.blitz-table *
+  box-sizing: border-box
+
 .blitz-table
-  *
-    box-sizing: border-box
   table, ul
     margin: 0
 </style>
@@ -42,6 +44,7 @@
 import { watch, ref, defineComponent, computed } from 'vue'
 import { merge } from 'merge-anything'
 import { isFunction, isArray, isFullArray, isBoolean, isFullString } from 'is-what'
+import { getProp } from 'path-to-prop'
 import { getBlitzFieldOverwrites } from '@blitzar/form'
 import BlitzTableInner from './BlitzTableInner.vue'
 import { Dataset } from 'vue-dataset'
@@ -64,7 +67,7 @@ import { Dataset } from 'vue-dataset'
  * @typedef DatasetProps
  * @type {{
  *   dsData: { [id in string]: any }[];
- *   dsFilterFields: { [id in string]: string | (val: any) => boolean };
+ *   dsFilterFields: { [colId in string]: (cellValue: any, rowData: Record<string, any>) => boolean | any };
  *   dsSortby: string[];
  *   dsSearchIn: string[];
  *   dsSearchAs: { [id in string]: (val: any) => boolean };
@@ -247,6 +250,7 @@ export default defineComponent({
       id: null,
       direction: 'none',
     })
+
     // apply default `sortable` to columns
     const schemaColumnsComputed = computed(() =>
       props.schemaColumns.map((col) => {
@@ -256,15 +260,61 @@ export default defineComponent({
       })
     )
 
-    const dsSortby = computed(() => {
+    /**
+     * Provides Dataset's `dsSearchAs` prop with a special functions for columns with `parseValue`
+     */
+    const dsSearchAsComputed = schemaColumnsComputed.value.reduce((searchAsDic, column) => {
+      if (!column.id) return searchAsDic
+      if (!isFunction(column.parseValue)) return searchAsDic
+
+      const searchFn = (cellValue, searchString, rowData) => {
+        const actualCellValue = getProp(rowData, column.id)
+        const searchStr = String(searchString).toLowerCase()
+
+        try {
+          const parsedValue = column.parseValue(cellValue, { formData: rowData })
+          const checkParsed = String(parsedValue).toLowerCase().indexOf(searchStr) >= 0
+          if (checkParsed === true) {
+            return true
+          }
+        } catch (error) {}
+        // as fallback also check the non-parsed value
+        return String(actualCellValue).toLowerCase().indexOf(searchStr) >= 0
+      }
+
+      searchAsDic[column.id] = searchFn
+
+      return searchAsDic
+    }, {})
+
+    /**
+     * Provides Dataset's `dsSortAs` prop with a special functions for columns with `parseValue`
+     */
+    const dsSortAsComputed = schemaColumnsComputed.value.reduce((sortAsDic, column) => {
+      if (!column.id) return sortAsDic
+      if (!column.sortable) return sortAsDic
+      if (!isFunction(column.parseValue)) return sortAsDic
+
+      const sortAsFn = (cellValue, rowData) => {
+        const parsedValue = column.parseValue(cellValue, { formData: rowData })
+        return parsedValue
+      }
+
+      sortAsDic[column.id] = sortAsFn
+      return sortAsDic
+    }, {})
+
+    const dsSortbyComputed = computed(() => {
       if (!sortState.value.id) return []
       if (sortState.value.direction === 'desc') return [`-${sortState.value.id}`]
       return [sortState.value.id]
     })
 
     return {
+      dsSearchAsComputed,
+      dsSortAsComputed,
       sortState,
-      dsSortby,
+      dsSortbyComputed,
       applyBlitzFieldOverwrites,
       isGridInner,
       schemaColumnsComputed,

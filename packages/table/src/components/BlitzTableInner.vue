@@ -81,6 +81,7 @@
       <DatasetItem>
         <template #default="{ row, rowIndex }">
           <BlitzForm
+            class="blitz-table--grid-card"
             :key="rowIndex"
             :formComponent="'div'"
             :class="[
@@ -152,12 +153,15 @@
     grid-area: shown-rows-info
 
   .blitz-table--grid
+    margin-top: 1rem
     display: grid
+    grid-gap: 1rem
     justify-items: center
     grid-template-columns: repeat(auto-fill, minmax(140px, 1fr))
     > *
       width: 100%
       max-width: 207px
+      padding: 0.5rem
 </style>
 
 <script>

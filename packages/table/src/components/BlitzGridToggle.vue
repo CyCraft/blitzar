@@ -1,5 +1,5 @@
 <template>
-  <div class="blitz-field-grid-toggle" @click="$emit('update:modelValue', !modelValue)">
+  <div class="blitz-grid-toggle" @click="$emit('update:modelValue', !modelValue)">
     <!-- grid icon -->
     <svg
       v-if="!modelValue"
@@ -44,7 +44,11 @@
 </template>
 
 <style lang="sass" scoped>
-.blitz-field-grid-toggle
+.blitz-grid-toggle,
+.blitz-grid-toggle *
+  box-sizing: border-box
+
+.blitz-grid-toggle
   --c-primary: #0b3d92
   color: var(--c-primary)
   display: flex

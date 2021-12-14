@@ -43,6 +43,10 @@ export default defineComponent({
 </template>
 
 <style lang="sass" scoped>
+.blitz-spinner,
+.blitz-spinner *
+  box-sizing: border-box
+
 .blitz-spinner
   animation: c-spin 2s linear infinite
   transform-origin: center center

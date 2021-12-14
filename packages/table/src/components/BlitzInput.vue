@@ -390,6 +390,11 @@ export default defineComponent({
     outline: 0
 
 /** Global Styles */
+
+.blitz-input,
+.blitz-input *
+  box-sizing: border-box
+
 .blitz-input
   --c-primary: #0b3d92
   --c-border: #dfe2e5

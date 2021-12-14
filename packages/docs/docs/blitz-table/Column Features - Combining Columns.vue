@@ -5,7 +5,6 @@
       :schemaGrid="schemaColumnsAndGrid"
       :rows="rows"
       :rowsPerPage="5"
-      :titleField="{ component: 'h3', slot: 'Users' }"
       :searchField="{ component: blitzInput, placeholder: 'Search...', clearable: true }"
       :gridToggleField="{ component: blitzGridToggle }"
       :paginationField="{ component: blitzPagination }"
@@ -42,40 +41,27 @@ const blitzPagination = markRaw(BlitzPagination)
 
 const schemaColumnsAndGrid = [
   {
-    id: 'avatarUrl',
-    label: 'Avatar',
-    component: 'img',
-    mode: 'edit',
-    src: (val) => val,
-    dynamicProps: ['src'],
+    // you need to add a column `id` even if it doesn't have/need one
+    //   just to make the column searchable
+    id: 'fullName',
+    label: 'Full Name',
+    parseValue: (val, { formData }) => `${formData.firstName} ${formData.lastName}`,
   },
-  { id: 'firstName', label: 'First Name' },
-  { id: 'lastName', label: 'Last Name' },
-  { id: 'company', label: 'Company' },
   {
-    id: 'birthdate',
-    label: 'Birthdate',
-    parseValue: (val) =>
-      new Date(val).toLocaleDateString(undefined, {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-      }),
+    // you need to add a column `id` even if it doesn't have/need one
+    //   just to make the column searchable
+    id: 'initials',
+    label: 'Initials',
+    parseValue: (val, { formData }) => `${formData.firstName[0]}.${formData.lastName[0]}.`,
   },
-  { id: 'balance', label: 'Balance', parseValue: (val) => val.toLocaleString() },
 ]
 
 export default {
   setup() {
     const rows = ref([
       {
-        balance: 93683,
-        birthdate: '1946-07-22',
         firstName: 'Harper',
         lastName: 'Nolan',
-        company: 'Tortor At Risus LLC',
-        avatarUrl:
-          'https://gravatar.com/avatar/8aa5e7a6220f2a87684a9f4e6286e343?s=100&d=robohash&r=x',
       },
       // other rows loaded asynchronously
     ])

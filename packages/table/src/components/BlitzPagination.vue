@@ -45,6 +45,11 @@
 </template>
 
 <style lang="scss" scoped>
+.blitz-pagination,
+.blitz-pagination * {
+  box-sizing: border-box;
+}
+
 .blitz-pagination {
   --c-primary: #0b3d92;
   --c-primary-dark: #0c306c;

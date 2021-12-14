@@ -5,7 +5,6 @@
       :schemaGrid="schemaColumnsAndGrid"
       :rows="rows"
       :rowsPerPage="5"
-      :titleField="{ component: 'h3', slot: 'Users' }"
       :searchField="{ component: blitzInput, placeholder: 'Search...', clearable: true }"
       :gridToggleField="{ component: blitzGridToggle }"
       :paginationField="{ component: blitzPagination }"
@@ -41,47 +40,19 @@ const blitzGridToggle = markRaw(BlitzGridToggle)
 const blitzPagination = markRaw(BlitzPagination)
 
 const schemaColumnsAndGrid = [
-  {
-    id: 'avatarUrl',
-    label: 'Avatar',
-    component: 'img',
-    mode: 'edit',
-    src: (val) => val,
-    dynamicProps: ['src'],
-  },
-  { id: 'firstName', label: 'First Name' },
-  { id: 'lastName', label: 'Last Name' },
-  { id: 'company', label: 'Company' },
-  {
-    id: 'birthdate',
-    label: 'Birthdate',
-    parseValue: (val) =>
-      new Date(val).toLocaleDateString(undefined, {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-      }),
-  },
-  { id: 'balance', label: 'Balance', parseValue: (val) => val.toLocaleString() },
+  { id: 'name.first', label: 'First Name' },
+  { id: 'name.last', label: 'Last Name' },
 ]
 
 export default {
   setup() {
     const rows = ref([
-      {
-        balance: 93683,
-        birthdate: '1946-07-22',
-        firstName: 'Harper',
-        lastName: 'Nolan',
-        company: 'Tortor At Risus LLC',
-        avatarUrl:
-          'https://gravatar.com/avatar/8aa5e7a6220f2a87684a9f4e6286e343?s=100&d=robohash&r=x',
-      },
+      { name: { first: 'Harper', last: 'Nolan' } },
       // other rows loaded asynchronously
     ])
 
     onMounted(async () => {
-      const _module = await import('./users.json')
+      const _module = await import('./users-nested.json')
       const users = _module.default
       rows.value = users
     })

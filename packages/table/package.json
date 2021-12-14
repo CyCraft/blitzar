@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@blitzar/form": "^1.0.3",
+    "flatten-anything": "^2.0.4",
     "is-what": "^3.14.1",
     "merge-anything": "^4.0.2",
     "path-to-prop": "^1.0.0",

@@ -57,6 +57,10 @@ export default defineComponent({
 </template>
 
 <style lang="sass" scoped>
+.blitz-icon,
+.blitz-icon *
+  box-sizing: border-box
+
 .blitz-icon
   --c-primary: #0b3d92
   --c-accent-red: #F64D4D
