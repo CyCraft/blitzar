@@ -174,7 +174,7 @@ export default {
       // find the row in the local state
       const rowToUpdate = this.rows.find((r) => r.id === rowId)
 
-      // update the rows fields
+      // update the row fields
       Object.entries(newData).forEach(([fieldId, value]) => {
         rowToUpdate[fieldId] = value
       })

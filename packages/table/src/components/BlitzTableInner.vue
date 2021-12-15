@@ -32,7 +32,7 @@
       <DatasetItem>
         <template #default="{ row, rowIndex }">
           <BlitzForm
-            :key="rowIndex"
+            :key="rowIndex + JSON.stringify(row)"
             :formComponent="'tr'"
             :class="[
               'blitz-table__row',
@@ -47,14 +47,16 @@
             @update-field="
               ({ id: colId, value, origin }) => onUpdateCell(row.id, colId, value, origin)
             "
+            @click="(e) => onRowClick(e, row)"
+            @dblclick="(e) => onRowDblclick(e, row)"
           >
             <!-- :style="evaluate(rowStyle, rowProps)" -->
             <template v-slot="blitzFormCtx">
               <!-- :class="['blitz-cell', evaluate(field.cellClasses, rowProps)]" -->
               <!-- :style="evaluate(field.cellStyle, rowProps)" -->
               <!-- @click="(e) => onCellClick(e, rowProps.row, field.id)" -->
-              <!-- @dblclick="(e) => onCellDblclick(e, rowProps.row, field.id)" -->
               <td v-for="field in blitzFormCtx.schema" :key="field.id">
+                <!-- :key="JSON.stringify(row)" -->
                 <BlitzField
                   v-bind="{
                     ...field,
@@ -67,6 +69,8 @@
                   @update:modelValue="
                     (value, origin) => blitzFormCtx.updateField({ id: field.id, value, origin })
                   "
+                  @click="(e) => onCellClick(e, row, field.id)"
+                  @dblclick="(e) => onCellDblclick(e, row, field.id)"
                 />
               </td>
             </template>
@@ -84,7 +88,7 @@
         <template #default="{ row, rowIndex }">
           <BlitzForm
             class="blitz-table--grid-card"
-            :key="rowIndex"
+            :key="rowIndex + JSON.stringify(row)"
             :formComponent="'div'"
             :class="[
               // rowProps.row.id ? `blitz-row__${rowProps.row.id}` : '',
@@ -171,7 +175,7 @@
 </style>
 
 <script>
-import { computed, ref, defineComponent } from 'vue'
+import { computed, ref, defineComponent, watchEffect } from 'vue'
 import { DatasetItem } from 'vue-dataset'
 import { BlitzForm, BlitzField } from '@blitzar/form'
 import { isFunction } from 'is-what'
@@ -318,6 +322,7 @@ export default defineComponent({
     if (!props.paginationField) {
       // then set the amount of rows per page to the total row count:
       rowsPerPageInner.value = props.ds.dsData.length
+      watchEffect(() => (rowsPerPageInner.value = props.ds.dsData.length))
     } else {
       rowsPerPageInner.value = props.rowsPerPage
     }
@@ -343,21 +348,23 @@ export default defineComponent({
       if (!isFunction(propValue)) return propValue || ''
       return propValue(rowProps.row, rowProps, this) || ''
     }
-    function onCellDblclick(event, rowData, colId) {
-      emit('row-dblclick', event, rowData)
-      emit('cell-dblclick', event, rowData, colId)
+    function onRowClick(e, rowData) {
+      // const { selectionMode } = this
+      // if (origin === 'grid' && selectionMode) {
+      //   gridItemProps.selected = !gridItemProps.selected
+      // }
+      emit('row-click', e, rowData)
     }
-    function onCellClick(event, rowData, colId) {
-      this.onRowClick(event, rowData)
-      emit('cell-click', event, rowData, colId)
+    function onRowDblclick(e, rowData) {
+      emit('row-dblclick', e, rowData)
     }
-    function onRowClick(event, rowData, origin, gridItemProps) {
-      const { selectionMode } = this
-      if (origin === 'grid' && selectionMode) {
-        gridItemProps.selected = !gridItemProps.selected
-      }
-      emit('row-click', event, rowData)
+    function onCellClick(e, rowData, colId) {
+      emit('cell-click', e, rowData, colId)
     }
+    function onCellDblclick(e, rowData, colId) {
+      emit('cell-dblclick', e, rowData, colId)
+    }
+
     function onUpdateCell(rowId, colId, value, origin) {
       emit('update-cell', { rowId, colId, value, origin })
     }
@@ -370,6 +377,10 @@ export default defineComponent({
       paginationFieldProps,
       rowsPerPageInner,
       shownRowsInfoFieldProps,
+      onRowClick,
+      onRowDblclick,
+      onCellClick,
+      onCellDblclick,
       onUpdateCell,
     }
   },

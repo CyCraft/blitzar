@@ -25,6 +25,10 @@
         :paginationField="applyBlitzFieldOverwrites(paginationField)"
         :rowsPerPageField="applyBlitzFieldOverwrites(rowsPerPageField)"
         :shownRowsInfoField="applyBlitzFieldOverwrites(shownRowsInfoField)"
+        @row-click="(e, rowData) => onRowClick(e, rowData)"
+        @row-dblclick="(e, rowData) => onRowDblclick(e, rowData)"
+        @cell-click="(e, rowData, colId) => onCellClick(e, rowData, colId)"
+        @cell-dblclick="(e, rowData, colId) => onCellDblclick(e, rowData, colId)"
         @update-cell="
           ({ rowId, colId, value, origin }) => event('update-cell', { rowId, colId, value, origin })
         "
@@ -338,23 +342,21 @@ export default defineComponent({
         this.cSelected = []
       }
     },
-    onCellDblclick(event, rowData, colId) {
-      this.event('row-dblclick', event, rowData)
-      this.event('cell-dblclick', event, rowData, colId)
+    onRowClick(e, rowData) {
+      // const { selectionMode } = this
+      // if (origin === 'grid' && selectionMode) {
+      //   gridItemProps.selected = !gridItemProps.selected
+      // }
+      this.event('row-click', e, rowData)
     },
-    onCellClick(event, rowData, colId) {
-      this.onRowClick(event, rowData)
-      this.event('cell-click', event, rowData, colId)
+    onRowDblclick(e, rowData) {
+      this.event('row-click', e, rowData)
     },
-    onRowClick(event, rowData, origin, gridItemProps) {
-      const { selectionMode } = this
-      if (origin === 'grid' && selectionMode) {
-        gridItemProps.selected = !gridItemProps.selected
-      }
-      this.event('row-click', event, rowData)
+    onCellClick(e, rowData, colId) {
+      this.event('cell-click', e, rowData, colId)
     },
-    onInputCell(rowId, colId, value, origin) {
-      this.event('update-cell', { rowId, colId, value, origin })
+    onCellDblclick(e, rowData, colId) {
+      this.event('cell-dblclick', e, rowData, colId)
     },
     /**
      * @param {'update:pagination' | 'update:selected' | 'row-click' | 'row-dblclick' | 'cell-click' | 'cell-dblclick' | 'update-cell'} eventName

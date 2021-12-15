@@ -4,6 +4,10 @@
     ref="refBlitzForm"
     :class="[`blitz-form blitz-form--nav-${actionButtonsPosition}`, $attrs.class]"
     :style="$attrs.style"
+    @click="(e) => $emit('click', e)"
+    @dblclick="(e) => $emit('dblclick', e)"
+    @mousedown="(e) => $emit('mousedown', e)"
+    @mouseup="(e) => $emit('mouseup', e)"
   >
     <!-- navigation buttons row (save, edit, ...) -->
     <div
@@ -99,7 +103,15 @@
 import { defineComponent } from 'vue'
 import { merge } from 'merge-anything'
 import { copy } from 'copy-anything'
-import { isArray, isFunction, isFullString, isPlainObject, isString, isBoolean } from 'is-what'
+import {
+  isArray,
+  isFunction,
+  isFullString,
+  isPlainObject,
+  isString,
+  isBoolean,
+  isFullArray,
+} from 'is-what'
 import { nestifyObject } from 'nestify-anything'
 import { flattenPerSchema } from '@blitzar/utils'
 import BlitzField from './BlitzField.vue'
@@ -348,6 +360,14 @@ export default defineComponent({
     save: (payload) => isPlainObject(payload),
     delete: (payload) => !payload, // no payload
     archive: (payload) => !payload, // no payload
+    /** HTML5 event from the top level component */
+    click: null,
+    /** HTML5 event from the top level component */
+    dblclick: null,
+    /** HTML5 event from the top level component */
+    mousedown: null,
+    /** HTML5 event from the top level component */
+    mouseup: null,
   },
   data() {
     const { mode, id, modelValue, schema, lang } = this
@@ -641,8 +661,9 @@ export default defineComponent({
       this.formErrorMsg = ''
       for (const [i, blueprint] of this.cSchema.entries()) {
         const refField = this.$refs[`ref-field-${i}`]
-        if (!refField) continue
-        refField.resetDirtyAndErrors()
+        // not sure why but one case during doc creation this turned out to be an array
+        const _refField = isFullArray(refField) ? refField[0] : refField
+        if (_refField) _refField.resetDirtyAndErrors()
       }
     },
     restoreBackup() {
@@ -676,9 +697,11 @@ export default defineComponent({
 
       for (const [i, blueprint] of cSchema.entries()) {
         const refField = this.$refs[`ref-field-${i}`]
-        if (!refField) continue
+        // not sure why but one case during doc creation this turned out to be an array
+        const _refField = isFullArray(refField) ? refField[0] : refField
+        if (!_refField) continue
 
-        const result = refField.validate(shouldFocus)
+        const result = _refField.validate(shouldFocus)
 
         if (isFullString(result)) {
           this.formErrorMsg = innerLang['formValidationError']

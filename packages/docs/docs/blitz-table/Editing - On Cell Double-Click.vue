@@ -1,21 +1,11 @@
 <template>
-  <div>
-    <h4 style="display: inline">Table Mode:</h4>
-    <input type="radio" id="raw" value="raw" v-model="mode" />
-    <label for="raw">raw</label>
-    <input type="radio" id="edit" value="edit" v-model="mode" />
-    <label for="edit">edit</label>
-  </div>
-
   <BlitzTable
-    :schemaColumns="schemaColumnsAndGrid"
-    :schemaGrid="schemaColumnsAndGrid"
+    :schemaColumns="schemaWithEditingLogic"
+    :schemaGrid="schemaWithEditingLogic"
     :rows="rows"
-    :mode="mode"
     :gridToggleField="{ component: blitzGridToggle }"
-    @update-cell="
-      ({ rowId, colId, value, origin }) => onUpdateCell({ rowId, colId, value, origin })
-    "
+    @update-cell="({ rowId, colId, value }) => onUpdateCell({ rowId, colId, value })"
+    @cell-dblclick="(mouseEvent, rowData, colId) => onCellDblclick(mouseEvent, rowData, colId)"
   />
 </template>
 
@@ -29,7 +19,7 @@
 </style>
 
 <script>
-import { ref, markRaw } from 'vue'
+import { reactive, markRaw, computed } from 'vue'
 import { BlitzGridToggle } from '@blitzar/table'
 
 const blitzGridToggle = markRaw(BlitzGridToggle)
@@ -44,7 +34,6 @@ const schemaColumnsAndGrid = [
     label: 'Balance',
     component: 'input',
     type: 'number',
-    parseValue: (val, { mode }) => (mode === 'raw' ? val.toLocaleString() : val),
     parseInput: (inputString) => Number(inputString),
   },
 ]
@@ -70,21 +59,77 @@ const rows = [
   { id: 'id04508174972460055', balance: 97869, birthdate: '1945-10-01', firstName: 'Shad', lastName: 'Beard', company: 'Mollis Incorporated' }, // prettier-ignore
 ]
 
+function autoFocusInput(mouseEvent) {
+  const cellEl = mouseEvent.srcElement.parentElement
+  setTimeout(() => {
+    const inputEl = cellEl.querySelector('input')
+    if (inputEl) inputEl.focus()
+  }, 0)
+}
+
 export default {
   setup() {
-    const mode = ref('raw')
+    const editInfo = reactive({ editingColId: '', editingRowId: '', lastEdit: null })
 
-    function onUpdateCell({ rowId, colId, value, origin }) {
-      console.log('@update-cell', { rowId, colId, value, origin })
-      const row = rows.find((r) => r.id === rowId)
-      if (!row) return
-      row[colId] = value
+    function onUpdateCell({ rowId, colId, value }) {
+      editInfo.lastEdit = { rowId, colId, value }
     }
 
+    function onCellDblclick(mouseEvent, rowData, colId) {
+      console.log(`@cell-dblclick (mouseEvent, rowData, colId) → `, mouseEvent, rowData, colId)
+      editInfo.editingColId = colId
+      editInfo.editingRowId = rowData.id
+      // auto focus logic:
+      autoFocusInput(mouseEvent)
+    }
+
+    function stopEditing() {
+      editInfo.editingRowId = ''
+      editInfo.editingColId = ''
+      editInfo.lastEdit = null
+    }
+
+    function saveLastEdit() {
+      if (!editInfo.lastEdit) return stopEditing()
+
+      const { rowId, colId, value } = editInfo.lastEdit
+
+      const row = rows.find((r) => r.id === rowId)
+      if (!row) return stopEditing()
+
+      row[colId] = value
+      stopEditing()
+    }
+
+    const schemaWithEditingLogic = computed(() => {
+      // return the columns with the added logic to edit & save data
+      return schemaColumnsAndGrid.map((blueprint) => {
+        return {
+          ...blueprint,
+          /**
+           * The editing logic for every schema blueprint is dynamically setting the "mode" of a cell.
+           * It does this based on the colId and rowId which are being edited.
+           */
+          dynamicProps: ['mode'],
+          mode: (val, { formData }) =>
+            editInfo.editingColId === blueprint.id && editInfo.editingRowId === formData.id
+              ? 'edit'
+              : 'raw',
+          events: {
+            keydown: (event) => {
+              if (event.code === 'Enter') saveLastEdit()
+              if (event.code === 'Escape') stopEditing()
+            },
+            blur: () => saveLastEdit(),
+          },
+        }
+      })
+    })
+
     return {
-      mode,
       rows,
-      schemaColumnsAndGrid,
+      schemaWithEditingLogic,
+      onCellDblclick,
       onUpdateCell,
       blitzGridToggle,
     }

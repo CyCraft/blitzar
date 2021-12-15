@@ -82,27 +82,29 @@ You can have a separate view for the table and grid views.
 
 There are various ways to implement the ability to edit table data. Below I show case 4 ways to easily implement editing. Each time you can check the _template_ and _script_ tabs to check how it can be implemented.
 
+Any editing requires your _rows_ to have an **id** prop on every object in the rows array.
+
 ### Edit Inline
 
 <CodeBlockComponent :importFn="() => import('./Editing - Inline.vue')" :importFnRaw="() => import('./Editing - Inline.vue?raw')" />
 
-### Edit Inline on Cell Double-Click
+### Edit on Cell Double-Click
 
-<!-- <CodeBlockComponent :importFn="() => import('./Editing - Inline on Cell Double-Click.vue')" :importFnRaw="() => import('./Editing - Inline on Cell Double-Click.vue?raw')" /> -->
+<CodeBlockComponent :importFn="() => import('./Editing - On Cell Double-Click.vue')" :importFnRaw="() => import('./Editing - On Cell Double-Click.vue?raw')" />
 
 ### Edit Modal on Row Click
 
-<!-- <CodeBlockComponent :importFn="() => import('./Editing - On Row Click.vue')" :importFnRaw="() => import('./Editing - On Row Click.vue?raw')" /> -->
+<CodeBlockComponent :importFn="() => import('./Editing - Modal on Row Click.vue')" :importFnRaw="() => import('./Editing - Modal on Row Click.vue?raw')" />
 
 ### Edit Modal on Button Click
 
 Since a `<BlitzTable />` is based on the [BlitzForms](/blitz-form/) schema system, it's possible to easily implement stuff like inline editing; popup editing; or show an editable form on a row click.
 
-<!-- <CodeBlockComponent :importFn="() => import('./Editing - On Button Click.vue')" :importFnRaw="() => import('./Editing - On Button Click.vue?raw')" /> -->
+<CodeBlockComponent :importFn="() => import('./Editing - Modal on Button Click.vue')" :importFnRaw="() => import('./Editing - Modal on Button Click.vue?raw')" />
 
-### Adding a New Record
+### Adding a New Row
 
-<!-- <CodeBlockComponent :importFn="() => import('./Editing - Adding a New Record.vue')" :importFnRaw="() => import('./Editing - Adding a New Record.vue?raw')" /> -->
+<CodeBlockComponent :importFn="() => import('./Editing - Adding a New Row.vue')" :importFnRaw="() => import('./Editing - Adding a New Row.vue?raw')" />
 
 ## Selection
 

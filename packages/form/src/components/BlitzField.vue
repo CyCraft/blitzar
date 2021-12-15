@@ -15,6 +15,10 @@
       $attrs.class,
     ]"
     :style="[evalPropOrAttr('fieldStyle'), $attrs.style]"
+    @click="(e) => $emit('click', e)"
+    @dblclick="(e) => $emit('dblclick', e)"
+    @mousedown="(e) => $emit('mousedown', e)"
+    @mouseup="(e) => $emit('mouseup', e)"
   >
     <div
       v-if="labelUsedHere || (evalPropOrAttr('slots') && evalPropOrAttr('slots').label)"
@@ -502,6 +506,14 @@ export default defineComponent({
      * @property {'default' | '' | undefined} origin the cause of the `update:modelValue` event:
      */
     'update:modelValue': (payload, origin) => ['default', '', undefined].includes(origin),
+    /** HTML5 event from the top level div */
+    click: null,
+    /** HTML5 event from the top level div */
+    dblclick: null,
+    /** HTML5 event from the top level div */
+    mousedown: null,
+    /** HTML5 event from the top level div */
+    mouseup: null,
   },
   data() {
     return {
@@ -529,8 +541,8 @@ export default defineComponent({
   },
   methods: {
     evalPropOrAttr(propOrAttr) {
-      const { dynamicPropsDataObject } = this
-      if (propOrAttr in dynamicPropsDataObject) return dynamicPropsDataObject[propOrAttr]
+      const { dynamicPropsEvaluated } = this
+      if (propOrAttr in dynamicPropsEvaluated) return dynamicPropsEvaluated[propOrAttr]
       if (propOrAttr in this) return this[propOrAttr]
       return this.$attrs[propOrAttr]
     },
@@ -584,7 +596,7 @@ export default defineComponent({
         if (component) {
           try {
             component.focus()
-          } catch (error) { }
+          } catch (error) {}
         }
       }
       return result
@@ -599,7 +611,9 @@ export default defineComponent({
     cValue: {
       get() {
         const { parseValue, innerValue } = this
-        if (isFunction(parseValue)) return parseValue(innerValue, this)
+        if (isFunction(parseValue)) {
+          return parseValue(innerValue, this)
+        }
         return innerValue
       },
       set(val, ...otherArguments) {
@@ -612,7 +626,7 @@ export default defineComponent({
         this.event('update:modelValue', val, ...otherArguments)
       },
     },
-    dynamicPropsDataObject() {
+    dynamicPropsEvaluated() {
       const { dynamicProps, cValue } = this
       const context = this
       return dynamicProps.reduce((carry, propKey) => {
@@ -708,7 +722,11 @@ export default defineComponent({
       }
       // set the component's 'required' attr/prop (only when not readonly or disabled)
       const required = evalPropOrAttr('required')
-      if ((required === true || required === 'required') && !propsToPass.disabled && !propsToPass.readonly) {
+      if (
+        (required === true || required === 'required') &&
+        !propsToPass.disabled &&
+        !propsToPass.readonly
+      ) {
         propsToPass.required = true
       }
       const attrsToPass = Object.keys(this.$attrs).reduce((carry, attrKey) => {
