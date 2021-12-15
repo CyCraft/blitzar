@@ -134,7 +134,7 @@ import {
 } from 'is-what'
 import { merge } from 'merge-anything'
 import { mapObject } from 'map-anything'
-import { parseFieldValue } from '@blitzar/utils'
+import { parseFieldValue, RowSelectionId } from '@blitzar/utils'
 import BlitzH from './BlitzH.vue'
 import { defaultLang } from '../meta/lang'
 import { createRequiredErrorFn } from '../helpers/validation.js'
@@ -623,6 +623,7 @@ export default defineComponent({
         const events = evalPropOrAttr('events')
         if (isFunction(parseInput)) val = parseInput(val, this)
         if (isFunction(events['update:modelValue'])) events['update:modelValue'](val, this)
+        if (this.id === RowSelectionId) return
         this.event('update:modelValue', val, ...otherArguments)
       },
     },

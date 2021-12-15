@@ -112,47 +112,27 @@ By default selection is implemented for both table and grid view. Play around wi
 
 Please note that every row NEEDS an 'id' prop in order for it to work.
 
-<!-- <CodeBlockComponent :importFn="() => import('./Selection.vue')" :importFnRaw="() => import('./Selection.vue?raw')" /> -->
+### Select by Checkbox
 
-### Styling Selection
+To be able to select rows with some sort of checkbox (please provide your own, or use the HTML5 input with type 'checkbox') you need to set a column ID to a special string imported from Blitzar:
 
-You can pass a custom checkbox component via `selectionComponentProps`, an object that represents a BlitzForm blueprint. Just like you would use in a schema. Eg.:
+```js
+import { RowSelectionId } from 'blitzar'
 
-```html
-<BlitzTable :selectionComponentProps="{ component: 'MyCheckbox', class: 'table-checkbox' }" />
+const schemaColumns = [
+  {
+    id: RowSelectionId, // or you can use `'BLITZ-TABLE-ROW-SELECTION'`
+    component: 'input',
+    type: 'checkbox',
+  },
+]
 ```
 
-The CSS for the selected rows or grid-items can also be overwritten by targeting these classes:
+You can use any component that works with `v-model` and accepts a `boolean` for its `modelValue`.
 
-- `.blitz-table__row.selected`
-- `.blitz-table__grid-item.selected`
+<CodeBlockComponent :importFn="() => import('./Selection.vue')" :importFnRaw="() => import('./Selection.vue?raw')" />
 
-<!-- <CodeBlockComponent :importFn="() => import('./Selection - Styling.vue')" :importFnRaw="() => import('./Selection - Styling.vue?raw')" /> -->
-
-### Selection with search
-
-Here is an example of selection together with search.
-
-When clicking select all it will only select
-
-<!-- <CodeBlockComponent :importFn="() => import('./Selection - Search.vue')" :importFnRaw="() => import('./Selection - Search.vue?raw')" /> -->
-
-## Slots
-
-You can use slots with BlitzTable.
-
-### BlitzTable Specific Slots
-
-- above-nav-row
-- above-table
-
-### Quasar's QTable Slots
-
-You can use all Quasar slots "around" the table. However, BlitzTable uses these slots to generate its content: `body` for the rows, `item` for the cards in grid mode.
-
-If you find yourself in a spot where you also want to use slots for the rows or items, you are probably better off using a regular QTable, perhaps in combination with a [BlitzForm](/blitz-form/). Feel free to look at my source code for how I built the BlitzTable component.
-
-<!-- <CodeBlockComponent :importFn="() => import('./Slots.vue')" :importFnRaw="() => import('./Slots.vue?raw')" /> -->
+When you search something and then click the "Select All" checkbox, it will select all filered rows based on your search results.
 
 ## Styling
 

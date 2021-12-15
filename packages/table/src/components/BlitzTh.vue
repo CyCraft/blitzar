@@ -10,6 +10,7 @@
   >
     <slot />
     <i v-if="column.sortable === true" class="_sort-arrows"></i>
+    <BlitzField v-if="isSelectionCol" v-bind="column" :label="undefined" />
   </th>
 </template>
 
@@ -64,9 +65,12 @@
 
 <script>
 import { defineComponent } from 'vue'
+import { RowSelectionId } from '@blitzar/utils'
+import { BlitzField } from '@blitzar/form'
 
 export default defineComponent({
   name: 'BlitzTh',
+  components: { BlitzField },
   props: {
     /** The BlitzField object used for the columns */
     column: { type: Object, required: true },
@@ -95,7 +99,9 @@ export default defineComponent({
       }
     }
 
-    return { onClick }
+    const isSelectionCol = props.column.id === RowSelectionId
+
+    return { onClick, isSelectionCol }
   },
 })
 </script>

@@ -16,6 +16,7 @@
         :gridBlitzFormOptions="gridBlitzFormOptions"
         :rows="rows"
         v-model:isGrid="isGridInner"
+        v-model:selectedRows="selectedRowsComputed"
         v-model:sortState="sortState"
         :mode="mode"
         :rowsPerPage="rowsPerPage"
@@ -30,7 +31,7 @@
         @cell-click="(e, rowData, colId) => onCellClick(e, rowData, colId)"
         @cell-dblclick="(e, rowData, colId) => onCellDblclick(e, rowData, colId)"
         @update-cell="
-          ({ rowId, colId, value, origin }) => event('update-cell', { rowId, colId, value, origin })
+          ({ rowId, colId, value, origin }) => onUpdateCell({ rowId, colId, value, origin })
         "
       />
     </Dataset>
@@ -53,9 +54,10 @@ import { watch, ref, defineComponent, computed } from 'vue'
 import { merge } from 'merge-anything'
 import { isFunction, isArray, isFullArray, isBoolean, isFullString } from 'is-what'
 import { getProp } from 'path-to-prop'
-import { getBlitzFieldOverwrites } from '@blitzar/form'
-import BlitzTableInner from './BlitzTableInner.vue'
 import { Dataset } from 'vue-dataset'
+import { getBlitzFieldOverwrites } from '@blitzar/form'
+import { RowSelectionId } from '@blitzar/utils'
+import BlitzTableInner from './BlitzTableInner.vue'
 
 /**
  * @typedef GridCardProps
@@ -83,6 +85,12 @@ import { Dataset } from 'vue-dataset'
  * }}
  * @see https://next--vue-dataset-demo.netlify.app/components/#props
  */
+
+function getSortableProps(col = {}) {
+  if (!isBoolean(col.sortable) && isFullString(col.id)) {
+    return { sortable: true }
+  }
+}
 
 export default defineComponent({
   name: 'BlitzTable',
@@ -148,16 +156,11 @@ export default defineComponent({
     //     type: 'checkbox',
     //   }),
     // },
-    // // Inherited props used here:
-    // /**
-    //  * @category inherited prop
-    //  */
-    // grid: { type: Boolean, default: false },
-    // /**
-    //  * @category inherited prop
-    //  * @type {Record<string, any>[]}
-    //  */
-    // selected: { type: Array, default: () => [] },
+    /**
+     * MUST be used with `v-model:selectedRows="mySelection"`
+     * @type { Record<string, any>[] }
+     */
+    selectedRows: { type: Array, default: () => [] },
     // /**
     //  * CSS classes to apply to the card (when in grid mode).
     //  * You can pass a function which will be evaluated just like an Dynamic Prop. The first param passed will be the entire row data. The second is `item` scoped slot object from a QTable.
@@ -249,6 +252,23 @@ export default defineComponent({
       return merge(field, getBlitzFieldOverwrites(field))
     }
 
+    /** SELECTION related state */
+    const selectedRowsComputed = computed({
+      get() {
+        return props.selectedRows
+      },
+      set(newSelectedRows) {
+        /**
+         * This makes it possible to sync the table's selected rows like:
+         * ```html
+         * <BlitzTable v-model:selectedRows="mySelectedRows" />
+         * ```
+         * @property {Record<string, any>[]} newSelectedRows val
+         */
+        emit('update:selectedRows', newSelectedRows)
+      },
+    })
+
     /** SORT related state */
     /**
      * @type {{ id: null | string, direction: 'asc' | 'desc' | 'none' }}
@@ -258,14 +278,21 @@ export default defineComponent({
       direction: 'none',
     })
 
-    // apply default `sortable` to columns
-    const schemaColumnsComputed = computed(() =>
-      props.schemaColumns.map((col) => {
-        if (isBoolean(col.sortable)) return col
+    // apply default `sortable` to columns && add special behaviour for Selection
+    const schemaColumnsComputed = computed(() => {
+      if (!props.schemaColumns) return props.schemaColumns
 
-        return { ...col, sortable: isFullString(col.id) }
+      return props.schemaColumns.map((col) => {
+        const sortableProps = getSortableProps(col)
+        return { ...col, ...sortableProps }
       })
-    )
+    })
+    // add special behaviour for Selection
+    // const schemaGridComputed = computed(() => {
+    //   if (!props.schemaGrid) return props.schemaGrid
+
+    //   return props.schemaGrid
+    // })
 
     /**
      * Provides Dataset's `dsSearchAs` prop with a special functions for columns with `parseValue`
@@ -317,116 +344,86 @@ export default defineComponent({
       return [sortState.value.id]
     })
 
-    return {
-      dsSearchAsComputed,
-      dsSortAsComputed,
-      sortState,
-      dsSortbyComputed,
-      applyBlitzFieldOverwrites,
-      isGridInner,
-      schemaColumnsComputed,
-    }
-  },
-  watch: {},
-  computed: {},
-  methods: {
-    evaluate(propValue, rowProps) {
+    function evaluate(propValue, rowProps) {
       if (!isFunction(propValue)) return propValue || ''
       return propValue(rowProps.row, rowProps, this) || ''
-    },
-    setSelectionAllRows(setTo) {
+    }
+
+    function setSelectionAllRows(setTo) {
       if (setTo === true) {
         const filteredRowsFromQTable = this.$refs.qtable?.filteredSortedRows
         this.cSelected = isArray(filteredRowsFromQTable) ? filteredRowsFromQTable : this.rows
       } else {
         this.cSelected = []
       }
-    },
-    onRowClick(e, rowData) {
+    }
+
+    function onRowClick(e, rowData) {
       // const { selectionMode } = this
       // if (origin === 'grid' && selectionMode) {
       //   gridItemProps.selected = !gridItemProps.selected
       // }
-      this.event('row-click', e, rowData)
-    },
-    onRowDblclick(e, rowData) {
-      this.event('row-click', e, rowData)
-    },
-    onCellClick(e, rowData, colId) {
-      this.event('cell-click', e, rowData, colId)
-    },
-    onCellDblclick(e, rowData, colId) {
-      this.event('cell-dblclick', e, rowData, colId)
-    },
-    /**
-     * @param {'update:pagination' | 'update:selected' | 'row-click' | 'row-dblclick' | 'cell-click' | 'cell-dblclick' | 'update-cell'} eventName
-     * @param {...any[]} args
-     */
-    event(eventName, ...args) {
-      if (eventName === 'update:pagination') {
-        /**
-         * This makes it possible to sync the table pagination like:
-         * ```html
-         * <BlitzTable :pagination.sync="pagination" />
-         * ```
-         * See the [Quasar docs](https://quasar.dev/vue-components/table#Pagination) for the exact details on how pagination works.
-         * @property {{ sortBy: 'desc' | 'asc', descending: boolean, page: number, rowsPerPage: number, rowsNumber?: number }} payload newPagination
-         */
-        this.$emit('update:pagination', ...args)
-      }
-      if (eventName === 'update:selected') {
-        /**
-         * This makes it possible to sync the table selection (the selected rows) like:
-         * ```html
-         * <BlitzTable :selected.sync="selected" selection="multiple" />
-         * ```
-         * See the [Quasar docs](https://quasar.dev/vue-components/table#Selection) for the exact details on how selection works.
-         * @property {Record<string, any>[]} payload val
-         */
-        this.$emit('update:selected', ...args)
-      }
-      if (eventName === 'row-click') {
-        /**
-         * Emitted when user clicks/taps on a row.
-         * @property {MouseEvent} event the mouse event that occured
-         * @property {Record<string, any>} payload the rowData
-         */
-        this.$emit('row-click', ...args)
-      }
-      if (eventName === 'row-dblclick') {
-        /**
-         * Emitted when user quickly double clicks/taps on a row.
-         * @property {MouseEvent} event the mouse event that occured
-         * @property {Record<string, any>} payload the rowData
-         */
-        this.$emit('row-dblclick', ...args)
-      }
-      if (eventName === 'cell-click') {
-        /**
-         * Emitted when user clicks/taps on a cell.
-         * @property {MouseEvent} event the mouse event that occured
-         * @property {Record<string, any>} payload the rowData
-         * @property {string} colId the column ID, this is what you have set as `id` in the schema
-         */
-        this.$emit('cell-click', ...args)
-      }
-      if (eventName === 'cell-dblclick') {
-        /**
-         * Emitted when user quickly double clicks/taps on a cell.
-         * @property {MouseEvent} event the mouse event that occured
-         * @property {Record<string, any>} payload the rowData
-         * @property {string} colId the column ID, this is what you have set as `id` in the schema
-         */
-        this.$emit('cell-dblclick', ...args)
-      }
-      if (eventName === 'update-cell') {
-        /**
-         * Emitted when the user updates the cell, if rendered as editable by setting `mode: 'edit'` in the schema.
-         * @property {{ rowId: string, colId: string, value: any, origin?: string }} payload
-         */
-        this.$emit('update-cell', ...args)
-      }
-    },
+      /**
+       * Emitted when user clicks/taps on a row.
+       * @property {MouseEvent} e the mouse e that occured
+       * @property {Record<string, any>} payload the rowData
+       */
+      emit('row-click', e, rowData)
+    }
+    function onRowDblclick(e, rowData) {
+      /**
+       * Emitted when user quickly double clicks/taps on a row.
+       * @property {MouseEvent} e the mouse e that occured
+       * @property {Record<string, any>} payload the rowData
+       */
+      emit('row-dblclick', e, rowData)
+    }
+    function onCellClick(e, rowData, colId) {
+      /**
+       * Emitted when user clicks/taps on a cell.
+       * @property {MouseEvent} e the mouse e that occured
+       * @property {Record<string, any>} payload the rowData
+       * @property {string} colId the column ID, this is what you have set as `id` in the schema
+       */
+      emit('cell-click', e, rowData, colId)
+    }
+    function onCellDblclick(e, rowData, colId) {
+      /**
+       * Emitted when user quickly double clicks/taps on a cell.
+       * @property {MouseEvent} e the mouse e that occured
+       * @property {Record<string, any>} payload the rowData
+       * @property {string} colId the column ID, this is what you have set as `id` in the schema
+       */
+      emit('cell-dblclick', e, rowData, colId)
+    }
+    function onUpdateCell({ rowId, colId, value, origin }) {
+      if (colId === RowSelectionId) return
+
+      /**
+       * Emitted when the user updates the cell, if rendered as editable by setting `mode: 'edit'` in the schema.
+       * @property {{ rowId: string, colId: string, value: any, origin?: string }} payload
+       */
+      emit('update-cell', { rowId, colId, value, origin })
+    }
+
+    return {
+      dsSearchAsComputed,
+      dsSortAsComputed,
+      selectedRowsComputed,
+      sortState,
+      dsSortbyComputed,
+      applyBlitzFieldOverwrites,
+      isGridInner,
+      schemaColumnsComputed,
+      // schemaGridComputed,
+      evaluate,
+      setSelectionAllRows,
+      onRowClick,
+      onRowDblclick,
+      onCellClick,
+      onCellDblclick,
+      onUpdateCell,
+    }
   },
 })
 </script>

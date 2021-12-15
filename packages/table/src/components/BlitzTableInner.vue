@@ -19,7 +19,7 @@
     <thead>
       <tr>
         <BlitzTh
-          v-for="(column, i) in schemaColumns"
+          v-for="(column, i) in schemaColumnsComputed"
           :key="i"
           :column="column"
           :sortState="sortState"
@@ -40,7 +40,7 @@
               // rowProps.row.id ? `blitz-row__${rowProps.row.id}` : '',
               // evaluate(rowClasses, rowProps),
             ]"
-            :schema="schemaColumns"
+            :schema="schemaColumnsComputed"
             :modelValue="row"
             :mode="mode"
             :id="row.id"
@@ -64,8 +64,8 @@
                     label: undefined,
                     subLabel: undefined,
                     component: field.component || 'div',
+                    modelValue: blitzFormCtx.formDataFlat[field.id],
                   }"
-                  :modelValue="blitzFormCtx.formDataFlat[field.id]"
                   @update:modelValue="
                     (value, origin) => blitzFormCtx.updateField({ id: field.id, value, origin })
                   "
@@ -97,7 +97,7 @@
             :mode="mode"
             v-bind="gridBlitzFormOptions"
             :modelValue="row"
-            :schema="schemaGrid"
+            :schema="schemaGridComputed"
             :id="row.id"
             @update-field="
               ({ id: colId, value, origin }) => onUpdateCell(row.id, colId, value, origin)
@@ -176,9 +176,10 @@
 
 <script>
 import { computed, ref, defineComponent, watchEffect } from 'vue'
+import { isFunction } from 'is-what'
 import { DatasetItem } from 'vue-dataset'
 import { BlitzForm, BlitzField } from '@blitzar/form'
-import { isFunction } from 'is-what'
+import { RowSelectionId } from '@blitzar/utils'
 import BlitzTh from './BlitzTh.vue'
 
 /*
@@ -251,6 +252,7 @@ export default defineComponent({
     rows: { type: Array, required: true },
     isGrid: { type: Boolean, required: true },
     gridBlitzFormOptions: { type: Object, default: () => ({}) },
+    selectedRows: { type: Array, default: () => [] },
     sortState: { type: Object, required: true },
     mode: { type: String, required: true },
     rowsPerPage: { type: Number, default: 10 },
@@ -263,6 +265,7 @@ export default defineComponent({
   },
   emits: [
     'update:isGrid',
+    'update:selectedRows',
     'update:sortState',
     'row-click',
     'row-dblclick',
@@ -271,6 +274,70 @@ export default defineComponent({
     'update-cell',
   ],
   setup(props, { emit }) {
+    /** SELECTION COLUMN RELATED */
+    /**
+     * creates the required column schema props for selection
+     */
+    function getSelectionProps(col = {}) {
+      if (col.id !== RowSelectionId) return
+      return {
+        // in the BlitzTableInner we will add logic for actual selection
+        events: {
+          ...col.events,
+          ['update:modelValue']: (wasSelected, { formData }) => {
+            const isSelectAllHeader = formData === undefined
+            if (isSelectAllHeader) {
+              if (wasSelected) {
+                emit(
+                  'update:selectedRows',
+                  props.ds.dsIndexes.map((rowIndex) => props.ds.dsData[rowIndex])
+                )
+                return
+              }
+              emit('update:selectedRows', [])
+              return
+            }
+            if (wasSelected) {
+              emit('update:selectedRows', [...props.selectedRows, formData])
+              return
+            }
+            emit(
+              'update:selectedRows',
+              props.selectedRows.filter((row) => row.id !== formData.id)
+            )
+            return
+          },
+        },
+        mode: 'edit',
+        sortable: false,
+        parseValue: (val, { formData }) => {
+          const isSelectAllHeader = formData === undefined
+          return isSelectAllHeader
+            ? props.selectedRows.length === props.rows.length
+            : !!props.selectedRows.find((s) => s.id === formData?.id)
+        },
+      }
+    }
+
+    // add special behaviour for Selection
+    const schemaColumnsComputed = computed(() => {
+      if (!props.schemaColumns) return props.schemaColumns
+
+      return props.schemaColumns.map((col) => {
+        const selectionProps = getSelectionProps(col)
+        return { ...col, ...selectionProps }
+      })
+    })
+    // add special behaviour for Selection
+    const schemaGridComputed = computed(() => {
+      if (!props.schemaGrid) return props.schemaGrid
+
+      return props.schemaGrid.map((col) => {
+        const selectionProps = getSelectionProps(col)
+        return { ...col, ...selectionProps }
+      })
+    })
+
     /** SEARCH FIELD */
     const searchTextInner = ref('')
     let searchTimeout = null
@@ -348,6 +415,7 @@ export default defineComponent({
       if (!isFunction(propValue)) return propValue || ''
       return propValue(rowProps.row, rowProps, this) || ''
     }
+
     function onRowClick(e, rowData) {
       // const { selectionMode } = this
       // if (origin === 'grid' && selectionMode) {
@@ -370,6 +438,8 @@ export default defineComponent({
     }
 
     return {
+      schemaColumnsComputed,
+      schemaGridComputed,
       emit,
       searchText,
       isGridMode,
@@ -377,6 +447,7 @@ export default defineComponent({
       paginationFieldProps,
       rowsPerPageInner,
       shownRowsInfoFieldProps,
+      RowSelectionId,
       onRowClick,
       onRowDblclick,
       onCellClick,

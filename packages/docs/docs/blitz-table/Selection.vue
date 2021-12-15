@@ -1,64 +1,108 @@
 <template>
   <div>
+    <details>
+      <summary>Selected rows ({{ selectedRows.length }})</summary>
+      <pre class="_preview">{{ selectedRows }}</pre>
+    </details>
+    <!-- <pre>{{ selectedRows.length }}</pre> -->
+
     <BlitzTable
-      selection="multiple"
-      :selected.sync="selectionArray"
-      :actionButtons="actionButtons"
-      :schemaColumns="schemaColumns"
-      :schemaGrid="schemaColumns"
+      v-model:selectedRows="selectedRows"
+      :schemaColumns="schemaColumnsAndGrid"
+      :schemaGrid="schemaColumnsAndGrid"
       :rows="rows"
-      title="Users"
-      flat
-      bordered
+      :rowsPerPage="5"
+      :titleField="{ component: 'h3', slot: 'Users' }"
+      :searchField="{ component: blitzInput, placeholder: 'Search...', clearable: true }"
+      :gridToggleField="{ component: blitzGridToggle }"
+      :paginationField="{ component: blitzPagination }"
+      :rowsPerPageField="{
+        label: 'Rows per page:',
+        component: blitzInput,
+        type: 'select',
+        options: [
+          { value: 5, label: '5' },
+          { value: 10, label: '10' },
+          { value: 20, label: '20' },
+          { value: 50, label: '50' },
+          { value: 100, label: '100' },
+        ],
+      }"
+      :shownRowsInfoField="{ component: 'div' }"
     />
   </div>
 </template>
 
+<style scoped>
+::v-deep(.blitz-table--grid-card) {
+  border: thin solid #dfe2e5;
+}
+
+._preview {
+  max-height: 500px;
+  overflow-y: auto;
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+}
+</style>
+
 <script>
-import { showToast } from '../../helpers/toast'
+import { markRaw, onMounted, ref } from 'vue'
+import { RowSelectionId } from '@blitzar/utils'
+import { BlitzInput, BlitzGridToggle, BlitzPagination } from '@blitzar/table'
 
-const rows = [
-  { nameFirst: 'Eleanor', nameLast: 'Shellstrop', id: 'tpmf4QaahR' },
-  { nameFirst: 'Chidi', nameLast: 'Anagonye', id: 'ZhTgi3CwSJ' },
-  { nameFirst: 'Jason', nameLast: 'Mendoza', id: '4YkCj0Wvwm' },
-  { nameFirst: 'Tahani', nameLast: 'Al-Jamil', id: 'bODyLeO09E' },
-  { nameFirst: 'Janet', nameLast: 'Della-Denunzio', id: 'YWk5iGDy3w' },
-  { nameFirst: 'Michael', nameLast: 'Of the bad place', id: 'IE4abcXG3F' },
-  { nameFirst: 'Shawn', nameLast: 'Of the bad place', id: 'c8IMz0ZEgs' },
-  { nameFirst: 'Simone', nameLast: 'Garnett', id: 'DcgViFmNKA' },
-  { nameFirst: 'Derek', nameLast: 'Hofstetler', id: 'Cf2Vx66ygY' },
-  { nameFirst: 'John', nameLast: 'Wheaton', id: 'zWLyWRnSN5' },
-  { nameFirst: 'Brent', nameLast: 'Norwalk', id: 'WiglplOrzO' },
-  { nameFirst: 'Mindy', nameLast: 'St. Claire', id: 'ZmN7I1rUv7' },
-]
+const blitzInput = markRaw(BlitzInput)
+const blitzGridToggle = markRaw(BlitzGridToggle)
+const blitzPagination = markRaw(BlitzPagination)
 
-const schemaColumns = [
-  { id: 'nameFirst', label: 'First Name', component: 'input' },
-  { id: 'nameLast', label: 'Last Name', component: 'input' },
+const schemaColumnsAndGrid = [
+  { id: RowSelectionId, label: 'Select', component: 'input', type: 'checkbox' },
+  { id: 'firstName', label: 'First Name' },
+  { id: 'lastName', label: 'Last Name' },
+  { id: 'company', label: 'Company' },
+  {
+    id: 'birthdate',
+    label: 'Birthdate',
+    parseValue: (val) =>
+      new Date(val).toLocaleDateString(undefined, {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      }),
+  },
+  { id: 'balance', label: 'Balance', parseValue: (val) => val.toLocaleString() },
 ]
 
 export default {
-  data() {
-    return { rows, schemaColumns, selectionArray: [] }
-  },
-  computed: {
-    showSelectedStudentsButton() {
-      const { selectionArray } = this
-      return {
-        component: 'button',
-        slot: 'log selected students',
-        showCondition: !!selectionArray.length,
-        events: {
-          click: () => {
-            showToast('selected students:', selectionArray)
-            console.log(`selectionArray → `, selectionArray)
-          },
-        },
-      }
-    },
-    actionButtons() {
-      return ['grid', this.showSelectedStudentsButton]
-    },
+  setup() {
+    const selectedRows = ref([])
+
+    const rows = ref([
+      {
+        id: 'EA265B20-45F2-953C-C534-3E2A7862059C',
+        balance: 93683,
+        birthdate: '1946-07-22',
+        firstName: 'Harper',
+        lastName: 'Nolan',
+        company: 'Tortor At Risus LLC',
+      },
+      // other rows loaded asynchronously
+    ])
+
+    onMounted(async () => {
+      const _module = await import('./users.json')
+      const users = _module.default
+      rows.value = users
+    })
+
+    return {
+      selectedRows,
+      blitzInput,
+      blitzGridToggle,
+      blitzPagination,
+      schemaColumnsAndGrid,
+      rows,
+    }
   },
 }
 </script>
