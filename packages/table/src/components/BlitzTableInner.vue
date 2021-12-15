@@ -43,7 +43,12 @@
             :schema="schemaColumns"
             :modelValue="row"
             :mode="mode"
+            :id="row.id"
+            @update-field="
+              ({ id: colId, value, origin }) => onUpdateCell(row.id, colId, value, origin)
+            "
           >
+            <!-- :style="evaluate(rowStyle, rowProps)" -->
             <template v-slot="blitzFormCtx">
               <!-- :class="['blitz-cell', evaluate(field.cellClasses, rowProps)]" -->
               <!-- :style="evaluate(field.cellStyle, rowProps)" -->
@@ -59,16 +64,13 @@
                     component: field.component || 'div',
                   }"
                   :modelValue="blitzFormCtx.formDataFlat[field.id]"
+                  @update:modelValue="
+                    (value, origin) => blitzFormCtx.updateField({ id: field.id, value, origin })
+                  "
                 />
-                <!-- @update:modelValue="(val, origin) => onInputCell(rowProps.row.id, field.id, val, origin)" -->
               </td>
             </template>
           </BlitzForm>
-          <!-- :style="evaluate(rowStyle, rowProps)"
-            :id="rowProps.row.id"
-            :mode="mode"
-            :key="rowProps.row.id + JSON.stringify(rowProps.row)"
-            @update-field="({ id, value, origin }) => onInputCell(rowProps.row.id, id, value, origin)"-->
         </template>
         <template #noDataFound>
           <div>
@@ -88,15 +90,19 @@
               // rowProps.row.id ? `blitz-row__${rowProps.row.id}` : '',
               // evaluate(rowClasses, rowProps),
             ]"
-            :schema="schemaGrid"
-            :modelValue="row"
             :mode="mode"
+            v-bind="gridBlitzFormOptions"
+            :modelValue="row"
+            :schema="schemaGrid"
+            :id="row.id"
+            @update-field="
+              ({ id: colId, value, origin }) => onUpdateCell(row.id, colId, value, origin)
+            "
           />
-          <!-- :style="evaluate(rowStyle, rowProps)"
-        :id="rowProps.row.id"
-        :mode="mode"
-        :key="rowProps.row.id + JSON.stringify(rowProps.row)"
-        @update-field="({ id, value, origin }) => onInputCell(rowProps.row.id, id, value, origin)"-->
+          <!--
+          :style="evaluate(rowStyle, rowProps)"
+          :key="rowProps.row.id + JSON.stringify(rowProps.row)"
+        -->
         </template>
         <template #noDataFound>
           <div>
@@ -240,6 +246,7 @@ export default defineComponent({
     schemaGrid: { type: [Array, Object], default: undefined },
     rows: { type: Array, required: true },
     isGrid: { type: Boolean, required: true },
+    gridBlitzFormOptions: { type: Object, default: () => ({}) },
     sortState: { type: Object, required: true },
     mode: { type: String, required: true },
     rowsPerPage: { type: Number, default: 10 },
@@ -332,6 +339,29 @@ export default defineComponent({
       slots: { default: shownRowsInfoText.value },
     }))
 
+    function evaluate(propValue, rowProps) {
+      if (!isFunction(propValue)) return propValue || ''
+      return propValue(rowProps.row, rowProps, this) || ''
+    }
+    function onCellDblclick(event, rowData, colId) {
+      emit('row-dblclick', event, rowData)
+      emit('cell-dblclick', event, rowData, colId)
+    }
+    function onCellClick(event, rowData, colId) {
+      this.onRowClick(event, rowData)
+      emit('cell-click', event, rowData, colId)
+    }
+    function onRowClick(event, rowData, origin, gridItemProps) {
+      const { selectionMode } = this
+      if (origin === 'grid' && selectionMode) {
+        gridItemProps.selected = !gridItemProps.selected
+      }
+      emit('row-click', event, rowData)
+    }
+    function onUpdateCell(rowId, colId, value, origin) {
+      emit('update-cell', { rowId, colId, value, origin })
+    }
+
     return {
       emit,
       searchText,
@@ -340,31 +370,8 @@ export default defineComponent({
       paginationFieldProps,
       rowsPerPageInner,
       shownRowsInfoFieldProps,
+      onUpdateCell,
     }
-  },
-  methods: {
-    evaluate(propValue, rowProps) {
-      if (!isFunction(propValue)) return propValue || ''
-      return propValue(rowProps.row, rowProps, this) || ''
-    },
-    onCellDblclick(event, rowData, colId) {
-      this.event('row-dblclick', event, rowData)
-      this.event('cell-dblclick', event, rowData, colId)
-    },
-    onCellClick(event, rowData, colId) {
-      this.onRowClick(event, rowData)
-      this.event('cell-click', event, rowData, colId)
-    },
-    onRowClick(event, rowData, origin, gridItemProps) {
-      const { selectionMode } = this
-      if (origin === 'grid' && selectionMode) {
-        gridItemProps.selected = !gridItemProps.selected
-      }
-      this.event('row-click', event, rowData)
-    },
-    onInputCell(rowId, colId, value, origin) {
-      this.event('update-cell', { rowId, colId, value, origin })
-    },
   },
 })
 </script>

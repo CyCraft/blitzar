@@ -20,35 +20,37 @@ Under the hood BlitzTable uses Quasar's QTable but applies custom logic to be ab
 
 Here we see a basic example for a BlitzTable. Check out the _template_ and _script_ tabs below to see how easy it is to render a data table based on the schema.
 
+By default
+
+- the table shows ALL the rows without pagination
+- all the rows are sortable
+
 <CodeBlockComponent :importFn="() => import('./Basics - Basic Example.vue')" :importFnRaw="() => import('./Basics - Basic Example.vue?raw')" />
 
 ### Advanced Example
 
 This is a more advanced example with title field, search field and grid toggle. It also parses some of the data to show it differently in the table. All the concepts used here are explained one by one in the following chapters.
 
+Here you can see how easy it is to add
+
+- a title
+- a search input field
+- a grid/table view toggle
+- pagination features
+
 <CodeBlockComponent :importFn="() => import('./Basics - Advanced Example.vue')" :importFnRaw="() => import('./Basics - Advanced Example.vue?raw')" />
 
-### Example using HTML5 Components
+### Using Custom Components
+
+Here you see the example uses all HTML5 components to render all the fields surrounding the table.
+
+The idea, as always with Blitzar, is that you BYOC (Bring Your Own Components).
 
 <!-- the whole idea is to .... blablablabla -->
 
 <CodeBlockComponent :importFn="() => import('./Basics - Example HTML5 Components.vue')" :importFnRaw="() => import('./Basics - Example HTML5 Components.vue?raw')" />
 
-### Using Custom Components
-
 <!-- the whole idea is to .... blablablabla -->
-
-## Grid View
-
-<!-- <CodeBlockComponent :importFn="() => import('./Search and Filter.vue')" :importFnRaw="() => import('./Search and Filter.vue?raw')" /> -->
-
-## Search and Filter Data
-
-<!-- <CodeBlockComponent :importFn="() => import('./Search and Filter.vue')" :importFnRaw="() => import('./Search and Filter.vue?raw')" /> -->
-
-## Sorting Rows
-
-<!-- <CodeBlockComponent :importFn="() => import('./Search and Filter.vue')" :importFnRaw="() => import('./Search and Filter.vue?raw')" /> -->
 
 ## Column Features
 
@@ -70,27 +72,33 @@ In this example the "full name" is combined on the fly when showing the table an
 
 <CodeBlockComponent :importFn="() => import('./Column Features - Combining Columns.vue')" :importFnRaw="() => import('./Column Features - Combining Columns.vue?raw')" />
 
+### Grid View
+
+You can have a separate view for the table and grid views.
+
+<CodeBlockComponent :importFn="() => import('./Column Features - Grid View.vue')" :importFnRaw="() => import('./Column Features - Grid View.vue?raw')" />
+
 ## Editing
 
 There are various ways to implement the ability to edit table data. Below I show case 4 ways to easily implement editing. Each time you can check the _template_ and _script_ tabs to check how it can be implemented.
 
-### Edit on Button Click
-
-Since a `<BlitzTable />` is based on the [BlitzForms](/blitz-form/) schema system, it's possible to easily implement stuff like inline editing; popup editing; or show an editable form on a row click.
-
-<!-- <CodeBlockComponent :importFn="() => import('./Editing - On Button Click.vue')" :importFnRaw="() => import('./Editing - On Button Click.vue?raw')" /> -->
-
-### Edit on Row Click
-
-<!-- <CodeBlockComponent :importFn="() => import('./Editing - On Row Click.vue')" :importFnRaw="() => import('./Editing - On Row Click.vue?raw')" /> -->
-
 ### Edit Inline
 
-<!-- <CodeBlockComponent :importFn="() => import('./Editing - Inline.vue')" :importFnRaw="() => import('./Editing - Inline.vue?raw')" /> -->
+<CodeBlockComponent :importFn="() => import('./Editing - Inline.vue')" :importFnRaw="() => import('./Editing - Inline.vue?raw')" />
 
 ### Edit Inline on Cell Double-Click
 
 <!-- <CodeBlockComponent :importFn="() => import('./Editing - Inline on Cell Double-Click.vue')" :importFnRaw="() => import('./Editing - Inline on Cell Double-Click.vue?raw')" /> -->
+
+### Edit Modal on Row Click
+
+<!-- <CodeBlockComponent :importFn="() => import('./Editing - On Row Click.vue')" :importFnRaw="() => import('./Editing - On Row Click.vue?raw')" /> -->
+
+### Edit Modal on Button Click
+
+Since a `<BlitzTable />` is based on the [BlitzForms](/blitz-form/) schema system, it's possible to easily implement stuff like inline editing; popup editing; or show an editable form on a row click.
+
+<!-- <CodeBlockComponent :importFn="() => import('./Editing - On Button Click.vue')" :importFnRaw="() => import('./Editing - On Button Click.vue?raw')" /> -->
 
 ### Adding a New Record
 

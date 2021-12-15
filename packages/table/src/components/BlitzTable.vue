@@ -13,6 +13,7 @@
         :ds="ds"
         :schemaColumns="schemaColumnsComputed"
         :schemaGrid="schemaGrid"
+        :gridBlitzFormOptions="gridBlitzFormOptions"
         :rows="rows"
         v-model:isGrid="isGridInner"
         v-model:sortState="sortState"
@@ -24,6 +25,9 @@
         :paginationField="applyBlitzFieldOverwrites(paginationField)"
         :rowsPerPageField="applyBlitzFieldOverwrites(rowsPerPageField)"
         :shownRowsInfoField="applyBlitzFieldOverwrites(shownRowsInfoField)"
+        @update-cell="
+          ({ rowId, colId, value, origin }) => event('update-cell', { rowId, colId, value, origin })
+        "
       />
     </Dataset>
   </div>
@@ -106,16 +110,16 @@ export default defineComponent({
      * Defaults to `true` (grid-view) if `schemaGrid` is provided (and no `schemaColumns`)
      */
     isGrid: { type: Boolean, default: undefined },
-    // /**
-    //  * The BlitzForm options you want to use for the grid cards. Eg. You can pass `{ actionButtons: [] }` here to include some action buttons on each grid card.
-    //  *
-    //  * Please note:
-    //  * - The `schema` for the grid cards should be set via the `schemaGrid` prop instead of passing it here as `schema`.
-    //  * - The BlitzForm used for each grid card will automatically get the row data.
-    //  * - See the documentation of BlitzForm for more information on the props you can set.
-    //  * @category column
-    //  */
-    // gridBlitzFormOptions: { type: Object, default: () => ({}) },
+    /**
+     * The BlitzForm options you want to use for the grid cards. Eg. You can pass `{ actionButtons: [] }` here to include some action buttons on each grid card.
+     *
+     * Please note:
+     * - The `schema` for the grid cards should be set via the `schemaGrid` prop instead of passing it here as `schema`.
+     * - The BlitzForm used for each grid card will automatically get the row data.
+     * - See the documentation of BlitzForm for more information on the props you can set.
+     * @category column
+     */
+    gridBlitzFormOptions: { type: Object, default: () => ({}) },
     // /**
     //  * Custom styling to be applied to each row. Applied like so `:style="rowStyle"`
     //  * @example 'padding: 1em;'
@@ -170,7 +174,6 @@ export default defineComponent({
     // cardStyle: { type: [Function, String, Array, Object] },
     /**
      * By default the rows show just the raw data without showing field components. If you set `mode: 'edit'` your entire table will show the actual (editable) component as per your schema.
-     * @category content
      */
     mode: { type: String, default: 'raw' },
     rowsPerPage: { type: Number, default: 10 },

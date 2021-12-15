@@ -21,10 +21,12 @@
     </div>
     <!-- form contents -->
     <!-- @slot The default slot is what contains by default the actual form fields. This slot should not be used, unless you are only interested in the logic of BlitzForm and not of BlitzFields. -->
-    <slot v-bind="{ schema: cSchema, formDataFlat }">
+    <slot v-bind="{ schema: cSchema, formData, formDataFlat, updateField }">
       <div
         class="blitz-form__form"
-        :style="`grid-template-columns:${' 1fr'.repeat(columnCount)}; grid-gap: ${gridGap}`"
+        :style="`grid-template-columns:${' minmax(0, 1fr)'.repeat(
+          columnCount
+        )}; grid-gap: ${gridGap}`"
       >
         <BlitzField
           v-for="(field, i) in cSchema"
