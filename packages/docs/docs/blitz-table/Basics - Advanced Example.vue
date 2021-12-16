@@ -1,13 +1,6 @@
 <template>
   <div>
-    <details>
-      <summary>Selected rows ({{ selectedRows.length }})</summary>
-      <pre class="_preview">{{ selectedRows }}</pre>
-    </details>
-    <!-- <pre>{{ selectedRows.length }}</pre> -->
-
     <BlitzTable
-      v-model:selectedRows="selectedRows"
       :schemaColumns="schemaColumnsAndGrid"
       :schemaGrid="schemaColumnsAndGrid"
       :rows="rows"
@@ -37,18 +30,10 @@
 ::v-deep(.blitz-table--grid-card) {
   border: thin solid #dfe2e5;
 }
-
-._preview {
-  max-height: 500px;
-  overflow-y: auto;
-  background: rgba(0, 0, 0, 0.9);
-  color: white;
-}
 </style>
 
 <script>
 import { markRaw, onMounted, ref } from 'vue'
-import { RowSelectionId } from '@blitzar/utils'
 import { BlitzInput, BlitzGridToggle, BlitzPagination } from '@blitzar/table'
 
 const blitzInput = markRaw(BlitzInput)
@@ -56,7 +41,14 @@ const blitzGridToggle = markRaw(BlitzGridToggle)
 const blitzPagination = markRaw(BlitzPagination)
 
 const schemaColumnsAndGrid = [
-  { id: RowSelectionId, label: 'Select', component: 'input', type: 'checkbox' },
+  {
+    id: 'avatarUrl',
+    label: 'Avatar',
+    component: 'img',
+    mode: 'edit',
+    src: (val) => val,
+    dynamicProps: ['src'],
+  },
   { id: 'firstName', label: 'First Name' },
   { id: 'lastName', label: 'Last Name' },
   { id: 'company', label: 'Company' },
@@ -75,16 +67,15 @@ const schemaColumnsAndGrid = [
 
 export default {
   setup() {
-    const selectedRows = ref([])
-
     const rows = ref([
       {
-        id: 'EA265B20-45F2-953C-C534-3E2A7862059C',
         balance: 93683,
         birthdate: '1946-07-22',
         firstName: 'Harper',
         lastName: 'Nolan',
         company: 'Tortor At Risus LLC',
+        avatarUrl:
+          'https://gravatar.com/avatar/8aa5e7a6220f2a87684a9f4e6286e343?s=100&d=robohash&r=x',
       },
       // other rows loaded asynchronously
     ])
@@ -96,7 +87,6 @@ export default {
     })
 
     return {
-      selectedRows,
       blitzInput,
       blitzGridToggle,
       blitzPagination,

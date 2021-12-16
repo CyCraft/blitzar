@@ -1,16 +1,42 @@
 <template>
   <div>
-    <BlitzTable :schemaColumns="schemaColumns" :rows="rows" />
+    <BlitzTable
+      :schemaColumns="schemaColumns"
+      :schemaGrid="schemaGrid"
+      :rows="rows"
+      :gridToggleField="{ component: blitzGridToggle }"
+      :gridBlitzFormOptions="{ columnCount: 2 }"
+    />
   </div>
 </template>
 
+<style scoped>
+::v-deep(.blitz-table--grid-card) {
+  border: thin solid #dfe2e5;
+}
+::v-deep(.blitz-table--grid-card .blitz-field__label) {
+  font-weight: 200;
+}
+</style>
+
 <script>
+import { markRaw } from 'vue'
+import { BlitzGridToggle } from '@blitzar/table'
+
+const blitzGridToggle = markRaw(BlitzGridToggle)
+
 const schemaColumns = [
   { id: 'firstName', label: 'First Name' },
   { id: 'lastName', label: 'Last Name' },
   { id: 'company', label: 'Company' },
   { id: 'birthdate', label: 'Birthdate' },
   { id: 'balance', label: 'Balance', parseValue: (val) => val.toLocaleString() },
+]
+
+const schemaGrid = [
+  { id: 'company', label: 'Company', span: true },
+  { id: 'firstName', label: 'First Name', span: 1 },
+  { id: 'lastName', label: 'Last Name', span: 1 },
 ]
 
 const rows = [
@@ -38,6 +64,8 @@ export default {
     return {
       rows,
       schemaColumns,
+      schemaGrid,
+      blitzGridToggle,
     }
   },
 }

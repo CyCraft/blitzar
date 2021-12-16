@@ -1,18 +1,10 @@
 <template>
   <div>
-    <details>
-      <summary>Selected rows ({{ selectedRows.length }})</summary>
-      <pre class="_preview">{{ selectedRows }}</pre>
-    </details>
-    <!-- <pre>{{ selectedRows.length }}</pre> -->
-
     <BlitzTable
-      v-model:selectedRows="selectedRows"
       :schemaColumns="schemaColumnsAndGrid"
       :schemaGrid="schemaColumnsAndGrid"
       :rows="rows"
       :rowsPerPage="5"
-      :titleField="{ component: 'h3', slot: 'Users' }"
       :searchField="{ component: blitzInput, placeholder: 'Search...', clearable: true }"
       :gridToggleField="{ component: blitzGridToggle }"
       :paginationField="{ component: blitzPagination }"
@@ -37,18 +29,10 @@
 ::v-deep(.blitz-table--grid-card) {
   border: thin solid #dfe2e5;
 }
-
-._preview {
-  max-height: 500px;
-  overflow-y: auto;
-  background: rgba(0, 0, 0, 0.9);
-  color: white;
-}
 </style>
 
 <script>
 import { markRaw, onMounted, ref } from 'vue'
-import { RowSelectionId } from '@blitzar/utils'
 import { BlitzInput, BlitzGridToggle, BlitzPagination } from '@blitzar/table'
 
 const blitzInput = markRaw(BlitzInput)
@@ -56,35 +40,28 @@ const blitzGridToggle = markRaw(BlitzGridToggle)
 const blitzPagination = markRaw(BlitzPagination)
 
 const schemaColumnsAndGrid = [
-  { id: RowSelectionId, label: 'Select', component: 'input', type: 'checkbox' },
-  { id: 'firstName', label: 'First Name' },
-  { id: 'lastName', label: 'Last Name' },
-  { id: 'company', label: 'Company' },
   {
-    id: 'birthdate',
-    label: 'Birthdate',
-    parseValue: (val) =>
-      new Date(val).toLocaleDateString(undefined, {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-      }),
+    // you need to add a column `id` even if it doesn't have/need one
+    //   just to make the column searchable
+    id: 'fullName',
+    label: 'Full Name',
+    parseValue: (val, { formData }) => `${formData.firstName} ${formData.lastName}`,
   },
-  { id: 'balance', label: 'Balance', parseValue: (val) => val.toLocaleString() },
+  {
+    // you need to add a column `id` even if it doesn't have/need one
+    //   just to make the column searchable
+    id: 'initials',
+    label: 'Initials',
+    parseValue: (val, { formData }) => `${formData.firstName[0]}.${formData.lastName[0]}.`,
+  },
 ]
 
 export default {
   setup() {
-    const selectedRows = ref([])
-
     const rows = ref([
       {
-        id: 'EA265B20-45F2-953C-C534-3E2A7862059C',
-        balance: 93683,
-        birthdate: '1946-07-22',
         firstName: 'Harper',
         lastName: 'Nolan',
-        company: 'Tortor At Risus LLC',
       },
       // other rows loaded asynchronously
     ])
@@ -96,7 +73,6 @@ export default {
     })
 
     return {
-      selectedRows,
       blitzInput,
       blitzGridToggle,
       blitzPagination,

@@ -1,18 +1,10 @@
 <template>
   <div>
-    <details>
-      <summary>Selected rows ({{ selectedRows.length }})</summary>
-      <pre class="_preview">{{ selectedRows }}</pre>
-    </details>
-    <!-- <pre>{{ selectedRows.length }}</pre> -->
-
     <BlitzTable
-      v-model:selectedRows="selectedRows"
       :schemaColumns="schemaColumnsAndGrid"
       :schemaGrid="schemaColumnsAndGrid"
       :rows="rows"
       :rowsPerPage="5"
-      :titleField="{ component: 'h3', slot: 'Users' }"
       :searchField="{ component: blitzInput, placeholder: 'Search...', clearable: true }"
       :gridToggleField="{ component: blitzGridToggle }"
       :paginationField="{ component: blitzPagination }"
@@ -37,18 +29,10 @@
 ::v-deep(.blitz-table--grid-card) {
   border: thin solid #dfe2e5;
 }
-
-._preview {
-  max-height: 500px;
-  overflow-y: auto;
-  background: rgba(0, 0, 0, 0.9);
-  color: white;
-}
 </style>
 
 <script>
 import { markRaw, onMounted, ref } from 'vue'
-import { RowSelectionId } from '@blitzar/utils'
 import { BlitzInput, BlitzGridToggle, BlitzPagination } from '@blitzar/table'
 
 const blitzInput = markRaw(BlitzInput)
@@ -56,9 +40,8 @@ const blitzGridToggle = markRaw(BlitzGridToggle)
 const blitzPagination = markRaw(BlitzPagination)
 
 const schemaColumnsAndGrid = [
-  { id: RowSelectionId, label: 'Select', component: 'input', type: 'checkbox' },
   { id: 'firstName', label: 'First Name' },
-  { id: 'lastName', label: 'Last Name' },
+  { id: 'lastName', label: 'Last Name', parseValue: (val) => val.toUpperCase() },
   { id: 'company', label: 'Company' },
   {
     id: 'birthdate',
@@ -75,11 +58,8 @@ const schemaColumnsAndGrid = [
 
 export default {
   setup() {
-    const selectedRows = ref([])
-
     const rows = ref([
       {
-        id: 'EA265B20-45F2-953C-C534-3E2A7862059C',
         balance: 93683,
         birthdate: '1946-07-22',
         firstName: 'Harper',
@@ -96,7 +76,6 @@ export default {
     })
 
     return {
-      selectedRows,
       blitzInput,
       blitzGridToggle,
       blitzPagination,

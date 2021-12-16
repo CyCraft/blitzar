@@ -4,6 +4,10 @@
     ref="refBlitzForm"
     :class="[`blitz-form blitz-form--nav-${actionButtonsPosition}`, $attrs.class]"
     :style="$attrs.style"
+    @click="(e) => $emit('click', e)"
+    @dblclick="(e) => $emit('dblclick', e)"
+    @mousedown="(e) => $emit('mousedown', e)"
+    @mouseup="(e) => $emit('mouseup', e)"
   >
     <!-- navigation buttons row (save, edit, ...) -->
     <div
@@ -21,10 +25,12 @@
     </div>
     <!-- form contents -->
     <!-- @slot The default slot is what contains by default the actual form fields. This slot should not be used, unless you are only interested in the logic of BlitzForm and not of BlitzFields. -->
-    <slot v-bind="{ schema: cSchema, formDataFlat }">
+    <slot v-bind="{ schema: cSchema, formData, formDataFlat, updateField }">
       <div
         class="blitz-form__form"
-        :style="`grid-template-columns:${' 1fr'.repeat(columnCount)}; grid-gap: ${gridGap}`"
+        :style="`grid-template-columns:${' minmax(0, 1fr)'.repeat(
+          columnCount
+        )}; grid-gap: ${gridGap}`"
       >
         <BlitzField
           v-for="(field, i) in cSchema"
@@ -97,11 +103,36 @@
 import { defineComponent } from 'vue'
 import { merge } from 'merge-anything'
 import { copy } from 'copy-anything'
-import { isArray, isFunction, isFullString, isPlainObject, isString, isBoolean } from 'is-what'
+import {
+  isArray,
+  isFunction,
+  isFullString,
+  isPlainObject,
+  isString,
+  isBoolean,
+  isFullArray,
+} from 'is-what'
 import { nestifyObject } from 'nestify-anything'
 import { flattenPerSchema } from '@blitzar/utils'
 import BlitzField from './BlitzField.vue'
 import { defaultLang } from '../meta/lang'
+
+export function getBlitzFieldOverwrites(field) {
+  if (!field) return {}
+
+  const overwrites = {}
+
+  if (field.slot) {
+    overwrites.slots = merge(field.slots || {}, { default: field.slot })
+  }
+  const fieldClasses = field.fieldClasses || field.class
+  if (fieldClasses) overwrites.fieldClasses = fieldClasses
+
+  const fieldStyle = field.fieldStyle || field.style
+  if (fieldStyle) overwrites.fieldStyle = fieldStyle
+
+  return overwrites
+}
 
 /**
 Here you can find all the information on the available props & events of BlitzForm.
@@ -329,6 +360,14 @@ export default defineComponent({
     save: (payload) => isPlainObject(payload),
     delete: (payload) => !payload, // no payload
     archive: (payload) => !payload, // no payload
+    /** HTML5 event from the top level component */
+    click: null,
+    /** HTML5 event from the top level component */
+    dblclick: null,
+    /** HTML5 event from the top level component */
+    mousedown: null,
+    /** HTML5 event from the top level component */
+    mouseup: null,
   },
   data() {
     const { mode, id, modelValue, schema, lang } = this
@@ -418,25 +457,14 @@ export default defineComponent({
       // - style: we pass as `fieldStyle`
       const { schema, schemaOverwritableDefaults, schemaForcedDefaults } = this
 
-      return schema.map((blueprint) => {
-        const overwrites = {}
-        if (blueprint.slot) {
-          overwrites.slots = merge(blueprint.slots || {}, { default: blueprint.slot })
-        }
-        const fieldClasses = blueprint.fieldClasses || blueprint.class
-        if (fieldClasses) overwrites.fieldClasses = fieldClasses
-
-        const fieldStyle = blueprint.fieldStyle || blueprint.style
-        if (fieldStyle) overwrites.fieldStyle = fieldStyle
-
-        const blueprintParsed = merge(
+      return schema.map((field) =>
+        merge(
           schemaOverwritableDefaults,
-          blueprint,
-          overwrites,
+          field,
+          getBlitzFieldOverwrites(field),
           schemaForcedDefaults
         )
-        return blueprintParsed
-      })
+      )
     },
     actionButtonsMap() {
       const {
@@ -633,8 +661,9 @@ export default defineComponent({
       this.formErrorMsg = ''
       for (const [i, blueprint] of this.cSchema.entries()) {
         const refField = this.$refs[`ref-field-${i}`]
-        if (!refField) continue
-        refField.resetDirtyAndErrors()
+        // not sure why but one case during doc creation this turned out to be an array
+        const _refField = isFullArray(refField) ? refField[0] : refField
+        if (_refField) _refField.resetDirtyAndErrors()
       }
     },
     restoreBackup() {
@@ -668,9 +697,11 @@ export default defineComponent({
 
       for (const [i, blueprint] of cSchema.entries()) {
         const refField = this.$refs[`ref-field-${i}`]
-        if (!refField) continue
+        // not sure why but one case during doc creation this turned out to be an array
+        const _refField = isFullArray(refField) ? refField[0] : refField
+        if (!_refField) continue
 
-        const result = refField.validate(shouldFocus)
+        const result = _refField.validate(shouldFocus)
 
         if (isFullString(result)) {
           this.formErrorMsg = innerLang['formValidationError']

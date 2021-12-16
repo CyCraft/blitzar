@@ -14,8 +14,8 @@
 }
 
 /* Internal Links */
-main a:not([aria-hidden='true'])[href^='#']:before,
-main a:not([aria-hidden='true'])[href^='/']:before {
+main p > a:not([aria-hidden='true'])[href^='#']:before,
+main p > a:not([aria-hidden='true'])[href^='/']:before {
   opacity: 0.5;
   display: inline-block;
   transform: translateY(0.1em);
@@ -25,14 +25,14 @@ main a:not([aria-hidden='true'])[href^='/']:before {
   background: url("data:image/svg+xml,%3Csvg style='color: %23f6ca2e' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cline x1='4' y1='7.25' x2='16' y2='7.25' stroke='currentColor' stroke-width='2' stroke-linecap='round'/%3E%3Cline x1='4' y1='12.75' x2='16' y2='12.75' stroke='currentColor' stroke-width='2' stroke-linecap='round'/%3E%3Cpath d='M7.75 4L6.75 16' stroke='currentColor' stroke-width='2' stroke-linecap='round'/%3E%3Cpath d='M13.25 4L12.25 16' stroke='currentColor' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
 }
-main a:not([aria-hidden='true'])[href^='#']:hover:before,
-main a:not([aria-hidden='true'])[href^='/']:hover:before {
+main p > a:not([aria-hidden='true'])[href^='#']:hover:before,
+main p > a:not([aria-hidden='true'])[href^='/']:hover:before {
   opacity: 0.9;
 }
 
 /* External Links */
 /* prettier-ignore */
-main a:not([aria-hidden="true"])[href^='https://']:after {
+main p > a:not([aria-hidden="true"])[href^='https://']:after {
   opacity: 0.5;
   display: inline-block;
   height: 1em;
@@ -43,6 +43,6 @@ main a:not([aria-hidden="true"])[href^='https://']:after {
   background-repeat: no-repeat;
 }
 /* prettier-ignore */
-main a:not([aria-hidden="true"])[href^='https://']:hover:after {
+main p > a:not([aria-hidden="true"])[href^='https://']:hover:after {
   opacity: 0.9;
 }

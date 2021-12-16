@@ -18,7 +18,7 @@
     "filter-anything": "^2.2.1",
     "is-what": "^3.14.1",
     "map-anything": "^1.0.4",
-    "merge-anything": "^4.0.1",
+    "merge-anything": "^4.0.2",
     "nestify-anything": "^1.0.3",
     "snarkdown": "^2.0.0"
   },
