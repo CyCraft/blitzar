@@ -110,6 +110,12 @@ export default defineComponent({
     disabled: { type: Boolean },
     readonly: { type: Boolean },
   },
+  emits: {
+    /**
+     * @type {(payload: any) => boolean}
+     */
+    'update:modelValue': null,
+  },
   computed: {
     /**
      * This is the value with an empty row concatinated to it.

@@ -14,11 +14,11 @@
     }
   },
   "scripts": {
-    "add-jsdocs-typedefs": "",
+    "add-missing-typedefs": "sed -i '' '$r ./dist/components/types.d.ts' ./dist/components/*.vue.d.ts",
     "vue-int": "vue-int -i src/components -r -o dist/vetur",
     "vue-tsc": "vue-tsc --declaration --emitDeclarationOnly",
     "vue-compile": "vue-compile src -o dist",
-    "build": "rimraf dist && npm run vue-int && npm run vue-tsc && npm run vue-compile",
+    "build": "rimraf dist && npm run vue-int && npm run vue-tsc && npm run vue-compile && npm run add-missing-typedefs",
     "dev": "vue-compile src -o ./dist --watch"
   },
   "dependencies": {
