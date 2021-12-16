@@ -43,16 +43,18 @@
   </div>
 </template>
 
-<style lang="sass" scoped>
+<style scoped>
 .blitz-grid-toggle,
-.blitz-grid-toggle *
-  box-sizing: border-box
+.blitz-grid-toggle * {
+  box-sizing: border-box;
+}
 
-.blitz-grid-toggle
-  --c-primary: #0b3d92
-  color: var(--c-primary)
-  display: flex
-  cursor: pointer
+.blitz-grid-toggle {
+  --c-primary: #0b3d92;
+  color: var(--c-primary);
+  display: flex;
+  cursor: pointer;
+}
 </style>
 
 <script>
@@ -65,6 +67,7 @@ export default {
      */
     modelValue: Boolean,
   },
+  emits: ['update:modelValue'],
   computed: {},
   methods: {},
 }

@@ -1,8 +1,8 @@
 {
-  "name": "@blitzar/table",
+  "name": "@blitzar/components",
   "version": "1.0.3",
   "author": "Luca Ban - Mesqueeb",
-  "description": "Blitzar table component",
+  "description": "Blitzar helper components",
   "module": "./src/index.js",
   "main": "./src/index.js",
   "exports": {
@@ -13,28 +13,17 @@
   },
   "scripts": {},
   "dependencies": {
-    "@blitzar/components": "^1.0.3",
-    "@blitzar/form": "^1.0.3",
+    "flatten-anything": "^2.0.4",
     "is-what": "^3.14.1",
-    "merge-anything": "^4.0.2",
-    "path-to-prop": "^1.0.0"
+    "path-to-prop": "^1.0.0",
+    "vue-pepicons": "^0.2.2"
   },
   "license": "MIT",
   "keywords": [
     "blitzar",
-    "blitz-table",
-    "data-tables",
-    "data-table",
-    "quasar-easy-tables",
-    "quasar-easy-table",
-    "easy-tables",
-    "easy-table",
-    "vue-table",
-    "table",
-    "table-component",
-    "table-builder",
-    "table-generator",
-    "schema-table",
+    "blitzar-helper-components",
+    "blitzar-components",
+    "blitz-components",
     "vue"
   ],
   "homepage": "https://github.com/cycraft/blitzar#readme",
@@ -48,6 +37,5 @@
   "vetur": {
     "tags": "dist/vetur/tags.json",
     "attributes": "dist/vetur/attributes.json"
-  },
-  "gitHead": "c687213c03a9d020e38caa1f3d4f68ba938ed8ae"
+  }
 }

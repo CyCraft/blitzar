@@ -4,8 +4,8 @@
     "lib": ["ES2018", "ES2019", "ES2020", "ESNext", "DOM"],
     "baseUrl": ".",
     "strict": true,
-    "moduleResolution": "node",
     "allowJs": true,
+    "moduleResolution": "node",
     "esModuleInterop": true,
     "types": ["node"]
   },

@@ -14,7 +14,7 @@
   </th>
 </template>
 
-<style lang="scss" scoped>
+<style scoped>
 ._sort-arrows {
   float: right;
   box-sizing: border-box;
@@ -50,16 +50,12 @@
 .blitz-field-th._sortable {
   cursor: pointer;
   user-select: none;
-  &._asc {
-    ._sort-arrows::after {
-      opacity: 1;
-    }
-  }
-  &._desc {
-    ._sort-arrows::before {
-      opacity: 1;
-    }
-  }
+}
+.blitz-field-th._sortable._asc ._sort-arrows::after {
+  opacity: 1;
+}
+.blitz-field-th._sortable._desc ._sort-arrows::before {
+  opacity: 1;
 }
 </style>
 

@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { validateFormPerSchema } from '../../../form/src/helpers/validation'
+import { validateFormPerSchema } from '@blitzar/form/src/components/validation'
 import { showToast } from '../../components/toasts'
 
 const schema = [
@@ -62,7 +62,7 @@ export default {
     validateProgrammatically() {
       const result = validateFormPerSchema(this.formData, this.schema)
       const allGood = Object.values(result).every((res) => res === null)
-      
+
       showToast(allGood ? 'All good!' : 'Errors remain', result)
     },
     setFormData() {

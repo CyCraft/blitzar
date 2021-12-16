@@ -40,9 +40,9 @@ export function validateFieldPerSchema(payload, blueprint, context = {}) {
  * Validates a form data based on its schema
  *
  * @export
- * @param {PlainObject} formData the form data in an object that looks like: `{[fieldId: string]: any}`
+ * @param {Record<string, any>} formData the form data in an object that looks like: `{[fieldId: string]: any}`
  * @param {Schema} schema
- * @param {StringObject} [lang] the lang object with at least the key `requiredField` used as error message for required fields
+ * @param {Lang} [lang] the lang object with at least the key `requiredField` used as error message for required fields
  * @returns {ValidationResultForm}
  */
 export function validateFormPerSchema(formData, schema, lang) {

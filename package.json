@@ -32,12 +32,13 @@
     "start:build": "npm run replace:src-dist",
     "dep:update-all": "ncu --target minor -u && lerna exec 'ncu --target minor -u' && npm i",
     "dep:check-for-updates": "ncu --target minor && lerna exec 'ncu --target minor'",
-    "dep:clean-all": "lerna clean -y && rimraf node_modules",
-    "dep:reinstall-all": "npm run dep:clean-all && npm i"
+    "dep:reinstall-all:hard": "rimraf package-lock.json && npm run _dep:clean && npm i",
+    "dep:reinstall-all:soft": "npm run _dep:clean && npm i",
+    "_dep:clean": "lerna clean -y && rimraf node_modules"
   },
   "devDependencies": {
     "@types/fs-extra": "^9.0.13",
-    "@types/node": "^16.11.12",
+    "@types/node": "^16.11.14",
     "@types/webpack-env": "^1.16.3",
     "ava": "^3.15.0",
     "concurrently": "^6.4.0",
@@ -53,10 +54,12 @@
     "rimraf": "^3.0.2",
     "rollup": "^2.61.1",
     "rollup-plugin-typescript2": "^0.31.1",
+    "sass": "^1.45.0",
     "typescript": "^4.5.4",
     "vue": "^3.2.26",
     "vue-compile": "^1.1.1",
-    "vue-intellisense": "^0.3.0"
+    "vue-intellisense": "^0.3.0",
+    "vue-tsc": "^0.29.8"
   },
   "engines": {
     "node": ">= 14",

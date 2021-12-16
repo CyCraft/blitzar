@@ -38,25 +38,26 @@
   </div>
 </template>
 
-<style lang="sass">
+<style>
 /* RESETS */
 .blitz-table,
-.blitz-table *
-  box-sizing: border-box
-
-.blitz-table
-  table, ul
-    margin: 0
+.blitz-table * {
+  box-sizing: border-box;
+}
+.blitz-table table,
+.blitz-table ul {
+  margin: 0;
+}
 </style>
 
 <script>
-import { watch, ref, defineComponent, computed } from 'vue'
+import { watch, ref, defineComponent, computed, PropType } from 'vue'
 import { merge } from 'merge-anything'
-import { isFunction, isArray, isFullArray, isBoolean, isFullString } from 'is-what'
+import { isFunction, isFullArray, isBoolean, isFullString } from 'is-what'
 import { getProp } from 'path-to-prop'
 import { getBlitzFieldOverwrites } from '@blitzar/form'
 import { RowSelectionId } from '@blitzar/utils'
-import Dataset from './Dataset.vue'
+import { Dataset } from '@blitzar/components'
 import BlitzTableInner from './BlitzTableInner.vue'
 
 /**
@@ -98,25 +99,34 @@ export default defineComponent({
   props: {
     /**
      * The schema for the columns you want to generate. (BlitzForm schema format)
-     * @type {Record<string, any>[]}
      * @example [{ id: 'nameFirst', label: 'First Name', component: 'input' }, { id: 'nameLast', label: 'Last Name', component: 'input' }]
      * @category column
      */
-    schemaColumns: { type: Array, default: undefined },
+    schemaColumns: {
+      /** @type {PropType<Record<string, any>[]>} */
+      type: Array,
+      default: undefined,
+    },
     /**
      * The schema for the grid cards you want to generate. (BlitzForm schema format)
-     * @type {Record<string, any>[]}
      * @example [{ id: 'nameFirst', label: 'First Name', component: 'input' }, { id: 'nameLast', label: 'Last Name', component: 'input' }]
      * @category column
      */
-    schemaGrid: { type: [Array, Object], default: undefined },
+    schemaGrid: {
+      /** @type {PropType<Record<string, any>[]>} */
+      type: [Array, Object],
+      default: undefined,
+    },
     /**
      * Rows of data to display. Use `rows` instead of the QTables `data`. Renamed for clarity.
-     * @type {Record<string, any>[]}
      * @example [{ nameFirst: 'Eleanor', nameLast: 'Shellstrop' }, { nameFirst: 'Chidi', nameLast: 'Anagonye' }]
      * @category model
      */
-    rows: { type: Array, required: true },
+    rows: {
+      /** @type {PropType<Record<string, any>[]>} */
+      type: Array,
+      required: true,
+    },
     /**
      * Defaults to `false` (table-view) if `schemaColumns` is provided
      * Defaults to `true` (grid-view) if `schemaGrid` is provided (and no `schemaColumns`)
@@ -131,7 +141,11 @@ export default defineComponent({
      * - See the documentation of BlitzForm for more information on the props you can set.
      * @category column
      */
-    gridBlitzFormOptions: { type: Object, default: () => ({}) },
+    gridBlitzFormOptions: {
+      /** @type {PropType<Record<string, any>>} */
+      type: Object,
+      default: () => ({}),
+    },
     // /**
     //  * Custom styling to be applied to each row. Applied like so `:style="rowStyle"`
     //  * @example 'padding: 1em;'
@@ -158,9 +172,12 @@ export default defineComponent({
     // },
     /**
      * MUST be used with `v-model:selectedRows="mySelection"`
-     * @type { Record<string, any>[] }
      */
-    selectedRows: { type: Array, default: () => [] },
+    selectedRows: {
+      /** @type {PropType<Record<string, any>[] >} */
+      type: Array,
+      default: () => [],
+    },
     // /**
     //  * CSS classes to apply to the card (when in grid mode).
     //  * You can pass a function which will be evaluated just like an Dynamic Prop. The first param passed will be the entire row data. The second is `item` scoped slot object from a QTable.
@@ -344,19 +361,10 @@ export default defineComponent({
       return [sortState.value.id]
     })
 
-    function evaluate(propValue, rowProps) {
-      if (!isFunction(propValue)) return propValue || ''
-      return propValue(rowProps.row, rowProps, this) || ''
-    }
-
-    function setSelectionAllRows(setTo) {
-      if (setTo === true) {
-        const filteredRowsFromQTable = this.$refs.qtable?.filteredSortedRows
-        this.cSelected = isArray(filteredRowsFromQTable) ? filteredRowsFromQTable : this.rows
-      } else {
-        this.cSelected = []
-      }
-    }
+    // function evaluate(propValue, rowProps) {
+    //   if (!isFunction(propValue)) return propValue || ''
+    //   return propValue(rowProps.row, rowProps, this) || ''
+    // }
 
     function onRowClick(e, rowData) {
       // const { selectionMode } = this
@@ -416,8 +424,7 @@ export default defineComponent({
       isGridInner,
       schemaColumnsComputed,
       // schemaGridComputed,
-      evaluate,
-      setSelectionAllRows,
+      // evaluate,
       onRowClick,
       onRowDblclick,
       onCellClick,

@@ -1,10 +1,12 @@
-<script lang="ts">
+<script>
 import { defineComponent, PropType } from 'vue'
 import { Pepicon } from 'vue-pepicons'
 import BlitzSpinner from './BlitzSpinner.vue'
 
-const kind = ['synced', 'error', 'loading'] as const
-type Kind = typeof kind[number]
+/**
+ * @typedef Kind
+ * @type {'synced' | 'error' | 'loading'}
+ */
 
 /**
  * Default colors are provided. Overwrite with CSS from the parent.
@@ -17,7 +19,11 @@ export default defineComponent({
      * The kind of the icon
      * e.g `synced, error, loading`
      */
-    kind: { type: String as PropType<Kind>, required: true },
+    kind: {
+      /** @type {PropType<Kind>} */
+      type: String,
+      required: true,
+    },
   },
   data() {
     return {}
@@ -56,28 +62,35 @@ export default defineComponent({
   <Pepicon v-else :class="`blitz-icon _kind-${kind}`" type="pop" :name="name" />
 </template>
 
-<style lang="sass" scoped>
+<style scoped>
 .blitz-icon,
-.blitz-icon *
-  box-sizing: border-box
+.blitz-icon * {
+  box-sizing: border-box;
+}
 
-.blitz-icon
-  --c-primary: #0b3d92
-  --c-accent-red: #F64D4D
-  width: 18px
-  height: 18px
-  display: flex
-  > *
-    flex: 1
-  &._kind-synced,
-  &._kind-error
-    color: white
-    border-radius: 100%
-    padding: 2px
-  &._kind-synced
-    background: var(--c-primary)
-  &._kind-error
-    background: var(--c-accent-red)
-  &._kind-loading
-    color: var(--c-primary)
+.blitz-icon {
+  --c-primary: #0b3d92;
+  --c-accent-red: #f64d4d;
+  width: 18px;
+  height: 18px;
+  display: flex;
+}
+.blitz-icon > * {
+  flex: 1;
+}
+.blitz-icon._kind-synced,
+.blitz-icon._kind-error {
+  color: white;
+  border-radius: 100%;
+  padding: 2px;
+}
+.blitz-icon._kind-synced {
+  background: var(--c-primary);
+}
+.blitz-icon._kind-error {
+  background: var(--c-accent-red);
+}
+.blitz-icon._kind-loading {
+  color: var(--c-primary);
+}
 </style>

@@ -82,7 +82,7 @@ export interface BlitzFieldProps {
    * The text used in the UI for the action buttons and some error messages.
    *
    * The example shows how the error message for required fields is overwritten.
-   * @type {{ archive?: string, delete?: string, cancel?: string, edit?: string, save?: string, requiredField?: string, formValidationError?: string } | DynamicProp<{ archive?: string, delete?: string, cancel?: string, edit?: string, save?: string, requiredField?: string, formValidationError?: string }>}
+   * @type {Partial<Lang> | DynamicProp<Partial<Lang>>}
    * @example { requiredField: `Don't forget this field!` }
    * @category content
    */
@@ -416,7 +416,7 @@ export interface BlitzFormProps extends Vue {
 
   /**
    * The text used in the UI for the action buttons and some error messages.
-   * @type {{ archive?: string, delete?: string, cancel?: string, edit?: string, save?: string, requiredField?: string, formValidationError?: string } | DynamicProp<{ archive?: string, delete?: string, cancel?: string, edit?: string, save?: string, requiredField?: string, formValidationError?: string }>}
+   * @type {Partial<Lang> | DynamicProp<Partial<Lang>>}
    * @example { cancel: 'キャンセル', edit: '編集', save: '保存' }
    * @category content
    */

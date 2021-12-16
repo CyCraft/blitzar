@@ -140,46 +140,61 @@
   />
 </template>
 
-<style lang="sass">
+<style>
 /* GRID */
-.blitz-table
-  display: grid
-  align-items: center
-  grid-gap: 1rem
-  grid-template-areas: 'title title' 'search grid-toggle' 'content content' 'pagination pagination' 'rows-per-page shown-rows-info'
-  .blitz-table--title
-    grid-area: title
-  .blitz-table--search
-    grid-area: search
-  .blitz-table--grid-toggle
-    grid-area: grid-toggle
-  .blitz-table--content
-    grid-area: content
-  .blitz-table--pagination
-    grid-area: pagination
-  .blitz-table--rows-per-page
-    grid-area: rows-per-page
-  .blitz-table--shown-rows-info
-    grid-area: shown-rows-info
+.blitz-table {
+  display: grid;
+  align-items: center;
+  grid-gap: 1rem;
+  grid-template-areas:
+    'title title'
+    'search grid-toggle'
+    'content content'
+    'pagination pagination'
+    'rows-per-page shown-rows-info';
+}
+.blitz-table--title {
+  grid-area: title;
+}
+.blitz-table--search {
+  grid-area: search;
+}
+.blitz-table--grid-toggle {
+  grid-area: grid-toggle;
+}
+.blitz-table--content {
+  grid-area: content;
+}
+.blitz-table--pagination {
+  grid-area: pagination;
+}
+.blitz-table--rows-per-page {
+  grid-area: rows-per-page;
+}
+.blitz-table--shown-rows-info {
+  grid-area: shown-rows-info;
+}
 
-  .blitz-table--grid
-    margin-top: 1rem
-    display: grid
-    grid-gap: 1rem
-    justify-items: center
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr))
-    > *
-      width: 100%
-      max-width: 207px
-      padding: 0.5rem
+.blitz-table--grid {
+  margin-top: 1rem;
+  display: grid;
+  grid-gap: 1rem;
+  justify-items: center;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+}
+.blitz-table--grid > * {
+  width: 100%;
+  max-width: 207px;
+  padding: 0.5rem;
+}
 </style>
 
 <script>
-import { computed, ref, defineComponent, watchEffect } from 'vue'
+import { computed, ref, defineComponent, watchEffect, PropType } from 'vue'
 import { isFunction } from 'is-what'
 import { BlitzForm, BlitzField } from '@blitzar/form'
 import { RowSelectionId } from '@blitzar/utils'
-import DatasetItem from './DatasetItem.vue'
+import { DatasetItem } from '@blitzar/components'
 import BlitzTh from './BlitzTh.vue'
 
 /*
@@ -245,8 +260,11 @@ export default defineComponent({
     DatasetItem,
   },
   props: {
-    /** @type {DsScope} */
-    ds: { type: Object, required: true },
+    ds: {
+      /** @type {PropType<DsScope>} */
+      type: Object,
+      required: true,
+    },
     schemaColumns: { type: Array, default: undefined },
     schemaGrid: { type: [Array, Object], default: undefined },
     rows: { type: Array, required: true },

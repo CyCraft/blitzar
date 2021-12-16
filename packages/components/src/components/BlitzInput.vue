@@ -1,51 +1,23 @@
-<script lang="ts">
+<script>
 import { defineComponent, PropType } from 'vue'
 import { Pepicon } from 'vue-pepicons'
 import { isFullString, isNumber, isDate } from 'is-what'
 import BlitzIcon from './BlitzIcon.vue'
 
-const kind = ['main', 'on-lilac'] as const
-type Kind = typeof kind[number]
+/**
+ * @typedef Type
+ * @type {'text' | 'textarea' | 'select' | 'button' | 'checkbox' | 'color' | 'date' | 'datetime-local' | 'email' | 'file' | 'hidden' | 'image' | 'month' | 'number' | 'password' | 'radio' | 'range' | 'reset' | 'search' | 'submit' | 'tel' | 'time' | 'url' | 'week'}
+ */
 
-const type = [
-  'text',
-  'textarea',
-  'select',
-  'button',
-  'checkbox',
-  'color',
-  'date',
-  'datetime-local',
-  'email',
-  'file',
-  'hidden',
-  'image',
-  'month',
-  'number',
-  'password',
-  'radio',
-  'range',
-  'reset',
-  'search',
-  'submit',
-  'tel',
-  'time',
-  'url',
-  'week',
-] as const
-type Type = typeof type[number]
-
-type Options = { label: string; value: string | number }[]
+/**
+ * @typedef Options
+ * @type {{ label: string; value: string | number }[]}
+ */
 
 export default defineComponent({
   name: 'BlitzInput',
   components: { Pepicon, BlitzIcon },
   props: {
-    /**
-     * The kind of input, slightly changes the looks
-     * @category style
-     */
-    kind: { type: String as PropType<Kind>, default: 'main' },
     /**
      * Pepicon icon name
      * @category content
@@ -81,11 +53,19 @@ export default defineComponent({
      * @see https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#input_types
      * @category content
      */
-    type: { type: String as PropType<Type>, default: 'text' },
+    type: {
+      /** @type {PropType<Type>} */
+      type: String,
+      default: 'text',
+    },
     /**
      * Only when `type: 'select'`
      */
-    options: { type: Array as PropType<Options>, default: undefined },
+    options: {
+      /** @type {PropType<Options>} */
+      type: Array,
+      default: undefined,
+    },
     /**
      * HTML5 attribute
      * @category content
@@ -95,22 +75,22 @@ export default defineComponent({
      * HTML5 attribute
      * @category state
      */
-    disabled: { type: [Boolean, String], default: undefined },
+    disabled: { type: Boolean, default: undefined },
     /**
      * HTML5 attribute
      * @category state
      */
-    readonly: { type: [Boolean, String], default: undefined },
+    readonly: { type: Boolean, default: undefined },
     /**
      * HTML5 attribute
      * @category validation
      */
-    required: { type: [Boolean, String], default: undefined },
+    required: { type: Boolean, default: undefined },
     /**
      * HTML5 attribute
      * @category feature
      */
-    autocomplete: { type: [Boolean, String], default: undefined },
+    autocomplete: { type: String, default: undefined },
     /**
      * HTML5 attribute
      * @category feature
@@ -156,7 +136,8 @@ export default defineComponent({
       valueInner: this.parseValue(this.modelValue),
       fieldType: this.type,
       eyeSvg: 'eye-closed',
-      textareaObserver: null as null | IntersectionObserver,
+      /** @type {null | IntersectionObserver} */
+      textareaObserver: null,
     }
   },
   computed: {
@@ -182,8 +163,8 @@ export default defineComponent({
       this.autogrowInput()
       const debounceMs = this.debounce
       if (debounceMs > 0) {
-        clearTimeout(this.timeout as any)
-        this.timeout = setTimeout(() => this.emitInput(newVal), debounceMs) as any
+        clearTimeout(this.timeout)
+        this.timeout = setTimeout(() => this.emitInput(newVal), debounceMs)
       } else {
         this.emitInput(newVal)
       }
@@ -207,7 +188,10 @@ export default defineComponent({
     this.textareaObserver?.disconnect()
   },
   methods: {
-    parseValue(val: Date | string) {
+    /**
+     * @param {Date | string} val
+     */
+    parseValue(val) {
       const { type } = this
       if (type !== 'date' || !isDate(val)) return val
 
@@ -216,7 +200,10 @@ export default defineComponent({
       const DD = String(val.getDate()).padStart(2, '0')
       return `${YYYY}-${MM}-${DD}`
     },
-    emitInput(newVal: number | Date | string) {
+    /**
+     * @param {number | Date | string} newVal
+     */
+    emitInput(newVal) {
       const { type } = this
       let payload = newVal
       if (isFullString(newVal)) {
@@ -229,7 +216,10 @@ export default defineComponent({
       }
       this.$emit('update:modelValue', payload)
     },
-    focus(e?: Event) {
+    /**
+     * @param {Event} [e]
+     */
+    focus(e) {
       if (this.preventFocus) {
         this.$emit('click', e)
         if (document.activeElement instanceof HTMLElement) {
@@ -237,18 +227,26 @@ export default defineComponent({
         }
         return
       }
-      const ref = this.$refs['native-el'] as HTMLElement
+      /** @type {HTMLElement} */
+      const ref = this.$refs['native-el']
       if (ref) ref.focus()
     },
-    click(e: Event) {
+    /**
+     * @param {Event} e
+     */
+    click(e) {
       if (this.type !== 'date' || (this.type === 'date' && this.preventFocus)) {
         e.preventDefault()
         e.stopPropagation()
       }
       this.focus(e)
     },
-    autogrowInput(options?: Record<'init', boolean>) {
-      const textAreaRef = this.$refs['native-el'] as HTMLElement
+    /**
+     * @param {Record<'init', boolean>} [options]
+     */
+    autogrowInput(options) {
+      /** @type {HTMLElement} */
+      const textAreaRef = this.$refs['native-el']
       if (!!textAreaRef && this.type === 'textarea' && this.autogrow) {
         if (options?.init) this.registerTextareaObserver()
         this.textareaHeight = 'auto'
@@ -264,7 +262,9 @@ export default defineComponent({
       this.textareaObserver = new IntersectionObserver(
         (entries) => entries[0].isIntersecting && this.autogrowInput()
       )
-      this.textareaObserver.observe(this.$refs['native-el'] as HTMLElement)
+      /** @type {HTMLElement} */
+      const textAreaRef = this.$refs['native-el']
+      this.textareaObserver.observe(textAreaRef)
     },
     toggleVisiblity() {
       this.eyeSvg = this.eyeSvg === 'eye-closed' ? 'eye' : 'eye-closed'
@@ -285,7 +285,7 @@ export default defineComponent({
 
 <template>
   <div
-    :class="`blitz-input _kind-${kind} _type-${type} ${disabled ? '_disabled' : ''} ${
+    :class="`blitz-input _type-${type} ${disabled ? '_disabled' : ''} ${
       !!valueInner ? '_truthy' : '_falsy'
     } ${showCheck || hasError || isBusy ? '_has-icon-right' : ''}`"
     @click.stop="(e) => focus(e)"
@@ -301,13 +301,15 @@ export default defineComponent({
     <input
       v-if="type !== 'textarea' && type !== 'select'"
       ref="native-el"
+      v-bind="{
+        disabled: disabled || undefined,
+        readonly: readonly || undefined,
+        required: required || undefined,
+        autocomplete: autocomplete || undefined,
+      }"
       v-model="valueInner"
-      :disabled="disabled || undefined"
       :type="fieldType"
       :placeholder="placeholder || (type === 'search' ? '検索' : undefined)"
-      :readonly="readonly"
-      :required="required"
-      :autocomplete="autocomplete"
       :min="min"
       data-cy="input-field"
       @click="click"
@@ -318,14 +320,16 @@ export default defineComponent({
     <textarea
       v-if="type === 'textarea'"
       ref="native-el"
+      v-bind="{
+        disabled: disabled || undefined,
+        readonly: readonly || undefined,
+        required: required || undefined,
+        autocomplete: autocomplete || undefined,
+      }"
       v-model="valueInner"
       :style="`${String(rows) === '1' ? 'resize: none' : ''}; height: ${textareaHeight}`"
       :rows="rows"
-      :disabled="disabled || undefined"
       :placeholder="placeholder"
-      :readonly="readonly"
-      :required="required"
-      :autocomplete="autocomplete"
       data-cy="input-field"
       @click="click"
       @blur="(e) => $emit('blur', e)"
@@ -335,11 +339,13 @@ export default defineComponent({
     <label v-if="type === 'select'" class="_select-wrapper">
       <select
         ref="native-el"
+        v-bind="{
+          disabled: disabled || undefined,
+          readonly: readonly || undefined,
+          required: required || undefined,
+          autocomplete: autocomplete || undefined,
+        }"
         v-model="valueInner"
-        :disabled="disabled || undefined"
-        :readonly="readonly"
-        :required="required"
-        :autocomplete="autocomplete"
         data-cy="select-field"
         @click="click"
         @blur="(e) => $emit('blur', e)"
@@ -363,7 +369,7 @@ export default defineComponent({
     <button
       v-if="type === 'password'"
       type="button"
-      class="ml-auto pl-sm _eye"
+      class="ml-auto pl-sm _eye _reset-button"
       @mousedown="toggleVisiblity"
     >
       <Pepicon type="pop" :name="eyeSvg" class="_eye" />
@@ -371,7 +377,7 @@ export default defineComponent({
     <button
       v-if="(clearable || type === 'search') && valueInner"
       type="button"
-      class="ml-auto pl-sm _cross"
+      class="ml-auto pl-sm _cross _reset-button"
       @mousedown="clearInput"
     >
       <Pepicon type="pop" name="times" />
@@ -379,139 +385,149 @@ export default defineComponent({
   </div>
 </template>
 
-<style lang="sass">
-=reset-button()
-  padding: 0
-  background: none
-  border: none
-  &:hover
-    cursor: pointer
-  &:focus
-    outline: 0
-
-/** Global Styles */
+<style scoped>
+._reset-button {
+  /** RESET BUTTON */
+  padding: 0;
+  background: none;
+  border: none;
+}
+._reset-button:hover {
+  cursor: pointer;
+}
+._reset-button:focus {
+  outline: 0;
+}
 
 .blitz-input,
-.blitz-input *
-  box-sizing: border-box
+.blitz-input * {
+  box-sizing: border-box;
+}
 
-.blitz-input
-  --c-primary: #0b3d92
-  --c-border: #dfe2e5
-  min-width: 0
-  max-width: 100%
-  display: flex
-  flex-wrap: nowrap
-  align-items: center
-  position: relative
-  padding: 0.5rem
-  &._disabled
-    opacity: 0.7 !important
-    cursor: not-allowed !important
-  textarea, input, select
-    font-family: inherit
-    color: rgba(black, 0.8)
-    min-width: 0
-    width: 100%
-    min-height: 24px
-    line-height: 24px
-    outline: none
-    box-shadow: none
-    -webkit-appearance: none
-    border: none
-    z-index: 2
-    position: relative
-    background: none
-  textarea::placeholder, input::placeholder, select::placeholder
-    color: rgba(black, 0.5)
-  textarea
-    padding: 0
-  ._icon, ._prefix, ._suffix
-    color: black
-    opacity: 0.25
-    transition: color 200ms ease, opacity 300ms ease
-  &::after, &::before
-    border-radius: 0.25rem
-    position: absolute
-    top: 0
-    bottom: 0
-    left: 0
-    right: 0
-    content: ''
-    border-style: solid
-    transition: border-color 300ms ease
-  &::after
-    border-width: 1px
-    border-color: var(--c-border)
-  &::before
-    border-width: 2px
-    border-color: transparent
-  &:focus-within::after
-    border-color: transparent
-  &:focus-within::before
-    border-color: var(--c-primary)
-  &:focus-within ._icon,
-  &:focus-within ._prefix,
-  &:focus-within ._suffix
-    color: var(--c-primary)
-    opacity: 1
-  ._prefix,
-  ._suffix
-    white-space: nowrap
-  ._eye,
-  ._cross
-    +reset-button()
-    z-index: 10
-  ._eye
-    color: var(--c-primary)
-  ._cross
-    color: white
-    background: var(--c-primary)
-    border-radius: 100px
-    padding: 0
-    transform: scale(0.8)
-  &._kind-on-lilac
-    border: none
-    border-radius: 20px
-    background: white
-    padding-left: 1rem
-    padding-right: 1rem
-    &::after
-      // border-color: #EDEBFF
-      // border-color: var(--c-primary)
-      border-color: rgba(0,0,0,0)
-    &::before,
-    &::after
-      border-radius: 20px
-    ._icon, ._prefix, ._suffix
-      color: var(--c-primary)
-      opacity: 1
-    &:focus-within ._icon, ._prefix, ._suffix
-      opacity: 1
-    input
-      color: black
-  ._select-wrapper
-    flex: 1
-    display: flex
-    align-items: center
-    position: relative
-  ._select-arrow
-    position: absolute
-    right: 0
-  // type="date" edits
-  &._type-date
-    ._icon
-      position: absolute
-      right: 0.5rem
-    input[type="date"]::-webkit-inner-spin-button,
-    input[type="date"]::-webkit-calendar-picker-indicator
-      opacity: 0
-    input[type="date"]::-webkit-calendar-picker-indicator
-      margin-inline-start: 1rem
-    &._falsy
-      input::-webkit-datetime-edit
-        color: rgba(black, 0.5)
-  &._type-date._has-icon-right
-    ._icon
-      right: 2rem
+.blitz-input {
+  --c-primary: #0b3d92;
+  --c-border: #dfe2e5;
+  min-width: 0;
+  max-width: 100%;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  position: relative;
+  padding: 0.5rem;
+}
+
+.blitz-input._disabled {
+  opacity: 0.7 !important;
+  cursor: not-allowed !important;
+}
+.blitz-input textarea,
+.blitz-input input,
+.blitz-input select {
+  font-family: inherit;
+  color: rgba(black, 0.8);
+  min-width: 0;
+  width: 100%;
+  min-height: 24px;
+  line-height: 24px;
+  outline: none;
+  box-shadow: none;
+  -webkit-appearance: none;
+  border: none;
+  z-index: 2;
+  position: relative;
+  background: none;
+}
+.blitz-input textarea::placeholder,
+.blitz-input input::placeholder,
+.blitz-input select::placeholder {
+  color: rgba(black, 0.5);
+}
+.blitz-input textarea {
+  padding: 0;
+}
+._icon,
+._prefix,
+._suffix {
+  color: black;
+  opacity: 0.25;
+  transition: color 200ms ease, opacity 300ms ease;
+}
+.blitz-input::after,
+.blitz-input::before {
+  border-radius: 0.25rem;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  content: '';
+  border-style: solid;
+  transition: border-color 300ms ease;
+}
+.blitz-input::after {
+  border-width: 1px;
+  border-color: var(--c-border);
+}
+.blitz-input::before {
+  border-width: 2px;
+  border-color: transparent;
+}
+.blitz-input:focus-within::after {
+  border-color: transparent;
+}
+.blitz-input:focus-within::before {
+  border-color: var(--c-primary);
+}
+.blitz-input:focus-within ._icon,
+.blitz-input:focus-within ._prefix,
+.blitz-input:focus-within ._suffix {
+  color: var(--c-primary);
+  opacity: 1;
+}
+._prefix,
+._suffix {
+  white-space: nowrap;
+}
+._eye,
+._cross {
+  z-index: 10;
+}
+._eye {
+  color: var(--c-primary);
+}
+._cross {
+  color: white;
+  background: var(--c-primary);
+  border-radius: 100px;
+  padding: 0;
+  transform: scale(0.8);
+}
+._select-wrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+._select-arrow {
+  position: absolute;
+  right: 0;
+}
+/** type="date" edits */
+._type-date ._icon {
+  position: absolute;
+  right: 0.5rem;
+}
+._type-date input[type='date']::-webkit-inner-spin-button,
+._type-date input[type='date']::-webkit-calendar-picker-indicator {
+  opacity: 0;
+}
+._type-date input[type='date']::-webkit-calendar-picker-indicator {
+  margin-inline-start: 1rem;
+}
+._type-date._falsy input::-webkit-datetime-edit {
+  color: rgba(black, 0.5);
+}
+._type-date._has-icon-right ._icon {
+  right: 2rem;
+}
 </style>
