@@ -54,9 +54,9 @@ import { watch, ref, defineComponent, computed } from 'vue'
 import { merge } from 'merge-anything'
 import { isFunction, isArray, isFullArray, isBoolean, isFullString } from 'is-what'
 import { getProp } from 'path-to-prop'
-import { Dataset } from 'vue-dataset'
 import { getBlitzFieldOverwrites } from '@blitzar/form'
 import { RowSelectionId } from '@blitzar/utils'
+import Dataset from './Dataset.vue'
 import BlitzTableInner from './BlitzTableInner.vue'
 
 /**

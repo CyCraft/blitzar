@@ -177,9 +177,9 @@
 <script>
 import { computed, ref, defineComponent, watchEffect } from 'vue'
 import { isFunction } from 'is-what'
-import { DatasetItem } from 'vue-dataset'
 import { BlitzForm, BlitzField } from '@blitzar/form'
 import { RowSelectionId } from '@blitzar/utils'
+import DatasetItem from './DatasetItem.vue'
 import BlitzTh from './BlitzTh.vue'
 
 /*
