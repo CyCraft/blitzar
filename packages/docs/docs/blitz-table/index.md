@@ -8,13 +8,11 @@ editLink: true
 
 `<BlitzTable />` is a _**data table**_ component you can use with the same `schema` syntax of [BlitzForms](/blitz-form/) to define your columns.
 
-A schema array describes the columns/fields for:
+With a single "schema" you can generate:
 
-- the columns of the BlitzTable
-- the fields per card when BlitzTable is in grid-view
-- you can also show an editable BlitzForm in a dialog when clicking a row
-
-Under the hood BlitzTable uses Quasar's QTable but applies custom logic to be able to use the BlitzForm `schema` syntax for columns and grid-cards.
+- the columns of the table
+- the fields of the cards in grid-view
+- an editable form in a dialog when clicking on a row
 
 ### Basic Example
 
@@ -29,14 +27,15 @@ By default
 
 ### Advanced Example
 
-This is a more advanced example with title field, search field and grid toggle. It also parses some of the data to show it differently in the table. All the concepts used here are explained one by one in the following chapters.
-
-Here you can see how easy it is to add
+This is a more advanced example that includes...
 
 - a title
 - a search input field
 - a grid/table view toggle
 - pagination features
+- an image rendered with `<img />`
+- dates are shown with `toLocaleDateString()`
+- numbers are shown with `toLocaleString()`
 
 <CodeBlockComponent :importFn="() => import('./Basics - Advanced Example.vue')" :importFnRaw="() => import('./Basics - Advanced Example.vue?raw')" />
 
@@ -58,17 +57,53 @@ Because every column is based on a BlitzForm field, there is quite some flexibil
 
 ### Nested Data
 
+Columns support "dot-notation" to access nested data in your rows array.
+
+<!-- prettier-ignore-start -->
+```js
+const rows = [
+  { name: { first: 'Luca', last: 'Ban' } }
+]
+
+const schemaColumns = [
+  { id: 'name.first', label: 'First Name' },
+  { id: 'name.last', label: 'Last Name' },
+]
+```
+<!-- prettier-ignore-end -->
+
+Full example:
+
 <CodeBlockComponent :importFn="() => import('./Column Features - Nested Data.vue')" :importFnRaw="() => import('./Column Features - Nested Data.vue?raw')" />
 
 ### Mutating Columns
+
+Columns can be "mutated" meaning data can be shown differently from the actual underlying data. To do so define a `parseValue` function.
+
+```js
+const schemaColumns = [
+  { id: 'name', label: 'Name', parseValue: (val) => val.toUpperCase() },
+  { id: 'date', label: 'Date', parseValue: (val) => val.toLocaleDateString() },
+  { id: 'number', label: 'Balance', parseValue: (val) => val.toLocaleString() },
+]
+```
+
+Full example:
 
 <CodeBlockComponent :importFn="() => import('./Column Features - Mutating Columns.vue')" :importFnRaw="() => import('./Column Features - Mutating Columns.vue?raw')" />
 
 ### Combining Columns
 
-This is an example of a table with combined columns. A combined column is one that shows data based on other fields/columns.
+Two table columns can be combined. A combined column is one that shows data based on multiple fields/columns.
 
-In this example the "full name" is combined on the fly when showing the table and immidiately made "sortable" as well.
+```js
+const schemaColumns = [
+  // no 'id' required for the combined column
+  { label: 'Full Name', (val, { formData }) => `${formData.firstName} ${formData.lastName}` },
+]
+```
+
+In this example the _Full Name_ and _Initials_ are calculated on the fly when showing the table. You can even sort and search for data in these combined columns.
 
 <CodeBlockComponent :importFn="() => import('./Column Features - Combining Columns.vue')" :importFnRaw="() => import('./Column Features - Combining Columns.vue?raw')" />
 
@@ -82,142 +117,82 @@ You can have a separate view for the table and grid views.
 
 There are various ways to implement the ability to edit table data. Below I show case 4 ways to easily implement editing. Each time you can check the _template_ and _script_ tabs to check how it can be implemented.
 
-Any editing requires your _rows_ to have an **id** prop on every object in the rows array.
+Any editing requires every object in your `rows` array to have an **`id` prop**.
 
 ### Edit Inline
+
+This example simply toggles the "mode" of the table from "raw" to "edit". See [BlitzTable > Modes](/blitz-form/#edit-readonly-disabled-raw-modes) for more info.
+
+To be able to show actual form components (like `<input />` or custom components) you need to make sure to add them to the `schemaColumns`.
+
+```html
+<BlitzTable mode="edit" :schemaColumns="schemaColumns" />
+```
+
+<!-- prettier-ignore-start -->
+```js
+const schemaColumns = [
+  { id: 'name', label: 'Name', component: 'input' }
+]
+```
+<!-- prettier-ignore-end -->
+
+Full example:
 
 <CodeBlockComponent :importFn="() => import('./Editing - Inline.vue')" :importFnRaw="() => import('./Editing - Inline.vue?raw')" />
 
 ### Edit on Cell Double-Click
 
+Making a Cell editable on double-click is a bit more advanced and requires more setup. You need to make use of Dynamic Props to make it possible. (more info on Dynamic Props at [Advanced > Dynamic Props](/advanced/#dynamic-props))
+
+Check the source code of the example below to see how it's implemented:
+
 <CodeBlockComponent :importFn="() => import('./Editing - On Cell Double-Click.vue')" :importFnRaw="() => import('./Editing - On Cell Double-Click.vue?raw')" />
 
 ### Edit Modal on Row Click
+
+It's possible to show a modal with a BlitzForm to edit data on row click. See the source code below to see how it's implemented:
 
 <CodeBlockComponent :importFn="() => import('./Editing - Modal on Row Click.vue')" :importFnRaw="() => import('./Editing - Modal on Row Click.vue?raw')" />
 
 ### Edit Modal on Button Click
 
-Since a `<BlitzTable />` is based on the [BlitzForms](/blitz-form/) schema system, it's possible to easily implement stuff like inline editing; popup editing; or show an editable form on a row click.
+It's possible to show a modal with a BlitzForm to edit data on the click of a button. See the source code below to see how it's implemented:
 
 <CodeBlockComponent :importFn="() => import('./Editing - Modal on Button Click.vue')" :importFnRaw="() => import('./Editing - Modal on Button Click.vue?raw')" />
 
 ### Adding a New Row
 
+This is an example of how you could set up a button that shows a BlitzForm to add new data to the table.
+
 <CodeBlockComponent :importFn="() => import('./Editing - Adding a New Row.vue')" :importFnRaw="() => import('./Editing - Adding a New Row.vue?raw')" />
 
 ## Selection
 
-By default selection is implemented for both table and grid view. Play around with the example below to see how it works.
-
-Please note that every row NEEDS an 'id' prop in order for it to work.
-
 ### Select by Checkbox
 
 To be able to select rows with some sort of checkbox (please provide your own, or use the HTML5 input with type 'checkbox') you need to set a column ID to a special string imported from Blitzar:
+
+Please note that every object in your `rows` array needs an **`id` prop** in order for the selection feature to work.
 
 ```js
 import { RowSelectionId } from 'blitzar'
 
 const schemaColumns = [
   {
-    id: RowSelectionId, // or you can use `'BLITZ-TABLE-ROW-SELECTION'`
+    id: RowSelectionId, // or you can use the string 'BLITZ-TABLE-ROW-SELECTION'
     component: 'input',
     type: 'checkbox',
   },
 ]
 ```
 
-You can use any component that works with `v-model` and accepts a `boolean` for its `modelValue`.
+For the actual selection checkbox, you can use any component that works with `v-model` and accepts a `boolean` for its `modelValue`. Please Bring Your Own Components. : )
 
 <CodeBlockComponent :importFn="() => import('./Selection.vue')" :importFnRaw="() => import('./Selection.vue?raw')" />
 
-When you search something and then click the "Select All" checkbox, it will select all filered rows based on your search results.
+When you search something and then click the _select all_ checkbox in the header, it will select all filtered rows based on your search results.
 
 ## Styling
 
-There are two ways you can style a BlitzTable: via CSS or via props.
-
-I believe that styling should be done in CSS as much as possible. When doing styling via props you're basically mixing data with styling, and the more your app grows, the more annoying this becomes to work with in my experience.
-
-### Styling with CSS (Recommended)
-
-CSS classes to target:
-
-- `.blitz-table` — the entire table component (or set your own class like so: `<BlitzTable class="my-table" />`)
-- `.blitz-table--rows` — the table when its in "table mode"
-- `.blitz-table--grid` — the table when its in "grid mode"
-- `.blitz-table__top` — the top section which holds the title and "grid" button; excluding the table header
-- `.blitz-table__title` — the title inside the top section
-- `.blitz-table__action-button` — the grid button and others passed to the `actionButtons` prop in the top section
-- `.blitz-table__header` — the header with just the column names
-- `.blitz-table__footer` — the table footer with pagination etc.
-
-In table mode:
-
-- `tr` — targets rows (including the header row)
-- `th` — targets header cells
-- `td` — targets body cells
-
-In grid mode:
-
-- `.blitz-table__grid-item` — targets the grid card
-- `.blitz-field__label` — targets the field label on a card
-- `.blitz-field__component` — targets the field content
-
-Check out this example's _**style tab**_ to see how styling is applied!
-
-<!-- <CodeBlockComponent :importFn="() => import('./Styling - Via CSS.vue')" :importFnRaw="() => import('./Styling - Via CSS.vue?raw')" /> -->
-
-#### Row Hover Color
-
-As you can see in the example above, to modify the row hover color, you need to disable the default background on `td:before` and then set your color on `tr:hover` like so:
-
-```css
-td:before
-  background: none !important
-tr:hover
-  background: var(--my-awesome-color)
-```
-
-### Reusable Complex Styling
-
-Here is an example of complex styling. Above the table there is a manual implementation of a title and grid/rows toggle button.
-
-It is still possible to make this re-usable throughout your app! You can create a _**wrapper component**_ that wraps `<BlitzTable />` and adds your custom style and title sections.
-
-To make sure you can still use any BlitzTable props on your wrapper component, you can simply pass all `$attrs` to BlitzTable. Check the _script_ tab of this example to see how this is done.
-
-<!-- <CodeBlockComponent :importFn="() => import('./Styling - Reusable Complex Styling.vue')" :importFnRaw="() => import('./Styling - Reusable Complex Styling.vue?raw')" /> -->
-
-### Styling via Props
-
-You can use these styling related props in your `schemaColumns` on a _per column_ basis:
-
-- `classes`
-- `style`
-- `headerClasses`
-- `headerStyle`
-- `cellClasses` — can be an Evaluated Prop function that receives the `rowData`
-- `cellStyle` — can be an Evaluated Prop function that receives the `rowData`
-
-Props usable on the table:
-
-- `rowStyle` — can be an Evaluated Prop function that receives the `rowData`
-- `rowClasses` — can be an Evaluated Prop function that receives the `rowData`
-- `cardClass` — can be an Evaluated Prop function that receives the `rowData`
-- `cardStyle` — can be an Evaluated Prop function that receives the `rowData`
-
-Other general styling props you can use:
-
-- `tableClass`
-- `tableStyle`
-- `tableHeaderClass`
-- `tableHeaderStyle`
-- `cardContainerClass`
-- `cardContainerStyle`
-- `titleClass`
-
-In the example below we use conditional rowStyle and cardStyle as Dynamic Props. Try changing the team colors!
-
-<!-- <CodeBlockComponent :importFn="() => import('./Styling - Via Props.vue')" :importFnRaw="() => import('./Styling - Via Props.vue?raw')" /> -->
+TODO: Styling section will be re-written soon.
