@@ -1,16 +1,25 @@
 ![hero](media/blitzar-hero.png?raw=true)
 
+(Check [here](https://github.com/CyCraft/blitzar/tree/v1.0.0) for the Vue 3 version)
+
 # Blitzar
 
 Generate Vue Forms and Data-tables fast with a simple JSON-like syntax ⚡️
 
 ```sh
-npm i blitzar
+npm i blitzar # VUE 2
+
+# OR
+npm i blitzar@next # VUE 3
 ```
 
 ## Documentation
 
+Vue 2.x
 [blitzar.cycraft.co](https://blitzar.cycraft.co)
+
+Vue 3.x
+[blitzar-next.web.app](https://blitzar-next.web.app)
 
 ## Motivation
 
