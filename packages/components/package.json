@@ -1,6 +1,6 @@
 {
   "name": "@blitzar/components",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "author": "Luca Ban - Mesqueeb",
   "description": "Blitzar helper components",
   "module": "./src/index.js",
@@ -37,5 +37,6 @@
   "vetur": {
     "tags": "dist/vetur/tags.json",
     "attributes": "dist/vetur/attributes.json"
-  }
+  },
+  "gitHead": "d3900bcf56eee8cd982b4dae06183dcf1d10e1dd"
 }

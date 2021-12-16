@@ -1,6 +1,6 @@
 {
   "name": "@blitzar/utils",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Blitzar utils",
   "author": "Luca Ban - Mesqueeb",
   "module": "./dist/index.esm.js",
@@ -42,5 +42,5 @@
       "esm"
     ]
   },
-  "gitHead": "c687213c03a9d020e38caa1f3d4f68ba938ed8ae"
+  "gitHead": "d3900bcf56eee8cd982b4dae06183dcf1d10e1dd"
 }

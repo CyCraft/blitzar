@@ -1,6 +1,6 @@
 {
   "name": "docs",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Blitzar Docs",
   "author": "CyCraft",
   "main": "index.js",
@@ -14,7 +14,7 @@
     "@hunterliu/code-block": "^1.0.4",
     "@meforma/vue-toaster": "^1.3.0",
     "@planetar/code-block": "^1.0.2",
-    "blitzar": "^1.0.4",
+    "blitzar": "^1.0.5",
     "is-what": "^3.14.1",
     "vue-final-modal": "^3.4.3",
     "vue-pepicons": "^0.2.2"
@@ -34,5 +34,6 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/cycraft/blitzar.git"
-  }
+  },
+  "gitHead": "d3900bcf56eee8cd982b4dae06183dcf1d10e1dd"
 }

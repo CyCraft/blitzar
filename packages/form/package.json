@@ -1,6 +1,6 @@
 {
   "name": "@blitzar/form",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Blitzar form component",
   "author": "Luca Ban - Mesqueeb",
   "module": "./dist/index.js",
@@ -22,7 +22,7 @@
     "dev": "vue-compile src -o ./dist --watch"
   },
   "dependencies": {
-    "@blitzar/utils": "^1.0.4",
+    "@blitzar/utils": "^1.0.5",
     "case-anything": "^1.1.3",
     "copy-anything": "^2.0.3",
     "filter-anything": "^2.2.1",
@@ -61,5 +61,5 @@
     "tags": "dist/vetur/tags.json",
     "attributes": "dist/vetur/attributes.json"
   },
-  "gitHead": "c687213c03a9d020e38caa1f3d4f68ba938ed8ae"
+  "gitHead": "d3900bcf56eee8cd982b4dae06183dcf1d10e1dd"
 }
