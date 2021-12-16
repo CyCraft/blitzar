@@ -4,17 +4,23 @@ editLink: true
 
 # BlitzForm
 
-## Installation
-
-Currently BlitzForm and BlitzListForm are fully compatible with Vue 3 and usable.
-
-For now you have to install the Vue 3 version like so:
+## Installation & Usage
 
 ```
-npm i @blitzar/form@next
+npm i blitzar
 ```
 
-BlitzTable is WIP and will be released soon.
+Blitzar only allows for local importing like the example below.
+
+```js
+// import what you need
+import { BlitzTable, BlitzListForm, BlitzTable } from 'blitzar'
+
+// add to local components where you use it:
+export default {
+  components: { BlitzTable, BlitzListForm, BlitzTable },
+}
+```
 
 ## Basics
 

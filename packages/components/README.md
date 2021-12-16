@@ -5,7 +5,7 @@
 Generate Vue Forms and Data-tables fast with a simple JSON-like syntax ⚡️
 
 ```
-npm i blitzar@next
+npm i blitzar
 ```
 
 ## Documentation
