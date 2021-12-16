@@ -1,19 +1,20 @@
 <script>
-import { defineComponent, h, resolveDynamicComponent } from 'vue'
+import { defineComponent, h, resolveDynamicComponent, PropType } from 'vue'
 import { isArray, isString } from 'is-what'
 import { omit } from 'filter-anything'
 import { pascalCase } from 'case-anything'
+import './types'
 
 /**
  * @typedef BlitzHOption
  * @type {{
-  component: string,
-  slot: any,
-  events: {},
-  class: string | Record<string, any> | (string | Record<string, any>)[],
-  style: string | Record<string, any> | (string | Record<string, any>)[],
-  [key: string]: any,
-}}
+ *   component: string,
+ *   slot: any,
+ *   events: Record<string, (...args: any[]) => any>,
+ *   class: string | Record<string, any> | (string | Record<string, any>)[],
+ *   style: string | Record<string, any> | (string | Record<string, any>)[],
+ *   [key: string]: any,
+ * }}
  */
 
 /**
@@ -23,12 +24,13 @@ const BlitzH = defineComponent({
   name: 'BlitzH',
   functional: true,
   props: {
-    /**
-     * @type {string | BlitzHOption | BlitzHOption[]}
-     */
-    options: { type: [String, Object, Array] },
+    options: {
+      /** @type {PropType<string | BlitzHOption | (string | BlitzHOption)[]>} */
+      type: [String, Object, Array],
+    },
   },
   render() {
+    /** @type {(string | BlitzHOption)[]} */
     const optionsArray = isArray(this.options) ? this.options : [this.options]
 
     // return the render function
@@ -44,16 +46,7 @@ const BlitzH = defineComponent({
       return h(
         Component,
         {
-          ...omit(o, [
-            'events',
-            'lang',
-            'rules',
-            'hint',
-            'readonly',
-            'component',
-            'slot',
-            'slots',
-          ]),
+          ...omit(o, ['events', 'lang', 'rules', 'hint', 'readonly', 'component', 'slot', 'slots']),
           ...Object.entries(o.events || {}).reduce((carry, [eventName, handler]) => {
             carry[`on${pascalCase(eventName)}`] = handler
             return carry

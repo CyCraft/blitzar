@@ -1,8 +1,9 @@
-import { StringObject } from '../types'
+import './types'
 
 // when changing the default, do it for both BlitzForm; BlitzField and lang.js
 
-export const defaultLang = (): StringObject => ({
+/** @type {() => Lang} */
+export const defaultLang = () => ({
   archive: 'Archive',
   delete: 'Delete',
   cancel: 'Cancel',

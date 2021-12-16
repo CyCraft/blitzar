@@ -98,7 +98,7 @@
 </style>
 
 <script>
-import { defineComponent } from 'vue'
+import { defineComponent, PropType } from 'vue'
 import { merge } from 'merge-anything'
 import { copy } from 'copy-anything'
 import {
@@ -113,24 +113,9 @@ import {
 import { nestifyObject } from 'nestify-anything'
 import { flattenPerSchema } from '@blitzar/utils'
 import BlitzField from './BlitzField.vue'
-import { defaultLang } from '../meta/lang'
-
-export function getBlitzFieldOverwrites(field) {
-  if (!field) return {}
-
-  const overwrites = {}
-
-  if (field.slot) {
-    overwrites.slots = merge(field.slots || {}, { default: field.slot })
-  }
-  const fieldClasses = field.fieldClasses || field.class
-  if (fieldClasses) overwrites.fieldClasses = fieldClasses
-
-  const fieldStyle = field.fieldStyle || field.style
-  if (fieldStyle) overwrites.fieldStyle = fieldStyle
-
-  return overwrites
-}
+import { defaultLang } from './lang'
+import { getBlitzFieldOverwrites } from './helpers'
+import './types'
 
 /**
 Here you can find all the information on the available props & events of BlitzForm.
@@ -146,16 +131,18 @@ export default defineComponent({
      * An object with the data of the entire form. The object keys are the ids of the fields passed in the `schema`.
      *
      * To be used with `:modelValue` or `v-model`.
-     * @type {Record<string, any>}
      * @example { name: '' }
      * @category model
      */
-    modelValue: { type: Object, default: () => ({}) },
+    modelValue: {
+      /** @type {PropType<Record<string, any>>} */
+      type: Object,
+      default: () => ({}),
+    },
     /**
      * A manually set `id` of the BlitzForm. This prop is accessible in the `context` (as `formId`) of any Dynamic Prop and event.
      *
      * Read more on Dynamic Props in its dedicated page.
-     * @type {string}
      * @category model
      */
     id: { type: String },
@@ -165,11 +152,14 @@ export default defineComponent({
      * The possible props you can pass are:
      * - BlitzField props (see BlitzField API Card in the documentation)
      * - any props of the actual component you define
-     * @type {Record<string, any>[]}
      * @example [{id: 'name', label: 'Name', component: 'input', style: 'color: white'}, {id: 'age', label: 'Age', component: 'input', type: 'number', style: 'color: white'}]
      * @category model
      */
-    schema: { type: Array, required: true },
+    schema: {
+      /** @type {PropType<Record<string, any>[]>} */
+      type: Array,
+      required: true,
+    },
     /**
      * Buttons on top of the form that control the `mode` of the form. The possible pre-made buttons are:
      * - `'edit'` — a button which puts the form in 'edit' mode & does `emit('edit')`
@@ -181,48 +171,59 @@ export default defineComponent({
      * You can also pass custom buttons with the same schema to generate forms.
      *
      * See the documentation on Action Buttons for more info.
-     * @type {('edit' | 'cancel' | 'save' | 'delete' | 'archive' | Record<string, any>)[]}
      * @example ['delete', 'cancel', 'edit', 'save']
      * @example [{component: 'button', type: 'button', slot: 'log', events: {click: console.log}}]
      * @category content
      */
-    actionButtons: { type: Array, default: () => [] },
+    actionButtons: {
+      /** @type {PropType<('edit' | 'cancel' | 'save' | 'delete' | 'archive' | Record<string, any>)[]>} */
+      type: Array,
+      default: () => [],
+    },
     /**
      * You can overwrite the schema used for the default action buttons for edit, cancel, save, delete & archive.
-     * @type {{ edit?: Record<string, any>, cancel?: Record<string, any>, save?: Record<string, any>, delete?: Record<string, any>, archive?: Record<string, any>, }}
      * @example {'save': {push: true}, 'delete': {color: 'secondary'}}
      * @category content
      */
-    actionButtonDefaults: { type: Object, default: () => ({}) },
+    actionButtonDefaults: {
+      /** @type {PropType<{ edit?: Record<string, any>, cancel?: Record<string, any>, save?: Record<string, any>, delete?: Record<string, any>, archive?: Record<string, any>, }>} */
+      type: Object,
+      default: () => ({}),
+    },
     /**
      * The position of the action buttons.
-     * @type {'top' | 'bottom' | 'right' | 'left'}
      * @category content
      */
     actionButtonsPosition: {
+      /** @type {PropType<'top' | 'bottom' | 'right' | 'left'>} */
       type: String,
       default: 'top',
+      /** @type {never} */
       validator: (prop) => ['top', 'bottom', 'right', 'left'].includes(prop),
     },
     /**
      * The amount of columns the form should have. Each field can set a specific 'span' to be able to span multiple columns.
-     * @type {number}
      * @category style
      */
-    columnCount: { type: Number, default: 1 },
+    columnCount: {
+      type: Number,
+      default: 1,
+    },
     /**
      * The size of the gap between each field in the form.
-     * @type {string}
      * @category style
      */
-    gridGap: { type: String, default: '1em' },
+    gridGap: {
+      type: String,
+      default: '1em',
+    },
     /**
      * The text used in the UI for the action buttons and some error messages.
-     * @type {{ archive?: string, delete?: string, cancel?: string, edit?: string, save?: string, requiredField?: string, formValidationError?: string } | DynamicProp<{ archive?: string, delete?: string, cancel?: string, edit?: string, save?: string, requiredField?: string, formValidationError?: string }>}
      * @example { cancel: 'キャンセル', edit: '編集', save: '保存' }
      * @category content
      */
     lang: {
+      /** @type {PropType<Partial<Lang>>} */
       type: Object,
       // when changing the default, do it for both BlitzForm; BlitzField and lang.js
       default: () => ({
@@ -235,7 +236,6 @@ export default defineComponent({
         formValidationError: 'There are remaining errors.',
       }),
     },
-    // shared props
     /**
      * The mode represents how fields are rendered
      * - `'edit'` — (default) show editable fields based on the schema
@@ -244,52 +244,58 @@ export default defineComponent({
      * - `'raw'` — used to show raw data of your form (for select components, it will show the data label instead of its value)
      *
      * This prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).
-     * @type {'edit' | 'readonly' | 'disabled' | 'raw'}
      * @category state
      */
     mode: {
+      /** @type {PropType<Mode>} */
       type: String,
       default: 'edit',
+      /** @type {never} */
       validator: (prop) => ['edit', 'readonly', 'disabled', 'raw'].includes(prop),
     },
     /**
      * The position of the label in comparison to the field.
      *
      * This prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).
-     * @type {'top' | 'left'}
      * @category style
      */
     labelPosition: {
+      /** @type {PropType<'top' | 'left'>} */
       type: [String, Function],
       default: 'top',
+      /** @type {never} */
       validator: (prop) => ['top', 'left'].includes(prop),
     },
     /**
      * Custom styling to be applied to the label of BlitzField. Applied like so `:style="componentStyle"`. Can be an Dynamic Prop.
      *
      * This prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).
-     * @type {string | Record<string, boolean> | (string | Record<string, boolean>)[] | DynamicProp<string | Record<string, boolean> | (string | Record<string, boolean>)[]>}
      * @example 'font-weight: 200;'
      * @category style
      */
-    labelStyle: { type: [Object, Array, String, Function] },
+    labelStyle: {
+      /** @type {PropType<string | Record<string, boolean> | (string | Record<string, boolean>)[]>} */
+      type: [Object, Array, String, Function],
+    },
     /**
      * Custom classes to be applied to the label of BlitzField. Applied like so `:class="labelClasses"`. Can be an Dynamic Prop.
      *
      * This prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).
-     * @type {string | Record<string, boolean> | (string | Record<string, boolean>)[] | DynamicProp<string | Record<string, boolean> | (string | Record<string, boolean>)[]>}
      * @example ['text-h6']
      * @category style
      */
-    labelClasses: { type: [Object, Array, String, Function] },
+    labelClasses: {
+      /** @type {PropType<string | Record<string, boolean> | (string | Record<string, boolean>)[]>} */
+      type: [Object, Array, String, Function],
+    },
     /**
      * An array with prop names that should be treated as Dynamic Props when passed a function.
      *
      * This prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).
-     * @type {string[]}
      * @category behavior
      */
     dynamicProps: {
+      /** @type {PropType<string[]>} */
       type: Array,
       default: () => [
         'component',
@@ -309,18 +315,24 @@ export default defineComponent({
      * Set to `true` if the component will take care of showing the `label` and `subLabel`. Both of these props will be passed to the component and not shown in BlitzField.
      *
      * This prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).
-     * @type {boolean | undefined}
      * @category behavior
      */
-    internalLabels: { type: [Boolean, undefined], default: undefined },
+    internalLabels: {
+      /** @type {PropType<boolean | undefined>} */
+      type: Boolean,
+      default: undefined,
+    },
     /**
      * Set to true if the component has its own error handling. This makes sure it passes on props like `error` and does nothing with them in the BlitzField.
      *
      * This prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).
-     * @type {boolean | undefined}
      * @category behavior
      */
-    internalErrors: { type: [Boolean, undefined], default: undefined },
+    internalErrors: {
+      /** @type {PropType<boolean | undefined>} */
+      type: Boolean,
+      default: undefined,
+    },
     /**
      * - 'interaction' — evaluates & shows errors on every interaction or keystroke
      * - 'save' — only evaluates & shows errors when clicking 'save'
@@ -329,34 +341,44 @@ export default defineComponent({
      * - 'always' — always evaluate and show errors, even without user interaction
      *
      * This prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).
-     * @type {'interaction' | 'save' | 'save-focus' | 'never' | 'always'}
      * @category behavior
      */
-    showErrorsOn: { type: String, default: 'interaction' },
+    showErrorsOn: {
+      /** @type {PropType<'interaction' | 'save' | 'save-focus' | 'never' | 'always'>} */
+      type: String,
+      default: 'interaction',
+      /** @type {never} */
+      validator: (prop) => ['interaction', 'save', 'save-focus', 'never', 'always'].includes(prop),
+    },
     /**
      * The component that should be used to generate the form. Defaults to a div. You can pass the name of a native HTML5 element or Vue component that is globally registered. You can also import the Vue file and directly pass the imported object, just like you would when you add it to a Vue file's components prop.
-     * @type {string | Function}
      * @example 'form'
      * @example 'tr'
      * @example 'MyFormWrapper'
      */
-    formComponent: { type: [String, Function], default: 'div' },
+    formComponent: {
+      /** @type {PropType<string | Function>} */
+      type: [String, Function],
+      default: 'div',
+    },
   },
   emits: {
+    /** @type { (payload: any) => boolean } */
     'update:mode': (payload) => ['edit', 'readonly', 'disabled', 'raw'].includes(payload),
-    /**
-     * @param {{ id: string, value: any, origin?: 'default' | 'cancel' | '' }} payload
-     */
+    /** @type {(payload: { id: string, value: any, origin?: 'default' | 'cancel' | '' }) => boolean} */
     'update-field': (payload) => isPlainObject(payload),
-    /**
-     * @param {'default' | 'cancel' | '' | undefined} origin
-     */
+    /** @type { (payload: any, origin: 'default' | 'cancel' | '' | undefined) => boolean } */
     'update:modelValue': (payload, origin) =>
       isPlainObject(payload) && ['default', 'cancel', '', undefined].includes(origin),
+    /** @type { (payload: any) => boolean } */
     edit: (payload) => !payload, // no payload
+    /** @type { (payload: any) => boolean } */
     cancel: (payload) => !payload, // no payload
+    /** @type { (payload: any) => boolean } */
     save: (payload) => isPlainObject(payload),
+    /** @type { (payload: any) => boolean } */
     delete: (payload) => !payload, // no payload
+    /** @type { (payload: any) => boolean } */
     archive: (payload) => !payload, // no payload
     /** HTML5 event from the top level component */
     click: null,
@@ -404,14 +426,9 @@ export default defineComponent({
     },
   },
   computed: {
+    /** @returns {Record<string, any>} */
     formData() {
       return nestifyObject(this.formDataFlat)
-    },
-    schemaObject() {
-      return this.schema.reduce((carry, blueprint) => {
-        carry[blueprint.id] = blueprint
-        return carry
-      }, {})
     },
     cMode: {
       get() {
@@ -422,6 +439,7 @@ export default defineComponent({
         this.event('update:mode', val)
       },
     },
+    /** @returns {any} */
     schemaOverwritableDefaults() {
       const { innerMode, innerLang } = this
       return {
@@ -439,6 +457,7 @@ export default defineComponent({
         internalErrors: this.internalErrors,
       }
     },
+    /** @returns {any} */
     schemaForcedDefaults() {
       const { formData, formDataFlat, formId, innerMode } = this
       return {
@@ -448,6 +467,7 @@ export default defineComponent({
         formMode: innerMode,
       }
     },
+    /** @returns {any} */
     cSchema() {
       // slot, class, style are 3 prop names we cannot directly pass via `v-bind`.
       // - slot: we pass as `slots: { default: ... }`
@@ -464,6 +484,7 @@ export default defineComponent({
         )
       )
     },
+    /** @returns {any} */
     actionButtonsMap() {
       const {
         innerLang,
@@ -514,6 +535,7 @@ export default defineComponent({
       }
       return merge(map, actionButtonDefaults)
     },
+    /** @returns {any} */
     actionButtonsSchema() {
       const { actionButtons, schemaForcedDefaults, actionButtonsMap, formDataFlat, innerLang } =
         this
@@ -542,6 +564,7 @@ export default defineComponent({
         return blueprintParsed
       })
     },
+    /** @returns {any} */
     dataBackup() {
       const { formDataFlatBackups } = this
       if (!formDataFlatBackups.length) return {}
@@ -549,6 +572,7 @@ export default defineComponent({
       const dataNested = nestifyObject(lastBackup)
       return dataNested
     },
+    /** @returns {any} */
     dataEdited() {
       const { editedFields, formDataFlat } = this
       const dataFlat = editedFields.reduce((carry, prop) => {
@@ -570,7 +594,7 @@ export default defineComponent({
       if (eventName === 'update:mode') {
         /**
          * This event makes it possible to sync the prop 'mode' like so: `v-model:mode="mode"`
-         * @property {'edit' | 'readonly' | 'disabled' | 'raw'} payload event payload
+         * @property {Mode} payload event payload
          */
         this.$emit('update:mode', payload)
       }

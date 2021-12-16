@@ -3,16 +3,26 @@
   "version": "1.0.3",
   "description": "Blitzar form component",
   "author": "Luca Ban - Mesqueeb",
-  "module": "dist/index.js",
-  "main": "dist/index.js",
+  "module": "./dist/index.js",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.js",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "required": "./dist/index.js",
+      "types": "./dist/index.d.js"
+    }
+  },
   "scripts": {
-    "vue-int": "vue-int -i src/components -r -o vetur",
-    "build": "npm run clean && vue-compile src -o dist",
-    "clean": "rimraf dist",
+    "add-jsdocs-typedefs": "",
+    "vue-int": "vue-int -i src/components -r -o dist/vetur",
+    "vue-tsc": "vue-tsc --declaration --emitDeclarationOnly",
+    "vue-compile": "vue-compile src -o dist",
+    "build": "rimraf dist && npm run vue-int && npm run vue-tsc && npm run vue-compile",
     "dev": "vue-compile src -o ./dist --watch"
   },
   "dependencies": {
-    "@blitzar/utils": "^0.0.33",
+    "@blitzar/utils": "^1.0.3",
     "case-anything": "^1.1.3",
     "copy-anything": "^2.0.3",
     "filter-anything": "^2.2.1",
@@ -48,8 +58,8 @@
     "url": "git+https://github.com/cycraft/blitzar.git"
   },
   "vetur": {
-    "tags": "vetur/tags.json",
-    "attributes": "vetur/attributes.json"
+    "tags": "dist/vetur/tags.json",
+    "attributes": "dist/vetur/attributes.json"
   },
   "gitHead": "c687213c03a9d020e38caa1f3d4f68ba938ed8ae"
 }

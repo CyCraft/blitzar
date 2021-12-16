@@ -1,9 +1,10 @@
 import { flattenPerSchema } from '@blitzar/utils'
 import { isArray, isFullString, isFunction } from 'is-what'
-import { defaultLang } from '../meta/lang'
+import { defaultLang } from './lang'
+import './types'
 
 export function createRequiredErrorFn(requiredFieldErrorMsg) {
-  return (val) => (val === 0 || !!val) ? null : requiredFieldErrorMsg
+  return (val) => (val === 0 || !!val ? null : requiredFieldErrorMsg)
 }
 
 /**
@@ -16,8 +17,8 @@ export function createRequiredErrorFn(requiredFieldErrorMsg) {
  *
  * @export
  * @param {*} payload
- * @param {Blueprint} blueprint
- * @param {Context} context
+ * @param {BlitzFieldProps} blueprint
+ * @param {FormContext} context
  * @returns {null | string}
  */
 export function validateFieldPerSchema(payload, blueprint, context = {}) {
@@ -28,8 +29,10 @@ export function validateFieldPerSchema(payload, blueprint, context = {}) {
   if (isFullString(requiredResult)) return requiredResult
 
   if (!blueprint.error) return null
-  
-  const errorResult = !isFunction(blueprint.error) ? blueprint.error : blueprint.error(payload, context)
+
+  const errorResult = !isFunction(blueprint.error)
+    ? blueprint.error
+    : blueprint.error(payload, context)
   return errorResult
 }
 
@@ -53,16 +56,16 @@ export function validateFormPerSchema(formData, schema, lang) {
     .reduce((carry, key) => ({ ...carry, [key]: null }), {}) // prettier-ignore
   const formDataFlatCurrent = flattenPerSchema(formData, schema)
   const formDataFlat = { ...formDataFlatEmpty, ...formDataFlatCurrent }
-  
+
   const resultPerField = Object.entries(formDataFlat).reduce((carry, [fieldId, fieldValue]) => {
     if (fieldId === 'undefined') return carry
-    
+
     const blueprint = schemaObject[fieldId]
     const context = { formData, formDataFlat, lang: lang || defaultLang() }
-    
+
     carry[fieldId] = !blueprint ? null : validateFieldPerSchema(fieldValue, blueprint, context)
     return carry
   }, {})
-  
+
   return resultPerField
 }

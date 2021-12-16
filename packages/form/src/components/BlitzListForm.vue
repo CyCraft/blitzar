@@ -47,11 +47,12 @@
 </style>
 
 <script>
-import { defineComponent } from 'vue'
+import { defineComponent, PropType } from 'vue'
 import { merge } from 'merge-anything'
 import { copy } from 'copy-anything'
 import { isNumber } from 'is-what'
 import BlitzField from './BlitzField.vue'
+import './types'
 
 /**
 With BlitzListForm you can pass a `schema` just like a BlitzForm. The difference is that BlitzListForm is more like a (as the name says) _**list**_ form. 😃
@@ -66,13 +67,21 @@ export default defineComponent({
     /**
      * @category model
      */
-    modelValue: { type: Array, default: () => [] },
+    modelValue: {
+      /** @type {PropType<any[]>} */
+      type: Array,
+      default: () => [],
+    },
     /**
      * This is the information on the columns you want to be shown. An array of objects just like a BlitzForm.
      * @example [{ label: 'Amount', id: 'amount', component: 'input', type: 'number', style: 'color: white' }, { label: 'Currency', id: 'curr', component: 'select', slot: [{ component: 'option', value: '', slot: 'Select one', disabled: true }, { component: 'option', value: 'usd', slot: 'USD' }], style: 'color: white' }]
      * @category content
      */
-    schema: { type: Array, default: () => [{ component: 'input' }] },
+    schema: {
+      /** @type {PropType<Schema>} */
+      type: Array,
+      default: () => [{ component: 'input' }],
+    },
     /**
      * A list of prop (attribute) names to be passed on to each single BlitzField generated in the list form.
      *
@@ -81,6 +90,7 @@ export default defineComponent({
      * @category content
      */
     attrsToPass: {
+      /** @type {PropType<string[]>} */
       type: Array,
       default: () => [
         'formData',
@@ -105,6 +115,7 @@ export default defineComponent({
      * This is the value with an empty row concatinated to it.
      */
     cValue: {
+      /** @returns {any} */
       get() {
         const { modelValue, schema, disabled, readonly, maxRows } = this
         const emptyRow = schema.reduce((carry, { id }) => ({ ...carry, [id]: undefined }), {})
@@ -117,6 +128,7 @@ export default defineComponent({
         this.$emit('update:modelValue', val)
       },
     },
+    /** @returns {any} */
     listFormAttrsToPass() {
       const { attrsToPass, getPropOrAttrOrParentProp, modelValue } = this
       const attrs = attrsToPass.reduce((carry, attrKey) => {
@@ -128,6 +140,7 @@ export default defineComponent({
       }
       return attrs
     },
+    /** @returns {any} */
     cSchema() {
       const { schema, disabled, readonly, listFormAttrsToPass } = this
       // slot, class, style are 3 prop names we cannot directly pass via `v-bind`.
@@ -152,12 +165,14 @@ export default defineComponent({
         return merge(listFormAttrsToPass, overwritableDefaults, blueprint, overwrites)
       })
     },
+    /** @returns {any} */
     schemaLabels() {
       const { schema, listFormAttrsToPass } = this
       return schema.map((subfield) => {
         return merge(listFormAttrsToPass, subfield, { component: undefined })
       })
     },
+    /** @returns {any} */
     gridTemplateColumnsCalculated() {
       const { schema } = this
       return schema.reduce((total, field) => {
