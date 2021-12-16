@@ -1,6 +1,6 @@
 {
   "name": "@blitzar/components",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "author": "Luca Ban - Mesqueeb",
   "description": "Blitzar helper components",
   "module": "./src/index.js",
