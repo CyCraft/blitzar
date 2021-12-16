@@ -12,13 +12,7 @@
   </div>
 </template>
 
-<style scoped>
-</style>
-
-<style lang="sass">
-// Don't forget to import the required styles after Vuetify Styles but before your project's custom styles.
-@import 'blitzar/styles.sass'
-</style>
+<style scoped></style>
 
 <script>
 import Vue from 'vue'

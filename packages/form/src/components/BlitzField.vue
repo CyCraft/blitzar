@@ -83,14 +83,12 @@
 </template>
 
 <style lang="sass">
-@import '../index.sass'
-
 // layout
 .blitz-field
   max-width: 100%
   display: grid
   align-content: start
-  grid-gap: $sm $md
+  grid-gap: 0.5rem 1rem
   &--label-top
     grid-auto-flow: row
   &--label-left

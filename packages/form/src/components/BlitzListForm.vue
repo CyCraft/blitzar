@@ -37,15 +37,13 @@
 </template>
 
 <style lang="sass">
-@import '../index.sass'
-
 .blitz-list-form
   > .blitz-list-form__row
     display: grid
     justify-items: stretch
     align-items: center
-    grid-gap: $sm
-    margin-bottom: $sm
+    grid-gap: 0.5rem
+    margin-bottom: 0.5rem
 </style>
 
 <script>
@@ -151,12 +149,7 @@ export default defineComponent({
         const fieldStyle = blueprint.fieldStyle || blueprint.style
         if (fieldStyle) overwrites.fieldStyle = fieldStyle
 
-        return merge(
-          listFormAttrsToPass,
-          overwritableDefaults,
-          blueprint,
-          overwrites
-        )
+        return merge(listFormAttrsToPass, overwritableDefaults, blueprint, overwrites)
       })
     },
     schemaLabels() {

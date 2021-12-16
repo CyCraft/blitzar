@@ -51,8 +51,6 @@
 </template>
 
 <style lang="sass">
-@import '../index.sass'
-
 .blitz-form
   &.q-form
     display: flex
@@ -77,23 +75,23 @@
   justify-content: end
   align-content: start
   align-items: center
-  grid-gap: $md
+  grid-gap: 1rem
   &--top
     order: 0
     grid-auto-flow: column
-    margin-bottom: $md
+    margin-bottom: 1rem
   &--bottom
     order: 1
     grid-auto-flow: column
-    margin-top: $md
+    margin-top: 1rem
   &--right
     order: 1
     grid-auto-flow: row
-    margin-left: $md
+    margin-left: 1rem
   &--left
     order: 0
     grid-auto-flow: row
-    margin-right: $md
+    margin-right: 1rem
 
 .blitz-form__validation-error
   color: crimson
