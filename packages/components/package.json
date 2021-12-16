@@ -1,0 +1,42 @@
+{
+  "name": "@blitzar/components",
+  "version": "1.0.5",
+  "author": "Luca Ban - Mesqueeb",
+  "description": "Blitzar helper components",
+  "module": "./src/index.js",
+  "main": "./src/index.js",
+  "exports": {
+    ".": {
+      "import": "./src/index.js",
+      "required": "./src/index.js"
+    }
+  },
+  "scripts": {},
+  "dependencies": {
+    "flatten-anything": "^2.0.4",
+    "is-what": "^3.14.1",
+    "path-to-prop": "^1.0.0",
+    "vue-pepicons": "^0.2.2"
+  },
+  "license": "MIT",
+  "keywords": [
+    "blitzar",
+    "blitzar-helper-components",
+    "blitzar-components",
+    "blitz-components",
+    "vue"
+  ],
+  "homepage": "https://github.com/cycraft/blitzar#readme",
+  "bugs": {
+    "url": "https://github.com/cycraft/blitzar/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cycraft/blitzar.git"
+  },
+  "vetur": {
+    "tags": "dist/vetur/tags.json",
+    "attributes": "dist/vetur/attributes.json"
+  },
+  "gitHead": "a40cbe1a9bbc4727d4e7e6f833808f8c578762de"
+}

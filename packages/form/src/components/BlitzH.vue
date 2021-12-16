@@ -1,64 +1,66 @@
 <script>
-import { isArray, isPlainObject, isString } from 'is-what'
+import { defineComponent, h, resolveDynamicComponent, PropType } from 'vue'
+import { isArray, isString } from 'is-what'
 import { omit } from 'filter-anything'
+import { pascalCase } from 'case-anything'
+import './types'
 
 /**
  * @typedef BlitzHOption
  * @type {{
-  component: string,
-  slot: any,
-  events: {},
-  class: string | Record<string, any> | (string | Record<string, any>)[],
-  style: string | Record<string, any> | (string | Record<string, any>)[],
-  [key: string]: any,
-}}
+ *   component: string,
+ *   slot: any,
+ *   events: Record<string, (...args: any[]) => any>,
+ *   class: string | Record<string, any> | (string | Record<string, any>)[],
+ *   style: string | Record<string, any> | (string | Record<string, any>)[],
+ *   [key: string]: any,
+ * }}
  */
 
 /**
  * I'm still thinking about the best syntax for BlitzH
  */
-export default {
+const BlitzH = defineComponent({
   name: 'BlitzH',
   functional: true,
   props: {
-    /**
-     * @type {string | BlitzHOption | BlitzHOption[]}
-     */
-    options: { type: [String, Object, Array] },
+    options: {
+      /** @type {PropType<string | BlitzHOption | (string | BlitzHOption)[]>} */
+      type: [String, Object, Array],
+    },
   },
-  render(h, ctx) {
-    const optionsArray = isArray(ctx.props.options) ? ctx.props.options : [ctx.props.options]
+  render() {
+    /** @type {(string | BlitzHOption)[]} */
+    const optionsArray = isArray(this.options) ? this.options : [this.options]
+
+    // return the render function
     return optionsArray.map((o) => {
-      if (isString(o)) return ctx._v(o)
+      if (isString(o)) return o
+      const Component = resolveDynamicComponent(o.component)
       let children
       if (o.slot) {
-        children = [h('BlitzH', { props: { options: o.slot } })]
+        children = [h(BlitzH, { options: o.slot })]
       } else if (o.slots && o.slots.default) {
-        children = [h('BlitzH', { props: { options: o.slots.default } })]
+        children = [h(BlitzH, { options: o.slots.default })]
       }
       return h(
-        o.component,
+        Component,
         {
-          props: o,
-          attrs: omit(o, [
-            'lang',
-            'rules',
-            'label',
-            'hint',
-            'readonly',
-            'component',
-            'slots',
-            'class',
-            'style',
-            'events',
-          ]),
-          on: o.events,
-          class: o.class,
-          style: o.style,
+          ...omit(o, ['events', 'lang', 'rules', 'hint', 'readonly', 'component', 'slot', 'slots']),
+          ...Object.entries(o.events || {}).reduce((carry, [eventName, handler]) => {
+            carry[`on${pascalCase(eventName)}`] = handler
+            return carry
+          }, {}),
         },
-        children
+        {
+          default() {
+            return children
+          },
+        }
       )
     })
   },
-}
+})
+
+export default BlitzH
 </script>

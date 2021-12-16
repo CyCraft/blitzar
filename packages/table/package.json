@@ -1,20 +1,23 @@
 {
   "name": "@blitzar/table",
-  "version": "0.0.33",
+  "version": "1.0.5",
   "author": "Luca Ban - Mesqueeb",
   "description": "Blitzar table component",
-  "module": "src/index.js",
-  "main": "dist/index.js",
-  "scripts": {
-    "vue-int": "vue-int -i src/components -r -o vetur",
-    "build": "rimraf dist && vue-compile src -o dist"
+  "module": "./src/index.js",
+  "main": "./src/index.js",
+  "exports": {
+    ".": {
+      "import": "./src/index.js",
+      "required": "./src/index.js"
+    }
   },
+  "scripts": {},
   "dependencies": {
-    "@blitzar/form": "^0.0.33",
+    "@blitzar/components": "^1.0.5",
+    "@blitzar/form": "^1.0.5",
     "is-what": "^3.14.1",
-    "merge-anything": "^4.0.1",
-    "path-to-prop": "^1.0.0",
-    "quasar": "^1.15.20"
+    "merge-anything": "^4.0.2",
+    "path-to-prop": "^1.0.0"
   },
   "license": "MIT",
   "keywords": [
@@ -43,8 +46,8 @@
     "url": "git+https://github.com/cycraft/blitzar.git"
   },
   "vetur": {
-    "tags": "vetur/tags.json",
-    "attributes": "vetur/attributes.json"
+    "tags": "dist/vetur/tags.json",
+    "attributes": "dist/vetur/attributes.json"
   },
-  "gitHead": "c687213c03a9d020e38caa1f3d4f68ba938ed8ae"
+  "gitHead": "a40cbe1a9bbc4727d4e7e6f833808f8c578762de"
 }

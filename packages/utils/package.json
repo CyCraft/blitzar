@@ -1,14 +1,23 @@
 {
   "name": "@blitzar/utils",
-  "version": "0.0.33",
+  "version": "1.0.5",
   "description": "Blitzar utils",
   "author": "Luca Ban - Mesqueeb",
-  "module": "dist/index.esm.js",
-  "main": "dist/index.cjs.js",
+  "module": "./dist/index.esm.js",
+  "main": "./dist/index.cjs.js",
+  "types": "./dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.esm.js",
+      "require": "./dist/index.cjs.js",
+      "types": "./dist/types/index.d.ts"
+    }
+  },
   "scripts": {
     "test": "ava",
     "build": "npm run clean && rollup -c ./build.js",
-    "clean": "rimraf ./types && rimraf ./dist"
+    "clean": "rimraf ./dist",
+    "dev": "rollup -c ./build.js --watch"
   },
   "dependencies": {
     "commafy-anything": "^2.1.0",
@@ -33,5 +42,5 @@
       "esm"
     ]
   },
-  "gitHead": "c687213c03a9d020e38caa1f3d4f68ba938ed8ae"
+  "gitHead": "a40cbe1a9bbc4727d4e7e6f833808f8c578762de"
 }
