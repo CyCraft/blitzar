@@ -1,6 +1,6 @@
 {
   "name": "@blitzar/types",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Blitzar types — can only be consumed by TS projects",
   "author": "Luca Ban - Mesqueeb",
   "module": "./src/index.ts",
@@ -14,7 +14,6 @@
     }
   },
   "scripts": {},
-  "dependencies": {},
   "keywords": [
     "blitzar",
     "typescript"
