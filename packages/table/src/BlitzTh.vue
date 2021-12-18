@@ -59,25 +59,26 @@
 }
 </style>
 
-<script>
-import { defineComponent } from 'vue'
+<script lang="ts">
+import { defineComponent, PropType } from 'vue'
 import { RowSelectionId } from '@blitzar/utils'
 import { BlitzField } from '@blitzar/form'
 
 export default defineComponent({
-  name: 'BlitzTh',
   components: { BlitzField },
   props: {
-    /** The BlitzField object used for the columns */
-    column: { type: Object, required: true },
     /**
-     * @type {{ id: null | string, direction: 'asc' | 'desc' | 'none' }}
+     * The BlitzField object used for the columns
      */
-    sortState: { type: Object, required: true },
+    column: { type: Object as PropType<Record<string, any>>, required: true },
+    sortState: {
+      type: Object as PropType<{ id: null | string; direction: 'asc' | 'desc' | 'none' }>,
+      required: true,
+    },
   },
   emits: ['update:sortState'],
   setup(props, { emit }) {
-    function onClick(e) {
+    function onClick(e: MouseEvent) {
       if (!props.column.sortable) return
 
       e.stopPropagation()

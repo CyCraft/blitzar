@@ -1,9 +1,11 @@
 import { getProp } from 'path-to-prop'
 
-export function createPagingRange(nrOfPages, currentPage) {
+export const morePages = '...' as const
+
+export function createPagingRange(nrOfPages: number, currentPage: number) {
   const delta = 2
   const range = []
-  const rangeWithDots = []
+  const rangeWithDots: (number | typeof morePages)[] = []
   let length
 
   range.push(1)
@@ -24,7 +26,7 @@ export function createPagingRange(nrOfPages, currentPage) {
       if (range[i] - length === 2) {
         rangeWithDots.push(length + 1)
       } else if (range[i] - length !== 1) {
-        rangeWithDots.push(MORE_PAGES)
+        rangeWithDots.push(morePages)
       }
     }
     rangeWithDots.push(range[i])
@@ -34,12 +36,13 @@ export function createPagingRange(nrOfPages, currentPage) {
 }
 
 /**
- * @param {string[]} dsSortby
- * @param {{ [id in string]: (cellValue: any, rowData: Record<string, any>) => any }} dsSortAs
- * @returns {(a: any, b: any) => number} must return a function that can be plugged into `.sort()`
+ * @returns a function that can be plugged into `.sort()`
  */
-export function fieldSorter(dsSortby, dsSortAs = {}) {
-  const dir = []
+export function fieldSorter(
+  dsSortby: string[],
+  dsSortAs: { [id in string]: (cellValue: any, rowData: Record<string, any>) => any } = {}
+): (a: any, b: any) => number {
+  const dir: number[] = []
   let i
   const length = dsSortby.length
   dsSortby = dsSortby.map(function (colId, i) {
@@ -52,11 +55,10 @@ export function fieldSorter(dsSortby, dsSortAs = {}) {
     return colId
   })
 
-  /**
-   * @param {{ rowIndex: number, rowData: Record<string, any>, rowDataFlat: Record<string, any> }} rowA
-   * @param {{ rowIndex: number, rowData: Record<string, any>, rowDataFlat: Record<string, any> }} rowB
-   */
-  return function (rowA, rowB) {
+  return function (
+    rowA: { rowIndex: number; rowData: Record<string, any>; rowDataFlat: Record<string, any> },
+    rowB: { rowIndex: number; rowData: Record<string, any>; rowDataFlat: Record<string, any> }
+  ) {
     const rowDataA = rowA.rowData
     const rowDataB = rowB.rowData
 
@@ -78,12 +80,12 @@ export function fieldSorter(dsSortby, dsSortAs = {}) {
   }
 }
 
-/**
- * @param {{ rowIndex: number, rowData: Record<string, any>, rowDataFlat: Record<string, any> }} row
- * @param {{ [colId in string]: (cellValue: any, rowData: Record<string, any>) => boolean | any }} dsFilterFields
- * @returns {boolean}
- */
-export function filterRow(row, dsFilterFields) {
+export function filterRow(
+  row: { rowIndex: number; rowData: Record<string, any>; rowDataFlat: Record<string, any> },
+  dsFilterFields: {
+    [colId in string]: (cellValue: any, rowData: Record<string, any>) => boolean | any
+  }
+): boolean {
   const { rowData } = row
 
   const filterResults = Object.entries(dsFilterFields).map(([colId, filterValueOrFn]) => {
@@ -102,13 +104,15 @@ export function filterRow(row, dsFilterFields) {
 
 /**
  * Search method that also takes into account transformations needed
- * @param {string[]} dsSearchIn
- * @param {{ [id in string]: (cellValue: any, searchString: string, rowData: Record<string, any>) => boolean }} dsSearchAs
- * @param {{ rowIndex: number, rowData: Record<string, any>, rowDataFlat: Record<string, any> }} row
- * @param {string} str the search string
- * @returns {boolean}
  */
-export function findAny(dsSearchIn, dsSearchAs, row, str) {
+export function findAny(
+  dsSearchIn: string[],
+  dsSearchAs: {
+    [id in string]: (cellValue: any, searchString: string, rowData: Record<string, any>) => boolean
+  },
+  row: { rowIndex: number; rowData: Record<string, any>; rowDataFlat: Record<string, any> },
+  searchStr: string
+): boolean {
   const { rowData, rowDataFlat } = row
 
   // first check the dsSearchAs functions:
@@ -119,13 +123,13 @@ export function findAny(dsSearchIn, dsSearchAs, row, str) {
     // get the (nested) value
     const cellValue = getProp(rowData, colId)
 
-    if (searchAsFn(cellValue, str, rowData) === true) {
+    if (searchAsFn(cellValue, searchStr, rowData) === true) {
       return true
     }
   }
   // Search didn't hit yet, so let's finally check the entire flat object:
 
-  str = String(str).toLowerCase()
+  searchStr = String(searchStr).toLowerCase()
 
   for (const [key, value] of Object.entries(rowDataFlat)) {
     // check which keys to skip
@@ -134,7 +138,7 @@ export function findAny(dsSearchIn, dsSearchAs, row, str) {
 
     const valueAsStr = String(value).toLowerCase()
     // If it doesn't return from above we perform a simple search
-    if (valueAsStr.indexOf(str) >= 0) {
+    if (valueAsStr.indexOf(searchStr) >= 0) {
       return true
     }
   }

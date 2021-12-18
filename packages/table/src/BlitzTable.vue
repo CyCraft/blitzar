@@ -50,7 +50,7 @@
 }
 </style>
 
-<script>
+<script lang="ts">
 import { watch, ref, defineComponent, computed, PropType } from 'vue'
 import { merge } from 'merge-anything'
 import { isFunction, isFullArray, isBoolean, isFullString } from 'is-what'
@@ -94,7 +94,6 @@ function getSortableProps(col = {}) {
 }
 
 export default defineComponent({
-  name: 'BlitzTable',
   components: { BlitzTableInner, Dataset },
   props: {
     /**
@@ -103,8 +102,7 @@ export default defineComponent({
      * @category column
      */
     schemaColumns: {
-      /** @type {PropType<Record<string, any>[]>} */
-      type: Array,
+      type: Array as PropType<Record<string, any>[]>,
       default: undefined,
     },
     /**
@@ -113,8 +111,7 @@ export default defineComponent({
      * @category column
      */
     schemaGrid: {
-      /** @type {PropType<Record<string, any>[]>} */
-      type: [Array, Object],
+      type: [Array, Object] as PropType<Record<string, any>[]>,
       default: undefined,
     },
     /**
@@ -123,8 +120,7 @@ export default defineComponent({
      * @category model
      */
     rows: {
-      /** @type {PropType<Record<string, any>[]>} */
-      type: Array,
+      type: Array as PropType<Record<string, any>[]>,
       required: true,
     },
     /**
@@ -142,8 +138,7 @@ export default defineComponent({
      * @category column
      */
     gridBlitzFormOptions: {
-      /** @type {PropType<Record<string, any>>} */
-      type: Object,
+      type: Object as PropType<Record<string, any>>,
       default: () => ({}),
     },
     // /**
@@ -174,8 +169,7 @@ export default defineComponent({
      * MUST be used with `v-model:selectedRows="mySelection"`
      */
     selectedRows: {
-      /** @type {PropType<Record<string, any>[] >} */
-      type: Array,
+      type: Array as PropType<Record<string, any>[]>,
       default: () => [],
     },
     // /**

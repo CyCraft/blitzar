@@ -1,13 +1,676 @@
+<script lang="ts">
+import { defineComponent, PropType } from 'vue'
+import { merge } from 'merge-anything'
+import { copy } from 'copy-anything'
+import {
+  isArray,
+  isFunction,
+  isFullString,
+  isPlainObject,
+  isString,
+  isBoolean,
+  isFullArray,
+} from 'is-what'
+import { nestifyObject } from 'nestify-anything'
+import { flattenPerSchema } from '@blitzar/utils'
+import BlitzField from './BlitzField.vue'
+import { defaultLang } from './lang'
+import { getBlitzFieldOverwrites } from './helpers'
+import type { Lang, Mode, Schema, ShowErrorsOn } from './types'
+
+/**
+Here you can find all the information on the available props & events of BlitzForm.
+
+If any of the documentation is unclear, feel free to [open an issue](https://github.com/cycraft/blitzar/issues) to ask for clarification!
+ */
+export default defineComponent({
+  components: { BlitzField },
+  inheritAttrs: false,
+  props: {
+    /**
+     * An object with the data of the entire form. The object keys are the ids of the fields passed in the `schema`.
+     *
+     * To be used with `:modelValue` or `v-model`.
+     * @example { name: '' }
+     * @category model
+     */
+    modelValue: {
+      /** @type {Record<string, any>} */
+      type: Object,
+      default: () => ({}),
+    },
+    /**
+     * A manually set `id` of the BlitzForm. This prop is accessible in the `context` (as `formId`) of any Dynamic Prop and event.
+     *
+     * Read more on Dynamic Props in its dedicated page.
+     * @category model
+     */
+    id: { type: String },
+    /**
+     * This is the heart of your BlitzForm. It's the schema that defines what fields will be generated.
+     *
+     * The possible props you can pass are:
+     * - BlitzField props (see BlitzField API Card in the documentation)
+     * - any props of the actual component you define
+     * @example [{id: 'name', label: 'Name', component: 'input', style: 'color: white'}, {id: 'age', label: 'Age', component: 'input', type: 'number', style: 'color: white'}]
+     * @category model
+     */
+    schema: {
+      type: Array as PropType<Record<string, any>[]>,
+      required: true,
+    },
+    /**
+     * Buttons on top of the form that control the `mode` of the form. The possible pre-made buttons are:
+     * - `'edit'` — a button which puts the form in 'edit' mode & does `emit('edit')`
+     * - `'cancel'` — a button which puts the form in 'readonly' mode & does `emit('cancel')`
+     * - `'save'` — a button which puts the form in 'edit' mode & does `emit('save', {newData, oldData})`
+     * - `'delete'` — a red button which does `emit('delete')`
+     * - `'archive'` — a red button which does `emit('archive')`
+     *
+     * You can also pass custom buttons with the same schema to generate forms.
+     *
+     * See the documentation on Action Buttons for more info.
+     * @example ['delete', 'cancel', 'edit', 'save']
+     * @example [{component: 'button', type: 'button', slot: 'log', events: {click: console.log}}]
+     * @category content
+     */
+    actionButtons: {
+      type: Array as PropType<
+        ('edit' | 'cancel' | 'save' | 'delete' | 'archive' | Record<string, any>)[]
+      >,
+      default: () => [],
+    },
+    /**
+     * You can overwrite the schema used for the default action buttons for edit, cancel, save, delete & archive.
+     * @example {'save': {push: true}, 'delete': {color: 'secondary'}}
+     * @category content
+     */
+    actionButtonDefaults: {
+      type: Object as PropType<{
+        edit?: Record<string, any>
+        cancel?: Record<string, any>
+        save?: Record<string, any>
+        delete?: Record<string, any>
+        archive?: Record<string, any>
+      }>,
+      default: () => ({}),
+    },
+    /**
+     * The position of the action buttons.
+     * @category content
+     */
+    actionButtonsPosition: {
+      type: String as PropType<'top' | 'bottom' | 'right' | 'left'>,
+      default: 'top',
+      validator: (prop: 'top' | 'bottom' | 'right' | 'left') =>
+        ['top', 'bottom', 'right', 'left'].includes(prop),
+    },
+    /**
+     * The amount of columns the form should have. Each field can set a specific 'span' to be able to span multiple columns.
+     * @category style
+     */
+    columnCount: {
+      type: Number,
+      default: 1,
+    },
+    /**
+     * The size of the gap between each field in the form.
+     * @category style
+     */
+    gridGap: {
+      type: String,
+      default: '1em',
+    },
+    /**
+     * The text used in the UI for the action buttons and some error messages.
+     * @example { cancel: 'キャンセル', edit: '編集', save: '保存' }
+     * @category content
+     */
+    lang: {
+      type: Object as PropType<Partial<Lang>>,
+      // when changing the default, do it for both BlitzForm; BlitzField and lang.js
+      default: () => ({
+        archive: 'Archive',
+        delete: 'Delete',
+        cancel: 'Cancel',
+        edit: 'Edit',
+        save: 'Save',
+        requiredField: 'Field is required',
+        formValidationError: 'There are remaining errors.',
+      }),
+    },
+    /**
+     * The mode represents how fields are rendered
+     * - `'edit'` — (default) show editable fields based on the schema
+     * - `'readonly'` — show each field with `readonly: true`
+     * - `'disabled'` — show each field with `disabled: true`
+     * - `'raw'` — used to show raw data of your form (for select components, it will show the data label instead of its value)
+     *
+     * This prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).
+     * @category state
+     */
+    mode: {
+      type: String as PropType<Mode>,
+      default: 'edit',
+      validator: (prop: Mode) => ['edit', 'readonly', 'disabled', 'raw'].includes(prop),
+    },
+    /**
+     * The position of the label in comparison to the field.
+     *
+     * This prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).
+     * @category style
+     */
+    labelPosition: {
+      type: [String, Function] as PropType<'top' | 'left'>,
+      default: 'top',
+      validator: (prop: 'top' | 'left') => ['top', 'left'].includes(prop),
+    },
+    /**
+     * Custom styling to be applied to the label of BlitzField. Applied like so `:style="componentStyle"`. Can be an Dynamic Prop.
+     *
+     * This prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).
+     * @example 'font-weight: 200;'
+     * @category style
+     */
+    labelStyle: {
+      type: [Object, Array, String, Function] as PropType<
+        string | Record<string, boolean> | (string | Record<string, boolean>)[]
+      >,
+    },
+    /**
+     * Custom classes to be applied to the label of BlitzField. Applied like so `:class="labelClasses"`. Can be an Dynamic Prop.
+     *
+     * This prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).
+     * @example ['text-h6']
+     * @category style
+     */
+    labelClasses: {
+      type: [Object, Array, String, Function] as PropType<
+        string | Record<string, boolean> | (string | Record<string, boolean>)[]
+      >,
+    },
+    /**
+     * An array with prop names that should be treated as Dynamic Props when passed a function.
+     *
+     * This prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).
+     * @category behavior
+     */
+    dynamicProps: {
+      type: Array as PropType<string[]>,
+      default: () => [
+        'component',
+        'showCondition',
+        'label',
+        'subLabel',
+        'required',
+        'fieldStyle',
+        'fieldClasses',
+        'componentStyle',
+        'componentClasses',
+        'events',
+        'lang',
+      ],
+    },
+    /**
+     * Set to `true` if the component will take care of showing the `label` and `subLabel`. Both of these props will be passed to the component and not shown in BlitzField.
+     *
+     * This prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).
+     * @category behavior
+     */
+    internalLabels: {
+      type: Boolean as PropType<boolean | undefined>,
+      default: undefined,
+    },
+    /**
+     * Set to true if the component has its own error handling. This makes sure it passes on props like `error` and does nothing with them in the BlitzField.
+     *
+     * This prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).
+     * @category behavior
+     */
+    internalErrors: {
+      type: Boolean as PropType<boolean | undefined>,
+      default: undefined,
+    },
+    /**
+     * - 'interaction' — evaluates & shows errors on every interaction or keystroke
+     * - 'save' — only evaluates & shows errors when clicking 'save'
+     * - 'save-focus' — only evaluates & shows errors when clicking 'save', then focuses the first field with an error
+     * - 'never' — never evaluate or show errors
+     * - 'always' — always evaluate and show errors, even without user interaction
+     *
+     * This prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).
+     * @category behavior
+     */
+    showErrorsOn: {
+      type: String as PropType<ShowErrorsOn>,
+      default: 'interaction',
+      validator: (prop: ShowErrorsOn) =>
+        ['interaction', 'save', 'save-focus', 'never', 'always'].includes(prop),
+    },
+    /**
+     * The component that should be used to generate the form. Defaults to a div. You can pass the name of a native HTML5 element or Vue component that is globally registered. You can also import the Vue file and directly pass the imported object, just like you would when you add it to a Vue file's components prop.
+     * @example 'form'
+     * @example 'tr'
+     * @example 'MyFormWrapper'
+     */
+    formComponent: {
+      type: [String, Function] as PropType<string | Function>,
+      default: 'div',
+    },
+  },
+  emits: {
+    'update:mode': (payload: any) => ['edit', 'readonly', 'disabled', 'raw'].includes(payload),
+    'update-field': (payload: { id: string; value: any; origin?: 'default' | 'cancel' | '' }) =>
+      isPlainObject(payload),
+    'update:modelValue': (payload: any, origin?: 'default' | 'cancel' | '' | undefined) =>
+      isPlainObject(payload) && ['default', 'cancel', '', undefined].includes(origin),
+    edit: () => {}, // no payload
+    cancel: () => {}, // no payload
+    save: (payload: {
+      newData: Record<string, any>
+      oldData: Record<string, any>
+      formData: Record<string, any>
+    }) => isPlainObject(payload),
+    delete: () => {}, // no payload
+    archive: () => {}, // no payload
+    /** HTML5 event from the top level component */
+    click: null,
+    /** HTML5 event from the top level component */
+    dblclick: null,
+    /** HTML5 event from the top level component */
+    mousedown: null,
+    /** HTML5 event from the top level component */
+    mouseup: null,
+  },
+  data() {
+    const { mode, id, modelValue, schema, lang } = this
+    // merge user provided lang onto defaults
+    const innerLang: Lang = merge(defaultLang(), lang)
+    const innerMode = mode
+    const formId = id
+    const dataFlat = flattenPerSchema(modelValue, schema)
+    const dataFlatDefaults: Record<string, any> = schema.reduce<Record<string, any>>(
+      (carry, { id, defaultValue }) => {
+        if (!isFullString(id)) return carry
+        carry[id] = isFunction(defaultValue) ? defaultValue(modelValue, this) : defaultValue
+        return carry
+      },
+      {}
+    )
+    const formDataFlat: Record<string, any> = merge(dataFlatDefaults, copy(dataFlat))
+    return {
+      innerLang,
+      innerMode,
+      formId,
+      edited: false,
+      editedFields: [] as string[],
+      formDataFlat,
+      formDataFlatBackups: [copy(formDataFlat)],
+      formErrorMsg: null as null | string,
+    }
+  },
+  watch: {
+    mode(newValue) {
+      this.innerMode = newValue
+    },
+    id(newValue) {
+      this.formId = newValue
+    },
+    lang(newValue) {
+      this.innerLang = merge(defaultLang(), newValue)
+    },
+  },
+  computed: {
+    formData(): Record<string, any> {
+      return nestifyObject(this.formDataFlat)
+    },
+    cMode: {
+      get(): Mode {
+        return this.innerMode
+      },
+      set(val: Mode) {
+        this.innerMode = val
+        this.event('update:mode', val)
+      },
+    },
+    schemaOverwritableDefaults(): Record<string, any> {
+      const { innerMode, innerLang } = this
+      return {
+        // used here & pass
+        lang: innerLang,
+        mode: innerMode,
+        updateField: this.updateField,
+        showErrorsOn: this.showErrorsOn,
+        // just pass
+        labelPosition: this.labelPosition,
+        labelStyle: this.labelStyle,
+        labelClasses: this.labelClasses,
+        dynamicProps: this.dynamicProps,
+        internalLabels: this.internalLabels,
+        internalErrors: this.internalErrors,
+      }
+    },
+    schemaForcedDefaults(): Record<string, any> {
+      const { formData, formDataFlat, formId, innerMode } = this
+      return {
+        formData,
+        formDataFlat,
+        formId,
+        formMode: innerMode,
+      }
+    },
+    cSchema(): Schema {
+      // slot, class, style are 3 prop names we cannot directly pass via `v-bind`.
+      // - slot: we pass as `slots: { default: ... }`
+      // - class: we pass as `fieldClasses`
+      // - style: we pass as `fieldStyle`
+      const { schema, schemaOverwritableDefaults, schemaForcedDefaults } = this
+
+      return schema.map((field) =>
+        merge(
+          schemaOverwritableDefaults,
+          field,
+          getBlitzFieldOverwrites(field),
+          schemaForcedDefaults
+        )
+      )
+    },
+    actionButtonsMap(): {
+      edit: Record<string, any> | undefined
+      cancel: Record<string, any> | undefined
+      save: Record<string, any> | undefined
+      delete: Record<string, any> | undefined
+      archive: Record<string, any> | undefined
+    } {
+      const {
+        innerLang,
+        tapDelete,
+        tapEdit,
+        tapArchive,
+        tapCancel,
+        tapSave,
+        actionButtonDefaults,
+        innerMode,
+      } = this
+      const map = {
+        delete: {
+          component: 'button',
+          type: 'button',
+          slot: innerLang['delete'],
+          color: 'negative',
+          events: { click: tapDelete },
+        },
+        archive: {
+          component: 'button',
+          type: 'button',
+          slot: innerLang['archive'],
+          color: 'negative',
+          events: { click: tapArchive },
+        },
+        edit: {
+          component: 'button',
+          type: 'button',
+          showCondition: () => ['readonly', 'raw'].includes(innerMode),
+          slot: innerLang['edit'],
+          events: { click: tapEdit },
+        },
+        cancel: {
+          component: 'button',
+          type: 'button',
+          showCondition: () => innerMode === 'edit',
+          slot: innerLang['cancel'],
+          events: { click: tapCancel },
+        },
+        save: {
+          component: 'button',
+          type: 'button',
+          showCondition: () => innerMode === 'edit',
+          slot: innerLang['save'],
+          events: { click: tapSave },
+        },
+      }
+      return merge(map, actionButtonDefaults)
+    },
+    actionButtonsSchema(): Record<string, any>[] {
+      const {
+        actionButtons,
+        schemaForcedDefaults,
+        actionButtonsMap,
+        formDataFlat,
+        innerLang,
+        updateField,
+      } = this
+      const overwritableDefaults = { lang: innerLang, updateField }
+      return actionButtons.map((blueprint) => {
+        const _bp = isString(blueprint) ? actionButtonsMap[blueprint]! : blueprint
+        const slotsOverwrite = !_bp.slot
+          ? {}
+          : { slots: merge(_bp.slots || {}, { default: _bp.slot }) }
+        const overwrites = {
+          span: undefined,
+          modelValue: formDataFlat[_bp.id],
+          ...slotsOverwrite,
+        }
+        const blueprintParsed = merge(overwritableDefaults, _bp, overwrites, schemaForcedDefaults)
+        return blueprintParsed
+      })
+    },
+    dataBackup(): Record<string, any> {
+      const { formDataFlatBackups } = this
+      if (!formDataFlatBackups.length) return {}
+      const lastBackup = formDataFlatBackups.slice(-1)[0]
+      const dataNested = nestifyObject(lastBackup)
+      return dataNested
+    },
+    dataEdited(): Record<string, any> {
+      const { editedFields, formDataFlat } = this
+      const dataFlat = editedFields.reduce<Record<string, any>>((carry, prop) => {
+        carry[prop] = formDataFlat[prop]
+        return carry
+      }, {})
+      const dataNested = nestifyObject(dataFlat)
+      return dataNested
+    },
+  },
+  methods: {
+    isFullString,
+    event(
+      eventName:
+        | 'update:mode'
+        | 'update-field'
+        | 'update:modelValue'
+        | 'edit'
+        | 'cancel'
+        | 'save'
+        | 'delete'
+        | 'archive',
+      payload?: any,
+      origin?: 'default' | 'cancel' | '' | undefined
+    ): void {
+      if (eventName === 'update:mode') {
+        /**
+         * This event makes it possible to sync the prop 'mode' like so: `v-model:mode="mode"`
+         * @property {Mode} payload event payload
+         */
+        this.$emit('update:mode', payload)
+      }
+      if (eventName === 'update-field') {
+        /**
+         * This event triggers every time a field gets updated.
+         *
+         * The payload is an object with `id` for the field id and `value` as the new value.
+         *
+         * The `origin` prop of the event payload is what caused update-field event:
+         * - `'default'` means that the event was emitted when the form was mounted and all fields have initialised their default values.
+         * - `'cancel'` means that the 'cancel' button was clicked and the event data was reset to what it was before it was edited.
+         * - update-field events from user input won't have an origin.
+         * - A custom origin can be added when you execute `updateField` from inside an evaluatuated prop.
+         *
+         * @property {{ id: string, value: any, origin?: 'default' | 'cancel' | '' }} payload event payload
+         */
+        this.$emit('update-field', payload)
+      }
+      if (eventName === 'update:modelValue') {
+        /**
+         * This event enables the form to be usable with `v-model="formData"`
+         * @property {{ [id in string]: any }} payload event payload
+         * @property {'default' | 'cancel' | '' | undefined} origin the cause of the `update:modelValue` event:
+         * - `'default'` means that the event was emitted when the form was mounted and all fields have initialised their default values.
+         * - `'cancel'` means that the 'cancel' button was clicked and the event data was reset to what it was before it was edited.
+         * - `update:modelValue` events from user input won't have an origin.
+         */
+        this.$emit('update:modelValue', payload, origin)
+      }
+      if (eventName === 'edit') {
+        /**
+         * (no payload) The edit-button was tapped and the form was put into "edit" mode
+         */
+        this.$emit('edit')
+      }
+      if (eventName === 'cancel') {
+        /**
+         * (no payload) The cancel-button was tapped and the form was put back into "readonly" mode & reverted to its original state
+         */
+        this.$emit('cancel')
+      }
+      if (eventName === 'save') {
+        /**
+         * The save-button was tapped and the form was put back into "readonly" mode & kept the modified content
+         * @property {{ newData: Record<string, any>, oldData: Record<string, any>, formData: Record<string, any> }} payload event payload
+         */
+        this.$emit('save', payload)
+      }
+      if (eventName === 'delete') {
+        /**
+         * (no payload) The delete-button was tapped (you must implement your own logic)
+         */
+        this.$emit('delete')
+      }
+      if (eventName === 'archive') {
+        /**
+         * (no payload) The archive-button was tapped (you must implement your own logic)
+         */
+        this.$emit('archive')
+      }
+    },
+    updateField({
+      id,
+      value,
+      origin,
+    }: {
+      id: string
+      value: any
+      origin?: 'default' | '' | undefined
+    }): void {
+      // do not emit anything when the field had no `id` on its schema blueprint
+      if (id === undefined) return
+      // no idea why I do this:
+      this.edited = true
+      // keep a list of edited field ids
+      if (!this.editedFields.includes(id)) this.editedFields.push(id)
+      // set the new value onto the formData (might be an empty object)
+      this.formDataFlat[id] = value
+      // emit `update-field` with field's id and new data
+      this.event('update-field', { id, value, origin })
+      // emit `update:modelValue` with entire formData
+      this.event('update:modelValue', this.formData, origin) // do not extract `this` from here
+      // if the form has a formErrorMsg, validate gain to check to see if it's solved
+      if (isFullString(this.formErrorMsg)) {
+        this.validate()
+      }
+    },
+    resetState(): void {
+      this.cMode = 'readonly'
+      this.edited = false
+      this.editedFields = []
+      this.formDataFlatBackups.push(copy(this.formDataFlat))
+      this.formErrorMsg = ''
+      for (const [i, blueprint] of this.cSchema.entries()) {
+        const refField = this.$refs[`ref-field-${i}`]
+        // not sure why but one case during doc creation this turned out to be an array
+        const _refField = isFullArray(refField) ? refField[0] : refField
+        if (_refField) _refField.resetDirtyAndErrors()
+      }
+    },
+    restoreBackup(): void {
+      if (!this.formDataFlatBackups.length) return
+      const lastBackup = this.formDataFlatBackups.pop()!
+      this.formDataFlat = lastBackup
+    },
+    tapCancel(): void {
+      this.restoreBackup()
+      this.resetState()
+      const origin = 'cancel'
+      Object.entries(this.formDataFlat).forEach(([id, value]) => {
+        // emit `update-field` with field's id and new data
+        this.event('update-field', { id, value, origin })
+      })
+      // emit `update:modelValue` with entire formData
+      this.event('update:modelValue', this.formData, origin) // do not extract `this` from here
+      this.event('cancel')
+    },
+    /**
+     * Validate all fields for potential errors
+     * @param focusIfError Wether or not it should focus the field with an error. Defaults to `false`
+     * @returns The result of the first field it finds with an error, or `null` if no errors were found.
+     */
+    validate(focusIfError: undefined | boolean = undefined): null | string {
+      const { cSchema, innerLang, showErrorsOn } = this
+
+      if (showErrorsOn === 'never') return null
+
+      const shouldFocus = isBoolean(focusIfError) ? focusIfError : showErrorsOn === 'save-focus'
+
+      for (const [i, blueprint] of cSchema.entries()) {
+        const refField = this.$refs[`ref-field-${i}`]
+        // not sure why but one case during doc creation this turned out to be an array
+        const _refField = isFullArray(refField) ? refField[0] : refField
+        if (!_refField) continue
+
+        const result = _refField.validate(shouldFocus)
+
+        if (isFullString(result)) {
+          this.formErrorMsg = innerLang['formValidationError']
+          return result
+        }
+      }
+      this.formErrorMsg = null
+      return null
+    },
+    tapEdit(): void {
+      this.cMode = 'edit'
+      this.event('edit')
+    },
+    tapSave(): void {
+      const { validate, dataEdited, dataBackup, resetState, formData } = this
+      const foundError = validate()
+      if (foundError) return
+
+      const newData = copy(dataEdited)
+      const oldData = copy(dataBackup)
+      this.event('save', { newData, oldData, formData })
+      resetState()
+    },
+    tapDelete(): void {
+      this.event('delete')
+    },
+    tapArchive(): void {
+      this.event('archive')
+    },
+  },
+})
+</script>
+
 <template>
   <component
     :is="formComponent"
     ref="refBlitzForm"
     :class="[`blitz-form blitz-form--nav-${actionButtonsPosition}`, $attrs.class]"
     :style="$attrs.style"
-    @click="(e) => $emit('click', e)"
-    @dblclick="(e) => $emit('dblclick', e)"
-    @mousedown="(e) => $emit('mousedown', e)"
-    @mouseup="(e) => $emit('mouseup', e)"
+    @click="(e: any) => $emit('click', e)"
+    @dblclick="(e: any) => $emit('dblclick', e)"
+    @mousedown="(e: any) => $emit('mousedown', e)"
+    @mouseup="(e: any) => $emit('mouseup', e)"
   >
     <!-- navigation buttons row (save, edit, ...) -->
     <div
@@ -96,663 +759,3 @@
 .blitz-form__validation-error
   color: crimson
 </style>
-
-<script>
-import { defineComponent, PropType } from 'vue'
-import { merge } from 'merge-anything'
-import { copy } from 'copy-anything'
-import {
-  isArray,
-  isFunction,
-  isFullString,
-  isPlainObject,
-  isString,
-  isBoolean,
-  isFullArray,
-} from 'is-what'
-import { nestifyObject } from 'nestify-anything'
-import { flattenPerSchema } from '@blitzar/utils'
-import BlitzField from './BlitzField.vue'
-import { defaultLang } from './lang'
-import { getBlitzFieldOverwrites } from './helpers'
-import './types'
-
-/**
-Here you can find all the information on the available props & events of BlitzForm.
-
-If any of the documentation is unclear, feel free to [open an issue](https://github.com/cycraft/blitzar/issues) to ask for clarification!
- */
-export default defineComponent({
-  name: 'BlitzForm',
-  components: { BlitzField },
-  inheritAttrs: false,
-  props: {
-    /**
-     * An object with the data of the entire form. The object keys are the ids of the fields passed in the `schema`.
-     *
-     * To be used with `:modelValue` or `v-model`.
-     * @example { name: '' }
-     * @category model
-     */
-    modelValue: {
-      /** @type {PropType<Record<string, any>>} */
-      type: Object,
-      default: () => ({}),
-    },
-    /**
-     * A manually set `id` of the BlitzForm. This prop is accessible in the `context` (as `formId`) of any Dynamic Prop and event.
-     *
-     * Read more on Dynamic Props in its dedicated page.
-     * @category model
-     */
-    id: { type: String },
-    /**
-     * This is the heart of your BlitzForm. It's the schema that defines what fields will be generated.
-     *
-     * The possible props you can pass are:
-     * - BlitzField props (see BlitzField API Card in the documentation)
-     * - any props of the actual component you define
-     * @example [{id: 'name', label: 'Name', component: 'input', style: 'color: white'}, {id: 'age', label: 'Age', component: 'input', type: 'number', style: 'color: white'}]
-     * @category model
-     */
-    schema: {
-      /** @type {PropType<Record<string, any>[]>} */
-      type: Array,
-      required: true,
-    },
-    /**
-     * Buttons on top of the form that control the `mode` of the form. The possible pre-made buttons are:
-     * - `'edit'` — a button which puts the form in 'edit' mode & does `emit('edit')`
-     * - `'cancel'` — a button which puts the form in 'readonly' mode & does `emit('cancel')`
-     * - `'save'` — a button which puts the form in 'edit' mode & does `emit('save', {newData, oldData})`
-     * - `'delete'` — a red button which does `emit('delete')`
-     * - `'archive'` — a red button which does `emit('archive')`
-     *
-     * You can also pass custom buttons with the same schema to generate forms.
-     *
-     * See the documentation on Action Buttons for more info.
-     * @example ['delete', 'cancel', 'edit', 'save']
-     * @example [{component: 'button', type: 'button', slot: 'log', events: {click: console.log}}]
-     * @category content
-     */
-    actionButtons: {
-      /** @type {PropType<('edit' | 'cancel' | 'save' | 'delete' | 'archive' | Record<string, any>)[]>} */
-      type: Array,
-      default: () => [],
-    },
-    /**
-     * You can overwrite the schema used for the default action buttons for edit, cancel, save, delete & archive.
-     * @example {'save': {push: true}, 'delete': {color: 'secondary'}}
-     * @category content
-     */
-    actionButtonDefaults: {
-      /** @type {PropType<{ edit?: Record<string, any>, cancel?: Record<string, any>, save?: Record<string, any>, delete?: Record<string, any>, archive?: Record<string, any>, }>} */
-      type: Object,
-      default: () => ({}),
-    },
-    /**
-     * The position of the action buttons.
-     * @category content
-     */
-    actionButtonsPosition: {
-      /** @type {PropType<'top' | 'bottom' | 'right' | 'left'>} */
-      type: String,
-      default: 'top',
-      /** @type {never} */
-      validator: (prop) => ['top', 'bottom', 'right', 'left'].includes(prop),
-    },
-    /**
-     * The amount of columns the form should have. Each field can set a specific 'span' to be able to span multiple columns.
-     * @category style
-     */
-    columnCount: {
-      type: Number,
-      default: 1,
-    },
-    /**
-     * The size of the gap between each field in the form.
-     * @category style
-     */
-    gridGap: {
-      type: String,
-      default: '1em',
-    },
-    /**
-     * The text used in the UI for the action buttons and some error messages.
-     * @example { cancel: 'キャンセル', edit: '編集', save: '保存' }
-     * @category content
-     */
-    lang: {
-      /** @type {PropType<Partial<Lang>>} */
-      type: Object,
-      // when changing the default, do it for both BlitzForm; BlitzField and lang.js
-      default: () => ({
-        archive: 'Archive',
-        delete: 'Delete',
-        cancel: 'Cancel',
-        edit: 'Edit',
-        save: 'Save',
-        requiredField: 'Field is required',
-        formValidationError: 'There are remaining errors.',
-      }),
-    },
-    /**
-     * The mode represents how fields are rendered
-     * - `'edit'` — (default) show editable fields based on the schema
-     * - `'readonly'` — show each field with `readonly: true`
-     * - `'disabled'` — show each field with `disabled: true`
-     * - `'raw'` — used to show raw data of your form (for select components, it will show the data label instead of its value)
-     *
-     * This prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).
-     * @category state
-     */
-    mode: {
-      /** @type {PropType<Mode>} */
-      type: String,
-      default: 'edit',
-      /** @type {never} */
-      validator: (prop) => ['edit', 'readonly', 'disabled', 'raw'].includes(prop),
-    },
-    /**
-     * The position of the label in comparison to the field.
-     *
-     * This prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).
-     * @category style
-     */
-    labelPosition: {
-      /** @type {PropType<'top' | 'left'>} */
-      type: [String, Function],
-      default: 'top',
-      /** @type {never} */
-      validator: (prop) => ['top', 'left'].includes(prop),
-    },
-    /**
-     * Custom styling to be applied to the label of BlitzField. Applied like so `:style="componentStyle"`. Can be an Dynamic Prop.
-     *
-     * This prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).
-     * @example 'font-weight: 200;'
-     * @category style
-     */
-    labelStyle: {
-      /** @type {PropType<string | Record<string, boolean> | (string | Record<string, boolean>)[]>} */
-      type: [Object, Array, String, Function],
-    },
-    /**
-     * Custom classes to be applied to the label of BlitzField. Applied like so `:class="labelClasses"`. Can be an Dynamic Prop.
-     *
-     * This prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).
-     * @example ['text-h6']
-     * @category style
-     */
-    labelClasses: {
-      /** @type {PropType<string | Record<string, boolean> | (string | Record<string, boolean>)[]>} */
-      type: [Object, Array, String, Function],
-    },
-    /**
-     * An array with prop names that should be treated as Dynamic Props when passed a function.
-     *
-     * This prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).
-     * @category behavior
-     */
-    dynamicProps: {
-      /** @type {PropType<string[]>} */
-      type: Array,
-      default: () => [
-        'component',
-        'showCondition',
-        'label',
-        'subLabel',
-        'required',
-        'fieldStyle',
-        'fieldClasses',
-        'componentStyle',
-        'componentClasses',
-        'events',
-        'lang',
-      ],
-    },
-    /**
-     * Set to `true` if the component will take care of showing the `label` and `subLabel`. Both of these props will be passed to the component and not shown in BlitzField.
-     *
-     * This prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).
-     * @category behavior
-     */
-    internalLabels: {
-      /** @type {PropType<boolean | undefined>} */
-      type: Boolean,
-      default: undefined,
-    },
-    /**
-     * Set to true if the component has its own error handling. This makes sure it passes on props like `error` and does nothing with them in the BlitzField.
-     *
-     * This prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).
-     * @category behavior
-     */
-    internalErrors: {
-      /** @type {PropType<boolean | undefined>} */
-      type: Boolean,
-      default: undefined,
-    },
-    /**
-     * - 'interaction' — evaluates & shows errors on every interaction or keystroke
-     * - 'save' — only evaluates & shows errors when clicking 'save'
-     * - 'save-focus' — only evaluates & shows errors when clicking 'save', then focuses the first field with an error
-     * - 'never' — never evaluate or show errors
-     * - 'always' — always evaluate and show errors, even without user interaction
-     *
-     * This prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).
-     * @category behavior
-     */
-    showErrorsOn: {
-      /** @type {PropType<'interaction' | 'save' | 'save-focus' | 'never' | 'always'>} */
-      type: String,
-      default: 'interaction',
-      /** @type {never} */
-      validator: (prop) => ['interaction', 'save', 'save-focus', 'never', 'always'].includes(prop),
-    },
-    /**
-     * The component that should be used to generate the form. Defaults to a div. You can pass the name of a native HTML5 element or Vue component that is globally registered. You can also import the Vue file and directly pass the imported object, just like you would when you add it to a Vue file's components prop.
-     * @example 'form'
-     * @example 'tr'
-     * @example 'MyFormWrapper'
-     */
-    formComponent: {
-      /** @type {PropType<string | Function>} */
-      type: [String, Function],
-      default: 'div',
-    },
-  },
-  emits: {
-    /** @type { (payload: any) => boolean } */
-    'update:mode': (payload) => ['edit', 'readonly', 'disabled', 'raw'].includes(payload),
-    /** @type {(payload: { id: string, value: any, origin?: 'default' | 'cancel' | '' }) => boolean} */
-    'update-field': (payload) => isPlainObject(payload),
-    /** @type { (payload: any, origin: 'default' | 'cancel' | '' | undefined) => boolean } */
-    'update:modelValue': (payload, origin) =>
-      isPlainObject(payload) && ['default', 'cancel', '', undefined].includes(origin),
-    /** @type { (payload: any) => boolean } */
-    edit: (payload) => !payload, // no payload
-    /** @type { (payload: any) => boolean } */
-    cancel: (payload) => !payload, // no payload
-    /** @type { (payload: any) => boolean } */
-    save: (payload) => isPlainObject(payload),
-    /** @type { (payload: any) => boolean } */
-    delete: (payload) => !payload, // no payload
-    /** @type { (payload: any) => boolean } */
-    archive: (payload) => !payload, // no payload
-    /** HTML5 event from the top level component */
-    click: null,
-    /** HTML5 event from the top level component */
-    dblclick: null,
-    /** HTML5 event from the top level component */
-    mousedown: null,
-    /** HTML5 event from the top level component */
-    mouseup: null,
-  },
-  data() {
-    const { mode, id, modelValue, schema, lang } = this
-    // merge user provided lang onto defaults
-    const innerLang = merge(defaultLang(), lang)
-    const innerMode = mode
-    const formId = id
-    const dataFlat = flattenPerSchema(modelValue, schema)
-    const schemaArray = isArray(schema) ? schema : Object.values(schema)
-    const dataFlatDefaults = schemaArray.reduce((carry, { id, defaultValue }) => {
-      if (!isFullString(id)) return carry
-      carry[id] = isFunction(defaultValue) ? defaultValue(modelValue, this) : defaultValue
-      return carry
-    }, {})
-    const formDataFlat = merge(dataFlatDefaults, copy(dataFlat))
-    return {
-      innerLang,
-      innerMode,
-      formId,
-      edited: false,
-      editedFields: [],
-      formDataFlat,
-      formDataFlatBackups: [copy(formDataFlat)],
-      formErrorMsg: '',
-    }
-  },
-  watch: {
-    mode(newValue) {
-      this.innerMode = newValue
-    },
-    id(newValue) {
-      this.formId = newValue
-    },
-    lang(newValue) {
-      this.innerLang = merge(defaultLang(), newValue)
-    },
-  },
-  computed: {
-    /** @returns {Record<string, any>} */
-    formData() {
-      return nestifyObject(this.formDataFlat)
-    },
-    cMode: {
-      get() {
-        return this.innerMode
-      },
-      set(val) {
-        this.innerMode = val
-        this.event('update:mode', val)
-      },
-    },
-    /** @returns {any} */
-    schemaOverwritableDefaults() {
-      const { innerMode, innerLang } = this
-      return {
-        // used here & pass
-        lang: innerLang,
-        mode: innerMode,
-        updateField: this.updateField,
-        showErrorsOn: this.showErrorsOn,
-        // just pass
-        labelPosition: this.labelPosition,
-        labelStyle: this.labelStyle,
-        labelClasses: this.labelClasses,
-        dynamicProps: this.dynamicProps,
-        internalLabels: this.internalLabels,
-        internalErrors: this.internalErrors,
-      }
-    },
-    /** @returns {any} */
-    schemaForcedDefaults() {
-      const { formData, formDataFlat, formId, innerMode } = this
-      return {
-        formData,
-        formDataFlat,
-        formId,
-        formMode: innerMode,
-      }
-    },
-    /** @returns {any} */
-    cSchema() {
-      // slot, class, style are 3 prop names we cannot directly pass via `v-bind`.
-      // - slot: we pass as `slots: { default: ... }`
-      // - class: we pass as `fieldClasses`
-      // - style: we pass as `fieldStyle`
-      const { schema, schemaOverwritableDefaults, schemaForcedDefaults } = this
-
-      return schema.map((field) =>
-        merge(
-          schemaOverwritableDefaults,
-          field,
-          getBlitzFieldOverwrites(field),
-          schemaForcedDefaults
-        )
-      )
-    },
-    /** @returns {any} */
-    actionButtonsMap() {
-      const {
-        innerLang,
-        tapDelete,
-        tapEdit,
-        tapArchive,
-        tapCancel,
-        tapSave,
-        actionButtonDefaults,
-        innerMode,
-      } = this
-      const map = {
-        delete: {
-          component: 'button',
-          type: 'button',
-          slot: innerLang['delete'],
-          color: 'negative',
-          events: { click: tapDelete },
-        },
-        archive: {
-          component: 'button',
-          type: 'button',
-          slot: innerLang['archive'],
-          color: 'negative',
-          events: { click: tapArchive },
-        },
-        edit: {
-          component: 'button',
-          type: 'button',
-          showCondition: () => ['readonly', 'raw'].includes(innerMode),
-          slot: innerLang['edit'],
-          events: { click: tapEdit },
-        },
-        cancel: {
-          component: 'button',
-          type: 'button',
-          showCondition: () => innerMode === 'edit',
-          slot: innerLang['cancel'],
-          events: { click: tapCancel },
-        },
-        save: {
-          component: 'button',
-          type: 'button',
-          showCondition: () => innerMode === 'edit',
-          slot: innerLang['save'],
-          events: { click: tapSave },
-        },
-      }
-      return merge(map, actionButtonDefaults)
-    },
-    /** @returns {any} */
-    actionButtonsSchema() {
-      const { actionButtons, schemaForcedDefaults, actionButtonsMap, formDataFlat, innerLang } =
-        this
-      const overwritableDefaults = { lang: innerLang, updateField: this.updateField }
-      return actionButtons.map((blueprint) => {
-        const _bp = isString(blueprint) ? actionButtonsMap[blueprint] : blueprint
-        const slotsOverwrite = !_bp.slot
-          ? {}
-          : { slots: merge(_bp.slots || {}, { default: _bp.slot }) }
-        const events = _bp.events || {}
-        const eventsOverwrites = !events['update:modelValue']
-          ? {}
-          : {
-              events: {
-                'update:modelValue': (value, origin) =>
-                  updateField({ id: field.id, value, origin }),
-              },
-            }
-        const overwrites = {
-          span: undefined,
-          modelValue: formDataFlat[_bp.id],
-          ...slotsOverwrite,
-          ...eventsOverwrites,
-        }
-        const blueprintParsed = merge(overwritableDefaults, _bp, overwrites, schemaForcedDefaults)
-        return blueprintParsed
-      })
-    },
-    /** @returns {any} */
-    dataBackup() {
-      const { formDataFlatBackups } = this
-      if (!formDataFlatBackups.length) return {}
-      const lastBackup = formDataFlatBackups.slice(-1)[0]
-      const dataNested = nestifyObject(lastBackup)
-      return dataNested
-    },
-    /** @returns {any} */
-    dataEdited() {
-      const { editedFields, formDataFlat } = this
-      const dataFlat = editedFields.reduce((carry, prop) => {
-        carry[prop] = formDataFlat[prop]
-        return carry
-      }, {})
-      const dataNested = nestifyObject(dataFlat)
-      return dataNested
-    },
-  },
-  methods: {
-    isFullString,
-    /**
-     * @param {'update:mode' | 'update-field' | 'update:modelValue' | 'edit' | 'cancel' | 'save' | 'delete' | 'archive'} eventName
-     * @param {any} payload
-     * @param {'default' | 'cancel' | '' | undefined} origin
-     */
-    event(eventName, payload, origin) {
-      if (eventName === 'update:mode') {
-        /**
-         * This event makes it possible to sync the prop 'mode' like so: `v-model:mode="mode"`
-         * @property {Mode} payload event payload
-         */
-        this.$emit('update:mode', payload)
-      }
-      if (eventName === 'update-field') {
-        /**
-         * This event triggers every time a field gets updated.
-         *
-         * The payload is an object with `id` for the field id and `value` as the new value.
-         *
-         * The `origin` prop of the event payload is what caused update-field event:
-         * - `'default'` means that the event was emitted when the form was mounted and all fields have initialised their default values.
-         * - `'cancel'` means that the 'cancel' button was clicked and the event data was reset to what it was before it was edited.
-         * - update-field events from user input won't have an origin.
-         * - A custom origin can be added when you execute `updateField` from inside an evaluatuated prop.
-         *
-         * @property {{ id: string, value: any, origin?: 'default' | 'cancel' | '' }} payload event payload
-         */
-        this.$emit('update-field', payload)
-      }
-      if (eventName === 'update:modelValue') {
-        /**
-         * This event enables the form to be usable with `v-model="formData"`
-         * @property {{ [id in string]: any }} payload event payload
-         * @property {'default' | 'cancel' | '' | undefined} origin the cause of the `update:modelValue` event:
-         * - `'default'` means that the event was emitted when the form was mounted and all fields have initialised their default values.
-         * - `'cancel'` means that the 'cancel' button was clicked and the event data was reset to what it was before it was edited.
-         * - `update:modelValue` events from user input won't have an origin.
-         */
-        this.$emit('update:modelValue', payload, origin)
-      }
-      if (eventName === 'edit') {
-        /**
-         * (no payload) The edit-button was tapped and the form was put into "edit" mode
-         */
-        this.$emit('edit')
-      }
-      if (eventName === 'cancel') {
-        /**
-         * (no payload) The cancel-button was tapped and the form was put back into "readonly" mode & reverted to its original state
-         */
-        this.$emit('cancel')
-      }
-      if (eventName === 'save') {
-        /**
-         * The save-button was tapped and the form was put back into "readonly" mode & kept the modified content
-         * @property {{newData: { [id in string]: any }, oldData: { [id in string]: any }}} payload event payload
-         */
-        this.$emit('save', payload)
-      }
-      if (eventName === 'delete') {
-        /**
-         * (no payload) The delete-button was tapped (you must implement your own logic)
-         */
-        this.$emit('delete')
-      }
-      if (eventName === 'archive') {
-        /**
-         * (no payload) The archive-button was tapped (you must implement your own logic)
-         */
-        this.$emit('archive')
-      }
-    },
-    updateField({ id, value, origin }) {
-      // do not emit anything when the field had no `id` on its schema blueprint
-      if (id === undefined) return
-      // no idea why I do this:
-      this.edited = true
-      // keep a list of edited field ids
-      if (!this.editedFields.includes(id)) this.editedFields.push(id)
-      // set the new value onto the formData (might be an empty object)
-      this.formDataFlat[id] = value
-      // emit `update-field` with field's id and new data
-      this.event('update-field', { id, value, origin })
-      // emit `update:modelValue` with entire formData
-      this.event('update:modelValue', this.formData, origin) // do not extract `this` from here
-      // if the form has a formErrorMsg, validate gain to check to see if it's solved
-      if (isFullString(this.formErrorMsg)) {
-        this.validate()
-      }
-    },
-    resetState() {
-      this.cMode = 'readonly'
-      this.edited = false
-      this.editedFields = []
-      this.formDataFlatBackups.push(copy(this.formDataFlat))
-      this.formErrorMsg = ''
-      for (const [i, blueprint] of this.cSchema.entries()) {
-        const refField = this.$refs[`ref-field-${i}`]
-        // not sure why but one case during doc creation this turned out to be an array
-        const _refField = isFullArray(refField) ? refField[0] : refField
-        if (_refField) _refField.resetDirtyAndErrors()
-      }
-    },
-    restoreBackup() {
-      if (!this.formDataFlatBackups.length) return
-      const lastBackup = this.formDataFlatBackups.pop()
-      this.formDataFlat = lastBackup
-    },
-    tapCancel() {
-      this.restoreBackup()
-      this.resetState()
-      const origin = 'cancel'
-      Object.entries(this.formDataFlat).forEach(([id, value]) => {
-        // emit `update-field` with field's id and new data
-        this.event('update-field', { id, value, origin })
-      })
-      // emit `update:modelValue` with entire formData
-      this.event('update:modelValue', this.formData, origin) // do not extract `this` from here
-      this.event('cancel')
-    },
-    /**
-     * Validate all fields for potential errors
-     * @param {boolean} [focusIfError] — Wether or not it should focus the field with an error. Defaults to `false`
-     * @returns {null | string} The result of the first field it finds with an error, or `null` if no errors were found.
-     */
-    validate(focusIfError) {
-      const { cSchema, innerLang, showErrorsOn } = this
-
-      if (showErrorsOn === 'never') return null
-
-      const shouldFocus = isBoolean(focusIfError) ? focusIfError : showErrorsOn === 'save-focus'
-
-      for (const [i, blueprint] of cSchema.entries()) {
-        const refField = this.$refs[`ref-field-${i}`]
-        // not sure why but one case during doc creation this turned out to be an array
-        const _refField = isFullArray(refField) ? refField[0] : refField
-        if (!_refField) continue
-
-        const result = _refField.validate(shouldFocus)
-
-        if (isFullString(result)) {
-          this.formErrorMsg = innerLang['formValidationError']
-          return result
-        }
-      }
-      this.formErrorMsg = null
-      return null
-    },
-    tapEdit() {
-      this.cMode = 'edit'
-      this.event('edit')
-    },
-    tapSave() {
-      const { validate, dataEdited, dataBackup, resetState, formData } = this
-      const foundError = validate()
-      if (foundError) return
-
-      const newData = copy(dataEdited)
-      const oldData = copy(dataBackup)
-      this.event('save', { newData, oldData, formData })
-      resetState()
-    },
-    tapDelete() {
-      this.event('delete')
-    },
-    tapArchive() {
-      this.event('archive')
-    },
-  },
-})
-</script>

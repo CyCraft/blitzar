@@ -1,8 +1,6 @@
 <template>
   <ClientOnly
-    ><PCodeBlockComponent
-      :importComponentInstanceFn="importFn"
-      :importComponentRawFn="importFnRaw"
+    ><PCodeBlockComponent :importComponentInstanceFn="importFn" :importComponentRawFn="importFnRaw"
   /></ClientOnly>
 </template>
 
@@ -11,7 +9,6 @@ import { CodeBlockComponent as PCodeBlockComponent } from '@planetar/code-block'
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: 'CodeBlockComponent',
   components: { PCodeBlockComponent },
   props: {
     /**

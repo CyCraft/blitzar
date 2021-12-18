@@ -11,13 +11,12 @@
   },
   "dependencies": {
     "@adamdehaven/vue-custom-tooltip": "^2.6.0",
-    "@hunterliu/code-block": "^1.0.4",
     "@meforma/vue-toaster": "^1.3.0",
     "@planetar/code-block": "^1.0.2",
     "blitzar": "^1.0.5",
     "is-what": "^3.14.1",
     "vue-final-modal": "^3.4.3",
-    "vue-pepicons": "^0.2.2"
+    "vue-pepicons": "^1.0.5"
   },
   "devDependencies": {
     "vitepress": "^0.20.9"

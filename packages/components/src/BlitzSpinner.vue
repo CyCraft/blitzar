@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 import { defineComponent } from 'vue'
 
 const sizeDict = { xs: 18, sm: 24, md: 32, lg: 38, xl: 46 }
@@ -7,7 +7,6 @@ const sizeDict = { xs: 18, sm: 24, md: 32, lg: 38, xl: 46 }
  * Color of the spinner can be applied via CSS.
  */
 export default defineComponent({
-  name: 'BlitzSpinner',
   props: {
     /**
      * The size of the spinner
@@ -18,9 +17,7 @@ export default defineComponent({
     thickness: { type: Number, default: 5 },
   },
   computed: {
-    /** @returns {any} */
-    cSize() {
-      /** @type {any} */
+    cSize(): string | number {
       const size = this.size
       return size in sizeDict ? `${size}px` : size
     },

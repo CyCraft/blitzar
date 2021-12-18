@@ -177,7 +177,6 @@ import { Pepicon } from 'vue-pepicons'
 import { isFullString, isNumber } from 'is-what'
 
 export default {
-  name: 'BaseInput',
   components: { Pepicon },
   props: {
     /**

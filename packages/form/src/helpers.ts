@@ -1,11 +1,9 @@
-/**
- * @param {Record<string, any>} [field]
- * @returns {Record<string, any>}
- */
-export function getBlitzFieldOverwrites(field) {
+import { merge } from 'merge-anything'
+
+export function getBlitzFieldOverwrites(field: Record<string, any>): Record<string, any> {
   if (!field) return {}
 
-  const overwrites = {}
+  const overwrites: Record<string, any> = {}
 
   if (field.slot) {
     overwrites.slots = merge(field.slots || {}, { default: field.slot })

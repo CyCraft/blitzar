@@ -1,28 +1,49 @@
-<script>
+<script lang="ts">
 import { defineComponent, PropType } from 'vue'
-import { Pepicon } from 'vue-pepicons'
+import { Pepicon, PepiconName, pepiconArray } from 'vue-pepicons'
 import { isFullString, isNumber, isDate } from 'is-what'
 import BlitzIcon from './BlitzIcon.vue'
 
-/**
- * @typedef Type
- * @type {'text' | 'textarea' | 'select' | 'button' | 'checkbox' | 'color' | 'date' | 'datetime-local' | 'email' | 'file' | 'hidden' | 'image' | 'month' | 'number' | 'password' | 'radio' | 'range' | 'reset' | 'search' | 'submit' | 'tel' | 'time' | 'url' | 'week'}
- */
+type Type =
+  | 'text'
+  | 'textarea'
+  | 'select'
+  | 'button'
+  | 'checkbox'
+  | 'color'
+  | 'date'
+  | 'datetime-local'
+  | 'email'
+  | 'file'
+  | 'hidden'
+  | 'image'
+  | 'month'
+  | 'number'
+  | 'password'
+  | 'radio'
+  | 'range'
+  | 'reset'
+  | 'search'
+  | 'submit'
+  | 'tel'
+  | 'time'
+  | 'url'
+  | 'week'
 
-/**
- * @typedef Options
- * @type {{ label: string; value: string | number }[]}
- */
+type Options = { label: string; value: string | number }[]
 
 export default defineComponent({
-  name: 'BlitzInput',
   components: { Pepicon, BlitzIcon },
   props: {
     /**
      * Pepicon icon name
      * @category content
      */
-    icon: { type: String, default: '' },
+    icon: {
+      type: String as PropType<PepiconName>,
+      default: '',
+      validator: (val: PepiconName) => pepiconArray.includes(val),
+    },
     /**
      * @category content
      */
@@ -54,16 +75,14 @@ export default defineComponent({
      * @category content
      */
     type: {
-      /** @type {PropType<Type>} */
-      type: String,
+      type: String as PropType<Type>,
       default: 'text',
     },
     /**
      * Only when `type: 'select'`
      */
     options: {
-      /** @type {PropType<Options>} */
-      type: Array,
+      type: Array as PropType<Options>,
       default: undefined,
     },
     /**
@@ -135,9 +154,8 @@ export default defineComponent({
       timeout: 0,
       valueInner: this.parseValue(this.modelValue),
       fieldType: this.type,
-      eyeSvg: 'eye-closed',
-      /** @type {null | IntersectionObserver} */
-      textareaObserver: null,
+      eyeSvg: 'eye-closed' as 'eye' | 'eye-closed',
+      textareaObserver: null as null | IntersectionObserver,
     }
   },
   computed: {
@@ -163,8 +181,8 @@ export default defineComponent({
       this.autogrowInput()
       const debounceMs = this.debounce
       if (debounceMs > 0) {
-        clearTimeout(this.timeout)
-        this.timeout = setTimeout(() => this.emitInput(newVal), debounceMs)
+        clearTimeout(this.timeout as any)
+        this.timeout = setTimeout(() => this.emitInput(newVal), debounceMs) as any
       } else {
         this.emitInput(newVal)
       }
@@ -188,10 +206,7 @@ export default defineComponent({
     this.textareaObserver?.disconnect()
   },
   methods: {
-    /**
-     * @param {Date | string} val
-     */
-    parseValue(val) {
+    parseValue(val: string | Date): string | Date {
       const { type } = this
       if (type !== 'date' || !isDate(val)) return val
 
@@ -200,10 +215,7 @@ export default defineComponent({
       const DD = String(val.getDate()).padStart(2, '0')
       return `${YYYY}-${MM}-${DD}`
     },
-    /**
-     * @param {number | Date | string} newVal
-     */
-    emitInput(newVal) {
+    emitInput(newVal: number | Date | string): void {
       const { type } = this
       let payload = newVal
       if (isFullString(newVal)) {
@@ -216,10 +228,7 @@ export default defineComponent({
       }
       this.$emit('update:modelValue', payload)
     },
-    /**
-     * @param {Event} [e]
-     */
-    focus(e) {
+    focus(e?: Event) {
       if (this.preventFocus) {
         this.$emit('click', e)
         if (document.activeElement instanceof HTMLElement) {
@@ -227,28 +236,21 @@ export default defineComponent({
         }
         return
       }
-      /** @type {HTMLElement} */
-      const ref = this.$refs['native-el']
+      const ref = this.$refs['native-el'] as HTMLElement
       if (ref) ref.focus()
     },
-    /**
-     * @param {Event} e
-     */
-    click(e) {
+    click(e: MouseEvent) {
       if (this.type !== 'date' || (this.type === 'date' && this.preventFocus)) {
         e.preventDefault()
         e.stopPropagation()
       }
       this.focus(e)
     },
-    /**
-     * @param {Record<'init', boolean>} [options]
-     */
-    autogrowInput(options) {
-      /** @type {HTMLElement} */
-      const textAreaRef = this.$refs['native-el']
+    autogrowInput(options = { init: false }) {
+      const textAreaRef = this.$refs['native-el'] as HTMLElement
       if (!!textAreaRef && this.type === 'textarea' && this.autogrow) {
         if (options?.init) this.registerTextareaObserver()
+
         this.textareaHeight = 'auto'
         this.$nextTick(() => {
           if (this.valueInner && textAreaRef.scrollHeight !== textAreaRef.clientHeight) {
@@ -259,11 +261,12 @@ export default defineComponent({
     },
     registerTextareaObserver() {
       if (this.textareaObserver) return
+
       this.textareaObserver = new IntersectionObserver(
         (entries) => entries[0].isIntersecting && this.autogrowInput()
       )
-      /** @type {HTMLElement} */
-      const textAreaRef = this.$refs['native-el']
+
+      const textAreaRef = this.$refs['native-el'] as HTMLElement
       this.textareaObserver.observe(textAreaRef)
     },
     toggleVisiblity() {

@@ -1,43 +1,22 @@
-<script>
-import { defineComponent, PropType } from 'vue'
+<script setup lang="ts">
+import { defineProps, PropType } from 'vue'
 import { Pepicon } from 'vue-pepicons'
 import BlitzSpinner from './BlitzSpinner.vue'
 
-/**
- * @typedef Kind
- * @type {'synced' | 'error' | 'loading'}
- */
+type Kind = 'synced' | 'error' | 'loading'
 
 /**
  * Default colors are provided. Overwrite with CSS from the parent.
  */
-export default defineComponent({
-  name: 'BlitzIcon',
-  components: { Pepicon, BlitzSpinner },
-  props: {
-    /**
-     * The kind of the icon
-     * e.g `synced, error, loading`
-     */
-    kind: {
-      /** @type {PropType<Kind>} */
-      type: String,
-      required: true,
-    },
+defineProps({
+  /**
+   * The kind of the icon
+   * e.g `synced, error, loading`
+   */
+  kind: {
+    type: String as PropType<Kind>,
+    required: true,
   },
-  data() {
-    return {}
-  },
-  computed: {
-    name() {
-      const { kind } = this
-      if (kind === 'synced') return 'checkmark'
-      if (kind === 'error') return 'exclamation'
-      if (kind === 'loading') return 'minus'
-      return 'question-mark'
-    },
-  },
-  methods: {},
 })
 </script>
 
@@ -59,7 +38,7 @@ export default defineComponent({
     </svg>
   </div>
 
-  <Pepicon v-else :class="`blitz-icon _kind-${kind}`" type="pop" :name="name" />
+  <Pepicon v-else :class="`blitz-icon _kind-${kind}`" type="pop" :name="'checkmark'" />
 </template>
 
 <style scoped>

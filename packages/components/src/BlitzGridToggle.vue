@@ -1,5 +1,19 @@
+<script setup lang="ts">
+import { defineProps, defineEmits } from 'vue'
+
+defineProps({
+  /**
+   * `modelValue: true` represents "grid mode" so shows a "list icon"
+   * `modelValue: false` represents "list mode" so shows a "grid icon"
+   */
+  modelValue: Boolean,
+})
+
+defineEmits({ 'update:modelValue': null })
+</script>
+
 <template>
-  <div class="blitz-grid-toggle" @click="$emit('update:modelValue', !modelValue)">
+  <div class="blitz-grid-toggle" @click="() => $emit('update:modelValue', !modelValue)">
     <!-- grid icon -->
     <svg
       v-if="!modelValue"
@@ -56,19 +70,3 @@
   cursor: pointer;
 }
 </style>
-
-<script>
-export default {
-  name: 'BlitzGridToggle',
-  props: {
-    /**
-     * `modelValue: true` represents "grid mode" so shows a "list icon"
-     * `modelValue: false` represents "list mode" so shows a "grid icon"
-     */
-    modelValue: Boolean,
-  },
-  emits: ['update:modelValue'],
-  computed: {},
-  methods: {},
-}
-</script>

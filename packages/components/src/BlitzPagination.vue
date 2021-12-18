@@ -1,12 +1,44 @@
+<script lang="ts">
+import { computed, defineComponent, PropType } from 'vue'
+import { Pepicon } from 'vue-pepicons'
+import { morePages } from './helpers'
+
+export default defineComponent({
+  components: { Pepicon },
+  props: {
+    modelValue: { type: Number, required: true },
+    pageCount: { type: Number, required: true },
+    pagesShown: { type: Array as PropType<(number | typeof morePages)[]>, required: true },
+  },
+  setup(props, { emit }) {
+    const disabledPrevious = computed(() => props.modelValue === 1)
+    const disabledNext = computed(
+      () => props.modelValue === props.pageCount || props.pageCount === 0
+    )
+
+    function setPage(val: number) {
+      emit('update:modelValue', val)
+    }
+
+    return {
+      setPage,
+      morePages,
+      disabledPrevious,
+      disabledNext,
+    }
+  },
+})
+</script>
+
 <template>
   <ul class="blitz-pagination">
     <li :class="['_page-item', disabledPrevious && 'disabled']">
       <a
         class="_page-link"
         href="#"
-        :tabindex="disabledPrevious ? '-1' : null"
-        :aria-disabled="disabledPrevious ? 'true' : null"
-        @click.prevent="
+        :tabindex="disabledPrevious ? '-1' : undefined"
+        :aria-disabled="disabledPrevious ? true : undefined"
+        @click.prevent.stop="
           () => setPage(modelValue !== 1 && pageCount !== 0 ? modelValue - 1 : modelValue)
         "
       >
@@ -21,7 +53,7 @@
           v-if="item !== morePages"
           class="_page-link"
           href="#"
-          @click.prevent="() => setPage(item)"
+          @click.prevent.stop="() => setPage(item)"
         >
           {{ item }}
         </a>
@@ -34,9 +66,9 @@
       <a
         class="_page-link"
         href="#"
-        :tabindex="disabledNext ? '-1' : null"
-        :aria-disabled="disabledNext ? 'true' : null"
-        @click.prevent="
+        :tabindex="disabledNext ? '-1' : undefined"
+        :aria-disabled="disabledNext ? 'true' : undefined"
+        @click.prevent.stop="
           () => setPage(modelValue !== pageCount && pageCount !== 0 ? modelValue + 1 : modelValue)
         "
       >
@@ -108,37 +140,3 @@
   opacity: 0.3;
 }
 </style>
-
-<script>
-import { computed } from 'vue'
-import { Pepicon } from 'vue-pepicons'
-
-export default {
-  name: 'BlitzPagination',
-  components: { Pepicon },
-  props: {
-    modelValue: { type: Number, required: true },
-    pageCount: { type: Number, required: true },
-    pagesShown: { type: Array, required: true },
-  },
-  setup(props, { emit }) {
-    const morePages = '...'
-
-    const disabledPrevious = computed(() => props.modelValue === 1)
-    const disabledNext = computed(
-      () => props.modelValue === props.pageCount || props.pageCount === 0
-    )
-
-    function setPage(val) {
-      emit('update:modelValue', val)
-    }
-
-    return {
-      setPage,
-      morePages,
-      disabledPrevious,
-      disabledNext,
-    }
-  },
-}
-</script>

@@ -1,58 +1,10 @@
-<template>
-  <div class="blitz-list-form" :class="$attrs.class" :style="$attrs.style">
-    <div
-      class="blitz-list-form__row"
-      :style="`grid-template-columns: ${gridTemplateColumnsCalculated}`"
-    >
-      <BlitzField
-        v-for="(subfield, fieldIndex) in schemaLabels"
-        :key="fieldIndex"
-        v-bind="subfield"
-        class="blitz-list-form__sub-field"
-      />
-    </div>
-    <div
-      class="blitz-list-form__row"
-      v-for="(row, rowIndex) in cValue"
-      :style="`grid-template-columns: ${gridTemplateColumnsCalculated}`"
-      :key="rowIndex"
-    >
-      <BlitzField
-        v-for="(subfield, fieldIndex) in cSchema"
-        :key="fieldIndex"
-        v-bind="subfield"
-        class="blitz-list-form__sub-field"
-        :rowIndex="rowIndex"
-        :rowData="cValue[rowIndex]"
-        :rowInput="(params) => setSubFieldValue({ id: params.id, value: params.value, rowIndex })"
-        :deleteRow="() => deleteRow(rowIndex)"
-        :modelValue="cValue[rowIndex][subfield.id]"
-        @update:modelValue="
-          (val, origin) => setSubFieldValue({ id: subfield.id, value: val, rowIndex }, origin)
-        "
-        @keyup.delete="onDeleteKey(rowIndex, subfield.id)"
-      />
-    </div>
-  </div>
-</template>
-
-<style lang="sass">
-.blitz-list-form
-  > .blitz-list-form__row
-    display: grid
-    justify-items: stretch
-    align-items: center
-    grid-gap: 0.5rem
-    margin-bottom: 0.5rem
-</style>
-
-<script>
+<script lang="ts">
 import { defineComponent, PropType } from 'vue'
 import { merge } from 'merge-anything'
 import { copy } from 'copy-anything'
 import { isNumber } from 'is-what'
 import BlitzField from './BlitzField.vue'
-import './types'
+import { Schema } from './types'
 
 /**
 With BlitzListForm you can pass a `schema` just like a BlitzForm. The difference is that BlitzListForm is more like a (as the name says) _**list**_ form. 😃
@@ -60,7 +12,6 @@ With BlitzListForm you can pass a `schema` just like a BlitzForm. The difference
 The `schema` you specify is shown as a single row. New rows are added automatically on user input.
  */
 export default defineComponent({
-  name: 'BlitzListForm',
   inheritAttrs: false,
   components: { BlitzField },
   props: {
@@ -68,8 +19,7 @@ export default defineComponent({
      * @category model
      */
     modelValue: {
-      /** @type {PropType<any[]>} */
-      type: Array,
+      type: Array as PropType<any[]>,
       default: () => [],
     },
     /**
@@ -78,8 +28,7 @@ export default defineComponent({
      * @category content
      */
     schema: {
-      /** @type {PropType<Schema>} */
-      type: Array,
+      type: Array as PropType<Schema>,
       default: () => [{ component: 'input' }],
     },
     /**
@@ -90,8 +39,7 @@ export default defineComponent({
      * @category content
      */
     attrsToPass: {
-      /** @type {PropType<string[]>} */
-      type: Array,
+      type: Array as PropType<string[]>,
       default: () => [
         'formData',
         'formDataFlat',
@@ -121,8 +69,7 @@ export default defineComponent({
      * This is the value with an empty row concatinated to it.
      */
     cValue: {
-      /** @returns {any} */
-      get() {
+      get(): any {
         const { modelValue, schema, disabled, readonly, maxRows } = this
         const emptyRow = schema.reduce((carry, { id }) => ({ ...carry, [id]: undefined }), {})
         if (!disabled && !readonly && (!isNumber(maxRows) || maxRows > modelValue.length)) {
@@ -130,14 +77,13 @@ export default defineComponent({
         }
         return modelValue
       },
-      set(val) {
+      set(val: any) {
         this.$emit('update:modelValue', val)
       },
     },
-    /** @returns {any} */
-    listFormAttrsToPass() {
+    listFormAttrsToPass(): Record<string, any> {
       const { attrsToPass, getPropOrAttrOrParentProp, modelValue } = this
-      const attrs = attrsToPass.reduce((carry, attrKey) => {
+      const attrs = attrsToPass.reduce<Record<string, any>>((carry, attrKey) => {
         carry[attrKey] = getPropOrAttrOrParentProp(attrKey)
         return carry
       }, {})
@@ -146,8 +92,7 @@ export default defineComponent({
       }
       return attrs
     },
-    /** @returns {any} */
-    cSchema() {
+    cSchema(): Schema {
       const { schema, disabled, readonly, listFormAttrsToPass } = this
       // slot, class, style are 3 prop names we cannot directly pass via `v-bind`.
       // - slot: we pass as `slots: { default: ... }`
@@ -155,7 +100,7 @@ export default defineComponent({
       // - style: we pass as `fieldStyle`
       return schema.map((blueprint) => {
         const overwritableDefaults = { disabled, readonly }
-        const overwrites = {
+        const overwrites: Record<string, any> = {
           label: '',
           subLabel: '',
           slots: { label: undefined },
@@ -171,17 +116,15 @@ export default defineComponent({
         return merge(listFormAttrsToPass, overwritableDefaults, blueprint, overwrites)
       })
     },
-    /** @returns {any} */
-    schemaLabels() {
+    schemaLabelsAndAttrs(): Record<string, any>[] {
       const { schema, listFormAttrsToPass } = this
       return schema.map((subfield) => {
         return merge(listFormAttrsToPass, subfield, { component: undefined })
       })
     },
-    /** @returns {any} */
-    gridTemplateColumnsCalculated() {
+    gridTemplateColumnsCalculated(): string {
       const { schema } = this
-      return schema.reduce((total, field) => {
+      return schema.reduce<string>((total, field) => {
         const fr = Number(field.span)
         if (isNumber(fr)) return `${total} ${fr}fr`
         return `${total} ${field.span || '1fr'}`
@@ -189,30 +132,39 @@ export default defineComponent({
     },
   },
   methods: {
-    getPropOrAttrOrParentProp(propKey) {
-      if (propKey in this) return this[propKey]
+    getPropOrAttrOrParentProp(propKey: string): any {
+      if (propKey in this) return (this as any)[propKey]
       if (propKey in this.$attrs) return this.$attrs[propKey]
       // TODO: WTF, this is such bad practice... Why did I do this... :'D
-      if (propKey in this.$parent) return this.$parent[propKey]
-      return this.$parent.$parent[propKey]
+      if (this.$parent && propKey in this.$parent) return (this.$parent as any)[propKey]
+      if (this.$parent && this.$parent.$parent && propKey in this.$parent.$parent) {
+        return (this.$parent.$parent as any)[propKey]
+      }
+      return undefined
     },
-    deleteRow(rowIndex) {
+    deleteRow(rowIndex: number): void {
       const { modelValue } = this
       const allRows = copy(modelValue)
       if (allRows[rowIndex] === undefined) return
       allRows.splice(rowIndex, 1)
       this.$emit('update:modelValue', allRows)
     },
-    setSubFieldValue({ id, value: newValue, rowIndex }, origin) {
+    setSubFieldValue(
+      { id, value: newValue, rowIndex }: { id: string | undefined; value: any; rowIndex: number },
+      origin?: 'default' | '' | undefined
+    ): void {
       // do not emit when the origin is from the default value initialisation
-      if (origin === 'default') return
+      if (origin === 'default' || !id) return
+
       const { modelValue: oldValue } = this
       const allRows = copy(oldValue)
+
       if (allRows[rowIndex] === undefined) allRows[rowIndex] = {}
+
       allRows[rowIndex][id] = newValue
       this.$emit('update:modelValue', allRows)
     },
-    onDeleteKey(rowIndex, fieldId) {
+    onDeleteKey(rowIndex: number): void {
       const { modelValue, deleteRow } = this
       const allRows = modelValue
       const row = allRows[rowIndex]
@@ -224,3 +176,51 @@ export default defineComponent({
   },
 })
 </script>
+
+<template>
+  <div class="blitz-list-form" :class="$attrs.class" :style="($attrs as any).style">
+    <div
+      class="blitz-list-form__row"
+      :style="`grid-template-columns: ${gridTemplateColumnsCalculated}`"
+    >
+      <BlitzField
+        v-for="(subfield, fieldIndex) in schemaLabelsAndAttrs"
+        :key="fieldIndex"
+        v-bind="subfield"
+        class="blitz-list-form__sub-field"
+      />
+    </div>
+    <div
+      class="blitz-list-form__row"
+      v-for="(row, rowIndex) in cValue"
+      :style="`grid-template-columns: ${gridTemplateColumnsCalculated}`"
+      :key="rowIndex"
+    >
+      <BlitzField
+        v-for="(subfield, fieldIndex) in cSchema"
+        :key="fieldIndex"
+        v-bind="subfield"
+        class="blitz-list-form__sub-field"
+        :rowIndex="rowIndex"
+        :rowData="cValue[rowIndex]"
+        :rowInput="(params) => setSubFieldValue({ id: params.id, value: params.value, rowIndex })"
+        :deleteRow="() => deleteRow(rowIndex)"
+        :modelValue="cValue[rowIndex][subfield.id]"
+        @update:modelValue="
+          (val, origin) => setSubFieldValue({ id: subfield.id, value: val, rowIndex }, origin)
+        "
+        @keyup.delete="onDeleteKey(rowIndex)"
+      />
+    </div>
+  </div>
+</template>
+
+<style lang="sass">
+.blitz-list-form
+  > .blitz-list-form__row
+    display: grid
+    justify-items: stretch
+    align-items: center
+    grid-gap: 0.5rem
+    margin-bottom: 0.5rem
+</style>

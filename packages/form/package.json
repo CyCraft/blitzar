@@ -1,25 +1,26 @@
 {
   "name": "@blitzar/form",
   "version": "1.0.5",
-  "description": "Blitzar form component",
   "author": "Luca Ban - Mesqueeb",
-  "module": "./dist/index.js",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.js",
+  "funding": "https://github.com/sponsors/mesqueeb",
+  "description": "Blitzar form component",
+  "main": "./dist/index.umd.js",
+  "module": "./dist/index.es.js",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/index.js",
-      "required": "./dist/index.js",
-      "types": "./dist/index.d.js"
+      "import": "./dist/index.es.js",
+      "require": "./dist/index.umd.js",
+      "types": "./dist/index.d.ts"
     }
   },
+  "files": [
+    "dist"
+  ],
   "scripts": {
-    "add-missing-typedefs": "sed -i '' '$r ./dist/components/types.d.ts' ./dist/components/*.vue.d.ts",
-    "vue-int": "vue-int -i src/components -r -o dist/vetur",
-    "vue-tsc": "vue-tsc --declaration --emitDeclarationOnly",
-    "vue-compile": "vue-compile src -o dist",
-    "build": "rimraf dist && npm run vue-int && npm run vue-tsc && npm run vue-compile && npm run add-missing-typedefs",
-    "dev": "vue-compile src -o ./dist --watch"
+    "gen:types:vetur": "vue-int -i src -r -o dist/vetur",
+    "gen:types:ts": "vue-tsc --declaration --emitDeclarationOnly",
+    "build": "rimraf dist && vite build && npm run gen:types:ts && npm run gen:types:vetur"
   },
   "dependencies": {
     "@blitzar/utils": "^1.0.5",

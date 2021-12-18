@@ -1,8 +1,9 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
+    "outDir": "dist",
     "baseUrl": "."
   },
-  "include": ["./index.js"],
-  "exclude": ["node_modules", "dist"]
+  "include": ["src/index.ts", "./src/**/*.ts", "./src/**/*.vue", "./shims.d.ts"],
+  "exclude": ["./dist", "node_modules"]
 }

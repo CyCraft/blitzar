@@ -38,7 +38,7 @@ module.exports = {
         ignore: [],
       },
     ],
-    '@typescript-eslint/no-unused-vars': 'off',
-    '@typescript-eslint/array-type': ['error', { default: 'array' }],
+    // '@typescript-eslint/no-unused-vars': 'off',
+    // '@typescript-eslint/array-type': ['error', { default: 'array' }],
   },
 }

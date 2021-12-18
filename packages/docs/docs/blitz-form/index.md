@@ -10,7 +10,7 @@ editLink: true
 npm i blitzar
 ```
 
-Blitzar only allows for local importing like the example below.
+You must import Blitzar components locally wherever you want to use them, as per the example below:
 
 ```js
 // import what you need
@@ -21,6 +21,8 @@ export default {
   components: { BlitzTable, BlitzListForm, BlitzTable },
 }
 ```
+
+We do not support Vue's `install(Plugin)` out of principle: Anything that is "auto-magical" is not considered good practice; It's more difficult to trace down where a component is coming from.
 
 ## Basics
 

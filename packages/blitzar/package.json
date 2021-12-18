@@ -1,18 +1,32 @@
 {
   "name": "blitzar",
   "version": "1.0.5",
+  "author": "Luca Ban - Mesqueeb",
+  "funding": "https://github.com/sponsors/mesqueeb",
   "description": "Generate Vue Forms and Data-tables fast with a simple JSON-like syntax ⚡",
-  "module": "index.js",
-  "main": "index.js",
-  "type": "module",
+  "main": "./dist/index.umd.js",
+  "module": "./dist/index.es.js",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./index.js",
-      "require": "./index.js"
+      "import": "./dist/index.es.js",
+      "require": "./dist/index.umd.js",
+      "types": "./dist/index.d.ts"
     }
   },
-  "scripts": {},
-  "author": "Luca Ban - Mesqueeb",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "gen:types:vetur": "vue-int -i src -r -o dist/vetur",
+    "gen:types:ts": "vue-tsc --declaration --emitDeclarationOnly",
+    "build": "rimraf dist && vite build && npm run gen:types:ts && npm run gen:types:vetur"
+  },
+  "dependencies": {
+    "@blitzar/form": "^1.0.5",
+    "@blitzar/table": "^1.0.5",
+    "@blitzar/utils": "^1.0.5"
+  },
   "homepage": "https://github.com/cycraft/blitzar#readme",
   "keywords": [
     "vue-framework",
@@ -31,11 +45,6 @@
     "forms",
     "schema"
   ],
-  "dependencies": {
-    "@blitzar/form": "^1.0.5",
-    "@blitzar/table": "^1.0.5",
-    "@blitzar/utils": "^1.0.5"
-  },
   "license": "MIT",
   "bugs": "https://github.com/cycraft/blitzar/issues",
   "repository": {

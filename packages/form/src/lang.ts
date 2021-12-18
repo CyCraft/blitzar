@@ -1,9 +1,9 @@
-import './types'
+import { Lang } from './types'
 
-// when changing the default, do it for both BlitzForm; BlitzField and lang.js
-
-/** @type {() => Lang} */
-export const defaultLang = () => ({
+/**
+ * when changing the default, do it for both BlitzForm; BlitzField and lang.js
+ */
+export const defaultLang: () => Lang = () => ({
   archive: 'Archive',
   delete: 'Delete',
   cancel: 'Cancel',

@@ -189,69 +189,16 @@
 }
 </style>
 
-<script>
+<script lang="ts">
 import { computed, ref, defineComponent, watchEffect, PropType } from 'vue'
 import { isFunction } from 'is-what'
 import { BlitzForm, BlitzField } from '@blitzar/form'
 import { RowSelectionId } from '@blitzar/utils'
 import { DatasetItem } from '@blitzar/components'
 import BlitzTh from './BlitzTh.vue'
-
-/*
- * dsPages — The array used to create pagination links
- * @type {Array}
- */
-/*
- * dsResultsNumber — The number of rows currently displaying
- * @type {Number}
- */
-/*
- * dsPagecount — The number of pagination pages
- * @type {Number}
- */
-/*
- * dsFrom — The item "from" of paginated items currently displaying
- * @type {Number}
- */
-/*
- * dsTo — The item "to" of paginated items currently displaying
- * @type {Number}
- */
-/*
- * dsPage — The number of the current page in pagination
- * @type {Number}
- */
-/*
- * dsData — The data object that contains all the data.
- * @type {Array of Objects}
- */
-/*
- * datasetI18n — An object containing translation strings
- * @type {Object}
- */
-
-/**
- * @typedef DsScope
- * @type {{
- *   dsData: { [id in string]: any }[];
- *   dsRows: ;
- *   dsPages: Array;
- *   dsResultsNumber: number;
- *   dsPagecount: number;
- *   dsShowEntries: number;
- *   dsFrom: number;
- *   dsTo: number;
- *   dsPage: number;
- *   datasetI18n: Object;
- *   search: (val: string) => void;
- *   showEntries: (val: number) => Promise<void>;
- *   setActive: (val: number) => void;
- * }}
- * @see https://next--vue-dataset-demo.netlify.app/components/#props
- */
+import { DsScope } from './types'
 
 export default defineComponent({
-  name: 'BlitzTableInner',
   inheritAttrs: false,
   components: {
     BlitzForm,
@@ -261,8 +208,7 @@ export default defineComponent({
   },
   props: {
     ds: {
-      /** @type {PropType<DsScope>} */
-      type: Object,
+      type: Object as PropType<DsScope>,
       required: true,
     },
     schemaColumns: { type: Array, default: undefined },

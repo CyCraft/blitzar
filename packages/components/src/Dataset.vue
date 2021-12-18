@@ -1,69 +1,58 @@
-<template>
-  <slot
-    :ds="{
-      dsIndexes,
-      dsShowEntries,
-      dsResultsNumber,
-      dsPage,
-      dsPagecount,
-      dsFrom,
-      dsTo,
-      dsData,
-      dsRows,
-      dsPages,
-      search,
-      showEntries,
-      setActive,
-    }"
-  ></slot>
-</template>
-
-<script>
-import { ref, computed, provide, watch, nextTick } from 'vue'
+<script lang="ts">
+import { ref, computed, provide, watch, nextTick, PropType, defineComponent } from 'vue'
 import { flattenObject } from 'flatten-anything'
 import { isEmptyObject } from 'is-what'
 import { createPagingRange, fieldSorter, filterRow, findAny } from './helpers'
 
-export default {
+export default defineComponent({
   props: {
-    dsData: { type: Array, default: () => [] },
-    dsFilterFields: { type: Object, default: () => ({}) },
-    dsSortby: { type: Array, default: () => [] },
-    dsSearchIn: { type: Array, default: () => [] },
-    dsSearchAs: { type: Object, default: () => ({}) },
-    dsSortAs: { type: Object, default: () => ({}) },
+    dsData: { type: Array as PropType<Record<string, any>[]>, default: () => [] },
+    dsFilterFields: {
+      type: Object as PropType<{
+        [colId in string]: (cellValue: any, rowData: Record<string, any>) => boolean | any
+      }>,
+      default: () => ({}),
+    },
+    dsSortby: { type: Array as PropType<string[]>, default: () => [] },
+    dsSearchIn: { type: Array as PropType<string[]>, default: () => [] },
+    dsSearchAs: {
+      type: Object as PropType<{
+        [id in string]: (
+          cellValue: any,
+          searchString: string,
+          rowData: Record<string, any>
+        ) => boolean
+      }>,
+      default: () => ({}),
+    },
+    dsSortAs: {
+      type: Object as PropType<{
+        [id in string]: (cellValue: any, rowData: Record<string, any>) => any
+      }>,
+      default: () => ({}),
+    },
   },
-  /**
-   * @param {{
-   *   dsData: Record<string, any>[];
-   *   dsFilterFields: { [colId in string]: (cellValue: any, rowData: Record<string, any>) => boolean | any };
-   *   dsSortby: string[];
-   *   dsSearchIn: string[];
-   *   dsSearchAs: { [id in string]: (cellValue: any, searchString: string, rowData: Record<string, any>) => boolean };
-   *   dsSortAs: { [id in string]: (cellValue: any, rowData: Record<string, any>) => any };
-   * }} props
-   */
   setup(props) {
     const dsPage = ref(1)
     const dsSearch = ref('')
     const dsShowEntries = ref(10)
-    const indexes = ref([])
+    const indexes = ref<number[]>([])
 
-    const search = (value) => {
+    const search = (value: string) => {
       dsSearch.value = value
     }
 
-    const showEntries = async (value) => {
+    const showEntries = async (value: number) => {
       const pagesBeforeChange = dsPages.value
       dsShowEntries.value = value
       await nextTick()
       const pagesAfterChange = dsPages.value
       if (pagesAfterChange.length < pagesBeforeChange.length) {
-        setActive(pagesAfterChange[pagesAfterChange.length - 1])
+        setActive(pagesAfterChange[pagesAfterChange.length - 1] as number)
       }
     }
 
-    const setActive = (value) => {
+    const setActive = (value: number) => {
       dsPage.value = value
     }
 
@@ -179,5 +168,25 @@ export default {
       setActive,
     }
   },
-}
+})
 </script>
+
+<template>
+  <slot
+    :ds="{
+      dsIndexes,
+      dsShowEntries,
+      dsResultsNumber,
+      dsPage,
+      dsPagecount,
+      dsFrom,
+      dsTo,
+      dsData,
+      dsRows,
+      dsPages,
+      search,
+      showEntries,
+      setActive,
+    }"
+  ></slot>
+</template>
