@@ -1,6 +1,6 @@
 ![hero](media/blitzar-hero.png?raw=true)
 
-# Blitzar (Vue 3 Beta)
+# Blitzar
 
 Generate Vue Forms and Data-tables fast with a simple JSON-like syntax ⚡️
 
