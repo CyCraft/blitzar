@@ -11,10 +11,10 @@ npm i blitzar
 ## Documentation
 
 **Vue 3**<br />
-[blitzar-next.web.app](https://blitzar-next.web.app)
+[blitzar.cycraft.co](https://blitzar.cycraft.co)
 
 **Vue 2**<br />
-[blitzar.cycraft.co](https://blitzar.cycraft.co)
+[blitzar0.web.app](https://blitzar0.web.app)
 
 ## Motivation
 

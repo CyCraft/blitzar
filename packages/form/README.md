@@ -10,7 +10,7 @@ npm i blitzar
 
 ## Documentation
 
-[blitzar-next.web.app](https://blitzar-next.web.app)
+[blitzar.cycraft.co](https://blitzar.cycraft.co)
 
 ## Motivation
 
