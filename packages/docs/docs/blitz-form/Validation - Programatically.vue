@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { validateFormPerSchema } from '@blitzar/form/src/components/validation'
+import { validateFormPerSchema } from 'blitzar'
 import { showToast } from '../../components/toasts'
 
 const schema = [

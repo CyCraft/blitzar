@@ -115,7 +115,7 @@ There are three ways we could create such a field:
 
 So even though the field `fullName` has no `value` at all, it will always stay in sync with the current `formData`.
 
-When implementing a Computed Field Value this way however, `fullName` will never have that computed value emitted. This means that it won't be included in the BlitzForm events: `@update:modelValue`, `@update-field` and `@save`. So it's difficult to capture and save this calculated value alongside your other data. See the next section for another method.
+When implementing a Computed Field Value this way however, `fullName` will never have that computed value emitted. This means that it won't be included in the BlitzForm events: `@update:modelValue`, `@updateField` and `@save`. So it's difficult to capture and save this calculated value alongside your other data. See the next section for another method.
 
 <CodeBlockComponent filename="blitz-form/Computed Field Values - 1" />
 

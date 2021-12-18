@@ -17,6 +17,7 @@ type BlitzHOption = {
  * I'm still thinking about the best syntax for BlitzH
  */
 const BlitzH = defineComponent({
+  name: 'BlitzH',
   functional: true,
   props: {
     options: {

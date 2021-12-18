@@ -1,0 +1,32 @@
+{
+  "name": "@blitzar/types",
+  "version": "1.0.5",
+  "description": "Blitzar types — can only be consumed by TS projects",
+  "author": "Luca Ban - Mesqueeb",
+  "module": "./src/index.ts",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": {
+      "import": "./src/index.ts",
+      "require": "./src/index.ts",
+      "types": "./src/index.tss"
+    }
+  },
+  "scripts": {},
+  "dependencies": {},
+  "keywords": [
+    "blitzar",
+    "typescript"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/cycraft/blitzar#readme",
+  "bugs": {
+    "url": "https://github.com/cycraft/blitzar/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cycraft/blitzar.git"
+  },
+  "gitHead": "a40cbe1a9bbc4727d4e7e6f833808f8c578762de"
+}

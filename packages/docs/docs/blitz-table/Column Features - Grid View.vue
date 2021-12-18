@@ -21,7 +21,7 @@
 
 <script>
 import { markRaw } from 'vue'
-import { BlitzGridToggle } from '@blitzar/table'
+import { BlitzGridToggle } from 'blitzar'
 
 const blitzGridToggle = markRaw(BlitzGridToggle)
 

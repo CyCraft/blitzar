@@ -4,7 +4,7 @@
       :schema="schema"
       :columnCount="3"
       v-model="formData"
-      @update-field="logupdateField"
+      @updateField="logupdateField"
       @update:modelValue="logFormInput"
     />
 
@@ -48,7 +48,7 @@ export default {
   },
   methods: {
     logupdateField(eventPayload) {
-      showToast('@update-field', eventPayload)
+      showToast('@updateField', eventPayload)
     },
     logFormInput(eventPayload, origin) {
       showToast('@update:modelValue', eventPayload, origin)

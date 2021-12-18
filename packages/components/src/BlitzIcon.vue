@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { defineProps, PropType } from 'vue'
+import { defineComponent, defineProps, PropType } from 'vue'
 import { Pepicon } from 'vue-pepicons'
 import BlitzSpinner from './BlitzSpinner.vue'
 
 type Kind = 'synced' | 'error' | 'loading'
 
+defineComponent({ name: 'BlitzIcon' })
 /**
  * Default colors are provided. Overwrite with CSS from the parent.
  */

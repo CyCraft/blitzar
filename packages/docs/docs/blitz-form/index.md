@@ -61,7 +61,7 @@ The form below uses regular HTML `input` and `select` fields. You can change the
 There are three ways to retrieve the data that a user fills in a BlitzForm.
 
 1. You can pass an empty object as `v-model`<br />In this case BlitzForms will populate an object with the field's `id` as key and the user input as value.
-2. You can listen to the `@update-field` event which triggers every time a field's value changes. It's payload is an object that looks like: `{id, value}`.
+2. You can listen to the `@updateField` event which triggers every time a field's value changes. It's payload is an object that looks like: `{id, value}`.
 3. You can listen to the `@save` event which is triggered when the form's save button is pressed. It's payload is an object that looks like: `{newData, oldData}`. For more info see the [Action Buttons documentation](#action-buttons).
 
 ### Advanced Example
@@ -288,10 +288,10 @@ Eg. a field with ID `size.width` points to `{size: {width}}` in your data.
 
 Besides writing your field IDs with dot notation, nothing further needs to be done.
 
-The only thing you need to be careful with is the `@update-field` event:
+The only thing you need to be careful with is the `@updateField` event:
 
 - Listening to the `@update:modelValue` event will always return the full data nested
-- Listening to the `@update-field` event will always have the field ID with dot-notation in its payload
+- Listening to the `@updateField` event will always have the field ID with dot-notation in its payload
 
 Try typing something in the example below:
 
@@ -363,7 +363,7 @@ There are both form and field events.
 
 A BlitzForm is usable with `v-model`. You can also listen to the `@update:modelValue` event that is triggered any time some `formData` changes.
 
-There is also an event emitted called `@update-field`, every time you type something in a specific field.
+There is also an event emitted called `@updateField`, every time you type something in a specific field.
 
 Try typing a little in the example below.
 

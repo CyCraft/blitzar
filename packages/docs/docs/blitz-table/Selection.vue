@@ -13,7 +13,12 @@
       :rows="rows"
       :rowsPerPage="5"
       :titleField="{ component: 'h3', slot: 'Users' }"
-      :searchField="{ component: blitzInput, placeholder: 'Search...', clearable: true }"
+      :searchField="{
+        component: blitzInput,
+        placeholder: 'Search...',
+        debounce: 300,
+        clearable: true,
+      }"
       :gridToggleField="{ component: blitzGridToggle }"
       :paginationField="{ component: blitzPagination }"
       :rowsPerPageField="{
@@ -48,15 +53,15 @@
 
 <script>
 import { markRaw, onMounted, ref } from 'vue'
-import { RowSelectionId } from '@blitzar/utils'
-import { BlitzInput, BlitzGridToggle, BlitzPagination } from '@blitzar/table'
+import { ROW_SELECTION_ID } from '@blitzar/types'
+import { BlitzInput, BlitzGridToggle, BlitzPagination } from 'blitzar'
 
 const blitzInput = markRaw(BlitzInput)
 const blitzGridToggle = markRaw(BlitzGridToggle)
 const blitzPagination = markRaw(BlitzPagination)
 
 const schemaColumnsAndGrid = [
-  { id: RowSelectionId, label: 'Select', component: 'input', type: 'checkbox' },
+  { id: ROW_SELECTION_ID, label: 'Select', component: 'input', type: 'checkbox' },
   { id: 'firstName', label: 'First Name' },
   { id: 'lastName', label: 'Last Name' },
   { id: 'company', label: 'Company' },

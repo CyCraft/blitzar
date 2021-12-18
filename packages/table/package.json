@@ -12,19 +12,25 @@
       "import": "./dist/index.es.js",
       "require": "./dist/index.umd.js",
       "types": "./dist/index.d.ts"
+    },
+    "./dist/style.css": {
+      "import": "./dist/style.css"
     }
   },
   "files": [
     "dist"
   ],
   "scripts": {
+    "lint": "eslint ./src/**.*",
     "gen:types:vetur": "vue-int -i src -r -o dist/vetur",
     "gen:types:ts": "vue-tsc --declaration --emitDeclarationOnly",
-    "build": "rimraf dist && vite build && npm run gen:types:ts && npm run gen:types:vetur"
+    "build": "npm run lint && rimraf dist && vite build && npm run gen:types:ts && npm run gen:types:vetur",
+    "dev": "vite build --watch"
   },
   "dependencies": {
     "@blitzar/components": "^1.0.5",
     "@blitzar/form": "^1.0.5",
+    "@blitzar/types": "^1.0.5",
     "is-what": "^3.14.1",
     "merge-anything": "^4.0.2",
     "path-to-prop": "^1.0.0"

@@ -45,7 +45,7 @@
 <script>
 import { VueFinalModal } from 'vue-final-modal'
 import { ref, reactive, markRaw } from 'vue'
-import { BlitzGridToggle } from '@blitzar/table'
+import { BlitzGridToggle } from 'blitzar'
 
 const blitzGridToggle = markRaw(BlitzGridToggle)
 

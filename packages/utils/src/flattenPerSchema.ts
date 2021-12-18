@@ -16,6 +16,6 @@ export function flattenPerSchema(
   const schemaArray = isArray(schema) ? schema : Object.values(schema)
   const schemaNestedIds = schemaArray
     .map((blueprint: Record<string, any>) => blueprint.id)
-    .filter((id: string | Symbol) => isFullString(id) && id.includes('.'))
+    .filter((id: string | symbol) => isFullString(id) && id.includes('.'))
   return flattenObjectProps(target, schemaNestedIds)
 }

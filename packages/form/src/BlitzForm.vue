@@ -2,21 +2,13 @@
 import { defineComponent, PropType } from 'vue'
 import { merge } from 'merge-anything'
 import { copy } from 'copy-anything'
-import {
-  isArray,
-  isFunction,
-  isFullString,
-  isPlainObject,
-  isString,
-  isBoolean,
-  isFullArray,
-} from 'is-what'
+import { isFunction, isFullString, isPlainObject, isString, isBoolean, isFullArray } from 'is-what'
 import { nestifyObject } from 'nestify-anything'
 import { flattenPerSchema } from '@blitzar/utils'
+import type { Lang, Mode, Schema, ShowErrorsOn, UpdateModelValueOrigin } from '@blitzar/types'
 import BlitzField from './BlitzField.vue'
 import { defaultLang } from './lang'
 import { getBlitzFieldOverwrites } from './helpers'
-import type { Lang, Mode, Schema, ShowErrorsOn } from './types'
 
 /**
 Here you can find all the information on the available props & events of BlitzForm.
@@ -24,6 +16,7 @@ Here you can find all the information on the available props & events of BlitzFo
 If any of the documentation is unclear, feel free to [open an issue](https://github.com/cycraft/blitzar/issues) to ask for clarification!
  */
 export default defineComponent({
+  name: 'BlitzForm',
   components: { BlitzField },
   inheritAttrs: false,
   props: {
@@ -45,7 +38,7 @@ export default defineComponent({
      * Read more on Dynamic Props in its dedicated page.
      * @category model
      */
-    id: { type: String },
+    id: { type: String, default: undefined },
     /**
      * This is the heart of your BlitzForm. It's the schema that defines what fields will be generated.
      *
@@ -176,6 +169,7 @@ export default defineComponent({
       type: [Object, Array, String, Function] as PropType<
         string | Record<string, boolean> | (string | Record<string, boolean>)[]
       >,
+      default: null,
     },
     /**
      * Custom classes to be applied to the label of BlitzField. Applied like so `:class="labelClasses"`. Can be an Dynamic Prop.
@@ -188,6 +182,7 @@ export default defineComponent({
       type: [Object, Array, String, Function] as PropType<
         string | Record<string, boolean> | (string | Record<string, boolean>)[]
       >,
+      default: null,
     },
     /**
      * An array with prop names that should be treated as Dynamic Props when passed a function.
@@ -254,25 +249,25 @@ export default defineComponent({
      * @example 'MyFormWrapper'
      */
     formComponent: {
-      type: [String, Function] as PropType<string | Function>,
+      type: [String, Function] as PropType<string | any>,
       default: 'div',
     },
   },
   emits: {
-    'update:mode': (payload: any) => ['edit', 'readonly', 'disabled', 'raw'].includes(payload),
-    'update-field': (payload: { id: string; value: any; origin?: 'default' | 'cancel' | '' }) =>
+    'update:mode': (payload: Mode) => ['edit', 'readonly', 'disabled', 'raw'].includes(payload),
+    updateField: (payload: { id: string; value: any; origin?: UpdateModelValueOrigin }) =>
       isPlainObject(payload),
-    'update:modelValue': (payload: any, origin?: 'default' | 'cancel' | '' | undefined) =>
+    'update:modelValue': (payload: Record<string, any>, origin?: UpdateModelValueOrigin) =>
       isPlainObject(payload) && ['default', 'cancel', '', undefined].includes(origin),
-    edit: () => {}, // no payload
-    cancel: () => {}, // no payload
+    edit: () => true, // no payload
+    cancel: () => true, // no payload
     save: (payload: {
       newData: Record<string, any>
       oldData: Record<string, any>
       formData: Record<string, any>
     }) => isPlainObject(payload),
-    delete: () => {}, // no payload
-    archive: () => {}, // no payload
+    delete: () => true, // no payload
+    archive: () => true, // no payload
     /** HTML5 event from the top level component */
     click: null,
     /** HTML5 event from the top level component */
@@ -308,17 +303,6 @@ export default defineComponent({
       formDataFlatBackups: [copy(formDataFlat)],
       formErrorMsg: null as null | string,
     }
-  },
-  watch: {
-    mode(newValue) {
-      this.innerMode = newValue
-    },
-    id(newValue) {
-      this.formId = newValue
-    },
-    lang(newValue) {
-      this.innerLang = merge(defaultLang(), newValue)
-    },
   },
   computed: {
     formData(): Record<string, any> {
@@ -472,12 +456,23 @@ export default defineComponent({
       return dataNested
     },
   },
+  watch: {
+    mode(newValue) {
+      this.innerMode = newValue
+    },
+    id(newValue) {
+      this.formId = newValue
+    },
+    lang(newValue) {
+      this.innerLang = merge(defaultLang(), newValue)
+    },
+  },
   methods: {
     isFullString,
     event(
       eventName:
         | 'update:mode'
-        | 'update-field'
+        | 'updateField'
         | 'update:modelValue'
         | 'edit'
         | 'cancel'
@@ -485,7 +480,7 @@ export default defineComponent({
         | 'delete'
         | 'archive',
       payload?: any,
-      origin?: 'default' | 'cancel' | '' | undefined
+      origin?: UpdateModelValueOrigin
     ): void {
       if (eventName === 'update:mode') {
         /**
@@ -494,27 +489,27 @@ export default defineComponent({
          */
         this.$emit('update:mode', payload)
       }
-      if (eventName === 'update-field') {
+      if (eventName === 'updateField') {
         /**
          * This event triggers every time a field gets updated.
          *
          * The payload is an object with `id` for the field id and `value` as the new value.
          *
-         * The `origin` prop of the event payload is what caused update-field event:
+         * The `origin` prop of the event payload is what caused updateField event:
          * - `'default'` means that the event was emitted when the form was mounted and all fields have initialised their default values.
          * - `'cancel'` means that the 'cancel' button was clicked and the event data was reset to what it was before it was edited.
-         * - update-field events from user input won't have an origin.
+         * - updateField events from user input won't have an origin.
          * - A custom origin can be added when you execute `updateField` from inside an evaluatuated prop.
          *
-         * @property {{ id: string, value: any, origin?: 'default' | 'cancel' | '' }} payload event payload
+         * @property {{ id: string, value: any, origin?: UpdateModelValueOrigin }} payload event payload
          */
-        this.$emit('update-field', payload)
+        this.$emit('updateField', payload)
       }
       if (eventName === 'update:modelValue') {
         /**
          * This event enables the form to be usable with `v-model="formData"`
          * @property {{ [id in string]: any }} payload event payload
-         * @property {'default' | 'cancel' | '' | undefined} origin the cause of the `update:modelValue` event:
+         * @property {UpdateModelValueOrigin} origin the cause of the `update:modelValue` event:
          * - `'default'` means that the event was emitted when the form was mounted and all fields have initialised their default values.
          * - `'cancel'` means that the 'cancel' button was clicked and the event data was reset to what it was before it was edited.
          * - `update:modelValue` events from user input won't have an origin.
@@ -560,7 +555,7 @@ export default defineComponent({
     }: {
       id: string
       value: any
-      origin?: 'default' | '' | undefined
+      origin?: UpdateModelValueOrigin
     }): void {
       // do not emit anything when the field had no `id` on its schema blueprint
       if (id === undefined) return
@@ -570,8 +565,8 @@ export default defineComponent({
       if (!this.editedFields.includes(id)) this.editedFields.push(id)
       // set the new value onto the formData (might be an empty object)
       this.formDataFlat[id] = value
-      // emit `update-field` with field's id and new data
-      this.event('update-field', { id, value, origin })
+      // emit `updateField` with field's id and new data
+      this.event('updateField', { id, value, origin })
       // emit `update:modelValue` with entire formData
       this.event('update:modelValue', this.formData, origin) // do not extract `this` from here
       // if the form has a formErrorMsg, validate gain to check to see if it's solved
@@ -602,8 +597,8 @@ export default defineComponent({
       this.resetState()
       const origin = 'cancel'
       Object.entries(this.formDataFlat).forEach(([id, value]) => {
-        // emit `update-field` with field's id and new data
-        this.event('update-field', { id, value, origin })
+        // emit `updateField` with field's id and new data
+        this.event('updateField', { id, value, origin })
       })
       // emit `update:modelValue` with entire formData
       this.event('update:modelValue', this.formData, origin) // do not extract `this` from here
@@ -674,10 +669,10 @@ export default defineComponent({
   >
     <!-- navigation buttons row (save, edit, ...) -->
     <div
-      :class="`blitz-form__nav-row blitz-form__nav-row--${actionButtonsPosition}`"
       v-if="isFullString(formErrorMsg) || actionButtonsSchema.length"
+      :class="`blitz-form__nav-row blitz-form__nav-row--${actionButtonsPosition}`"
     >
-      <div class="blitz-form__validation-error text-negative" v-if="isFullString(formErrorMsg)">
+      <div v-if="isFullString(formErrorMsg)" class="blitz-form__validation-error text-negative">
         {{ formErrorMsg }}
       </div>
       <BlitzField
@@ -701,12 +696,12 @@ export default defineComponent({
           :ref="`ref-field-${i}`"
           v-bind="{ ...field, span: undefined }"
           :modelValue="formDataFlat[field.id]"
-          @update:modelValue="(value, origin) => updateField({ id: field.id, value, origin })"
           :style="
             field.span
               ? `grid-column: ${field.span === true ? '1 / -1' : `span ${field.span}`}`
               : ''
           "
+          @update:modelValue="(value, origin) => updateField({ id: field.id, value, origin })"
         />
       </div>
     </slot>

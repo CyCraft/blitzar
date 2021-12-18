@@ -6,7 +6,12 @@
       :rows="rows"
       :rowsPerPage="5"
       :titleField="{ component: 'h3', slot: 'Users' }"
-      :searchField="{ component: blitzInput, placeholder: 'Search...', clearable: true }"
+      :searchField="{
+        component: blitzInput,
+        placeholder: 'Search...',
+        debounce: 300,
+        clearable: true,
+      }"
       :gridToggleField="{ component: blitzGridToggle }"
       :paginationField="{ component: blitzPagination }"
       :rowsPerPageField="{
@@ -34,7 +39,7 @@
 
 <script>
 import { markRaw, onMounted, ref } from 'vue'
-import { BlitzInput, BlitzGridToggle, BlitzPagination } from '@blitzar/table'
+import { BlitzInput, BlitzGridToggle, BlitzPagination } from 'blitzar'
 
 const blitzInput = markRaw(BlitzInput)
 const blitzGridToggle = markRaw(BlitzGridToggle)

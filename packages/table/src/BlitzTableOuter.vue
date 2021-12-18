@@ -1,36 +1,31 @@
 <script lang="ts">
-import { ref, computed, provide, watch, nextTick, PropType, defineComponent } from 'vue'
+import { ref, computed, watch, nextTick, PropType, defineComponent, unref } from 'vue'
 import { flattenObject } from 'flatten-anything'
 import { isEmptyObject } from 'is-what'
 import { createPagingRange, fieldSorter, filterRow, findAny } from './helpers'
+import type {
+  BlitzColumnProps,
+  DsData,
+  DsFilterFields,
+  DsSortby,
+  DsSearchIn,
+  DsSearchAs,
+  DsSortAs,
+  DsScope,
+} from './types'
 
+/**
+ * A renderless component that calculates and only provides the scope required to create data tables and grids
+ */
 export default defineComponent({
+  name: 'BlitzTableOuter',
   props: {
-    dsData: { type: Array as PropType<Record<string, any>[]>, default: () => [] },
-    dsFilterFields: {
-      type: Object as PropType<{
-        [colId in string]: (cellValue: any, rowData: Record<string, any>) => boolean | any
-      }>,
-      default: () => ({}),
-    },
-    dsSortby: { type: Array as PropType<string[]>, default: () => [] },
-    dsSearchIn: { type: Array as PropType<string[]>, default: () => [] },
-    dsSearchAs: {
-      type: Object as PropType<{
-        [id in string]: (
-          cellValue: any,
-          searchString: string,
-          rowData: Record<string, any>
-        ) => boolean
-      }>,
-      default: () => ({}),
-    },
-    dsSortAs: {
-      type: Object as PropType<{
-        [id in string]: (cellValue: any, rowData: Record<string, any>) => any
-      }>,
-      default: () => ({}),
-    },
+    dsData: { type: Array as PropType<DsData>, default: () => [] },
+    dsFilterFields: { type: Object as PropType<DsFilterFields>, default: () => ({}) },
+    dsSortby: { type: Array as PropType<DsSortby>, default: () => [] },
+    dsSearchIn: { type: Array as PropType<DsSearchIn>, default: () => [] },
+    dsSearchAs: { type: Object as PropType<DsSearchAs>, default: () => ({}) },
+    dsSortAs: { type: Object as PropType<DsSortAs>, default: () => ({}) },
   },
   setup(props) {
     const dsPage = ref(1)
@@ -138,21 +133,6 @@ export default defineComponent({
       }
     )
 
-    provide('search', search)
-    provide('showEntries', showEntries)
-    provide('setActive', setActive)
-    provide(
-      'dsData',
-      computed(() => props.dsData)
-    )
-    provide('dsRows', dsRows)
-    provide('dsPages', dsPages)
-    provide('dsResultsNumber', dsResultsNumber)
-    provide('dsPagecount', dsPagecount)
-    provide('dsFrom', dsFrom)
-    provide('dsTo', dsTo)
-    provide('dsPage', dsPage)
-
     return {
       dsIndexes: indexes,
       dsShowEntries,
@@ -174,15 +154,15 @@ export default defineComponent({
 <template>
   <slot
     :ds="{
+      dsData,
       dsIndexes,
+      dsRows,
       dsShowEntries,
       dsResultsNumber,
       dsPage,
       dsPagecount,
       dsFrom,
       dsTo,
-      dsData,
-      dsRows,
       dsPages,
       search,
       showEntries,

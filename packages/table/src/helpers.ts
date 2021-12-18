@@ -1,11 +1,11 @@
 import { getProp } from 'path-to-prop'
-
-export const morePages = '...' as const
+import { MORE_PAGES } from '@blitzar/types'
+import type { DsFilterFields, DsSortby, DsSearchIn, DsSearchAs, DsSortAs } from './types'
 
 export function createPagingRange(nrOfPages: number, currentPage: number) {
   const delta = 2
   const range = []
-  const rangeWithDots: (number | typeof morePages)[] = []
+  const rangeWithDots: (number | typeof MORE_PAGES)[] = []
   let length
 
   range.push(1)
@@ -26,7 +26,7 @@ export function createPagingRange(nrOfPages: number, currentPage: number) {
       if (range[i] - length === 2) {
         rangeWithDots.push(length + 1)
       } else if (range[i] - length !== 1) {
-        rangeWithDots.push(morePages)
+        rangeWithDots.push(MORE_PAGES)
       }
     }
     rangeWithDots.push(range[i])
@@ -39,8 +39,8 @@ export function createPagingRange(nrOfPages: number, currentPage: number) {
  * @returns a function that can be plugged into `.sort()`
  */
 export function fieldSorter(
-  dsSortby: string[],
-  dsSortAs: { [id in string]: (cellValue: any, rowData: Record<string, any>) => any } = {}
+  dsSortby: DsSortby,
+  dsSortAs: DsSortAs = {}
 ): (a: any, b: any) => number {
   const dir: number[] = []
   let i
@@ -82,9 +82,7 @@ export function fieldSorter(
 
 export function filterRow(
   row: { rowIndex: number; rowData: Record<string, any>; rowDataFlat: Record<string, any> },
-  dsFilterFields: {
-    [colId in string]: (cellValue: any, rowData: Record<string, any>) => boolean | any
-  }
+  dsFilterFields: DsFilterFields
 ): boolean {
   const { rowData } = row
 
@@ -106,10 +104,8 @@ export function filterRow(
  * Search method that also takes into account transformations needed
  */
 export function findAny(
-  dsSearchIn: string[],
-  dsSearchAs: {
-    [id in string]: (cellValue: any, searchString: string, rowData: Record<string, any>) => boolean
-  },
+  dsSearchIn: DsSearchIn,
+  dsSearchAs: DsSearchAs,
   row: { rowIndex: number; rowData: Record<string, any>; rowDataFlat: Record<string, any> },
   searchStr: string
 ): boolean {

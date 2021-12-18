@@ -7,6 +7,7 @@ const sizeDict = { xs: 18, sm: 24, md: 32, lg: 38, xl: 46 }
  * Color of the spinner can be applied via CSS.
  */
 export default defineComponent({
+  name: 'BlitzSpinner',
   props: {
     /**
      * The size of the spinner

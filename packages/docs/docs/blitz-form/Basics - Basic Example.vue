@@ -1,6 +1,6 @@
 <template>
   <div>
-    <BlitzForm :schema="schema" v-model="formData" :columnCount="2" />
+    <blitz-form :schema="schema" v-model="formData" :columnCount="2" />
 
     <CodeBlock :content="`// formData\n${JSON.stringify(formData, undefined, 2)}`" />
   </div>

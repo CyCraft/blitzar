@@ -4,8 +4,8 @@
     :schemaGrid="schemaWithEditingLogic"
     :rows="rows"
     :gridToggleField="{ component: blitzGridToggle }"
-    @update-cell="({ rowId, colId, value }) => onUpdateCell({ rowId, colId, value })"
-    @cell-dblclick="(mouseEvent, rowData, colId) => onCellDblclick(mouseEvent, rowData, colId)"
+    @updateCell="({ rowId, colId, value }) => onUpdateCell({ rowId, colId, value })"
+    @cellDblclick="(mouseEvent, rowData, colId) => onCellDblclick(mouseEvent, rowData, colId)"
   />
 </template>
 
@@ -20,7 +20,7 @@
 
 <script>
 import { reactive, markRaw, computed } from 'vue'
-import { BlitzGridToggle } from '@blitzar/table'
+import { BlitzGridToggle } from 'blitzar'
 
 const blitzGridToggle = markRaw(BlitzGridToggle)
 
@@ -76,7 +76,7 @@ export default {
     }
 
     function onCellDblclick(mouseEvent, rowData, colId) {
-      console.log(`@cell-dblclick (mouseEvent, rowData, colId) → `, mouseEvent, rowData, colId)
+      console.log(`@cellDblclick (mouseEvent, rowData, colId) → `, mouseEvent, rowData, colId)
       editInfo.editingColId = colId
       editInfo.editingRowId = rowData.id
       // auto focus logic:

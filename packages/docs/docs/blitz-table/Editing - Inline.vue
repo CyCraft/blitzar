@@ -13,9 +13,7 @@
     :rows="rows"
     :mode="mode"
     :gridToggleField="{ component: blitzGridToggle }"
-    @update-cell="
-      ({ rowId, colId, value, origin }) => onUpdateCell({ rowId, colId, value, origin })
-    "
+    @updateCell="({ rowId, colId, value, origin }) => onUpdateCell({ rowId, colId, value, origin })"
   />
 </template>
 
@@ -30,7 +28,7 @@
 
 <script>
 import { ref, markRaw } from 'vue'
-import { BlitzGridToggle } from '@blitzar/table'
+import { BlitzGridToggle } from 'blitzar'
 
 const blitzGridToggle = markRaw(BlitzGridToggle)
 
@@ -75,7 +73,7 @@ export default {
     const mode = ref('raw')
 
     function onUpdateCell({ rowId, colId, value, origin }) {
-      console.log('@update-cell', { rowId, colId, value, origin })
+      console.log('@updateCell', { rowId, colId, value, origin })
       const row = rows.find((r) => r.id === rowId)
       if (!row) return
       row[colId] = value

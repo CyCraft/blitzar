@@ -8,7 +8,7 @@
     title="Users"
     flat
     bordered
-    @update-cell="inputCell"
+    @updateCell="inputCell"
     tableHeaderClass="bg-stone t-caption-semi-bold"
   />
 </template>

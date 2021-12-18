@@ -1,3 +1,46 @@
+<script lang="ts">
+import { defineComponent, PropType } from 'vue'
+import { ROW_SELECTION_ID } from '@blitzar/types'
+import { BlitzField } from '@blitzar/form'
+import type { BlitzColumn, SortState } from './types'
+
+export default defineComponent({
+  name: 'BlitzTh',
+  components: { BlitzField },
+  props: {
+    /**
+     * The BlitzField object used for the columns
+     */
+    column: { type: Object as PropType<BlitzColumn>, required: true },
+    sortState: { type: Object as PropType<SortState>, required: true },
+  },
+  emits: ['update:sortState'],
+  setup(props, { emit }) {
+    function onClick(e: MouseEvent) {
+      if (!props.column.sortable) return
+
+      e.stopPropagation()
+      const id = props.column.id
+
+      if (props.sortState.id !== id) {
+        return emit('update:sortState', { id, direction: 'asc' })
+      }
+      if (props.sortState.id === id) {
+        if (props.sortState.direction === 'asc') {
+          return emit('update:sortState', { id, direction: 'desc' })
+        } else {
+          return emit('update:sortState', { id: null, direction: 'none' })
+        }
+      }
+    }
+
+    const isSelectionCol = props.column.id === ROW_SELECTION_ID
+
+    return { onClick, isSelectionCol }
+  },
+})
+</script>
+
 <template>
   <th
     v-bind="$attrs"
@@ -58,47 +101,3 @@
   opacity: 1;
 }
 </style>
-
-<script lang="ts">
-import { defineComponent, PropType } from 'vue'
-import { RowSelectionId } from '@blitzar/utils'
-import { BlitzField } from '@blitzar/form'
-
-export default defineComponent({
-  components: { BlitzField },
-  props: {
-    /**
-     * The BlitzField object used for the columns
-     */
-    column: { type: Object as PropType<Record<string, any>>, required: true },
-    sortState: {
-      type: Object as PropType<{ id: null | string; direction: 'asc' | 'desc' | 'none' }>,
-      required: true,
-    },
-  },
-  emits: ['update:sortState'],
-  setup(props, { emit }) {
-    function onClick(e: MouseEvent) {
-      if (!props.column.sortable) return
-
-      e.stopPropagation()
-      const id = props.column.id
-
-      if (props.sortState.id !== id) {
-        return emit('update:sortState', { id, direction: 'asc' })
-      }
-      if (props.sortState.id === id) {
-        if (props.sortState.direction === 'asc') {
-          return emit('update:sortState', { id, direction: 'desc' })
-        } else {
-          return emit('update:sortState', { id: null, direction: 'none' })
-        }
-      }
-    }
-
-    const isSelectionCol = props.column.id === RowSelectionId
-
-    return { onClick, isSelectionCol }
-  },
-})
-</script>

@@ -1,63 +1,20 @@
-<template>
-  <div class="blitz-table" v-bind="$attrs">
-    <Dataset
-      :dsData="rows"
-      :dsSortby="dsSortbyComputed"
-      :dsFilterFields="{}"
-      :dsSearchIn="[]"
-      :dsSearchAs="dsSearchAsComputed"
-      :dsSortAs="dsSortAsComputed"
-      v-slot="{ ds }"
-    >
-      <BlitzTableInner
-        :ds="ds"
-        :schemaColumns="schemaColumnsComputed"
-        :schemaGrid="schemaGrid"
-        :gridBlitzFormOptions="gridBlitzFormOptions"
-        :rows="rows"
-        v-model:isGrid="isGridInner"
-        v-model:selectedRows="selectedRowsComputed"
-        v-model:sortState="sortState"
-        :mode="mode"
-        :rowsPerPage="rowsPerPage"
-        :titleField="applyBlitzFieldOverwrites(titleField)"
-        :searchField="applyBlitzFieldOverwrites(searchField)"
-        :gridToggleField="applyBlitzFieldOverwrites(gridToggleField)"
-        :paginationField="applyBlitzFieldOverwrites(paginationField)"
-        :rowsPerPageField="applyBlitzFieldOverwrites(rowsPerPageField)"
-        :shownRowsInfoField="applyBlitzFieldOverwrites(shownRowsInfoField)"
-        @row-click="(e, rowData) => onRowClick(e, rowData)"
-        @row-dblclick="(e, rowData) => onRowDblclick(e, rowData)"
-        @cell-click="(e, rowData, colId) => onCellClick(e, rowData, colId)"
-        @cell-dblclick="(e, rowData, colId) => onCellDblclick(e, rowData, colId)"
-        @update-cell="
-          ({ rowId, colId, value, origin }) => onUpdateCell({ rowId, colId, value, origin })
-        "
-      />
-    </Dataset>
-  </div>
-</template>
-
-<style>
-/* RESETS */
-.blitz-table,
-.blitz-table * {
-  box-sizing: border-box;
-}
-.blitz-table table,
-.blitz-table ul {
-  margin: 0;
-}
-</style>
-
 <script lang="ts">
-import { watch, ref, defineComponent, computed, PropType } from 'vue'
+import { watch, ref, defineComponent, computed, PropType, watchEffect } from 'vue'
 import { merge } from 'merge-anything'
-import { isFunction, isFullArray, isBoolean, isFullString } from 'is-what'
+import { isFunction, isFullArray, isBoolean, isFullString, isPlainObject, isArray } from 'is-what'
 import { getProp } from 'path-to-prop'
 import { getBlitzFieldOverwrites } from '@blitzar/form'
-import { RowSelectionId } from '@blitzar/utils'
-import { Dataset } from '@blitzar/components'
+import type { BlitzFieldProps, Mode, UpdateModelValueOrigin } from '@blitzar/types'
+import { ROW_SELECTION_ID } from '@blitzar/types'
+import type {
+  BlitzColumn,
+  BlitzColumnProps,
+  DsSearchAs,
+  DsSortAs,
+  DsSortby,
+  SortState,
+} from './types'
+import BlitzTableOuter from './BlitzTableOuter.vue'
 import BlitzTableInner from './BlitzTableInner.vue'
 
 /**
@@ -74,27 +31,16 @@ import BlitzTableInner from './BlitzTableInner.vue'
  * @property {string} __trClass - Internal prop passed down to QTr (if used)
  */
 
-/**
- * @typedef DatasetProps
- * @type {{
- *   dsData: { [id in string]: any }[];
- *   dsFilterFields: { [colId in string]: (cellValue: any, rowData: Record<string, any>) => boolean | any };
- *   dsSortby: string[];
- *   dsSearchIn: string[];
- *   dsSearchAs: { [id in string]: (val: any) => boolean };
- *   dsSortAs: { [id in string]: (val: any) => any };
- * }}
- * @see https://next--vue-dataset-demo.netlify.app/components/#props
- */
-
-function getSortableProps(col = {}) {
-  if (!isBoolean(col.sortable) && isFullString(col.id)) {
+function getSortableProps(col?: BlitzColumn): { sortable: boolean } | undefined {
+  if (!isBoolean(col?.sortable) && isFullString(col?.id)) {
     return { sortable: true }
   }
+  return undefined
 }
 
 export default defineComponent({
-  components: { BlitzTableInner, Dataset },
+  name: 'BlitzTable',
+  components: { BlitzTableInner, BlitzTableOuter },
   props: {
     /**
      * The schema for the columns you want to generate. (BlitzForm schema format)
@@ -102,7 +48,7 @@ export default defineComponent({
      * @category column
      */
     schemaColumns: {
-      type: Array as PropType<Record<string, any>[]>,
+      type: Array as PropType<BlitzColumn[]>,
       default: undefined,
     },
     /**
@@ -111,7 +57,7 @@ export default defineComponent({
      * @category column
      */
     schemaGrid: {
-      type: [Array, Object] as PropType<Record<string, any>[]>,
+      type: Array as PropType<BlitzColumn[]>,
       default: undefined,
     },
     /**
@@ -139,7 +85,7 @@ export default defineComponent({
      */
     gridBlitzFormOptions: {
       type: Object as PropType<Record<string, any>>,
-      default: () => ({}),
+      default: (): Record<string, any> => ({}),
     },
     // /**
     //  * Custom styling to be applied to each row. Applied like so `:style="rowStyle"`
@@ -170,7 +116,7 @@ export default defineComponent({
      */
     selectedRows: {
       type: Array as PropType<Record<string, any>[]>,
-      default: () => [],
+      default: (): Record<string, any>[] => [],
     },
     // /**
     //  * CSS classes to apply to the card (when in grid mode).
@@ -193,7 +139,7 @@ export default defineComponent({
     /**
      * By default the rows show just the raw data without showing field components. If you set `mode: 'edit'` your entire table will show the actual (editable) component as per your schema.
      */
-    mode: { type: String, default: 'raw' },
+    mode: { type: String as PropType<Mode>, default: 'raw' },
     rowsPerPage: { type: Number, default: 10 },
     /**
      * A field as per BlitzField syntax.
@@ -202,7 +148,7 @@ export default defineComponent({
      *
      * TODO: add @example
      */
-    titleField: { type: Object },
+    titleField: { type: Object as PropType<BlitzFieldProps>, default: undefined },
     /**
      * An input field as per BlitzField syntax.
      *
@@ -212,7 +158,7 @@ export default defineComponent({
      *
      * TODO: add @example
      */
-    searchField: { type: Object },
+    searchField: { type: Object as PropType<BlitzFieldProps>, default: undefined },
     /**
      * A toggle field as per BlitzField syntax.
      *
@@ -224,7 +170,7 @@ export default defineComponent({
      *
      * TODO: add @example
      */
-    gridToggleField: { type: Object },
+    gridToggleField: { type: Object as PropType<BlitzFieldProps>, default: undefined },
     /**
      * A select or input field as per BlitzField syntax.
      *
@@ -240,35 +186,51 @@ export default defineComponent({
      *
      * TODO: add @example
      */
-    rowsPerPageField: { type: Object },
-    shownRowsInfoField: { type: Object },
-    paginationField: { type: Object },
+    rowsPerPageField: { type: Object as PropType<BlitzFieldProps>, default: undefined },
+    shownRowsInfoField: { type: Object as PropType<BlitzFieldProps>, default: undefined },
+    paginationField: { type: Object as PropType<BlitzFieldProps>, default: undefined },
+  },
+  emits: {
+    rowClick: (e: MouseEvent, rowData: Record<string, any>) => isPlainObject(rowData),
+    rowDblclick: (e: MouseEvent, rowData: Record<string, any>) => isPlainObject(rowData),
+    cellClick: (e: MouseEvent, rowData: Record<string, any>, colId: string) =>
+      isPlainObject(rowData),
+    cellDblclick: (e: MouseEvent, rowData: Record<string, any>, colId: string) =>
+      isPlainObject(rowData),
+    updateCell: ({
+      rowId,
+      colId,
+      value,
+      origin,
+    }: {
+      rowId: string
+      colId: string
+      value: any
+      origin?: UpdateModelValueOrigin
+    }) => true,
+    'update:isGrid': (payload: boolean) => isBoolean(payload),
+    'update:selectedRows': (payload: Record<string, any>[]) => isArray(payload),
   },
   setup(props, { emit }) {
     const hasColumns = isFullArray(props.schemaColumns)
     const hasGrid = isFullArray(props.schemaGrid)
 
     const isGridInner = ref(isBoolean(props.isGrid) ? props.isGrid : !hasColumns && hasGrid)
-    watch(
-      () => isGridInner,
-      (newVal, oldVal) => (newVal !== oldVal ? emit('update:isGrid', val) : null)
-    )
-    watch(
-      () => props.isGrid,
-      (newVal, oldVal) => (newVal !== oldVal ? (isGridInner.value = newVal) : null)
-    )
+    watchEffect(() => emit('update:isGrid', isGridInner.value))
+    watchEffect(() => (isGridInner.value = Boolean(props.isGrid)))
 
-    function applyBlitzFieldOverwrites(field) {
+    function applyBlitzFieldOverwrites(field?: BlitzFieldProps): BlitzFieldProps | undefined {
       if (!field) return undefined
+
       return merge(field, getBlitzFieldOverwrites(field))
     }
 
     /** SELECTION related state */
     const selectedRowsComputed = computed({
-      get() {
+      get(): Record<string, any>[] {
         return props.selectedRows
       },
-      set(newSelectedRows) {
+      set(newSelectedRows: Record<string, any>[]) {
         /**
          * This makes it possible to sync the table's selected rows like:
          * ```html
@@ -281,16 +243,10 @@ export default defineComponent({
     })
 
     /** SORT related state */
-    /**
-     * @type {{ id: null | string, direction: 'asc' | 'desc' | 'none' }}
-     */
-    const sortState = ref({
-      id: null,
-      direction: 'none',
-    })
+    const sortState = ref<SortState>({ id: null, direction: 'none' })
 
     // apply default `sortable` to columns && add special behaviour for Selection
-    const schemaColumnsComputed = computed(() => {
+    const schemaColumnsComputed = computed<BlitzColumn[] | undefined>(() => {
       if (!props.schemaColumns) return props.schemaColumns
 
       return props.schemaColumns.map((col) => {
@@ -308,48 +264,60 @@ export default defineComponent({
     /**
      * Provides Dataset's `dsSearchAs` prop with a special functions for columns with `parseValue`
      */
-    const dsSearchAsComputed = schemaColumnsComputed.value.reduce((searchAsDic, column) => {
-      if (!column.id) return searchAsDic
-      if (!isFunction(column.parseValue)) return searchAsDic
+    const dsSearchAsComputed = (schemaColumnsComputed.value || []).reduce<DsSearchAs>(
+      (searchAsDic, column) => {
+        if (!column.id) return searchAsDic
+        if (!isFunction(column.parseValue)) return searchAsDic
 
-      const searchFn = (cellValue, searchString, rowData) => {
-        const actualCellValue = getProp(rowData, column.id)
-        const searchStr = String(searchString).toLowerCase()
+        const searchFn = (
+          cellValue: any,
+          searchString: string,
+          rowData: Record<string, any>
+        ): boolean => {
+          const actualCellValue = getProp(rowData, column.id)
+          const searchStr = String(searchString).toLowerCase()
 
-        try {
-          const parsedValue = column.parseValue(cellValue, { formData: rowData })
-          const checkParsed = String(parsedValue).toLowerCase().indexOf(searchStr) >= 0
-          if (checkParsed === true) {
-            return true
+          try {
+            const parsedValue = column.parseValue(cellValue, { formData: rowData })
+            const checkParsed = String(parsedValue).toLowerCase().indexOf(searchStr) >= 0
+            if (checkParsed === true) {
+              return true
+            }
+          } catch (error) {
+            /** error */
           }
-        } catch (error) {}
-        // as fallback also check the non-parsed value
-        return String(actualCellValue).toLowerCase().indexOf(searchStr) >= 0
-      }
+          // as fallback also check the non-parsed value
+          return String(actualCellValue).toLowerCase().indexOf(searchStr) >= 0
+        }
 
-      searchAsDic[column.id] = searchFn
+        searchAsDic[column.id] = searchFn
 
-      return searchAsDic
-    }, {})
+        return searchAsDic
+      },
+      {}
+    )
 
     /**
      * Provides Dataset's `dsSortAs` prop with a special functions for columns with `parseValue`
      */
-    const dsSortAsComputed = schemaColumnsComputed.value.reduce((sortAsDic, column) => {
-      if (!column.id) return sortAsDic
-      if (!column.sortable) return sortAsDic
-      if (!isFunction(column.parseValue)) return sortAsDic
+    const dsSortAsComputed = (schemaColumnsComputed.value || []).reduce<DsSortAs>(
+      (sortAsDic, column) => {
+        if (!column.id) return sortAsDic
+        if (!column.sortable) return sortAsDic
+        if (!isFunction(column.parseValue)) return sortAsDic
 
-      const sortAsFn = (cellValue, rowData) => {
-        const parsedValue = column.parseValue(cellValue, { formData: rowData })
-        return parsedValue
-      }
+        const sortAsFn = (cellValue: any, rowData: Record<string, any>): any => {
+          const parsedValue = column.parseValue(cellValue, { formData: rowData })
+          return parsedValue
+        }
 
-      sortAsDic[column.id] = sortAsFn
-      return sortAsDic
-    }, {})
+        sortAsDic[column.id] = sortAsFn
+        return sortAsDic
+      },
+      {}
+    )
 
-    const dsSortbyComputed = computed(() => {
+    const dsSortbyComputed = computed<DsSortby>(() => {
       if (!sortState.value.id) return []
       if (sortState.value.direction === 'desc') return [`-${sortState.value.id}`]
       return [sortState.value.id]
@@ -360,7 +328,7 @@ export default defineComponent({
     //   return propValue(rowProps.row, rowProps, this) || ''
     // }
 
-    function onRowClick(e, rowData) {
+    function onRowClick(e: MouseEvent, rowData: Record<string, any>): void {
       // const { selectionMode } = this
       // if (origin === 'grid' && selectionMode) {
       //   gridItemProps.selected = !gridItemProps.selected
@@ -370,42 +338,52 @@ export default defineComponent({
        * @property {MouseEvent} e the mouse e that occured
        * @property {Record<string, any>} payload the rowData
        */
-      emit('row-click', e, rowData)
+      emit('rowClick', e, rowData)
     }
-    function onRowDblclick(e, rowData) {
+    function onRowDblclick(e: MouseEvent, rowData: Record<string, any>): void {
       /**
        * Emitted when user quickly double clicks/taps on a row.
        * @property {MouseEvent} e the mouse e that occured
        * @property {Record<string, any>} payload the rowData
        */
-      emit('row-dblclick', e, rowData)
+      emit('rowDblclick', e, rowData)
     }
-    function onCellClick(e, rowData, colId) {
+    function onCellClick(e: MouseEvent, rowData: Record<string, any>, colId: string): void {
       /**
        * Emitted when user clicks/taps on a cell.
        * @property {MouseEvent} e the mouse e that occured
        * @property {Record<string, any>} payload the rowData
        * @property {string} colId the column ID, this is what you have set as `id` in the schema
        */
-      emit('cell-click', e, rowData, colId)
+      emit('cellClick', e, rowData, colId)
     }
-    function onCellDblclick(e, rowData, colId) {
+    function onCellDblclick(e: MouseEvent, rowData: Record<string, any>, colId: string): void {
       /**
        * Emitted when user quickly double clicks/taps on a cell.
        * @property {MouseEvent} e the mouse e that occured
        * @property {Record<string, any>} payload the rowData
        * @property {string} colId the column ID, this is what you have set as `id` in the schema
        */
-      emit('cell-dblclick', e, rowData, colId)
+      emit('cellDblclick', e, rowData, colId)
     }
-    function onUpdateCell({ rowId, colId, value, origin }) {
-      if (colId === RowSelectionId) return
+    function onUpdateCell({
+      rowId,
+      colId,
+      value,
+      origin,
+    }: {
+      rowId: string
+      colId: string
+      value: any
+      origin?: UpdateModelValueOrigin
+    }): void {
+      if (colId === ROW_SELECTION_ID) return
 
       /**
        * Emitted when the user updates the cell, if rendered as editable by setting `mode: 'edit'` in the schema.
        * @property {{ rowId: string, colId: string, value: any, origin?: string }} payload
        */
-      emit('update-cell', { rowId, colId, value, origin })
+      emit('updateCell', { rowId, colId, value, origin })
     }
 
     return {
@@ -428,3 +406,55 @@ export default defineComponent({
   },
 })
 </script>
+
+<template>
+  <div class="blitz-table" v-bind="$attrs">
+    <BlitzTableOuter
+      v-slot="{ ds }"
+      :dsData="rows"
+      :dsSortby="dsSortbyComputed"
+      :dsFilterFields="{}"
+      :dsSearchIn="[]"
+      :dsSearchAs="dsSearchAsComputed"
+      :dsSortAs="dsSortAsComputed"
+    >
+      <BlitzTableInner
+        v-model:isGrid="isGridInner"
+        v-model:selectedRows="selectedRowsComputed"
+        v-model:sortState="sortState"
+        :ds="ds"
+        :schemaColumns="schemaColumnsComputed"
+        :schemaGrid="schemaGrid"
+        :gridBlitzFormOptions="gridBlitzFormOptions"
+        :rows="rows"
+        :mode="mode"
+        :rowsPerPage="rowsPerPage"
+        :titleField="applyBlitzFieldOverwrites(titleField)"
+        :searchField="applyBlitzFieldOverwrites(searchField)"
+        :gridToggleField="applyBlitzFieldOverwrites(gridToggleField)"
+        :paginationField="applyBlitzFieldOverwrites(paginationField)"
+        :rowsPerPageField="applyBlitzFieldOverwrites(rowsPerPageField)"
+        :shownRowsInfoField="applyBlitzFieldOverwrites(shownRowsInfoField)"
+        @rowClick="(e, rowData) => onRowClick(e, rowData)"
+        @rowDblclick="(e, rowData) => onRowDblclick(e, rowData)"
+        @cellClick="(e, rowData, colId) => onCellClick(e, rowData, colId)"
+        @cellDblclick="(e, rowData, colId) => onCellDblclick(e, rowData, colId)"
+        @updateCell="
+          ({ rowId, colId, value, origin }) => onUpdateCell({ rowId, colId, value, origin })
+        "
+      />
+    </BlitzTableOuter>
+  </div>
+</template>
+
+<style>
+/* RESETS */
+.blitz-table,
+.blitz-table * {
+  box-sizing: border-box;
+}
+.blitz-table table,
+.blitz-table ul {
+  margin: 0;
+}
+</style>

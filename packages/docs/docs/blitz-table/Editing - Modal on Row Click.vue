@@ -4,7 +4,7 @@
     :schemaGrid="schemaColumnsAndGrid"
     :rows="rows"
     :gridToggleField="{ component: blitzGridToggle }"
-    @row-click="(e, rowData) => onRowClick(rowData)"
+    @rowClick="(e, rowData) => onRowClick(rowData)"
   />
 
   <!-- Blitzar does not come with a modal library
@@ -46,7 +46,7 @@
 <script>
 import { VueFinalModal } from 'vue-final-modal'
 import { ref, reactive, markRaw } from 'vue'
-import { BlitzGridToggle } from '@blitzar/table'
+import { BlitzGridToggle } from 'blitzar'
 
 const blitzGridToggle = markRaw(BlitzGridToggle)
 

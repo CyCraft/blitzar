@@ -12,11 +12,19 @@ import {
 } from 'is-what'
 import { merge } from 'merge-anything'
 import { mapObject } from 'map-anything'
-import { parseFieldValue, RowSelectionId } from '@blitzar/utils'
+import { parseFieldValue } from '@blitzar/utils'
+import type {
+  UpdateModelValueOrigin,
+  DynamicProp,
+  FormContext,
+  Lang,
+  Mode,
+  ShowErrorsOn,
+} from '@blitzar/types'
+import { ROW_SELECTION_ID } from '@blitzar/types'
 import BlitzH from './BlitzH.vue'
 import { defaultLang } from './lang'
 import { createRequiredErrorFn } from './validation'
-import { DynamicProp, FormContext, Lang, Mode, ShowErrorsOn } from './types'
 
 function evaluateProp(propValue: any, componentValue: any, componentInstance: any) {
   return isFunction(propValue) ? propValue(componentValue, componentInstance) : propValue
@@ -28,8 +36,9 @@ function evaluateProp(propValue: any, componentValue: any, componentInstance: an
 Use this API Card to check out all the possible props you can use in a single field of a schema.
  */
 export default defineComponent({
-  inheritAttrs: false,
+  name: 'BlitzField',
   components: { BlitzH },
+  inheritAttrs: false,
   props: {
     /**
      * The value of the field. The BlitzForm `formData` is an object with the value of each field and the id for key.
@@ -37,6 +46,7 @@ export default defineComponent({
      */
     modelValue: {
       type: null as unknown as PropType<any>,
+      default: undefined,
     },
     /**
      * An `id` is required for the BlitzForm to be able to know which fields have which value.
@@ -46,6 +56,7 @@ export default defineComponent({
      */
     id: {
       type: String as PropType<string>,
+      default: undefined,
     },
     /**
      * A default value to be used when the `modelValue` is `undefined`.
@@ -59,6 +70,7 @@ export default defineComponent({
       type: undefined as unknown as PropType<
         (formData: Record<string, any>, formContext: FormContext) => any | any
       >,
+      default: undefined,
     },
     /**
      * A function that modifies a value before it is used in the actual component. (see `parseInput` for the reverse)
@@ -69,6 +81,7 @@ export default defineComponent({
      */
     parseValue: {
       type: Function as PropType<(val: any, formContext: FormContext) => any>,
+      default: undefined,
     },
     /**
      * A function that modifies a value after user input but before the value is emitted. (see `parseValue` for the reverse)
@@ -78,6 +91,7 @@ export default defineComponent({
      */
     parseInput: {
       type: Function as PropType<(val: any, formContext: FormContext) => any>,
+      default: undefined,
     },
     /**
      * The component to be used for the field. Is mounted via `<component :is="component" />`. You can pass the name of a native HTML5 element or Vue component that is globally registered. You can also import the Vue file and directly pass the imported object, just like you would when you add it to a Vue file's components prop.
@@ -86,9 +100,8 @@ export default defineComponent({
      * @category content
      */
     component: {
-      type: [String, Function, Object] as PropType<
-        string | Function | any | DynamicProp<string | Function | any>
-      >,
+      type: [String, Function, Object] as PropType<string | any | DynamicProp<string | any>>,
+      default: undefined,
     }, // object for imported vue instances
     /**
      * An Object with keys for the slot names and an object for values. The object you pass to a slot is itself applied as a `<component is="" />`.
@@ -109,6 +122,7 @@ export default defineComponent({
             default?: string | Record<string, any> | Record<string, any>[]
           }>
       >,
+      default: undefined,
     },
     /**
      * The text used in the UI for the action buttons and some error messages.
@@ -138,6 +152,7 @@ export default defineComponent({
      */
     label: {
       type: [String, Function] as PropType<string | DynamicProp<string>>,
+      default: undefined,
     },
     /**
      * A smaller label for extra info.
@@ -146,6 +161,7 @@ export default defineComponent({
      */
     subLabel: {
       type: [String, Function] as PropType<string | DynamicProp<string>>,
+      default: undefined,
     },
     /**
      * The mode represents how fields are rendered
@@ -184,6 +200,7 @@ export default defineComponent({
       type: [Boolean, Function] as PropType<
         boolean | 'required' | DynamicProp<boolean | 'required'>
       >,
+      default: undefined,
     },
     /**
      * An array with prop names that should be treated as Dynamic Props when passed a function.
@@ -304,6 +321,7 @@ export default defineComponent({
         | (string | Record<string, boolean>)[]
         | DynamicProp<string | Record<string, boolean> | (string | Record<string, boolean>)[]>
       >,
+      default: undefined,
     },
     /**
      * Custom classes to be applied to the BlitzField. Applied like so `:class="fieldClasses"`. Can be an Dynamic Prop (this is why I opted to have a different name from `class`).
@@ -319,6 +337,7 @@ export default defineComponent({
         | (string | Record<string, boolean>)[]
         | DynamicProp<string | Record<string, boolean> | (string | Record<string, boolean>)[]>
       >,
+      default: undefined,
     },
     /**
      * Custom styling to be applied to the inner component of BlitzField. Applied like so `:style="componentStyle"`. Can be an Dynamic Prop.
@@ -332,6 +351,7 @@ export default defineComponent({
         | (string | Record<string, boolean>)[]
         | DynamicProp<string | Record<string, boolean> | (string | Record<string, boolean>)[]>
       >,
+      default: undefined,
     },
     /**
      * Custom classes to be applied to the inner component of BlitzField. Applied like so `:class="componentClasses"`. Can be an Dynamic Prop.
@@ -345,6 +365,7 @@ export default defineComponent({
         | (string | Record<string, boolean>)[]
         | DynamicProp<string | Record<string, boolean> | (string | Record<string, boolean>)[]>
       >,
+      default: undefined,
     },
     /**
      * Custom styling to be applied to the label of BlitzField. Applied like so `:style="componentStyle"`. Can be an Dynamic Prop.
@@ -360,6 +381,7 @@ export default defineComponent({
         | (string | Record<string, boolean>)[]
         | DynamicProp<string | Record<string, boolean> | (string | Record<string, boolean>)[]>
       >,
+      default: undefined,
     },
     /**
      * Custom classes to be applied to the label of BlitzField. Applied like so `:class="labelClasses"`. Can be an Dynamic Prop.
@@ -375,6 +397,7 @@ export default defineComponent({
         | (string | Record<string, boolean>)[]
         | DynamicProp<string | Record<string, boolean> | (string | Record<string, boolean>)[]>
       >,
+      default: undefined,
     },
     /**
      * This is the *nested* data of all the fields inside a BlitzForm. (When using BlitzListForm as standalone, this is an array.)
@@ -384,6 +407,7 @@ export default defineComponent({
      */
     formData: {
       type: [Object, Array] as PropType<Record<string, any> | Record<string, any>[]>,
+      default: undefined,
     },
     /**
      * This is the *flattened* data of all the fields inside a BlitzForm.
@@ -393,6 +417,7 @@ export default defineComponent({
      */
     formDataFlat: {
       type: Object as PropType<Record<string, any>>,
+      default: undefined,
     },
     /**
      * A manually set 'id' of the BlitzForm. This only exists if you passed an id directly to the BlitzForm.
@@ -402,6 +427,7 @@ export default defineComponent({
      */
     formId: {
       type: String as PropType<string>,
+      default: undefined,
     },
     /**
      * The `mode` of the BlitzForm. A BlitzField inherits the `mode` from the `BlitzForm` via its `mode` prop; however, if you had manually overwritten the mode to be something else, `formMode` can be used to check the current mode of the form. This can be useful inside an Dynamic Prop.
@@ -411,6 +437,7 @@ export default defineComponent({
      */
     formMode: {
       type: String as PropType<Mode>,
+      default: undefined,
       validator: (prop: any) => ['edit', 'readonly', 'disabled', 'raw'].includes(prop) as never,
     },
     /**
@@ -421,6 +448,7 @@ export default defineComponent({
      */
     updateField: {
       type: Function as PropType<(val: any, formContext: FormContext) => void>,
+      default: undefined,
     },
     /**
      * (only present in BlitzListForm!)
@@ -431,6 +459,7 @@ export default defineComponent({
      */
     rowInput: {
       type: Function as PropType<(val: any, formContext: FormContext) => void>,
+      default: undefined,
     },
     /**
      * (only present in BlitzListForm!)
@@ -441,6 +470,7 @@ export default defineComponent({
      */
     rowIndex: {
       type: Number as PropType<number>,
+      default: undefined,
     },
     /**
      * (only present in BlitzListForm!)
@@ -451,6 +481,7 @@ export default defineComponent({
      */
     rowData: {
       type: Object as PropType<Record<string, any>>,
+      default: undefined,
     },
     /**
      * (only present in BlitzListForm!)
@@ -461,10 +492,11 @@ export default defineComponent({
      */
     deleteRow: {
       type: Function as PropType<() => void>,
+      default: undefined,
     },
   },
   emits: {
-    'update:modelValue': (payload: any, origin?: 'default' | '' | undefined) =>
+    'update:modelValue': (payload: any, origin?: UpdateModelValueOrigin) =>
       ['default', '', undefined].includes(origin),
     /** HTML5 event from the top level div */
     click: null,
@@ -486,86 +518,6 @@ export default defineComponent({
       showingErrorBeforeSave: false,
     }
   },
-  mounted() {
-    const { modelValue, defaultValue, formData = {} } = this
-    if (isUndefined(modelValue)) {
-      const newDefaultValue = isFunction(defaultValue)
-        ? defaultValue(formData, this as any)
-        : defaultValue
-      this.event('update:modelValue', newDefaultValue, 'default')
-    }
-    this.justMounted = true
-  },
-  watch: {
-    modelValue(newValue) {
-      this.innerValue = newValue
-    },
-  },
-  methods: {
-    evalPropOrAttr(propOrAttr: any): any {
-      const { dynamicPropsEvaluated } = this
-      if (propOrAttr in dynamicPropsEvaluated) return dynamicPropsEvaluated[propOrAttr]
-      if (propOrAttr in this) return (this as any)[propOrAttr]
-      return this.$attrs[propOrAttr]
-    },
-    event(eventName: 'update:modelValue', payload: any, origin?: 'default' | '') {
-      if (eventName === 'update:modelValue') {
-        /**
-         * This event enables the field to be usable with `v-model="value"`
-         * @property {any} payload the updated value
-         * @property {'default' | '' | undefined} origin the cause of the `update:modelValue` event:
-         * - `'default'` means that the event was emitted when the form was mounted and all fields have initialised their default values.
-         * - `update:modelValue` events from user input won't have an origin.
-         */
-        this.$emit('update:modelValue', payload, origin)
-      }
-    },
-    evaluateError(): null | string {
-      const { evalPropOrAttr, langCalculated, cValue } = this
-
-      const isRequired = evalPropOrAttr('required')
-      const requiredErrorFn = createRequiredErrorFn(langCalculated['requiredField'])
-      const requiredErrorResult = !isRequired ? null : requiredErrorFn(cValue)
-
-      if (isFullString(requiredErrorResult)) return requiredErrorResult
-
-      return evalPropOrAttr('error') || null
-    },
-    // validate() IS CALLED FROM REFERENCE!!
-    /**
-     * Validates a field
-     * @param focusIfError — Wether or not it should focus the field with an error. Defaults to `false`
-     * @returns the result of the error validation
-     */
-    validate(focusIfError?: boolean | undefined): null | string {
-      const { evaluateError, evalPropOrAttr } = this
-
-      this.showingErrorBeforeSave = true
-
-      const result = evaluateError()
-      const shouldFocus = isBoolean(focusIfError)
-        ? focusIfError
-        : evalPropOrAttr('showErrorsOn') === 'save-focus'
-
-      if (shouldFocus && isFullString(result) && evalPropOrAttr('mode') === 'edit') {
-        const component = this.$refs['ref-component'] as any
-        if (component) {
-          try {
-            component.focus()
-          } catch (error) {}
-        }
-      }
-      return result
-    },
-    // resetDirtyAndErrors() IS CALLED FROM REFERENCE!!
-    /**
-     * Resets internal values
-     */
-    resetDirtyAndErrors(): void {
-      this.isDirty = false
-      this.showingErrorBeforeSave = false
-    },
-  },
   computed: {
     cValue: {
       get(): any {
@@ -582,23 +534,22 @@ export default defineComponent({
         const events = evalPropOrAttr('events')
         if (isFunction(parseInput)) val = parseInput(val, this as any)
         if (isFunction(events['update:modelValue'])) events['update:modelValue'](val, this)
-        if (this.id === RowSelectionId) return
+        if (this.id === ROW_SELECTION_ID) return
         this.event('update:modelValue', val, ...otherArguments)
       },
     },
     dynamicPropsEvaluated(): { [key in string]: any } {
       const { dynamicProps, cValue } = this
-      const context = this
       return dynamicProps.reduce<{ [key in string]: any }>((carry, propKey) => {
         if (propKey === 'slots' || propKey === 'slot') {
-          const slotsValue = 'slots' in context ? context['slots'] : context.$attrs['slots']
+          const slotsValue = 'slots' in this ? this['slots'] : this.$attrs['slots']
           carry['slots'] = isPlainObject(slotsValue)
-            ? mapObject(slotsValue, (propValue) => evaluateProp(propValue, cValue, context))
-            : evaluateProp(slotsValue, cValue, context)
+            ? mapObject(slotsValue, (propValue) => evaluateProp(propValue, cValue, this))
+            : evaluateProp(slotsValue, cValue, this)
           return carry
         }
-        const propValue = propKey in context ? (context as any)[propKey] : context.$attrs[propKey]
-        carry[propKey] = evaluateProp(propValue, cValue, context)
+        const propValue = propKey in this ? (this as any)[propKey] : this.$attrs[propKey]
+        carry[propKey] = evaluateProp(propValue, cValue, this)
         return carry
       }, {})
     },
@@ -606,6 +557,7 @@ export default defineComponent({
       const { evalPropOrAttr } = this
       const slots = evalPropOrAttr('slots')
       if (isPlainObject(slots)) return slots.default
+      return undefined
     },
     componentName(): any {
       const { evalPropOrAttr } = this
@@ -646,14 +598,13 @@ export default defineComponent({
     },
     eventsCalculated(): { [key in string]: any } {
       const { evalPropOrAttr } = this
-      const context = this
       const events = evalPropOrAttr('events') as { [key in string]: any }
       return Object.entries(events).reduce<{ [key in string]: any }>(
         (carry, [eventName, eventFn]) => {
           // `update:modelValue` event is handled in cValue
           if (eventName === 'update:modelValue') return carry
           carry[eventName] = (val: any, ...otherArguments: any[]) =>
-            eventFn(val, context, ...otherArguments)
+            eventFn(val, this, ...otherArguments)
           return carry
         },
         {}
@@ -731,6 +682,88 @@ export default defineComponent({
       return parseFieldValue(cValue, blueprint)
     },
   },
+  watch: {
+    modelValue(newValue) {
+      this.innerValue = newValue
+    },
+  },
+  mounted() {
+    const { modelValue, defaultValue, formData = {} } = this
+    if (isUndefined(modelValue)) {
+      const newDefaultValue = isFunction(defaultValue)
+        ? defaultValue(formData, this as any)
+        : defaultValue
+      this.event('update:modelValue', newDefaultValue, 'default')
+    }
+    this.justMounted = true
+  },
+  methods: {
+    evalPropOrAttr(propOrAttr: any): any {
+      const { dynamicPropsEvaluated } = this
+      if (propOrAttr in dynamicPropsEvaluated) return dynamicPropsEvaluated[propOrAttr]
+      if (propOrAttr in this) return (this as any)[propOrAttr]
+      return this.$attrs[propOrAttr]
+    },
+    event(eventName: 'update:modelValue', payload: any, origin?: UpdateModelValueOrigin) {
+      if (eventName === 'update:modelValue') {
+        /**
+         * This event enables the field to be usable with `v-model="value"`
+         * @property {*} payload the updated value
+         * @property {UpdateModelValueOrigin} origin the cause of the `update:modelValue` event:
+         * - `'default'` means that the event was emitted when the form was mounted and all fields have initialised their default values.
+         * - `update:modelValue` events from user input won't have an origin.
+         */
+        this.$emit('update:modelValue', payload, origin)
+      }
+    },
+    evaluateError(): null | string {
+      const { evalPropOrAttr, langCalculated, cValue } = this
+
+      const isRequired = evalPropOrAttr('required')
+      const requiredErrorFn = createRequiredErrorFn(langCalculated['requiredField'])
+      const requiredErrorResult = !isRequired ? null : requiredErrorFn(cValue)
+
+      if (isFullString(requiredErrorResult)) return requiredErrorResult
+
+      return evalPropOrAttr('error') || null
+    },
+    // validate() IS CALLED FROM REFERENCE!!
+    /**
+     * Validates a field
+     * @param focusIfError — Wether or not it should focus the field with an error. Defaults to `false`
+     * @returns the result of the error validation
+     */
+    validate(focusIfError?: boolean | undefined): null | string {
+      const { evaluateError, evalPropOrAttr } = this
+
+      this.showingErrorBeforeSave = true
+
+      const result = evaluateError()
+      const shouldFocus = isBoolean(focusIfError)
+        ? focusIfError
+        : evalPropOrAttr('showErrorsOn') === 'save-focus'
+
+      if (shouldFocus && isFullString(result) && evalPropOrAttr('mode') === 'edit') {
+        const component = this.$refs['ref-component'] as any
+        if (component) {
+          try {
+            component.focus()
+          } catch (error) {
+            /** error */
+          }
+        }
+      }
+      return result
+    },
+    // resetDirtyAndErrors() IS CALLED FROM REFERENCE!!
+    /**
+     * Resets internal values
+     */
+    resetDirtyAndErrors(): void {
+      this.isDirty = false
+      this.showingErrorBeforeSave = false
+    },
+  },
 })
 </script>
 
@@ -787,30 +820,30 @@ export default defineComponent({
       v-bind="propsAndAttrsToPass"
       ref="ref-component"
       v-model="cValue"
-      v-on="eventsCalculated"
       :class="['blitz-field__component', evalPropOrAttr('componentClasses')]"
       :style="evalPropOrAttr('componentStyle')"
+      v-on="eventsCalculated"
     />
     <select
       v-else-if="evalPropOrAttr('component') === 'select'"
       v-bind="propsAndAttrsToPass"
       ref="ref-component"
       v-model="cValue"
-      v-on="eventsCalculated"
       :class="['blitz-field__component', evalPropOrAttr('componentClasses')]"
       :style="evalPropOrAttr('componentStyle')"
+      v-on="eventsCalculated"
     >
       <BlitzH v-if="defaultSlotCalculated" :options="defaultSlotCalculated" />
     </select>
     <component
+      :is="evalPropOrAttr('component')"
       v-else-if="evalPropOrAttr('component')"
       v-bind="propsAndAttrsToPass"
       ref="ref-component"
-      :is="evalPropOrAttr('component')"
       v-model="cValue"
-      v-on="eventsCalculated"
       :class="['blitz-field__component', evalPropOrAttr('componentClasses')]"
       :style="evalPropOrAttr('componentStyle')"
+      v-on="eventsCalculated"
     >
       <BlitzH v-if="defaultSlotCalculated" :options="defaultSlotCalculated" />
     </component>

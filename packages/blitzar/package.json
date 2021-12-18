@@ -18,13 +18,16 @@
     "dist"
   ],
   "scripts": {
-    "gen:types:vetur": "vue-int -i src -r -o dist/vetur",
+    "gen:types:vetur": "ts-node ./vueInt.ts",
     "gen:types:ts": "vue-tsc --declaration --emitDeclarationOnly",
-    "build": "rimraf dist && vite build && npm run gen:types:ts && npm run gen:types:vetur"
+    "build": "rimraf dist && vite build && npm run gen:types:ts && npm run gen:types:vetur",
+    "dev": "vite build --watch"
   },
   "dependencies": {
+    "@blitzar/components": "^1.0.5",
     "@blitzar/form": "^1.0.5",
     "@blitzar/table": "^1.0.5",
+    "@blitzar/types": "^1.0.5",
     "@blitzar/utils": "^1.0.5"
   },
   "homepage": "https://github.com/cycraft/blitzar#readme",

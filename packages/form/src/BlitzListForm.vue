@@ -3,8 +3,8 @@ import { defineComponent, PropType } from 'vue'
 import { merge } from 'merge-anything'
 import { copy } from 'copy-anything'
 import { isNumber } from 'is-what'
+import type { Schema, UpdateModelValueOrigin } from '@blitzar/types'
 import BlitzField from './BlitzField.vue'
-import { Schema } from './types'
 
 /**
 With BlitzListForm you can pass a `schema` just like a BlitzForm. The difference is that BlitzListForm is more like a (as the name says) _**list**_ form. 😃
@@ -12,8 +12,9 @@ With BlitzListForm you can pass a `schema` just like a BlitzForm. The difference
 The `schema` you specify is shown as a single row. New rows are added automatically on user input.
  */
 export default defineComponent({
-  inheritAttrs: false,
+  name: 'BlitzListForm',
   components: { BlitzField },
+  inheritAttrs: false,
   props: {
     /**
      * @category model
@@ -54,9 +55,9 @@ export default defineComponent({
      * Allows to limit the max amount of rows.
      * @category content
      */
-    maxRows: { type: Number },
-    disabled: { type: Boolean },
-    readonly: { type: Boolean },
+    maxRows: { type: Number, default: undefined },
+    disabled: { type: Boolean, default: undefined },
+    readonly: { type: Boolean, default: undefined },
   },
   emits: {
     /**
@@ -151,7 +152,7 @@ export default defineComponent({
     },
     setSubFieldValue(
       { id, value: newValue, rowIndex }: { id: string | undefined; value: any; rowIndex: number },
-      origin?: 'default' | '' | undefined
+      origin?: UpdateModelValueOrigin
     ): void {
       // do not emit when the origin is from the default value initialisation
       if (origin === 'default' || !id) return
@@ -191,10 +192,10 @@ export default defineComponent({
       />
     </div>
     <div
-      class="blitz-list-form__row"
       v-for="(row, rowIndex) in cValue"
-      :style="`grid-template-columns: ${gridTemplateColumnsCalculated}`"
       :key="rowIndex"
+      class="blitz-list-form__row"
+      :style="`grid-template-columns: ${gridTemplateColumnsCalculated}`"
     >
       <BlitzField
         v-for="(subfield, fieldIndex) in cSchema"

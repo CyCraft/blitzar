@@ -1,3 +1,4 @@
+/* eslint-disable */
 const vue = require('@vitejs/plugin-vue')
 const path = require('path')
 const { defineConfig } = require('vite')

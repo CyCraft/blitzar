@@ -1,5 +1,6 @@
 {
   "editor.formatOnSave": true,
+  // set default formatters to Prettier
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "[javascript]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
   "[typescript]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
@@ -7,12 +8,7 @@
   "[sass]": { "editor.defaultFormatter": "syler.sass-indented" },
   // monorepo / workspace related
   "eslint.workingDirectories": [{ "pattern": "./packages/*/" }],
-  // make sure vetur is enabled
   "eslint.validate": ["javascript", "javascriptreact", "typescript", "vue"],
-  "vetur.validation.style": true,
-  "vetur.validation.template": true,
-  "vetur.validation.script": true,
-  "vetur.experimental.templateInterpolationService": false,
   // global important defaults
   "editor.tabSize": 2, // make sure this is the same as .prettierrc
   "files.trimFinalNewlines": true,
@@ -22,20 +18,15 @@
   // disable conflicting formatting
   "javascript.validate.enable": false,
   "typescript.format.enable": false,
-  // script
-  "vetur.format.defaultFormatter.ts": "prettier",
-  "vetur.format.defaultFormatter.js": "prettier",
-  // stylus
-  "vetur.format.defaultFormatter.stylus": "stylus-supremacy",
-  "stylusSupremacy.insertColons": true,
-  "stylusSupremacy.insertBraces": false,
-  "stylusSupremacy.insertSemicolons": false,
-  "languageStylus.useSeparator": true,
-  // sass
-  "vetur.format.defaultFormatter.sass": "sass-formatter",
+  // sass files 'syler.sass-indented' options
   "sass.format.debug": false,
   "sass.format.deleteEmptyRows": true,
   "sass.format.deleteWhitespace": true,
   "sass.format.convert": true,
-  "sass.format.setPropertySpace": true
+  "sass.format.setPropertySpace": true,
+  // make sure vetur is disabled to prevent ESLint conflicts
+  "vetur.validation.style": false,
+  "vetur.validation.template": false,
+  "vetur.validation.script": false,
+  "vetur.experimental.templateInterpolationService": false
 }

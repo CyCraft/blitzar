@@ -15,8 +15,7 @@
   },
   "scripts": {
     "test": "ava",
-    "build": "npm run clean && rollup -c ./build.js",
-    "clean": "rimraf ./dist",
+    "build": "rimraf dist && rollup -c ./build.js",
     "dev": "rollup -c ./build.js --watch"
   },
   "dependencies": {

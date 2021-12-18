@@ -35,3 +35,11 @@ export type Lang = {
   requiredField: string
   formValidationError: string
 }
+
+/**
+ * the 'origin' param explains the reason `@update:modelValue` was emitted from a field:
+ * - `undefined` regular field input — no special reason
+ * - `'default'`  was because of the provided `defaultValue` in the schema
+ * - `'cancel'` the reason `@update:modelValue` was emitted from a field was because the user clicked "cancel" in the BlitzForm
+ */
+export type UpdateModelValueOrigin = 'default' | 'cancel' | undefined

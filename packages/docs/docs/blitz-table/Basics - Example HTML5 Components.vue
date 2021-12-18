@@ -6,7 +6,12 @@
       :rows="rows"
       :rowsPerPage="5"
       :titleField="{ component: 'h3', slot: 'Users' }"
-      :searchField="{ component: 'input', placeholder: 'Search...', clearable: true }"
+      :searchField="{
+        component: 'input',
+        placeholder: 'Search...',
+        debounce: 300,
+        clearable: true,
+      }"
       :gridToggleField="{ label: 'grid', component: 'input', type: 'checkbox' }"
       :paginationField="{
         label: 'Open page:',

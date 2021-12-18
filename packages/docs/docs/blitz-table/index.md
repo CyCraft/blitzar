@@ -176,11 +176,11 @@ To be able to select rows with some sort of checkbox (please provide your own, o
 Please note that every object in your `rows` array needs an **`id` prop** in order for the selection feature to work.
 
 ```js
-import { RowSelectionId } from 'blitzar'
+import { ROW_SELECTION_ID } from 'blitzar'
 
 const schemaColumns = [
   {
-    id: RowSelectionId, // or you can use the string 'BLITZ-TABLE-ROW-SELECTION'
+    id: ROW_SELECTION_ID, // or you can use the string 'BLITZ-TABLE-ROW-SELECTION'
     component: 'input',
     type: 'checkbox',
   },

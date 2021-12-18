@@ -16,7 +16,7 @@
     "blitzar": "^1.0.5",
     "is-what": "^3.14.1",
     "vue-final-modal": "^3.4.3",
-    "vue-pepicons": "^1.0.5"
+    "vue-pepicons": "^1.0.9"
   },
   "devDependencies": {
     "vitepress": "^0.20.9"

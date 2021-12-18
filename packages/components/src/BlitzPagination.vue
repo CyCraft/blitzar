@@ -1,14 +1,22 @@
 <script lang="ts">
+import { isNumber } from 'is-what'
 import { computed, defineComponent, PropType } from 'vue'
 import { Pepicon } from 'vue-pepicons'
-import { morePages } from './helpers'
+import { MORE_PAGES } from '@blitzar/types'
 
 export default defineComponent({
+  name: 'BlitzPagination',
   components: { Pepicon },
   props: {
+    /** Represents the current open page */
     modelValue: { type: Number, required: true },
+    /** Represents the total count of pages */
     pageCount: { type: Number, required: true },
-    pagesShown: { type: Array as PropType<(number | typeof morePages)[]>, required: true },
+    pagesShown: { type: Array as PropType<(number | typeof MORE_PAGES)[]>, required: true },
+  },
+  emits: {
+    /** Updates the current open page */
+    'update:modelValue': (val: number) => isNumber(val),
   },
   setup(props, { emit }) {
     const disabledPrevious = computed(() => props.modelValue === 1)
@@ -22,7 +30,7 @@ export default defineComponent({
 
     return {
       setPage,
-      morePages,
+      MORE_PAGES,
       disabledPrevious,
       disabledNext,
     }
@@ -47,10 +55,10 @@ export default defineComponent({
     </li>
     <template v-for="(item, index) in pagesShown" :key="index">
       <li
-        :class="['_page-item', item === modelValue && 'active', item === morePages && 'disabled']"
+        :class="['_page-item', item === modelValue && 'active', item === MORE_PAGES && 'disabled']"
       >
         <a
-          v-if="item !== morePages"
+          v-if="item !== MORE_PAGES"
           class="_page-link"
           href="#"
           @click.prevent.stop="() => setPage(item)"

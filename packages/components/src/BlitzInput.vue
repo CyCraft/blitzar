@@ -1,6 +1,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from 'vue'
-import { Pepicon, PepiconName, pepiconArray } from 'vue-pepicons'
+import type { PepiconName } from 'vue-pepicons'
+import { Pepicon, pepiconArray } from 'vue-pepicons'
 import { isFullString, isNumber, isDate } from 'is-what'
 import BlitzIcon from './BlitzIcon.vue'
 
@@ -33,6 +34,7 @@ type Type =
 type Options = { label: string; value: string | number }[]
 
 export default defineComponent({
+  name: 'BlitzInput',
   components: { Pepicon, BlitzIcon },
   props: {
     /**
@@ -41,8 +43,8 @@ export default defineComponent({
      */
     icon: {
       type: String as PropType<PepiconName>,
-      default: '',
-      validator: (val: PepiconName) => pepiconArray.includes(val),
+      default: undefined,
+      validator: (val: PepiconName) => !val || pepiconArray.includes(val),
     },
     /**
      * @category content

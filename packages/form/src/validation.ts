@@ -1,7 +1,7 @@
 import { flattenPerSchema } from '@blitzar/utils'
-import { isArray, isFullString, isFunction } from 'is-what'
+import { isFullString, isFunction } from 'is-what'
+import type { BlitzFieldProps, FormContext, Lang, Schema } from '@blitzar/types'
 import { defaultLang } from './lang'
-import { BlitzFieldProps, FormContext, Lang, Schema } from './types'
 
 export function createRequiredErrorFn(
   requiredFieldErrorMsg: string
