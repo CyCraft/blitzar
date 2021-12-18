@@ -177,6 +177,7 @@ Please note that every object in your `rows` array needs an **`id` prop** in ord
 
 ```js
 import { ROW_SELECTION_ID } from 'blitzar'
+import 'blitzar/dist/style.css'
 
 const schemaColumns = [
   {

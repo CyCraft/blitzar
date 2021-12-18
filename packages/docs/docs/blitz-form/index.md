@@ -6,6 +6,13 @@ editLink: true
 
 ## Installation & Usage
 
+### Vue 2
+
+- install with `npm i blitzar@0`
+- see documentation at [blitzar0.web.app](https://blitzar0.web.app)
+
+### Vue 3
+
 ```
 npm i blitzar
 ```
@@ -15,6 +22,8 @@ You must import Blitzar components locally wherever you want to use them, as per
 ```js
 // import what you need
 import { BlitzTable, BlitzListForm, BlitzTable } from 'blitzar'
+// include Blitzar's CSS (kept at minimal and doesn't pollute global scope)
+import 'blitzar/dist/style.css'
 
 // add to local components where you use it:
 export default {
@@ -469,6 +478,7 @@ You can also do programatic validation. BlitzForms provides a helper function wh
 
 ```js
 import { validateFormPerSchema } from 'blitzar'
+import 'blitzar/dist/style.css'
 
 validateFormPerSchema(formData, schema)
 ```

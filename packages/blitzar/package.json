@@ -12,15 +12,19 @@
       "import": "./dist/index.es.js",
       "require": "./dist/index.umd.js",
       "types": "./dist/index.d.ts"
+    },
+    "./dist/style.css": {
+      "import": "./dist/style.css"
     }
   },
   "files": [
     "dist"
   ],
   "scripts": {
-    "gen:types:vetur": "ts-node ./vueInt.ts",
+    "gen:styles": "ts-node ./mergeStyles.ts",
+    "gen:types:vetur": "ts-node ./mergeVueInt.ts",
     "gen:types:ts": "vue-tsc --declaration --emitDeclarationOnly",
-    "build": "rimraf dist && vite build && npm run gen:types:ts && npm run gen:types:vetur",
+    "build": "rimraf dist && vite build && npm run gen:types:ts && npm run gen:styles && npm run gen:types:vetur",
     "dev": "vite build --watch"
   },
   "dependencies": {

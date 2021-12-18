@@ -1,6 +1,5 @@
 /* eslint-disable */
-const fs = require('fs-extra')
-
+import * as fs from 'fs-extra'
 ;(async () => {
   const mainFolder = '../../packages/blitzar'
   const folders = ['../../packages/form', '../../packages/table', '../../packages/components']

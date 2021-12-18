@@ -53,8 +53,10 @@
 
 <script>
 import { markRaw, onMounted, ref } from 'vue'
-import { ROW_SELECTION_ID } from '@blitzar/types'
+import { ROW_SELECTION_ID } from 'blitzar'
+import 'blitzar/dist/style.css'
 import { BlitzInput, BlitzGridToggle, BlitzPagination } from 'blitzar'
+import 'blitzar/dist/style.css'
 
 const blitzInput = markRaw(BlitzInput)
 const blitzGridToggle = markRaw(BlitzGridToggle)

@@ -5,9 +5,7 @@ import './variables.css'
 import './styles.css'
 
 import { BlitzForm, BlitzListForm, BlitzTable } from 'blitzar'
-import '@blitzar/form/dist/style.css'
-import '@blitzar/table/dist/style.css'
-import '@blitzar/components/dist/style.css'
+import 'blitzar/dist/style.css'
 
 import VueCustomTooltip from '@adamdehaven/vue-custom-tooltip'
 import { CodeBlock } from '@planetar/code-block'

@@ -20,6 +20,7 @@
 
 <script>
 import { validateFormPerSchema } from 'blitzar'
+import 'blitzar/dist/style.css'
 import { showToast } from '../../components/toasts'
 
 const schema = [

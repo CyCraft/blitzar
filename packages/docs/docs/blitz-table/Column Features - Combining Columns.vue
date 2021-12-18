@@ -39,6 +39,7 @@
 <script>
 import { markRaw, onMounted, ref } from 'vue'
 import { BlitzInput, BlitzGridToggle, BlitzPagination } from 'blitzar'
+import 'blitzar/dist/style.css'
 
 const blitzInput = markRaw(BlitzInput)
 const blitzGridToggle = markRaw(BlitzGridToggle)
