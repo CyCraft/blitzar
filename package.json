@@ -7,6 +7,7 @@
   "scripts": {
     "dev": "concurrently -n 'docs,components,form,table,utils' -c 'green,yellow,blue,purple,gray' 'npm run dev -w=docs' 'npm run dev -w=@blitzar/components' 'npm run dev -w=@blitzar/form' 'npm run dev -w=@blitzar/table' 'npm run dev -w=@blitzar/utils'",
     "dev:docs-vuetify": "npm run dev -w docs-vuetify",
+    "lint": "lerna run lint",
     "test": "lerna run test",
     "build": "lerna run build",
     "publish": "lerna publish && npm run publish:post",

@@ -7,6 +7,8 @@
     "allowJs": true,
     "moduleResolution": "node",
     "esModuleInterop": true,
+    "isolatedModules": true,
+    "skipLibCheck": true,
     "types": ["node", "fs-extra"]
   },
   "exclude": ["/dist", "node_modules"]
