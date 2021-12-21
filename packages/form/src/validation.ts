@@ -6,7 +6,7 @@ import { defaultLang } from './lang'
 export function createRequiredErrorFn(
   requiredFieldErrorMsg: string
 ): (payload: any) => null | string {
-  return (val) => (val === 0 || !!val ? null : requiredFieldErrorMsg)
+  return (val) => (isBoolean(val) || val === 0 || !!val ? null : requiredFieldErrorMsg)
 }
 
 /**
@@ -46,7 +46,7 @@ export function validateFieldPerSchema(
 
   if (!blueprint.error) return null
 
-  let errorResult = !isFunction(blueprint.error)
+  const errorResult = !isFunction(blueprint.error)
     ? blueprint.error
     : blueprint.error(payload, context)
   // report provided error message if error result is true

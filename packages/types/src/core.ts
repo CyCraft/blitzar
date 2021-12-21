@@ -33,6 +33,7 @@ export type Lang = {
   edit: string
   save: string
   requiredField: string
+  fieldValidationError: string
   formValidationError: string
 }
 

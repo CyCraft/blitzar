@@ -129,6 +129,7 @@ export default defineComponent({
         edit: 'Edit',
         save: 'Save',
         requiredField: 'Field is required',
+        fieldValidationError: 'Field has validation error',
         formValidationError: 'There are remaining errors.',
       }),
     },
