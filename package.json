@@ -10,7 +10,7 @@
     "lint": "lerna run lint",
     "test": "lerna run test",
     "build": "lerna run build",
-    "publish": "lerna publish",
+    "publish": "lerna publish && npm run _deploy:post",
     "deploy:docs": "firebase deploy --only hosting:blitzar && npm run _deploy:post",
     "_deploy:post": "git add -A && git commit -m \"chore: deploy\" && git push",
     "dep:update-all": "ncu --target minor -u && lerna exec 'ncu --target minor -u' && npm i",
