@@ -1,18 +1,22 @@
 {
   "name": "@blitzar/utils",
   "version": "1.0.6",
-  "description": "Blitzar utils",
   "author": "Luca Ban - Mesqueeb",
-  "module": "./dist/index.esm.js",
-  "main": "./dist/index.cjs.js",
+  "funding": "https://github.com/sponsors/mesqueeb",
+  "description": "Blitzar utils",
+  "module": "./dist/index.es.js",
+  "main": "./dist/index.umd.js",
   "types": "./dist/types/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/index.esm.js",
-      "require": "./dist/index.cjs.js",
+      "import": "./dist/index.es.js",
+      "require": "./dist/index.umd.js",
       "types": "./dist/types/index.d.ts"
     }
   },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "test": "ava",
     "build": "rimraf dist && rollup -c ./build.js",
