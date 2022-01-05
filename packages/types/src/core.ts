@@ -1,10 +1,18 @@
 export type FormContext = {
   formData: Record<string, any>
   formDataFlat: Record<string, any>
-  mode: 'edit' | 'readonly' | 'disabled' | 'raw'
   formMode: 'edit' | 'readonly' | 'disabled' | 'raw'
+  mode: 'edit' | 'readonly' | 'disabled' | 'raw'
   updateField: (payload: { id: string; value: any }) => void
   lang: Lang
+  /** Only available in BlitzListForm */
+  rowData: Record<string, any>
+  /** Only available in BlitzListForm */
+  updateRow: (payload: { id: string; value: any }) => void
+  /** Only available in BlitzListForm */
+  deleteRow?: () => void
+  /** Only available in BlitzListForm */
+  rowIndex?: number
   [key: string]: any
 }
 

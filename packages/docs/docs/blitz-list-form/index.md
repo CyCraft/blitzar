@@ -27,7 +27,7 @@ When you check the _**script tab**_ of this more advanced example, you'll notice
 
 There are 4 _extra_ props available on the context when using BlitzListForm:
 
-- `rowInput` (function)
+- `updateRow` (function)
 - `deleteRow` (function)
 - `rowIndex` (number)
 - `rowData` (object or array)

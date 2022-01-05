@@ -522,13 +522,13 @@ export default defineComponent({
     },
     /**
      * (only present in BlitzListForm!)
-     * The `rowInput` function of BlitzForm. Is passed so it can be used in events. Eg.: `events: { '@update:modelValue': (value, { updateField } => updateField({ id: 'otherField', value }))}`
+     * The `updateRow` function of BlitzForm. Is passed so it can be used in events. Eg.: `events: { '@update:modelValue': (value, { updateRow } => updateRow({ id: 'otherFieldInRow', value }))}`
      *
      * It's not something you can pass via the schema, but something that BlitzListForm will automatically pass to each of its fields so you can use it in Dynamic Props.
      * @category readonly
      */
-    rowInput: {
-      type: Function as PropType<(val: any, formContext: FormContext) => void>,
+    updateRow: {
+      type: Function as PropType<(payload: { id: string; value: any }) => void>,
       default: undefined,
     },
     /**
