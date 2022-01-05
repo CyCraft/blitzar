@@ -296,6 +296,24 @@ export default defineComponent({
       default: undefined,
     },
     /**
+     * Error can be passed a `string` which will be displayed below the field as an error message.
+     *
+     * Usually it's more useful to use as DynamicProp:
+     * - pass a function that receives the value of the field as payload
+     * - return `null` if there should be no error shown
+     * - return a `string` with your error message if there should be an error
+     *
+     * @example
+     * {
+     *   dynamicProps: ['error'],
+     *   error: (val) => Number(val) >= 18 ? null : 'You have to be over 18!'
+     * }
+     */
+    error: {
+      type: [String, Function] as PropType<string | null | DynamicProp<string | null>>,
+      default: undefined,
+    },
+    /**
      * The position of the label in comparison to the field.
      *
      * This prop can be set on a BlitzField or on a BlitzForm (in which case it's applied to all fields).
