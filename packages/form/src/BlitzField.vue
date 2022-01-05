@@ -68,7 +68,7 @@ export default defineComponent({
      */
     defaultValue: {
       type: undefined as unknown as PropType<
-        (formData: Record<string, any>, formContext: FormContext) => any | any
+        ((formData: Record<string, any>, formContext: FormContext) => any) | any
       >,
       default: undefined,
     },
