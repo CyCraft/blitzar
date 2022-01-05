@@ -1,6 +1,6 @@
 {
   "name": "@blitzar/form",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "author": "Luca Ban - Mesqueeb",
   "funding": "https://github.com/sponsors/mesqueeb",
   "description": "Blitzar form component",
@@ -28,8 +28,8 @@
     "dev": "vite build --watch"
   },
   "dependencies": {
-    "@blitzar/types": "^1.0.8",
-    "@blitzar/utils": "^1.0.8",
+    "@blitzar/types": "^1.0.9",
+    "@blitzar/utils": "^1.0.9",
     "case-anything": "^2.1.2",
     "copy-anything": "^2.0.3",
     "filter-anything": "^2.2.1",
