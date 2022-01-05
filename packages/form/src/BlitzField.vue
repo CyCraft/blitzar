@@ -64,6 +64,26 @@ export default defineComponent({
      * You can also pass a function that will receive two params you can work with: `(formData, context)`
      * - `formData` is the `modelValue` object of your BlitzForm. This will be undefined when BlitzField is used as stand-alone (without BlitzForm) unless you manually pass it.
      * - `context` is either your BlitzForm or BlitzField context with many usefull props. See the documentation on Dynamic Props for more info.
+     * @example
+     * ```js
+     * // default to an string (just pass it directly)
+     * defaultValue: 'Hello'
+     * ```
+     * @example
+     * ```js
+     * // default to an array (just like Vue props)
+     * defaultValue: () => []
+     * ```
+     * @example
+     * ```js
+     * // default to an object (just like Vue props)
+     * defaultValue: () => ({})
+     * ```
+     * @example
+     * ```js
+     * // default to a Function (you must pass a function that returns your function)
+     * defaultValue: () => () => {}
+     * ```
      * @category model
      */
     defaultValue: {
@@ -74,9 +94,18 @@ export default defineComponent({
     },
     /**
      * A function that modifies a value before it is used in the actual component. (see `parseInput` for the reverse)
-     * @example val => val && val.split(' ').map(str => !str ? '' : `${str[0].toUpperCase()}${str.slice(1)}`).join(' ')
-     * @example val => Number(val)
-     * @example val => Date(val)
+     * @example
+     * ```js
+     * val => val && val.split(' ').map(str => !str ? '' : `${str[0].toUpperCase()}${str.slice(1)}`).join(' ')
+     * ```
+     * @example
+     * ```js
+     * val => Number(val)
+     * ```
+     * @example
+     * ```js
+     * val => Date(val)
+     * ```
      * @category model
      */
     parseValue: {
@@ -85,8 +114,14 @@ export default defineComponent({
     },
     /**
      * A function that modifies a value after user input but before the value is emitted. (see `parseValue` for the reverse)
-     * @example val => (val || '').toLowerCase()
-     * @example val => val.toISOString()
+     * @example
+     * ```js
+     * val => (val || '').toLowerCase()
+     * ```
+     * @example
+     * ```js
+     * val => val.toISOString()
+     * ```
      * @category model
      */
     parseInput: {
@@ -107,8 +142,14 @@ export default defineComponent({
      * An Object with keys for the slot names and an object for values. The object you pass to a slot is itself applied as a `<component is="" />`.
      *
      * The last example below shows how this is actually used under the hood.
-     * @example { label: { component: 'MyTooltip', tip: 'hi' } } }
-     * @example <slot name="label"><component :is="slots.label.component" v-bind="slots.label" /></slot>
+     * @example
+     * ```js
+     * { label: { component: 'MyTooltip', tip: 'hi' } } }
+     * ```
+     * @example
+     * ```js
+     * <slot name="label"><component :is="slots.label.component" v-bind="slots.label" /></slot>
+     * ```
      * @category content
      */
     slots: {
@@ -128,7 +169,10 @@ export default defineComponent({
      * The text used in the UI for the action buttons and some error messages.
      *
      * The example shows how the error message for required fields is overwritten.
-     * @example { requiredField: `Don't forget this field!` }
+     * @example
+     * ```js
+     * { requiredField: `Don't forget this field!` }
+     * ```
      * @category content
      */
     lang: {
@@ -182,7 +226,10 @@ export default defineComponent({
     },
     /**
      * An Object with an event name as key and the handler function as value. The function you pass will receive the native event payload as first parameter and the BlitzField context (the component instance) as second: `($event, context) => {}`
-     * @example { click: (val, { formData }) => console.log(formData) }
+     * @example
+     * ```js
+     * { click: (val, { formData }) => console.log(formData) }
+     * ```
      * @category behavior
      */
     events: {
@@ -267,7 +314,10 @@ export default defineComponent({
     },
     /**
      * Setting to `false` will hide the field. When using as an Dynamic Prop it can used to conditionally hide fields based on the other `formData`.
-     * @example (val, { mode }) => (mode === 'edit')
+     * @example
+     * ```js
+     * (val, { mode }) => (mode === 'edit')
+     * ```
      * @example false
      * @category state
      */
@@ -304,10 +354,12 @@ export default defineComponent({
      * - return a `string` with your error message if there should be an error
      *
      * @example
+     * ```js
      * {
      *   dynamicProps: ['error'],
      *   error: (val) => Number(val) >= 18 ? null : 'You have to be over 18!'
      * }
+     * ```
      */
     error: {
       type: [String, Function] as PropType<string | null | DynamicProp<string | null>>,

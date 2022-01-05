@@ -28,8 +28,7 @@ export default defineComponent({
      * @category model
      */
     modelValue: {
-      /** @type {Record<string, any>} */
-      type: Object,
+      type: Object as PropType<Record<string, any>>,
       default: () => ({}),
     },
     /**
@@ -45,7 +44,10 @@ export default defineComponent({
      * The possible props you can pass are:
      * - BlitzField props (see BlitzField API Card in the documentation)
      * - any props of the actual component you define
-     * @example [{id: 'name', label: 'Name', component: 'input', style: 'color: white'}, {id: 'age', label: 'Age', component: 'input', type: 'number', style: 'color: white'}]
+     * @example
+     * ```js
+     * [{id: 'name', label: 'Name', component: 'input', style: 'color: white'}, {id: 'age', label: 'Age', component: 'input', type: 'number', style: 'color: white'}]
+     * ```
      * @category model
      */
     schema: {
@@ -63,8 +65,14 @@ export default defineComponent({
      * You can also pass custom buttons with the same schema to generate forms.
      *
      * See the documentation on Action Buttons for more info.
-     * @example ['delete', 'cancel', 'edit', 'save']
-     * @example [{component: 'button', type: 'button', slot: 'log', events: {click: console.log}}]
+     * @example
+     * ```js
+     * ['delete', 'cancel', 'edit', 'save']
+     * ```
+     * @example
+     * ```js
+     * [{component: 'button', type: 'button', slot: 'log', events: {click: console.log}}]
+     * ```
      * @category content
      */
     actionButtons: {
@@ -75,7 +83,10 @@ export default defineComponent({
     },
     /**
      * You can overwrite the schema used for the default action buttons for edit, cancel, save, delete & archive.
-     * @example {'save': {push: true}, 'delete': {color: 'secondary'}}
+     * @example
+     * ```js
+     * {'save': {push: true}, 'delete': {color: 'secondary'}}
+     * ```
      * @category content
      */
     actionButtonDefaults: {
@@ -116,7 +127,10 @@ export default defineComponent({
     },
     /**
      * The text used in the UI for the action buttons and some error messages.
-     * @example { cancel: 'キャンセル', edit: '編集', save: '保存' }
+     * @example
+     * ```js
+     * { cancel: 'キャンセル', edit: '編集', save: '保存' }
+     * ```
      * @category content
      */
     lang: {
