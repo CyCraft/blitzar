@@ -1,5 +1,6 @@
 {
   "name": "docs",
+  "private": true,
   "version": "1.0.9",
   "description": "Blitzar Docs",
   "author": "CyCraft",
@@ -34,5 +35,5 @@
     "type": "git",
     "url": "git+https://github.com/cycraft/blitzar.git"
   },
-  "gitHead": "54b3615f643146e89ca7fd97a514f10ce5483304"
+  "gitHead": "c5a442e9e3a23320fe0eaf41dec924d837a472d0"
 }
