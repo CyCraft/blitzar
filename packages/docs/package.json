@@ -19,7 +19,7 @@
     "vue-pepicons": "^1.0.9"
   },
   "devDependencies": {
-    "vitepress": "^0.20.9"
+    "vitepress": "^0.20.10"
   },
   "keywords": [
     "blitzar",

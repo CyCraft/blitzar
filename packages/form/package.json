@@ -30,7 +30,7 @@
   "dependencies": {
     "@blitzar/types": "^1.0.7",
     "@blitzar/utils": "^1.0.7",
-    "case-anything": "^1.1.3",
+    "case-anything": "^2.1.2",
     "copy-anything": "^2.0.3",
     "filter-anything": "^2.2.1",
     "is-what": "^3.14.1",
