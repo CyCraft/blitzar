@@ -6,9 +6,9 @@ export type FormContext = {
   updateField: (payload: { id: string; value: any }) => void
   lang: Lang
   /** Only available in BlitzListForm */
-  rowData: Record<string, any>
+  rowData?: Record<string, any>
   /** Only available in BlitzListForm */
-  updateRow: (payload: { id: string; value: any }) => void
+  updateRow?: (payload: { id: string; value: any }) => void
   /** Only available in BlitzListForm */
   deleteRow?: () => void
   /** Only available in BlitzListForm */
