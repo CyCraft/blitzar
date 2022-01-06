@@ -440,7 +440,7 @@ export default defineComponent({
       } = this
       const overwritableDefaults = { lang: innerLang, updateField }
       return actionButtons.map((blueprint) => {
-        const _bp = isString(blueprint) ? actionButtonsMap[blueprint]! : blueprint
+        const _bp = isString(blueprint) ? actionButtonsMap[blueprint] || {} : blueprint
         const slotsOverwrite = !_bp.slot
           ? {}
           : { slots: merge(_bp.slots || {}, { default: _bp.slot }) }
@@ -603,7 +603,7 @@ export default defineComponent({
     },
     restoreBackup(): void {
       if (!this.formDataFlatBackups.length) return
-      const lastBackup = this.formDataFlatBackups.pop()!
+      const lastBackup = this.formDataFlatBackups.pop() || {}
       this.formDataFlat = lastBackup
     },
     tapCancel(): void {
