@@ -1,6 +1,7 @@
 {
   "name": "docs",
-  "version": "1.0.6",
+  "private": true,
+  "version": "1.0.10",
   "description": "Blitzar Docs",
   "author": "CyCraft",
   "main": "index.js",
@@ -13,13 +14,13 @@
     "@adamdehaven/vue-custom-tooltip": "^2.6.0",
     "@meforma/vue-toaster": "^1.3.0",
     "@planetar/code-block": "^1.0.2",
-    "blitzar": "^1.0.6",
+    "blitzar": "^1.0.10",
     "is-what": "^3.14.1",
     "vue-final-modal": "^3.4.3",
     "vue-pepicons": "^1.0.9"
   },
   "devDependencies": {
-    "vitepress": "^0.20.9"
+    "vitepress": "^0.20.10"
   },
   "keywords": [
     "blitzar",
@@ -34,5 +35,5 @@
     "type": "git",
     "url": "git+https://github.com/cycraft/blitzar.git"
   },
-  "gitHead": "29825a44d5cafe7f9fb24cd41c1f0d9410e2d5a5"
+  "gitHead": "c5a442e9e3a23320fe0eaf41dec924d837a472d0"
 }

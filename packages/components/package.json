@@ -1,11 +1,11 @@
 {
   "name": "@blitzar/components",
-  "version": "1.0.6",
+  "version": "1.0.10",
   "author": "Luca Ban - Mesqueeb",
   "funding": "https://github.com/sponsors/mesqueeb",
   "description": "Blitzar helper components",
-  "main": "./dist/index.umd.js",
   "module": "./dist/index.es.js",
+  "main": "./dist/index.umd.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
@@ -28,7 +28,7 @@
     "dev": "vite build --watch"
   },
   "dependencies": {
-    "@blitzar/types": "^1.0.6",
+    "@blitzar/types": "^1.0.10",
     "flatten-anything": "^2.0.4",
     "is-what": "^3.14.1",
     "path-to-prop": "^1.0.0",
@@ -54,5 +54,5 @@
     "tags": "dist/vetur/tags.json",
     "attributes": "dist/vetur/attributes.json"
   },
-  "gitHead": "29825a44d5cafe7f9fb24cd41c1f0d9410e2d5a5"
+  "gitHead": "911481ed12bc63236ebe608ccdf86d4f8f01b238"
 }

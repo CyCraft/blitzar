@@ -1,19 +1,26 @@
 {
   "name": "@blitzar/types",
-  "version": "1.0.6",
-  "description": "Blitzar types — can only be consumed by TS projects",
+  "version": "1.0.10",
   "author": "Luca Ban - Mesqueeb",
-  "module": "./src/index.ts",
-  "main": "./src/index.ts",
-  "types": "./src/index.ts",
+  "funding": "https://github.com/sponsors/mesqueeb",
+  "description": "Blitzar types",
+  "module": "./dist/index.es.js",
+  "main": "./dist/index.umd.js",
+  "types": "./dist/types/index.d.ts",
   "exports": {
     ".": {
-      "import": "./src/index.ts",
-      "require": "./src/index.ts",
-      "types": "./src/index.tss"
+      "import": "./dist/index.es.js",
+      "require": "./dist/index.umd.js",
+      "types": "./dist/types/index.d.ts"
     }
   },
-  "scripts": {},
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "rimraf dist && rollup -c ./build.js",
+    "dev": "rollup -c ./build.js --watch"
+  },
   "keywords": [
     "blitzar",
     "typescript"
@@ -27,5 +34,5 @@
     "type": "git",
     "url": "git+https://github.com/cycraft/blitzar.git"
   },
-  "gitHead": "29825a44d5cafe7f9fb24cd41c1f0d9410e2d5a5"
+  "gitHead": "911481ed12bc63236ebe608ccdf86d4f8f01b238"
 }

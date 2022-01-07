@@ -25,7 +25,10 @@ export default defineComponent({
     },
     /**
      * This is the information on the columns you want to be shown. An array of objects just like a BlitzForm.
-     * @example [{ label: 'Amount', id: 'amount', component: 'input', type: 'number', style: 'color: white' }, { label: 'Currency', id: 'curr', component: 'select', slot: [{ component: 'option', value: '', slot: 'Select one', disabled: true }, { component: 'option', value: 'usd', slot: 'USD' }], style: 'color: white' }]
+     * @example
+     * ```js
+     * [{ label: 'Amount', id: 'amount', component: 'input', type: 'number', style: 'color: white' }, { label: 'Currency', id: 'curr', component: 'select', slot: [{ component: 'option', value: '', slot: 'Select one', disabled: true }, { component: 'option', value: 'usd', slot: 'USD' }], style: 'color: white' }]
+     * ```
      * @category content
      */
     schema: {
@@ -204,7 +207,7 @@ export default defineComponent({
         class="blitz-list-form__sub-field"
         :rowIndex="rowIndex"
         :rowData="cValue[rowIndex]"
-        :rowInput="(params) => setSubFieldValue({ id: params.id, value: params.value, rowIndex })"
+        :updateRow="(params) => setSubFieldValue({ id: params.id, value: params.value, rowIndex })"
         :deleteRow="() => deleteRow(rowIndex)"
         :modelValue="cValue[rowIndex][subfield.id]"
         @update:modelValue="
