@@ -112,6 +112,7 @@ export default defineComponent({
   color: var(--c-primary);
   background-color: #fff;
   border: 1px solid var(--c-border);
+  text-decoration: none;
 }
 ._page-link:hover {
   z-index: 2;
