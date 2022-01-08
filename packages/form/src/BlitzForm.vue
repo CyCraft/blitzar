@@ -694,6 +694,8 @@ export default defineComponent({
         :key="`${blueprint.id}-${i}`"
         v-bind="blueprint"
       />
+      <!-- temporary slot -->
+      <slot name="nav" />
     </div>
     <!-- form contents -->
     <!-- @slot The default slot is what contains by default the actual form fields. This slot should not be used, unless you are only interested in the logic of BlitzForm and not of BlitzFields. -->
