@@ -1,3 +1,58 @@
+<script>
+const rows = [
+  { nameFirst: 'Eleanor', nameLast: 'Shellstrop' },
+  { nameFirst: 'Chidi', nameLast: 'Anagonye' },
+  { nameFirst: 'Jason', nameLast: 'Mendoza' },
+  { nameFirst: 'Tahani', nameLast: 'Al-Jamil' },
+  { nameFirst: 'Janet', nameLast: 'Della-Denunzio' },
+  { nameFirst: 'Michael', nameLast: 'Of the bad place' },
+  { nameFirst: 'Shawn', nameLast: 'Of the bad place' },
+  { nameFirst: 'Simone', nameLast: 'Garnett' },
+  { nameFirst: 'Derek', nameLast: 'Hofstetler' },
+  { nameFirst: 'John', nameLast: 'Wheaton' },
+  { nameFirst: 'Brent', nameLast: 'Norwalk' },
+  { nameFirst: 'Mindy', nameLast: 'St. Claire' },
+]
+
+// the columns schema is just for the sake of the example
+const schemaColumns = [
+  { id: 'nameFirst', label: 'First Name', component: 'input' },
+  { id: 'nameLast', label: 'Last Name', component: 'input' },
+]
+
+export default {
+  // This is the code for our example wrapper component
+  props: {
+    rows: { type: Array, default: () => [...rows] },
+    schemaColumns: { type: Array, default: () => [...schemaColumns] },
+    schemaGrid: { type: Array, default: () => [...schemaColumns] },
+    title: { type: String, default: 'My Styled Table' },
+  },
+  data() {
+    return { grid: false }
+  },
+  computed: {
+    // the `propsToPass` object is passed in the template with `v-bind="propsToPass"`
+    propsToPass() {
+      const defaults = {
+        flat: true,
+        bordered: true,
+      }
+      return {
+        ...defaults,
+        // Any props we are trying to set that we didn't define in the props of this wrapper component
+        // are available on `this.$attrs`!
+        ...this.$attrs,
+        rows: this.rows,
+        schemaColumns: this.schemaColumns,
+        schemaGrid: this.schemaGrid,
+        actionButtons: [],
+      }
+    },
+  },
+}
+</script>
+
 <template>
   <div>
     <!-- Our wrapper component makes use of a fully custom top title section -->
@@ -12,7 +67,7 @@
         <path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M3 5C2.44772 5 2 5.44772 2 6C2 6.55228 2.44772 7 3 7H3.01C3.56228 7 4.01 6.55228 4.01 6C4.01 5.44772 3.56228 5 3.01 5H3ZM8 5C7.44772 5 7 5.44772 7 6C7 6.55228 7.44772 7 8 7H21C21.5523 7 22 6.55228 22 6C22 5.44772 21.5523 5 21 5H8ZM8 11C7.44772 11 7 11.4477 7 12C7 12.5523 7.44772 13 8 13H21C21.5523 13 22 12.5523 22 12C22 11.4477 21.5523 11 21 11H8ZM7 18C7 17.4477 7.44772 17 8 17H21C21.5523 17 22 17.4477 22 18C22 18.5523 21.5523 19 21 19H8C7.44772 19 7 18.5523 7 18ZM2 12C2 11.4477 2.44772 11 3 11H3.01C3.56228 11 4.01 11.4477 4.01 12C4.01 12.5523 3.56228 13 3.01 13H3C2.44772 13 2 12.5523 2 12ZM3 17C2.44772 17 2 17.4477 2 18C2 18.5523 2.44772 19 3 19H3.01C3.56228 19 4.01 18.5523 4.01 18C4.01 17.4477 3.56228 17 3.01 17H3Z" />
       </svg>
     </div>
-    
+
     <!-- Then we embed BlitzTable and pass any other props with `v-bind="propsToPass"` -->
     <BlitzTable
       v-bind="propsToPass"
@@ -97,58 +152,3 @@
     .blitz-field__component
       +t-body2()
 </style>
-
-<script>
-const rows = [
-  { nameFirst: 'Eleanor', nameLast: 'Shellstrop' },
-  { nameFirst: 'Chidi', nameLast: 'Anagonye' },
-  { nameFirst: 'Jason', nameLast: 'Mendoza' },
-  { nameFirst: 'Tahani', nameLast: 'Al-Jamil' },
-  { nameFirst: 'Janet', nameLast: 'Della-Denunzio' },
-  { nameFirst: 'Michael', nameLast: 'Of the bad place' },
-  { nameFirst: 'Shawn', nameLast: 'Of the bad place' },
-  { nameFirst: 'Simone', nameLast: 'Garnett' },
-  { nameFirst: 'Derek', nameLast: 'Hofstetler' },
-  { nameFirst: 'John', nameLast: 'Wheaton' },
-  { nameFirst: 'Brent', nameLast: 'Norwalk' },
-  { nameFirst: 'Mindy', nameLast: 'St. Claire' },
-]
-
-// the columns schema is just for the sake of the example
-const schemaColumns = [
-  { id: 'nameFirst', label: 'First Name', component: 'input' },
-  { id: 'nameLast', label: 'Last Name', component: 'input' },
-]
-
-export default {
-  // This is the code for our example wrapper component
-  props: {
-    rows: { type: Array, default: () => [...rows] },
-    schemaColumns: { type: Array, default: () => [...schemaColumns] },
-    schemaGrid: { type: Array, default: () => [...schemaColumns] },
-    title: { type: String, default: 'My Styled Table' },
-  },
-  data() {
-    return { grid: false }
-  },
-  computed: {
-    // the `propsToPass` object is passed in the template with `v-bind="propsToPass"`
-    propsToPass() {
-      const defaults = {
-        flat: true,
-        bordered: true,
-      }
-      return {
-        ...defaults,
-        // Any props we are trying to set that we didn't define in the props of this wrapper component
-        // are available on `this.$attrs`!
-        ...this.$attrs,
-        rows: this.rows,
-        schemaColumns: this.schemaColumns,
-        schemaGrid: this.schemaGrid,
-        actionButtons: [],
-      }
-    },
-  },
-}
-</script>

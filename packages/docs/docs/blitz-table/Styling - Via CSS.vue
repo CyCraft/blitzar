@@ -1,3 +1,31 @@
+<script>
+const rows = [
+  { nameFirst: 'Eleanor', nameLast: 'Shellstrop' },
+  { nameFirst: 'Chidi', nameLast: 'Anagonye' },
+  { nameFirst: 'Jason', nameLast: 'Mendoza' },
+  { nameFirst: 'Tahani', nameLast: 'Al-Jamil' },
+  { nameFirst: 'Janet', nameLast: 'Della-Denunzio' },
+  { nameFirst: 'Michael', nameLast: 'Of the bad place' },
+  { nameFirst: 'Shawn', nameLast: 'Of the bad place' },
+  { nameFirst: 'Simone', nameLast: 'Garnett' },
+  { nameFirst: 'Derek', nameLast: 'Hofstetler' },
+  { nameFirst: 'John', nameLast: 'Wheaton' },
+  { nameFirst: 'Brent', nameLast: 'Norwalk' },
+  { nameFirst: 'Mindy', nameLast: 'St. Claire' },
+]
+
+const schemaColumns = [
+  { id: 'nameFirst', label: 'First Name', component: 'input' },
+  { id: 'nameLast', label: 'Last Name', component: 'input' },
+]
+
+export default {
+  data() {
+    return { rows, schemaColumns, grid: false }
+  },
+}
+</script>
+
 <template>
   <div class="q-gutter-lg">
     <BlitzTable
@@ -6,7 +34,7 @@
       :rows="rows"
       title="Default table"
     />
-    
+
     <BlitzTable
       :class="`styled-table ${grid ? 'mode-grid' : 'mode-rows'}`"
       :schemaColumns="schemaColumns"
@@ -74,31 +102,3 @@
     .blitz-field__component
       +t-body2()
 </style>
-
-<script>
-const rows = [
-  { nameFirst: 'Eleanor', nameLast: 'Shellstrop' },
-  { nameFirst: 'Chidi', nameLast: 'Anagonye' },
-  { nameFirst: 'Jason', nameLast: 'Mendoza' },
-  { nameFirst: 'Tahani', nameLast: 'Al-Jamil' },
-  { nameFirst: 'Janet', nameLast: 'Della-Denunzio' },
-  { nameFirst: 'Michael', nameLast: 'Of the bad place' },
-  { nameFirst: 'Shawn', nameLast: 'Of the bad place' },
-  { nameFirst: 'Simone', nameLast: 'Garnett' },
-  { nameFirst: 'Derek', nameLast: 'Hofstetler' },
-  { nameFirst: 'John', nameLast: 'Wheaton' },
-  { nameFirst: 'Brent', nameLast: 'Norwalk' },
-  { nameFirst: 'Mindy', nameLast: 'St. Claire' },
-]
-
-const schemaColumns = [
-  { id: 'nameFirst', label: 'First Name', component: 'input' },
-  { id: 'nameLast', label: 'Last Name', component: 'input' },
-]
-
-export default {
-  data() {
-    return { rows, schemaColumns, grid: false }
-  },
-}
-</script>

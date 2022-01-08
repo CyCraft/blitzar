@@ -1,33 +1,3 @@
-<template>
-  <div>
-    <strong>Expenses</strong><br /><br />
-
-    <BlitzListForm :schema="schema" v-model="formData" />
-
-    <CodeBlock :content="`// formData\n${JSON.stringify(formData, undefined, 2)}`" />
-  </div>
-</template>
-
-<style>
-.delete-button {
-  height: 20px;
-  width: 20px;
-  line-height: 1;
-  color: white;
-  background: crimson;
-  border: none;
-  font-weight: 900;
-  border-radius: 100%;
-  outline: none;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.delete-button:disabled {
-  opacity: 0.5;
-}
-</style>
-
 <script>
 const schema = [
   // the `deleteRow` function and `rowIndex` props used below are only available in schemas of a BlitzListForm!
@@ -80,3 +50,33 @@ export default {
   },
 }
 </script>
+
+<template>
+  <div>
+    <strong>Expenses</strong><br /><br />
+
+    <BlitzListForm :schema="schema" v-model="formData" />
+
+    <CodeBlock :content="`// formData\n${JSON.stringify(formData, undefined, 2)}`" />
+  </div>
+</template>
+
+<style>
+.delete-button {
+  height: 20px;
+  width: 20px;
+  line-height: 1;
+  color: white;
+  background: crimson;
+  border: none;
+  font-weight: 900;
+  border-radius: 100%;
+  outline: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.delete-button:disabled {
+  opacity: 0.5;
+}
+</style>

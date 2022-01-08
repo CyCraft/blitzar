@@ -1,25 +1,3 @@
-<template>
-  <div class="example-action-buttons-overwrite-style">
-    <BlitzForm
-      :actionButtons="['edit', 'cancel', 'save', 'delete']"
-      :actionButtonDefaults="actionButtonDefaults"
-      :columnCount="2"
-      :schema="schema"
-      v-model="formData"
-      @save="(payload) => onSave(payload)"
-      @delete="() => onDelete()"
-    />
-  </div>
-</template>
-
-<style scoped>
-.example-action-buttons-overwrite-style .my-button-class {
-  border: none;
-  background: none;
-  font-weight: 700;
-}
-</style>
-
 <script>
 import { showToast } from '../../components/toasts'
 
@@ -78,3 +56,25 @@ export default {
   },
 }
 </script>
+
+<template>
+  <div class="example-action-buttons-overwrite-style">
+    <BlitzForm
+      :actionButtons="['edit', 'cancel', 'save', 'delete']"
+      :actionButtonDefaults="actionButtonDefaults"
+      :columnCount="2"
+      :schema="schema"
+      v-model="formData"
+      @save="(payload) => onSave(payload)"
+      @delete="() => onDelete()"
+    />
+  </div>
+</template>
+
+<style scoped>
+.example-action-buttons-overwrite-style .my-button-class {
+  border: none;
+  background: none;
+  font-weight: 700;
+}
+</style>

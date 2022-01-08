@@ -1,48 +1,3 @@
-<template>
-  <BlitzTable
-    :schemaColumns="schemaColumnsAndGrid"
-    :schemaGrid="schemaColumnsAndGrid"
-    :rows="rows"
-    :gridToggleField="{ component: blitzGridToggle }"
-    @rowClick="(e, rowData) => onRowClick(rowData)"
-  />
-
-  <!-- Blitzar does not come with a modal library
-    The example below uses `vue-final-modal`
-    However, you can use any modal library you want -->
-  <VueFinalModal classes="form-modal" v-model="editInfo.isShowingModal">
-    <!-- show a BlitzForm in a modal -->
-    <BlitzForm
-      :schema="schemaColumnsAndGrid"
-      :modelValue="editInfo.editingRowData"
-      :actionButtons="['delete', 'edit', 'cancel', 'save']"
-      :columnCount="2"
-      :key="editInfo.remountCounter"
-      @cancel="editInfo.isShowingModal = false"
-      @delete="() => deleteEditingRow()"
-      @save="(payload) => saveEdits(payload)"
-    />
-  </VueFinalModal>
-</template>
-
-<style scoped>
-::v-deep(.blitz-table--grid-card) {
-  border: thin solid #dfe2e5;
-}
-::v-deep(.blitz-table--grid-card input) {
-  min-width: 0;
-}
-::v-deep(.form-modal) {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-::v-deep(.form-modal > *) {
-  background: white;
-  padding: 1.5rem;
-}
-</style>
-
 <script>
 import { VueFinalModal } from 'vue-final-modal'
 import { ref, reactive, markRaw } from 'vue'
@@ -150,3 +105,48 @@ export default {
   },
 }
 </script>
+
+<template>
+  <BlitzTable
+    :schemaColumns="schemaColumnsAndGrid"
+    :schemaGrid="schemaColumnsAndGrid"
+    :rows="rows"
+    :gridToggleField="{ component: blitzGridToggle }"
+    @rowClick="(e, rowData) => onRowClick(rowData)"
+  />
+
+  <!-- Blitzar does not come with a modal library
+    The example below uses `vue-final-modal`
+    However, you can use any modal library you want -->
+  <VueFinalModal classes="form-modal" v-model="editInfo.isShowingModal">
+    <!-- show a BlitzForm in a modal -->
+    <BlitzForm
+      :schema="schemaColumnsAndGrid"
+      :modelValue="editInfo.editingRowData"
+      :actionButtons="['delete', 'edit', 'cancel', 'save']"
+      :columnCount="2"
+      :key="editInfo.remountCounter"
+      @cancel="editInfo.isShowingModal = false"
+      @delete="() => deleteEditingRow()"
+      @save="(payload) => saveEdits(payload)"
+    />
+  </VueFinalModal>
+</template>
+
+<style scoped>
+::v-deep(.blitz-table--grid-card) {
+  border: thin solid #dfe2e5;
+}
+::v-deep(.blitz-table--grid-card input) {
+  min-width: 0;
+}
+::v-deep(.form-modal) {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+::v-deep(.form-modal > *) {
+  background: white;
+  padding: 1.5rem;
+}
+</style>

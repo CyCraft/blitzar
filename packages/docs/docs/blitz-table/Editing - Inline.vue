@@ -1,31 +1,3 @@
-<template>
-  <div>
-    <h4 style="display: inline">Table Mode:</h4>
-    <input type="radio" id="raw" value="raw" v-model="mode" />
-    <label for="raw">raw</label>
-    <input type="radio" id="edit" value="edit" v-model="mode" />
-    <label for="edit">edit</label>
-  </div>
-
-  <BlitzTable
-    :schemaColumns="schemaColumnsAndGrid"
-    :schemaGrid="schemaColumnsAndGrid"
-    :rows="rows"
-    :mode="mode"
-    :gridToggleField="{ component: blitzGridToggle }"
-    @updateCell="({ rowId, colId, value, origin }) => onUpdateCell({ rowId, colId, value, origin })"
-  />
-</template>
-
-<style scoped>
-::v-deep(.blitz-table--grid-card) {
-  border: thin solid #dfe2e5;
-}
-::v-deep(.blitz-table--grid-card input) {
-  min-width: 0;
-}
-</style>
-
 <script>
 import { ref, markRaw } from 'vue'
 import { BlitzGridToggle } from 'blitzar'
@@ -90,3 +62,31 @@ export default {
   },
 }
 </script>
+
+<template>
+  <div>
+    <h4 style="display: inline">Table Mode:</h4>
+    <input type="radio" id="raw" value="raw" v-model="mode" />
+    <label for="raw">raw</label>
+    <input type="radio" id="edit" value="edit" v-model="mode" />
+    <label for="edit">edit</label>
+  </div>
+
+  <BlitzTable
+    :schemaColumns="schemaColumnsAndGrid"
+    :schemaGrid="schemaColumnsAndGrid"
+    :rows="rows"
+    :mode="mode"
+    :gridToggleField="{ component: blitzGridToggle }"
+    @updateCell="({ rowId, colId, value, origin }) => onUpdateCell({ rowId, colId, value, origin })"
+  />
+</template>
+
+<style scoped>
+::v-deep(.blitz-table--grid-card) {
+  border: thin solid #dfe2e5;
+}
+::v-deep(.blitz-table--grid-card input) {
+  min-width: 0;
+}
+</style>

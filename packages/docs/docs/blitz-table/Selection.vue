@@ -1,56 +1,3 @@
-<template>
-  <div>
-    <details>
-      <summary>Selected rows ({{ selectedRows.length }})</summary>
-      <pre class="_preview">{{ selectedRows }}</pre>
-    </details>
-    <!-- <pre>{{ selectedRows.length }}</pre> -->
-
-    <BlitzTable
-      v-model:selectedRows="selectedRows"
-      :schemaColumns="schemaColumnsAndGrid"
-      :schemaGrid="schemaColumnsAndGrid"
-      :rows="rows"
-      :rowsPerPage="5"
-      :titleField="{ component: 'h3', slot: 'Users' }"
-      :searchField="{
-        component: blitzInput,
-        placeholder: 'Search...',
-        debounce: 300,
-        clearable: true,
-      }"
-      :gridToggleField="{ component: blitzGridToggle }"
-      :paginationField="{ component: blitzPagination }"
-      :rowsPerPageField="{
-        label: 'Rows per page:',
-        component: blitzInput,
-        type: 'select',
-        options: [
-          { value: 5, label: '5' },
-          { value: 10, label: '10' },
-          { value: 20, label: '20' },
-          { value: 50, label: '50' },
-          { value: 100, label: '100' },
-        ],
-      }"
-      :shownRowsInfoField="{ component: 'div' }"
-    />
-  </div>
-</template>
-
-<style scoped>
-::v-deep(.blitz-table--grid-card) {
-  border: thin solid #dfe2e5;
-}
-
-._preview {
-  max-height: 500px;
-  overflow-y: auto;
-  background: rgba(0, 0, 0, 0.9);
-  color: white;
-}
-</style>
-
 <script>
 import { markRaw, onMounted, ref } from 'vue'
 import { ROW_SELECTION_ID } from 'blitzar'
@@ -113,3 +60,56 @@ export default {
   },
 }
 </script>
+
+<template>
+  <div>
+    <details>
+      <summary>Selected rows ({{ selectedRows.length }})</summary>
+      <pre class="_preview">{{ selectedRows }}</pre>
+    </details>
+    <!-- <pre>{{ selectedRows.length }}</pre> -->
+
+    <BlitzTable
+      v-model:selectedRows="selectedRows"
+      :schemaColumns="schemaColumnsAndGrid"
+      :schemaGrid="schemaColumnsAndGrid"
+      :rows="rows"
+      :rowsPerPage="5"
+      :titleField="{ component: 'h3', slot: 'Users' }"
+      :searchField="{
+        component: blitzInput,
+        placeholder: 'Search...',
+        debounce: 300,
+        clearable: true,
+      }"
+      :gridToggleField="{ component: blitzGridToggle }"
+      :paginationField="{ component: blitzPagination }"
+      :rowsPerPageField="{
+        label: 'Rows per page:',
+        component: blitzInput,
+        type: 'select',
+        options: [
+          { value: 5, label: '5' },
+          { value: 10, label: '10' },
+          { value: 20, label: '20' },
+          { value: 50, label: '50' },
+          { value: 100, label: '100' },
+        ],
+      }"
+      :shownRowsInfoField="{ component: 'div' }"
+    />
+  </div>
+</template>
+
+<style scoped>
+::v-deep(.blitz-table--grid-card) {
+  border: thin solid #dfe2e5;
+}
+
+._preview {
+  max-height: 500px;
+  overflow-y: auto;
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+}
+</style>

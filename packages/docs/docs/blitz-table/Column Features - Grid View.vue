@@ -1,24 +1,3 @@
-<template>
-  <div>
-    <BlitzTable
-      :schemaColumns="schemaColumns"
-      :schemaGrid="schemaGrid"
-      :rows="rows"
-      :gridToggleField="{ component: blitzGridToggle }"
-      :gridBlitzFormOptions="{ columnCount: 2 }"
-    />
-  </div>
-</template>
-
-<style scoped>
-::v-deep(.blitz-table--grid-card) {
-  border: thin solid #dfe2e5;
-}
-::v-deep(.blitz-table--grid-card .blitz-field__label) {
-  font-weight: 200;
-}
-</style>
-
 <script>
 import { markRaw } from 'vue'
 import { BlitzGridToggle } from 'blitzar'
@@ -71,3 +50,24 @@ export default {
   },
 }
 </script>
+
+<template>
+  <div>
+    <BlitzTable
+      :schemaColumns="schemaColumns"
+      :schemaGrid="schemaGrid"
+      :rows="rows"
+      :gridToggleField="{ component: blitzGridToggle }"
+      :gridBlitzFormOptions="{ columnCount: 2 }"
+    />
+  </div>
+</template>
+
+<style scoped>
+::v-deep(.blitz-table--grid-card) {
+  border: thin solid #dfe2e5;
+}
+::v-deep(.blitz-table--grid-card .blitz-field__label) {
+  font-weight: 200;
+}
+</style>

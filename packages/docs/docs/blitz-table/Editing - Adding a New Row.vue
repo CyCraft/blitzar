@@ -1,47 +1,3 @@
-<template>
-  <button @click="openAddModal">Add New Row</button>
-
-  <BlitzTable
-    :schemaColumns="schemaColumnsAndGrid"
-    :schemaGrid="schemaColumnsAndGrid"
-    :rows="rows"
-    :gridToggleField="{ component: blitzGridToggle }"
-  />
-
-  <!-- Blitzar does not come with a modal library
-    The example below uses `vue-final-modal`
-    However, you can use any modal library you want -->
-  <VueFinalModal classes="form-modal" v-model="addInfo.isShowingModal">
-    <!-- show a BlitzForm in a modal -->
-    <BlitzForm
-      :schema="schemaColumnsAndGrid"
-      :actionButtons="['edit', 'cancel', 'save']"
-      :columnCount="2"
-      :key="addInfo.remountCounter"
-      @cancel="addInfo.isShowingModal = false"
-      @save="(payload) => addNewRow(payload)"
-    />
-  </VueFinalModal>
-</template>
-
-<style scoped>
-::v-deep(.blitz-table--grid-card) {
-  border: thin solid #dfe2e5;
-}
-::v-deep(.blitz-table--grid-card input) {
-  min-width: 0;
-}
-::v-deep(.form-modal) {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-::v-deep(.form-modal > *) {
-  background: white;
-  padding: 1.5rem;
-}
-</style>
-
 <script>
 import { VueFinalModal } from 'vue-final-modal'
 import { ref, reactive, markRaw } from 'vue'
@@ -121,3 +77,47 @@ export default {
   },
 }
 </script>
+
+<template>
+  <button @click="openAddModal">Add New Row</button>
+
+  <BlitzTable
+    :schemaColumns="schemaColumnsAndGrid"
+    :schemaGrid="schemaColumnsAndGrid"
+    :rows="rows"
+    :gridToggleField="{ component: blitzGridToggle }"
+  />
+
+  <!-- Blitzar does not come with a modal library
+    The example below uses `vue-final-modal`
+    However, you can use any modal library you want -->
+  <VueFinalModal classes="form-modal" v-model="addInfo.isShowingModal">
+    <!-- show a BlitzForm in a modal -->
+    <BlitzForm
+      :schema="schemaColumnsAndGrid"
+      :actionButtons="['edit', 'cancel', 'save']"
+      :columnCount="2"
+      :key="addInfo.remountCounter"
+      @cancel="addInfo.isShowingModal = false"
+      @save="(payload) => addNewRow(payload)"
+    />
+  </VueFinalModal>
+</template>
+
+<style scoped>
+::v-deep(.blitz-table--grid-card) {
+  border: thin solid #dfe2e5;
+}
+::v-deep(.blitz-table--grid-card input) {
+  min-width: 0;
+}
+::v-deep(.form-modal) {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+::v-deep(.form-modal > *) {
+  background: white;
+  padding: 1.5rem;
+}
+</style>

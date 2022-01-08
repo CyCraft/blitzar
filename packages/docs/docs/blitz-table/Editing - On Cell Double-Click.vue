@@ -1,23 +1,3 @@
-<template>
-  <BlitzTable
-    :schemaColumns="schemaWithEditingLogic"
-    :schemaGrid="schemaWithEditingLogic"
-    :rows="rows"
-    :gridToggleField="{ component: blitzGridToggle }"
-    @updateCell="({ rowId, colId, value }) => onUpdateCell({ rowId, colId, value })"
-    @cellDblclick="(mouseEvent, rowData, colId) => onCellDblclick(mouseEvent, rowData, colId)"
-  />
-</template>
-
-<style scoped>
-::v-deep(.blitz-table--grid-card) {
-  border: thin solid #dfe2e5;
-}
-::v-deep(.blitz-table--grid-card input) {
-  min-width: 0;
-}
-</style>
-
 <script>
 import { reactive, markRaw, computed } from 'vue'
 import { BlitzGridToggle } from 'blitzar'
@@ -137,3 +117,23 @@ export default {
   },
 }
 </script>
+
+<template>
+  <BlitzTable
+    :schemaColumns="schemaWithEditingLogic"
+    :schemaGrid="schemaWithEditingLogic"
+    :rows="rows"
+    :gridToggleField="{ component: blitzGridToggle }"
+    @updateCell="({ rowId, colId, value }) => onUpdateCell({ rowId, colId, value })"
+    @cellDblclick="(mouseEvent, rowData, colId) => onCellDblclick(mouseEvent, rowData, colId)"
+  />
+</template>
+
+<style scoped>
+::v-deep(.blitz-table--grid-card) {
+  border: thin solid #dfe2e5;
+}
+::v-deep(.blitz-table--grid-card input) {
+  min-width: 0;
+}
+</style>

@@ -1,15 +1,3 @@
-<template>
-  <div>
-    <blitz-form :schema="schema" v-model="formData" :columnCount="2" />
-
-    <CodeBlock :content="`// formData\n${JSON.stringify(formData, undefined, 2)}`" />
-  </div>
-</template>
-
-<style>
-/* This example has no styling */
-</style>
-
 <script>
 const schema = [
   {
@@ -40,3 +28,15 @@ export default {
   },
 }
 </script>
+
+<template>
+  <div>
+    <blitz-form :schema="schema" v-model="formData" :columnCount="2" />
+
+    <CodeBlock :content="`// formData\n${JSON.stringify(formData, undefined, 2)}`" />
+  </div>
+</template>
+
+<style>
+/* This example has no styling */
+</style>

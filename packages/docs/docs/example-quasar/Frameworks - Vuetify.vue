@@ -1,19 +1,3 @@
-<template>
-  <div>
-    <BlitzForm
-      :schema="schema"
-      v-model="formData"
-      :columnCount="2"
-      gridGap="32px"
-      :internalErrorsFor="['VInput']"
-    />
-
-    <CodeBlock :content="`// formData\n${JSON.stringify(formData, undefined, 2)}`" />
-  </div>
-</template>
-
-<style scoped></style>
-
 <script>
 import Vue from 'vue'
 
@@ -188,3 +172,19 @@ export default {
   },
 }
 </script>
+
+<template>
+  <div>
+    <BlitzForm
+      :schema="schema"
+      v-model="formData"
+      :columnCount="2"
+      gridGap="32px"
+      :internalErrorsFor="['VInput']"
+    />
+
+    <CodeBlock :content="`// formData\n${JSON.stringify(formData, undefined, 2)}`" />
+  </div>
+</template>
+
+<style scoped></style>
