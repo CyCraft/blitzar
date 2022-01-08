@@ -83,10 +83,10 @@ export default {
 </template>
 
 <style scoped>
-::v-deep(.blitz-table--grid-card) {
+:deep(.blitz-table--grid-card) {
   border: thin solid #dfe2e5;
 }
-::v-deep(.blitz-table--grid-card input) {
+:deep(.blitz-table--grid-card input) {
   min-width: 0;
 }
 </style>

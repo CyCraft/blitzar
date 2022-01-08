@@ -64,10 +64,10 @@ export default {
 </template>
 
 <style scoped>
-::v-deep(.blitz-table--grid-card) {
+:deep(.blitz-table--grid-card) {
   border: thin solid #dfe2e5;
 }
-::v-deep(.blitz-table--grid-card .blitz-field__label) {
+:deep(.blitz-table--grid-card .blitz-field__label) {
   font-weight: 200;
 }
 </style>

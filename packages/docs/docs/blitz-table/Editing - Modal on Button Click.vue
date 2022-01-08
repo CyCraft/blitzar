@@ -143,18 +143,18 @@ export default {
 </template>
 
 <style scoped>
-::v-deep(.blitz-table--grid-card) {
+:deep(.blitz-table--grid-card) {
   border: thin solid #dfe2e5;
 }
-::v-deep(.blitz-table--grid-card input) {
+:deep(.blitz-table--grid-card input) {
   min-width: 0;
 }
-::v-deep(.form-modal) {
+:deep(.form-modal) {
   display: flex;
   justify-content: center;
   align-items: center;
 }
-::v-deep(.form-modal > *) {
+:deep(.form-modal > *) {
   background: white;
   padding: 1.5rem;
 }
