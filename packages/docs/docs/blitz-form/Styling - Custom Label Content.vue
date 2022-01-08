@@ -1,11 +1,3 @@
-<template>
-  <div>
-    <BlitzForm :schema="schema" v-model="formData" />
-
-    <CodeBlock :content="`// formData\n${JSON.stringify(formData, undefined, 2)}`" />
-  </div>
-</template>
-
 <script>
 const schema = [
   {
@@ -56,3 +48,11 @@ export default {
   },
 }
 </script>
+
+<template>
+  <div>
+    <BlitzForm :schema="schema" v-model="formData" />
+
+    <CodeBlock :content="`// formData\n${JSON.stringify(formData, undefined, 2)}`" />
+  </div>
+</template>

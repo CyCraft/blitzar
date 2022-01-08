@@ -1,18 +1,3 @@
-<template>
-  <BlitzTable
-    :rowStyle="rowStyle"
-    :cardStyle="cardStyle"
-    :schemaColumns="schemaColumns"
-    :schemaGrid="schemaColumns"
-    :rows="rows"
-    title="Users"
-    flat
-    bordered
-    @updateCell="inputCell"
-    tableHeaderClass="bg-stone t-caption-semi-bold"
-  />
-</template>
-
 <script>
 const rows = [
   { id: 'e', nameFirst: 'Eleanor', nameLast: 'Shellstrop', teamColor: '' },
@@ -56,3 +41,18 @@ export default {
   },
 }
 </script>
+
+<template>
+  <BlitzTable
+    :rowStyle="rowStyle"
+    :cardStyle="cardStyle"
+    :schemaColumns="schemaColumns"
+    :schemaGrid="schemaColumns"
+    :rows="rows"
+    title="Users"
+    flat
+    bordered
+    @updateCell="inputCell"
+    tableHeaderClass="bg-stone t-caption-semi-bold"
+  />
+</template>

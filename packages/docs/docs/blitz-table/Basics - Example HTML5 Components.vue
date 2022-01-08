@@ -1,39 +1,3 @@
-<template>
-  <div>
-    <BlitzTable
-      :schemaColumns="schemaColumnsAndGrid"
-      :schemaGrid="schemaColumnsAndGrid"
-      :rows="rows"
-      :rowsPerPage="5"
-      :titleField="{ component: 'h3', slot: 'Users' }"
-      :searchField="{
-        component: 'input',
-        placeholder: 'Search...',
-        debounce: 300,
-        clearable: true,
-      }"
-      :gridToggleField="{ label: 'grid', component: 'input', type: 'checkbox' }"
-      :paginationField="{
-        label: 'Open page:',
-        component: 'input',
-        type: 'number',
-      }"
-      :rowsPerPageField="{
-        label: 'Rows per page:',
-        component: 'select',
-        slot: [
-          { component: 'option', slot: '5' },
-          { component: 'option', slot: '10' },
-          { component: 'option', slot: '20' },
-          { component: 'option', slot: '50' },
-          { component: 'option', slot: '100' },
-        ],
-      }"
-      :shownRowsInfoField="{ component: 'div' }"
-    />
-  </div>
-</template>
-
 <script>
 import { onMounted, ref } from 'vue'
 
@@ -80,3 +44,39 @@ export default {
   },
 }
 </script>
+
+<template>
+  <div>
+    <BlitzTable
+      :schemaColumns="schemaColumnsAndGrid"
+      :schemaGrid="schemaColumnsAndGrid"
+      :rows="rows"
+      :rowsPerPage="5"
+      :titleField="{ component: 'h3', slot: 'Users' }"
+      :searchField="{
+        component: 'input',
+        placeholder: 'Search...',
+        debounce: 300,
+        clearable: true,
+      }"
+      :gridToggleField="{ label: 'grid', component: 'input', type: 'checkbox' }"
+      :paginationField="{
+        label: 'Open page:',
+        component: 'input',
+        type: 'number',
+      }"
+      :rowsPerPageField="{
+        label: 'Rows per page:',
+        component: 'select',
+        slot: [
+          { component: 'option', slot: '5' },
+          { component: 'option', slot: '10' },
+          { component: 'option', slot: '20' },
+          { component: 'option', slot: '50' },
+          { component: 'option', slot: '100' },
+        ],
+      }"
+      :shownRowsInfoField="{ component: 'div' }"
+    />
+  </div>
+</template>

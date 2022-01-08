@@ -1,14 +1,3 @@
-<template>
-  <div>
-    <BlitzForm
-      :actionButtons="actionButtons"
-      :schema="schema"
-      v-model="formData"
-      :columnCount="5"
-    />
-  </div>
-</template>
-
 <script>
 import { showToast } from '../../components/toasts'
 
@@ -64,3 +53,14 @@ export default {
   },
 }
 </script>
+
+<template>
+  <div>
+    <BlitzForm
+      :actionButtons="actionButtons"
+      :schema="schema"
+      v-model="formData"
+      :columnCount="5"
+    />
+  </div>
+</template>

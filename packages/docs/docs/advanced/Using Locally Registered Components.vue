@@ -1,11 +1,3 @@
-<template>
-  <div>
-    <BlitzForm :schema="schema" v-model="formData" :columnCount="2" />
-
-    <CodeBlock :content="`// formData\n${JSON.stringify(formData, undefined, 2)}`" />
-  </div>
-</template>
-
 <script>
 import { markRaw } from 'vue'
 import BaseInput from '../../components/BaseInput.vue'
@@ -45,3 +37,11 @@ export default {
   },
 }
 </script>
+
+<template>
+  <div>
+    <BlitzForm :schema="schema" v-model="formData" :columnCount="2" />
+
+    <CodeBlock :content="`// formData\n${JSON.stringify(formData, undefined, 2)}`" />
+  </div>
+</template>

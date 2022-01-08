@@ -1,9 +1,3 @@
-<template>
-  <div>
-    <BlitzTable :schemaColumns="schemaColumns" :rows="rows" />
-  </div>
-</template>
-
 <script>
 const schemaColumns = [
   { id: 'firstName', label: 'First Name' },
@@ -42,3 +36,9 @@ export default {
   },
 }
 </script>
+
+<template>
+  <div>
+    <BlitzTable :schemaColumns="schemaColumns" :rows="rows" />
+  </div>
+</template>

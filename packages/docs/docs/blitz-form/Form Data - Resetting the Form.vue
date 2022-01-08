@@ -1,17 +1,3 @@
-<template>
-  <div>
-    <BlitzForm
-      mode="readonly"
-      :schema="schema"
-      v-model="formData"
-      :columnCount="2"
-      :actionButtons="actionButtons"
-    />
-
-    <CodeBlock :content="`// formData\n${JSON.stringify(formData, undefined, 2)}`" />
-  </div>
-</template>
-
 <script>
 const schema = [
   {
@@ -49,3 +35,17 @@ export default {
   },
 }
 </script>
+
+<template>
+  <div>
+    <BlitzForm
+      mode="readonly"
+      :schema="schema"
+      v-model="formData"
+      :columnCount="2"
+      :actionButtons="actionButtons"
+    />
+
+    <CodeBlock :content="`// formData\n${JSON.stringify(formData, undefined, 2)}`" />
+  </div>
+</template>

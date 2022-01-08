@@ -1,11 +1,3 @@
-<template>
-  <div>
-    <BlitzForm :key="remount" :schema="schema" v-model="formData" :columnCount="2" gridGap="32px" />
-
-    <CodeBlock :content="`// formData\n${JSON.stringify(formData, undefined, 2)}`" />
-  </div>
-</template>
-
 <script>
 const schema = [
   {
@@ -141,11 +133,19 @@ export default {
   data() {
     return { schema, formData: {}, remount: 0 }
   },
-  mounted () {
+  mounted() {
     console.log(`window.Quasar → `, window.Quasar)
     console.log(`window.vueApp → `, window.vueApp)
-    
+
     setTimeout(() => this.remount++, 100)
   },
 }
 </script>
+
+<template>
+  <div>
+    <BlitzForm :key="remount" :schema="schema" v-model="formData" :columnCount="2" gridGap="32px" />
+
+    <CodeBlock :content="`// formData\n${JSON.stringify(formData, undefined, 2)}`" />
+  </div>
+</template>

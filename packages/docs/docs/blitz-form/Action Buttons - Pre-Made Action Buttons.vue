@@ -1,16 +1,3 @@
-<template>
-  <div>
-    <BlitzForm
-      :actionButtons="['edit', 'cancel', 'save', 'delete']"
-      :columnCount="2"
-      :schema="schema"
-      v-model="formData"
-      @save="(payload) => onSave(payload)"
-      @delete="() => onDelete()"
-    />
-  </div>
-</template>
-
 <script>
 import { showToast } from '../../components/toasts'
 
@@ -54,3 +41,16 @@ export default {
   },
 }
 </script>
+
+<template>
+  <div>
+    <BlitzForm
+      :actionButtons="['edit', 'cancel', 'save', 'delete']"
+      :columnCount="2"
+      :schema="schema"
+      v-model="formData"
+      @save="(payload) => onSave(payload)"
+      @delete="() => onDelete()"
+    />
+  </div>
+</template>

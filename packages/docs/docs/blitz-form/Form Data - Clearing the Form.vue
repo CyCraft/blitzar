@@ -1,26 +1,3 @@
-<template>
-  <div>
-    <div class="q-gutter-sm mb-xl">
-      <button @click="clearFormData(), remountCounter++" type="button">
-        Clear form data & remount
-      </button>
-      <button @click="loadNewData(), remountCounter++" type="button">
-        Load new data & remount
-      </button>
-      <button @click="clearFormData" type="button" style="color: crimson">
-        Clear form data - no remount!
-      </button>
-      <button @click="loadNewData" type="button" style="color: crimson">
-        Load new data - no remount!
-      </button>
-    </div>
-
-    <BlitzForm :key="remountCounter" :schema="schema" v-model="formData" :columnCount="2" />
-
-    <CodeBlock :content="`// formData\n${JSON.stringify(formData, undefined, 2)}`" />
-  </div>
-</template>
-
 <script>
 const schema = [
   {
@@ -73,3 +50,26 @@ export default {
   },
 }
 </script>
+
+<template>
+  <div>
+    <div class="q-gutter-sm mb-xl">
+      <button @click="clearFormData(), remountCounter++" type="button">
+        Clear form data & remount
+      </button>
+      <button @click="loadNewData(), remountCounter++" type="button">
+        Load new data & remount
+      </button>
+      <button @click="clearFormData" type="button" style="color: crimson">
+        Clear form data - no remount!
+      </button>
+      <button @click="loadNewData" type="button" style="color: crimson">
+        Load new data - no remount!
+      </button>
+    </div>
+
+    <BlitzForm :key="remountCounter" :schema="schema" v-model="formData" :columnCount="2" />
+
+    <CodeBlock :content="`// formData\n${JSON.stringify(formData, undefined, 2)}`" />
+  </div>
+</template>

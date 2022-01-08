@@ -1,13 +1,3 @@
-<template>
-  <div>
-    <form>
-      <BlitzForm :schema="schema" v-model="formData" :columnCount="2" />
-    </form>
-
-    <CodeBlock :content="`// formData\n${JSON.stringify(formData, undefined, 2)}`" />
-  </div>
-</template>
-
 <script>
 const schema = [
   {
@@ -34,3 +24,13 @@ export default {
   },
 }
 </script>
+
+<template>
+  <div>
+    <form>
+      <BlitzForm :schema="schema" v-model="formData" :columnCount="2" />
+    </form>
+
+    <CodeBlock :content="`// formData\n${JSON.stringify(formData, undefined, 2)}`" />
+  </div>
+</template>

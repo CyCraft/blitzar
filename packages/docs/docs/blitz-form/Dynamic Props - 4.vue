@@ -1,11 +1,3 @@
-<template>
-  <div>
-    <BlitzForm :schema="schema" v-model="formData" :columnCount="4" />
-
-    <CodeBlock :content="`// formData\n${JSON.stringify(formData, undefined, 2)}`" />
-  </div>
-</template>
-
 <script>
 const carData = [
   { year: '2015', make: 'Audi', model: 'A3', trim: '2.0' },
@@ -105,3 +97,11 @@ export default {
   },
 }
 </script>
+
+<template>
+  <div>
+    <BlitzForm :schema="schema" v-model="formData" :columnCount="4" />
+
+    <CodeBlock :content="`// formData\n${JSON.stringify(formData, undefined, 2)}`" />
+  </div>
+</template>

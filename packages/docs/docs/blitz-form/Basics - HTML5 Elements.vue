@@ -1,9 +1,3 @@
-<template>
-  <div>
-    <BlitzForm :schema="schema" />
-  </div>
-</template>
-
 <script>
 const schema = [
   {
@@ -60,3 +54,9 @@ export default {
   },
 }
 </script>
+
+<template>
+  <div>
+    <BlitzForm :schema="schema" />
+  </div>
+</template>

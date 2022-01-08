@@ -1,11 +1,3 @@
-<template>
-  <div>
-    <BlitzForm :schema="schema" v-model="formData" :columnCount="2" />
-
-    <CodeBlock :content="`// formData\n${JSON.stringify(formData, undefined, 2)}`" />
-  </div>
-</template>
-
 <script>
 import { showToast } from '../../components/toasts'
 
@@ -34,3 +26,11 @@ export default {
   },
 }
 </script>
+
+<template>
+  <div>
+    <BlitzForm :schema="schema" v-model="formData" :columnCount="2" />
+
+    <CodeBlock :content="`// formData\n${JSON.stringify(formData, undefined, 2)}`" />
+  </div>
+</template>

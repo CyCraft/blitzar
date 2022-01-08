@@ -1,16 +1,3 @@
-<template>
-  <div>
-    <BlitzTable
-      :schemaColumns="schemaColumns"
-      :schemaGrid="schemaColumns"
-      :rows="rows"
-      title="Users"
-      flat
-      bordered
-    />
-  </div>
-</template>
-
 <script>
 const rows = [
   { nameFirst: 'Eleanor', nameLast: 'Shellstrop' },
@@ -46,3 +33,16 @@ export default {
   },
 }
 </script>
+
+<template>
+  <div>
+    <BlitzTable
+      :schemaColumns="schemaColumns"
+      :schemaGrid="schemaColumns"
+      :rows="rows"
+      title="Users"
+      flat
+      bordered
+    />
+  </div>
+</template>

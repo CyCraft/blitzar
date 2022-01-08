@@ -1,23 +1,3 @@
-<template>
-  <div>
-    <div style="margin-bottom: 1rem">
-      <button @click="validateProgrammatically">validate Programmatically</button>
-      <button @click="setFormData">Set Form Data</button>
-      <button @click="clearFormData">Clear Form Data</button>
-    </div>
-
-    <BlitzForm
-      showErrorsOn="never"
-      :schema="schema"
-      v-model="formData"
-      :columnCount="3"
-      :key="resetFormCounter"
-    />
-
-    <CodeBlock :content="`// formData\n${JSON.stringify(formData, undefined, 2)}`" />
-  </div>
-</template>
-
 <script>
 import { validateFormPerSchema } from 'blitzar'
 import 'blitzar/dist/style.css'
@@ -81,3 +61,23 @@ export default {
   },
 }
 </script>
+
+<template>
+  <div>
+    <div style="margin-bottom: 1rem">
+      <button @click="validateProgrammatically">validate Programmatically</button>
+      <button @click="setFormData">Set Form Data</button>
+      <button @click="clearFormData">Clear Form Data</button>
+    </div>
+
+    <BlitzForm
+      showErrorsOn="never"
+      :schema="schema"
+      v-model="formData"
+      :columnCount="3"
+      :key="resetFormCounter"
+    />
+
+    <CodeBlock :content="`// formData\n${JSON.stringify(formData, undefined, 2)}`" />
+  </div>
+</template>
