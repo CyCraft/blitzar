@@ -1,6 +1,6 @@
 {
   "name": "blitzar",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "author": "Luca Ban - Mesqueeb",
   "funding": "https://github.com/sponsors/mesqueeb",
   "description": "Generate Vue Forms and Data-tables fast with a simple JSON-like syntax ⚡",
@@ -28,11 +28,11 @@
     "dev": "vite build --watch"
   },
   "dependencies": {
-    "@blitzar/components": "^1.0.11",
-    "@blitzar/form": "^1.0.11",
-    "@blitzar/table": "^1.0.11",
-    "@blitzar/types": "^1.0.11",
-    "@blitzar/utils": "^1.0.11"
+    "@blitzar/components": "^1.0.12",
+    "@blitzar/form": "^1.0.12",
+    "@blitzar/table": "^1.0.12",
+    "@blitzar/types": "^1.0.12",
+    "@blitzar/utils": "^1.0.12"
   },
   "homepage": "https://github.com/cycraft/blitzar#readme",
   "keywords": [
@@ -62,5 +62,5 @@
     "tags": "vetur/tags.json",
     "attributes": "vetur/attributes.json"
   },
-  "gitHead": "911481ed12bc63236ebe608ccdf86d4f8f01b238"
+  "gitHead": "bd016b2d599f096ac653704f7e5009eeb7ee4e5d"
 }
