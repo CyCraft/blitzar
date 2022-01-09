@@ -1,7 +1,23 @@
 import { flattenPerSchema } from '@blitzar/utils'
-import { isFullString, isFunction } from 'is-what'
+import { isFullString, isFunction, isArray } from 'is-what'
 import type { BlitzFieldProps, FormContext, Lang, Schema } from '@blitzar/types'
 import { defaultLang } from './lang'
+
+/**
+ * returns a prop as is, or when it's defined as dynamicProp it will evaluate it.
+ */
+function evalDynamicProp(
+  propName: string,
+  payload: any,
+  blueprint: BlitzFieldProps,
+  context: FormContext
+): any {
+  const propValue = blueprint[propName]
+  if (isFunction(propValue)) {
+    return propValue(payload, context)
+  }
+  return propValue
+}
 
 export function createRequiredErrorFn(
   requiredFieldErrorMsg: string
@@ -22,18 +38,16 @@ export function validateFieldPerSchema(
   blueprint: BlitzFieldProps,
   context: FormContext
 ): null | string {
-  const lang = context.lang || defaultLang()
-  const requiredErrorFn = createRequiredErrorFn(lang.requiredField)
+  const required = evalDynamicProp('required', payload, blueprint, context)
+  if (required === true) {
+    const lang = context.lang || defaultLang()
+    const requiredErrorFn = createRequiredErrorFn(lang.requiredField)
+    const requiredResult = requiredErrorFn(payload)
+    if (isFullString(requiredResult)) return requiredResult
+  }
 
-  const requiredResult = requiredErrorFn(payload)
-  if (isFullString(requiredResult)) return requiredResult
-
-  if (!blueprint.error) return null
-
-  const errorResult = !isFunction(blueprint.error)
-    ? blueprint.error
-    : blueprint.error(payload, context)
-  return errorResult
+  const error = evalDynamicProp('error', payload, blueprint, context)
+  return isFullString(error) ? error : null
 }
 
 /**
