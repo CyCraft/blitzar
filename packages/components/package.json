@@ -1,6 +1,6 @@
 {
   "name": "@blitzar/components",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "author": "Luca Ban - Mesqueeb",
   "funding": "https://github.com/sponsors/mesqueeb",
   "description": "Blitzar helper components",
@@ -28,7 +28,7 @@
     "dev": "vite build --watch"
   },
   "dependencies": {
-    "@blitzar/types": "^1.0.12",
+    "@blitzar/types": "^1.0.13",
     "flatten-anything": "^2.0.4",
     "is-what": "^3.14.1",
     "path-to-prop": "^1.0.0",
