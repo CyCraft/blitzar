@@ -189,6 +189,10 @@ export default defineComponent({
     rowsPerPageField: { type: Object as PropType<BlitzFieldProps>, default: undefined },
     shownRowsInfoField: { type: Object as PropType<BlitzFieldProps>, default: undefined },
     paginationField: { type: Object as PropType<BlitzFieldProps>, default: undefined },
+    lang: {
+      type: Object as PropType<Record<string, string>>,
+      default: (): Record<string, string> => ({}),
+    },
   },
   emits: {
     rowClick: (e: MouseEvent, rowData: Record<string, any>) => isPlainObject(rowData),
@@ -222,7 +226,7 @@ export default defineComponent({
     function applyBlitzFieldOverwrites(field?: BlitzFieldProps): BlitzFieldProps | undefined {
       if (!field) return undefined
 
-      return merge(field, getBlitzFieldOverwrites(field))
+      return merge(field, getBlitzFieldOverwrites(field, props.lang))
     }
 
     /** SELECTION related state */
@@ -247,19 +251,23 @@ export default defineComponent({
 
     // apply default `sortable` to columns && add special behaviour for Selection
     const schemaColumnsComputed = computed<BlitzColumn[] | undefined>(() => {
-      if (!props.schemaColumns) return props.schemaColumns
+      if (!props.schemaColumns) return undefined
 
       return props.schemaColumns.map((col) => {
         const sortableProps = getSortableProps(col)
-        return { ...col, ...sortableProps }
+        const label = 'label' in col ? col.label : props.lang[col?.id]
+        return { ...col, label, ...sortableProps }
       })
     })
     // add special behaviour for Selection
-    // const schemaGridComputed = computed(() => {
-    //   if (!props.schemaGrid) return props.schemaGrid
+    const schemaGridComputed = computed<BlitzColumn[] | undefined>(() => {
+      if (!props.schemaGrid) return undefined
 
-    //   return props.schemaGrid
-    // })
+      return props.schemaGrid.map((col) => {
+        const label = 'label' in col ? col.label : props.lang[col?.id]
+        return { ...col, label }
+      })
+    })
 
     /**
      * Provides Dataset's `dsSearchAs` prop with a special functions for columns with `parseValue`
@@ -395,7 +403,7 @@ export default defineComponent({
       applyBlitzFieldOverwrites,
       isGridInner,
       schemaColumnsComputed,
-      // schemaGridComputed,
+      schemaGridComputed,
       // evaluate,
       onRowClick,
       onRowDblclick,
@@ -424,7 +432,7 @@ export default defineComponent({
         v-model:sortState="sortState"
         :ds="ds"
         :schemaColumns="schemaColumnsComputed"
-        :schemaGrid="schemaGrid"
+        :schemaGrid="schemaGridComputed"
         :gridBlitzFormOptions="gridBlitzFormOptions"
         :rows="rows"
         :mode="mode"

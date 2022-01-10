@@ -362,13 +362,13 @@ export default defineComponent({
       // - slot: we pass as `slots: { default: ... }`
       // - class: we pass as `fieldClasses`
       // - style: we pass as `fieldStyle`
-      const { schema, schemaOverwritableDefaults, schemaForcedDefaults } = this
+      const { schema, schemaOverwritableDefaults, schemaForcedDefaults, innerLang } = this
 
       return schema.map((field) =>
         merge(
           schemaOverwritableDefaults,
           field,
-          getBlitzFieldOverwrites(field),
+          getBlitzFieldOverwrites(field, innerLang),
           schemaForcedDefaults
         )
       )
