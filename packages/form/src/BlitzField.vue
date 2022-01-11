@@ -879,7 +879,7 @@ export default defineComponent({
       v-if="evalPropOrAttr('mode') === 'raw'"
       :options="{
         component: 'div',
-        slot: parsedFieldValue,
+        slot: (!parsedFieldValue && propsAndAttrsToPass.slot) ? propsAndAttrsToPass.slot : parsedFieldValue,
         class: ['blitz-field__component', evalPropOrAttr('componentClasses')],
         style: evalPropOrAttr('componentStyle'),
       }"
