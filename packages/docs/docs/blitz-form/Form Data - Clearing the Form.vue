@@ -53,7 +53,7 @@ export default {
 
 <template>
   <div>
-    <div class="q-gutter-sm mb-xl">
+    <div style="margin-bottom: 1rem">
       <button @click="clearFormData(), remountCounter++" type="button">
         Clear form data & remount
       </button>

@@ -361,6 +361,12 @@ This example uses `mode="raw"` to show just the raw form data. Then CSS is used 
 
 <CodeBlockComponent :importFn="() => import('./Styling - Raw Form Styling.vue')" :importFnRaw="() => import('./Styling - Raw Form Styling.vue?raw')" />
 
+### Styling Action Buttons
+
+Here is an example of how you can position the action buttons via the `actionButtonPosition` prop.
+
+<CodeBlockComponent :importFn="() => import('./Styling - Action Buttons.vue')" :importFnRaw="() => import('./Styling - Action Buttons.vue?raw')" />
+
 ## Events
 
 There are both form and field events.

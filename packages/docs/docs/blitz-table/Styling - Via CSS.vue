@@ -27,7 +27,7 @@ export default {
 </script>
 
 <template>
-  <div class="q-gutter-lg">
+  <div>
     <BlitzTable
       :schemaColumns="schemaColumns"
       :schemaGrid="schemaColumns"

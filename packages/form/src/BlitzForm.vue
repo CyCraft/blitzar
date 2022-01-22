@@ -726,8 +726,7 @@ export default defineComponent({
 
 <style lang="sass">
 .blitz-form
-  &.q-form
-    display: flex
+  display: flex
   &--nav-top,
   &--nav-bottom
     flex-direction: column
