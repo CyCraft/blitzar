@@ -1,4 +1,5 @@
-<script>
+<script setup>
+import { ref } from 'vue'
 const carData = [
   { year: '2015', make: 'Audi', model: 'A3', trim: '2.0' },
   { year: '2015', make: 'Audi', model: 'A3', trim: '1.8' },
@@ -91,16 +92,12 @@ const schema = [
   },
 ]
 
-export default {
-  data() {
-    return { schema, formData: {} }
-  },
-}
+const formData = ref({})
 </script>
 
 <template>
   <div>
-    <BlitzForm :schema="schema" v-model="formData" :columnCount="4" />
+    <BlitzForm v-model="formData" :schema="schema" :columnCount="4" />
 
     <CodeBlock :content="`// formData\n${JSON.stringify(formData, undefined, 2)}`" />
   </div>

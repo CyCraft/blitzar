@@ -1,4 +1,5 @@
-<script>
+<script setup>
+import { ref } from 'vue'
 const schema = [
   {
     id: 'name',
@@ -26,18 +27,14 @@ const schema = [
   },
 ]
 
-export default {
-  data() {
-    return { schema, formData: {} }
-  },
-}
+const formData = ref({})
 </script>
 
 <template>
   <div>
     <BlitzForm
-      :schema="schema"
       v-model="formData"
+      :schema="schema"
       :actionButtons="['cancel', 'edit', 'save']"
       :columnCount="3"
     />
