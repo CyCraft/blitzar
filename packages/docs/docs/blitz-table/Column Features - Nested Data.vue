@@ -1,4 +1,4 @@
-<script>
+<script setup>
 import { markRaw, onMounted, ref } from 'vue'
 import { BlitzInput, BlitzGridToggle, BlitzPagination } from 'blitzar'
 import 'blitzar/dist/style.css'
@@ -12,28 +12,16 @@ const schemaColumnsAndGrid = [
   { id: 'name.last', label: 'Last Name' },
 ]
 
-export default {
-  setup() {
-    const rows = ref([
-      { name: { first: 'Harper', last: 'Nolan' } },
-      // other rows loaded asynchronously
-    ])
+const rows = ref([
+  { name: { first: 'Harper', last: 'Nolan' } },
+  // other rows loaded asynchronously
+])
 
-    onMounted(async () => {
-      const _module = await import('./users-nested.json')
-      const users = _module.default
-      rows.value = users
-    })
-
-    return {
-      blitzInput,
-      blitzGridToggle,
-      blitzPagination,
-      schemaColumnsAndGrid,
-      rows,
-    }
-  },
-}
+onMounted(async () => {
+  const _module = await import('./users-nested.json')
+  const users = _module.default
+  rows.value = users
+})
 </script>
 
 <template>
