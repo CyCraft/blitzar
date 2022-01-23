@@ -1,4 +1,4 @@
-<script>
+<script setup>
 import { reactive, markRaw, computed } from 'vue'
 import { BlitzGridToggle } from 'blitzar'
 import 'blitzar/dist/style.css'
@@ -48,74 +48,62 @@ function autoFocusInput(mouseEvent) {
   }, 0)
 }
 
-export default {
-  setup() {
-    const editInfo = reactive({ editingColId: '', editingRowId: '', lastEdit: null })
+const editInfo = reactive({ editingColId: '', editingRowId: '', lastEdit: null })
 
-    function onUpdateCell({ rowId, colId, value }) {
-      editInfo.lastEdit = { rowId, colId, value }
-    }
-
-    function onCellDblclick(mouseEvent, rowData, colId) {
-      console.log(`@cellDblclick (mouseEvent, rowData, colId) → `, mouseEvent, rowData, colId)
-      editInfo.editingColId = colId
-      editInfo.editingRowId = rowData.id
-      // auto focus logic:
-      autoFocusInput(mouseEvent)
-    }
-
-    function stopEditing() {
-      editInfo.editingRowId = ''
-      editInfo.editingColId = ''
-      editInfo.lastEdit = null
-    }
-
-    function saveLastEdit() {
-      if (!editInfo.lastEdit) return stopEditing()
-
-      const { rowId, colId, value } = editInfo.lastEdit
-
-      const row = rows.find((r) => r.id === rowId)
-      if (!row) return stopEditing()
-
-      row[colId] = value
-      stopEditing()
-    }
-
-    const schemaWithEditingLogic = computed(() => {
-      // return the columns with the added logic to edit & save data
-      return schemaColumnsAndGrid.map((blueprint) => {
-        return {
-          ...blueprint,
-          /**
-           * The editing logic for every schema blueprint is dynamically setting the "mode" of a cell.
-           * It does this based on the colId and rowId which are being edited.
-           */
-          dynamicProps: ['mode'],
-          mode: (val, { formData }) =>
-            editInfo.editingColId === blueprint.id && editInfo.editingRowId === formData.id
-              ? 'edit'
-              : 'raw',
-          events: {
-            keydown: (event) => {
-              if (event.code === 'Enter') saveLastEdit()
-              if (event.code === 'Escape') stopEditing()
-            },
-            blur: () => saveLastEdit(),
-          },
-        }
-      })
-    })
-
-    return {
-      rows,
-      schemaWithEditingLogic,
-      onCellDblclick,
-      onUpdateCell,
-      blitzGridToggle,
-    }
-  },
+function onUpdateCell({ rowId, colId, value }) {
+  editInfo.lastEdit = { rowId, colId, value }
 }
+
+function onCellDblclick(mouseEvent, rowData, colId) {
+  console.log(`@cellDblclick (mouseEvent, rowData, colId) → `, mouseEvent, rowData, colId)
+  editInfo.editingColId = colId
+  editInfo.editingRowId = rowData.id
+  // auto focus logic:
+  autoFocusInput(mouseEvent)
+}
+
+function stopEditing() {
+  editInfo.editingRowId = ''
+  editInfo.editingColId = ''
+  editInfo.lastEdit = null
+}
+
+function saveLastEdit() {
+  if (!editInfo.lastEdit) return stopEditing()
+
+  const { rowId, colId, value } = editInfo.lastEdit
+
+  const row = rows.find((r) => r.id === rowId)
+  if (!row) return stopEditing()
+
+  row[colId] = value
+  stopEditing()
+}
+
+const schemaWithEditingLogic = computed(() => {
+  // return the columns with the added logic to edit & save data
+  return schemaColumnsAndGrid.map((blueprint) => {
+    return {
+      ...blueprint,
+      /**
+       * The editing logic for every schema blueprint is dynamically setting the "mode" of a cell.
+       * It does this based on the colId and rowId which are being edited.
+       */
+      dynamicProps: ['mode'],
+      mode: (val, { formData }) =>
+        editInfo.editingColId === blueprint.id && editInfo.editingRowId === formData.id
+          ? 'edit'
+          : 'raw',
+      events: {
+        keydown: (event) => {
+          if (event.code === 'Enter') saveLastEdit()
+          if (event.code === 'Escape') stopEditing()
+        },
+        blur: () => saveLastEdit(),
+      },
+    }
+  })
+})
 </script>
 
 <template>

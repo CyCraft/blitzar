@@ -1,4 +1,5 @@
-<script>
+<script setup>
+import { ref } from 'vue'
 const rows = [
   { id: 'e', nameFirst: 'Eleanor', nameLast: 'Shellstrop', teamColor: '' },
   { id: 'c', nameFirst: 'Chidi', nameLast: 'Anagonye', teamColor: '' },
@@ -26,19 +27,13 @@ function applyTeamColor(rowData) {
   return `background: ${color}`
 }
 
-export default {
-  data() {
-    const rowStyle = applyTeamColor
-    const cardStyle = applyTeamColor
-    return { rows, schemaColumns, rowStyle, cardStyle }
-  },
-  methods: {
-    inputCell({ rowId, colId, value, origin }) {
-      const row = this.rows.find((r) => r.id === rowId)
-      if (!row) return
-      row[colId] = value
-    },
-  },
+const rowStyle = ref(applyTeamColor)
+const cardStyle = ref(applyTeamColor)
+
+function inputCell({ rowId, colId, value, origin }) {
+  const row = this.rows.find((r) => r.id === rowId)
+  if (!row) return
+  row[colId] = value
 }
 </script>
 
@@ -52,7 +47,7 @@ export default {
     title="Users"
     flat
     bordered
-    @updateCell="inputCell"
     tableHeaderClass="bg-stone t-caption-semi-bold"
+    @updateCell="inputCell"
   />
 </template>

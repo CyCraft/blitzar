@@ -1,4 +1,5 @@
-<script>
+<script setup>
+import { ref } from 'vue'
 const schema = [
   {
     id: 'classroomName',
@@ -16,17 +17,12 @@ const schema = [
   },
 ]
 
-export default {
-  data() {
-    return { schema, formData: {} }
-  },
-  methods: {},
-}
+const formData = ref({})
 </script>
 
 <template>
   <div>
-    <BlitzForm :schema="schema" v-model="formData" />
+    <BlitzForm v-model="formData" :schema="schema" />
 
     <CodeBlock :content="`// formData\n${JSON.stringify(formData, undefined, 2)}`" />
   </div>

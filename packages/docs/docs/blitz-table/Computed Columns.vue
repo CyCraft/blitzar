@@ -1,4 +1,4 @@
-<script>
+<script setup>
 const rows = [
   { nameFirst: 'Eleanor', nameLast: 'Shellstrop' },
   { nameFirst: 'Chidi', nameLast: 'Anagonye' },
@@ -26,12 +26,6 @@ const schemaColumns = [
     },
   },
 ]
-
-export default {
-  data() {
-    return { rows, schemaColumns }
-  },
-}
 </script>
 
 <template>

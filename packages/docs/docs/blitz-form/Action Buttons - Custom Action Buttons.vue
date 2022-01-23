@@ -1,4 +1,5 @@
-<script>
+<script setup>
+import { ref } from 'vue'
 import { showToast } from '../../components/toasts'
 
 const schema = [
@@ -33,33 +34,29 @@ const schema = [
   },
 ]
 
-export default {
-  data() {
-    const actionButtons = [
-      'cancel',
-      'edit',
-      'save',
-      {
-        component: 'button',
-        type: 'button',
-        slot: 'log the data',
-        showCondition: (_, { formData }) => formData.enableLogging,
-        events: {
-          click: (event, { formData }) => showToast('formData', formData),
-        },
-      },
-    ]
-    return { schema, formData: {}, actionButtons }
+const actionButtons = [
+  'cancel',
+  'edit',
+  'save',
+  {
+    component: 'button',
+    type: 'button',
+    slot: 'log the data',
+    showCondition: (_, { formData }) => formData.enableLogging,
+    events: {
+      click: (event, { formData }) => showToast('formData', formData),
+    },
   },
-}
+]
+const formData = ref({})
 </script>
 
 <template>
   <div>
     <BlitzForm
+      v-model="formData"
       :actionButtons="actionButtons"
       :schema="schema"
-      v-model="formData"
       :columnCount="5"
     />
   </div>

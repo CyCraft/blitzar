@@ -1,4 +1,4 @@
-<script>
+<script setup>
 import { markRaw, onMounted, ref } from 'vue'
 import { ROW_SELECTION_ID } from 'blitzar'
 import 'blitzar/dist/style.css'
@@ -27,38 +27,25 @@ const schemaColumnsAndGrid = [
   { id: 'balance', label: 'Balance', parseValue: (val) => val.toLocaleString() },
 ]
 
-export default {
-  setup() {
-    const selectedRows = ref([])
+const selectedRows = ref([])
 
-    const rows = ref([
-      {
-        id: 'EA265B20-45F2-953C-C534-3E2A7862059C',
-        balance: 93683,
-        birthdate: '1946-07-22',
-        firstName: 'Harper',
-        lastName: 'Nolan',
-        company: 'Tortor At Risus LLC',
-      },
-      // other rows loaded asynchronously
-    ])
-
-    onMounted(async () => {
-      const _module = await import('./users.json')
-      const users = _module.default
-      rows.value = users
-    })
-
-    return {
-      selectedRows,
-      blitzInput,
-      blitzGridToggle,
-      blitzPagination,
-      schemaColumnsAndGrid,
-      rows,
-    }
+const rows = ref([
+  {
+    id: 'EA265B20-45F2-953C-C534-3E2A7862059C',
+    balance: 93683,
+    birthdate: '1946-07-22',
+    firstName: 'Harper',
+    lastName: 'Nolan',
+    company: 'Tortor At Risus LLC',
   },
-}
+  // other rows loaded asynchronously
+])
+
+onMounted(async () => {
+  const _module = await import('./users.json')
+  const users = _module.default
+  rows.value = users
+})
 </script>
 
 <template>

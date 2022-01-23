@@ -1,4 +1,4 @@
-<script>
+<script setup>
 import { onMounted, ref } from 'vue'
 
 const schemaColumnsAndGrid = [
@@ -18,31 +18,22 @@ const schemaColumnsAndGrid = [
   { id: 'balance', label: 'Balance', parseValue: (val) => val.toLocaleString() },
 ]
 
-export default {
-  setup() {
-    const rows = ref([
-      {
-        balance: 93683,
-        birthdate: '1946-07-22',
-        firstName: 'Harper',
-        lastName: 'Nolan',
-        company: 'Tortor At Risus LLC',
-      },
-      // other rows loaded asynchronously
-    ])
-
-    onMounted(async () => {
-      const _module = await import('./users.json')
-      const users = _module.default
-      rows.value = users
-    })
-
-    return {
-      schemaColumnsAndGrid,
-      rows,
-    }
+const rows = ref([
+  {
+    balance: 93683,
+    birthdate: '1946-07-22',
+    firstName: 'Harper',
+    lastName: 'Nolan',
+    company: 'Tortor At Risus LLC',
   },
-}
+  // other rows loaded asynchronously
+])
+
+onMounted(async () => {
+  const _module = await import('./users.json')
+  const users = _module.default
+  rows.value = users
+})
 </script>
 
 <template>

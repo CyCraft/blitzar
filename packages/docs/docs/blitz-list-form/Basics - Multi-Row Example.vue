@@ -1,4 +1,5 @@
-<script>
+<script setup>
+import { ref } from 'vue'
 const schema = [
   // the `deleteRow` function and `rowIndex` props used below are only available in schemas of a BlitzListForm!
   {
@@ -42,18 +43,14 @@ const schema = [
   },
 ]
 
-export default {
-  data() {
-    return { schema, formData: [] }
-  },
-}
+const formData = ref([])
 </script>
 
 <template>
   <div>
     <strong>Expenses</strong><br /><br />
 
-    <BlitzListForm class="my-multi-row-form" :schema="schema" v-model="formData" />
+    <BlitzListForm v-model="formData" class="my-multi-row-form" :schema="schema" />
 
     <CodeBlock :content="`// formData\n${JSON.stringify(formData, undefined, 2)}`" />
   </div>
