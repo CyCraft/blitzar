@@ -725,8 +725,9 @@ export default defineComponent({
 </template>
 
 <style lang="sass">
-.blitz-form
+div.blitz-form
   display: flex
+.blitz-form
   &--nav-top,
   &--nav-bottom
     flex-direction: column
