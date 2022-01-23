@@ -1,4 +1,5 @@
-<script>
+<script setup>
+import { ref } from 'vue'
 const schema = [
   {
     id: 'name',
@@ -22,54 +23,49 @@ const schema = [
   },
 ]
 
-export default {
-  data() {
-    const formData = {
-      name: 'Thor Odinson',
-      powerOrigin: 'self',
-    }
-    return {
-      remountCounter: 0,
-      schema,
-      formData,
-    }
-  },
-  methods: {
-    clearFormData() {
-      this.formData = {
-        name: '',
-        powerOrigin: '',
-      }
-    },
-    loadNewData() {
-      this.formData = {
-        name: 'Tony Stark',
-        powerOrigin: 'gear',
-      }
-    },
-  },
+const formData = ref({
+  name: 'Thor Odinson',
+  powerOrigin: 'self',
+})
+let remountCounter = ref(0)
+
+function clearFormData() {
+  formData.value = {
+    name: '',
+    powerOrigin: '',
+  }
+}
+function loadNewData() {
+  formData.value = {
+    name: 'Tony Stark',
+    powerOrigin: 'gear',
+  }
 }
 </script>
 
 <template>
   <div>
     <div style="margin-bottom: 1rem">
-      <button @click="clearFormData(), remountCounter++" type="button">
+      <button type="button" @click="clearFormData(), remountCounter++">
         Clear form data & remount
       </button>
-      <button @click="loadNewData(), remountCounter++" type="button">
+      <button type="button" @click="loadNewData(), remountCounter++">
         Load new data & remount
       </button>
-      <button @click="clearFormData" type="button" style="color: crimson">
+      <button type="button" style="color: crimson" @click="clearFormData">
         Clear form data - no remount!
       </button>
-      <button @click="loadNewData" type="button" style="color: crimson">
+      <button type="button" style="color: crimson" @click="loadNewData">
         Load new data - no remount!
       </button>
     </div>
 
-    <BlitzForm :key="remountCounter" :schema="schema" v-model="formData" :columnCount="2" />
-
+    <BlitzForm
+      :key="JSON.stringify(remountCounter)"
+      v-model="formData"
+      :schema="schema"
+      :columnCount="2"
+    />
     <CodeBlock :content="`// formData\n${JSON.stringify(formData, undefined, 2)}`" />
   </div>
 </template>

@@ -43,7 +43,7 @@ const schema = [
   },
 ]
 
-const formData = ref({})
+const formData = ref([])
 </script>
 
 <template>

@@ -4,7 +4,7 @@ const schema = [
   { id: 'nameFirst', label: 'First Name', component: 'input' },
   { id: 'nameLast', label: 'Last Name', component: 'input' },
 ]
-const formData = ref({})
+const formData = ref([])
 </script>
 
 <template>

@@ -1,4 +1,5 @@
-<script>
+<script setup>
+import { ref } from 'vue'
 import { validateFormPerSchema } from 'blitzar'
 import 'blitzar/dist/style.css'
 import { showToast } from '../../components/toasts'
@@ -30,35 +31,30 @@ const schema = [
   },
 ]
 
-export default {
-  data() {
-    const formData = {
-      name: undefined,
-      age: undefined,
-      consent: undefined,
-    }
-    return { schema, formData, resetFormCounter: 0 }
-  },
-  methods: {
-    validateProgrammatically() {
-      const result = validateFormPerSchema(this.formData, this.schema)
-      const allGood = Object.values(result).every((res) => res === null)
+const formData = ref({
+  name: undefined,
+  age: undefined,
+  consent: undefined,
+})
+const resetFormCounter = ref(0)
 
-      showToast(allGood ? 'All good!' : 'Errors remain', result)
-    },
-    setFormData() {
-      this.formData.name = 'Luca Ban'
-      this.formData.age = 18
-      this.formData.consent = true
-      this.resetFormCounter++
-    },
-    clearFormData() {
-      this.formData.name = undefined
-      this.formData.age = undefined
-      this.formData.consent = undefined
-      this.resetFormCounter++
-    },
-  },
+function validateProgrammatically() {
+  const result = validateFormPerSchema(formData.value, schema)
+  const allGood = Object.values(result).every((res) => res === null)
+
+  showToast(allGood ? 'All good!' : 'Errors remain', result)
+}
+function setFormData() {
+  formData.value.name = 'Luca Ban'
+  formData.value.age = 18
+  formData.value.consent = true
+  resetFormCounter.value++
+}
+function clearFormData() {
+  formData.value.name = undefined
+  formData.value.age = undefined
+  formData.value.consent = undefined
+  resetFormCounter.value++
 }
 </script>
 
@@ -71,11 +67,11 @@ export default {
     </div>
 
     <BlitzForm
+      :key="resetFormCounter"
+      v-model="formData"
       showErrorsOn="never"
       :schema="schema"
-      v-model="formData"
       :columnCount="3"
-      :key="resetFormCounter"
     />
 
     <CodeBlock :content="`// formData\n${JSON.stringify(formData, undefined, 2)}`" />
