@@ -3,7 +3,8 @@
   "private": true,
   "version": "1.1.5",
   "description": "Blitzar Docs",
-  "author": "CyCraft",
+  "author": "Luca Ban - Mesqueeb",
+  "funding": "https://github.com/sponsors/mesqueeb",
   "main": "index.js",
   "scripts": {
     "dev": "vitepress dev docs",
