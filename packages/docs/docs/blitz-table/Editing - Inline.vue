@@ -1,4 +1,4 @@
-<script>
+<script setup>
 import { ref, markRaw } from 'vue'
 import { BlitzGridToggle } from 'blitzar'
 import 'blitzar/dist/style.css'
@@ -41,34 +41,22 @@ const rows = [
   { id: 'id04508174972460055', balance: 97869, birthdate: '1945-10-01', firstName: 'Shad', lastName: 'Beard', company: 'Mollis Incorporated' }, // prettier-ignore
 ]
 
-export default {
-  setup() {
-    const mode = ref('raw')
+const mode = ref('raw')
 
-    function onUpdateCell({ rowId, colId, value, origin }) {
-      console.log('@updateCell', { rowId, colId, value, origin })
-      const row = rows.find((r) => r.id === rowId)
-      if (!row) return
-      row[colId] = value
-    }
-
-    return {
-      mode,
-      rows,
-      schemaColumnsAndGrid,
-      onUpdateCell,
-      blitzGridToggle,
-    }
-  },
+function onUpdateCell({ rowId, colId, value, origin }) {
+  console.log('@updateCell', { rowId, colId, value, origin })
+  const row = rows.find((r) => r.id === rowId)
+  if (!row) return
+  row[colId] = value
 }
 </script>
 
 <template>
   <div>
     <h4 style="display: inline">Table Mode:</h4>
-    <input type="radio" id="raw" value="raw" v-model="mode" />
+    <input id="raw" v-model="mode" type="radio" value="raw" />
     <label for="raw">raw</label>
-    <input type="radio" id="edit" value="edit" v-model="mode" />
+    <input id="edit" v-model="mode" type="radio" value="edit" />
     <label for="edit">edit</label>
   </div>
 

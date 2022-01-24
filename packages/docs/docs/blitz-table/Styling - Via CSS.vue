@@ -1,4 +1,5 @@
-<script>
+<script setup>
+import { ref } from 'vue'
 const rows = [
   { nameFirst: 'Eleanor', nameLast: 'Shellstrop' },
   { nameFirst: 'Chidi', nameLast: 'Anagonye' },
@@ -19,15 +20,11 @@ const schemaColumns = [
   { id: 'nameLast', label: 'Last Name', component: 'input' },
 ]
 
-export default {
-  data() {
-    return { rows, schemaColumns, grid: false }
-  },
-}
+const grid = ref(false)
 </script>
 
 <template>
-  <div class="q-gutter-lg">
+  <div>
     <BlitzTable
       :schemaColumns="schemaColumns"
       :schemaGrid="schemaColumns"

@@ -1,4 +1,4 @@
-<script>
+<script setup>
 import { markRaw, onMounted, ref } from 'vue'
 import { BlitzInput, BlitzGridToggle, BlitzPagination } from 'blitzar'
 import 'blitzar/dist/style.css'
@@ -24,31 +24,19 @@ const schemaColumnsAndGrid = [
   },
 ]
 
-export default {
-  setup() {
-    const rows = ref([
-      {
-        firstName: 'Harper',
-        lastName: 'Nolan',
-      },
-      // other rows loaded asynchronously
-    ])
-
-    onMounted(async () => {
-      const _module = await import('./users.json')
-      const users = _module.default
-      rows.value = users
-    })
-
-    return {
-      blitzInput,
-      blitzGridToggle,
-      blitzPagination,
-      schemaColumnsAndGrid,
-      rows,
-    }
+const rows = ref([
+  {
+    firstName: 'Harper',
+    lastName: 'Nolan',
   },
-}
+  // other rows loaded asynchronously
+])
+
+onMounted(async () => {
+  const _module = await import('./users.json')
+  const users = _module.default
+  rows.value = users
+})
 </script>
 
 <template>

@@ -1,4 +1,5 @@
-<script>
+<script setup>
+import { ref } from 'vue'
 const schema = [
   {
     id: 'myInput',
@@ -14,11 +15,7 @@ const schema = [
   },
 ]
 
-export default {
-  data() {
-    return { schema, formData: {} }
-  },
-}
+const formData = ref({})
 </script>
 
 <template>

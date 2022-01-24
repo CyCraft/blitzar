@@ -1,4 +1,5 @@
-<script>
+<script setup>
+import { ref } from 'vue'
 const schema = [
   {
     id: 'name',
@@ -47,31 +48,24 @@ const schema = [
   },
 ]
 
-export default {
-  data() {
-    return {
-      schema,
-      mode: 'readonly',
-      formData: {
-        name: 'Johnny Silverhand',
-        powerOrigin: 'self',
-      },
-    }
-  },
-}
+const mode = ref('readonly')
+const formData = ref({
+  name: 'Johnny Silverhand',
+  powerOrigin: 'self',
+})
 </script>
 
 <template>
   <div>
     mode:
-    <select name="mode" id="mode" v-model="mode" style="margin-bottom: 1rem">
+    <select id="mode" v-model="mode" name="mode" style="margin-bottom: 1rem">
       <option value="edit">edit</option>
       <option value="readonly">readonly</option>
       <option value="disabled">disabled</option>
       <option value="raw">raw</option>
     </select>
 
-    <BlitzForm :schema="schema" v-model="formData" :mode="mode" :columnCount="2" />
+    <BlitzForm v-model="formData" :schema="schema" :mode="mode" :columnCount="2" />
 
     <CodeBlock :content="`// formData\n${JSON.stringify(formData, undefined, 2)}`" />
   </div>

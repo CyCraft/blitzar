@@ -1,4 +1,4 @@
-<script>
+<script setup>
 const schemaColumns = [
   { id: 'firstName', label: 'First Name' },
   { id: 'lastName', label: 'Last Name' },
@@ -26,15 +26,6 @@ const rows = [
   { balance: 50981, birthdate: '1995-07-26', firstName: 'Althea', lastName: 'Mcdaniel', company: 'Non Foundation' }, // prettier-ignore
   { balance: 97869, birthdate: '1945-10-01', firstName: 'Shad', lastName: 'Beard', company: 'Mollis Incorporated' }, // prettier-ignore
 ]
-
-export default {
-  setup() {
-    return {
-      rows,
-      schemaColumns,
-    }
-  },
-}
 </script>
 
 <template>

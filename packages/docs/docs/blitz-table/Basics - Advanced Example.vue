@@ -1,4 +1,4 @@
-<script>
+<script setup>
 import { markRaw, onMounted, ref } from 'vue'
 import { BlitzInput, BlitzGridToggle, BlitzPagination } from 'blitzar'
 import 'blitzar/dist/style.css'
@@ -31,37 +31,23 @@ const schemaColumnsAndGrid = [
   },
   { id: 'balance', label: 'Balance', parseValue: (val) => val.toLocaleString() },
 ]
-
-export default {
-  setup() {
-    const rows = ref([
-      {
-        balance: 93683,
-        birthdate: '1946-07-22',
-        firstName: 'Harper',
-        lastName: 'Nolan',
-        company: 'Tortor At Risus LLC',
-        avatarUrl:
-          'https://gravatar.com/avatar/8aa5e7a6220f2a87684a9f4e6286e343?s=100&d=robohash&r=x',
-      },
-      // other rows loaded asynchronously
-    ])
-
-    onMounted(async () => {
-      const _module = await import('./users.json')
-      const users = _module.default
-      rows.value = users
-    })
-
-    return {
-      blitzInput,
-      blitzGridToggle,
-      blitzPagination,
-      schemaColumnsAndGrid,
-      rows,
-    }
+const rows = ref([
+  {
+    balance: 93683,
+    birthdate: '1946-07-22',
+    firstName: 'Harper',
+    lastName: 'Nolan',
+    company: 'Tortor At Risus LLC',
+    avatarUrl: 'https://gravatar.com/avatar/8aa5e7a6220f2a87684a9f4e6286e343?s=100&d=robohash&r=x',
   },
-}
+  // other rows loaded asynchronously
+])
+
+onMounted(async () => {
+  const _module = await import('./users.json')
+  const users = _module.default
+  rows.value = users
+})
 </script>
 
 <template>
@@ -95,6 +81,7 @@ export default {
       :shownRowsInfoField="{ component: 'div' }"
     />
   </div>
+  poop
 </template>
 
 <style scoped>

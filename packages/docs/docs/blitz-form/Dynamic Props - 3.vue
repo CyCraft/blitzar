@@ -1,4 +1,6 @@
-<script>
+<script setup>
+import { ref } from 'vue'
+
 const schema = [
   {
     id: 'car',
@@ -24,19 +26,14 @@ const schema = [
     showCondition: (val, { formData, mode }) => formData.car && mode === 'edit',
   },
 ]
-
-export default {
-  data() {
-    return { schema, formData: {} }
-  },
-}
+const formData = ref({})
 </script>
 
 <template>
   <div>
     <BlitzForm
-      :schema="schema"
       v-model="formData"
+      :schema="schema"
       :actionButtons="['edit', 'save']"
       :columnCount="2"
     />

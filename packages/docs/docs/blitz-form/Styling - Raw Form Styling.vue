@@ -1,4 +1,5 @@
-<script>
+<script setup>
+import { ref } from 'vue'
 const schema = [
   {
     label: 'Hero Details',
@@ -31,35 +32,28 @@ const schema = [
   },
 ]
 
-export default {
-  data() {
-    return {
-      showStyling: true,
-      schema,
-      formData: {
-        name: 'Peace of Cake',
-        powerOrigin: 'self',
-        stamina: 5000,
-        power: 9000,
-        roleModel: 'Thor Odinson',
-      },
-    }
-  },
-}
+const showStyling = ref(true)
+const formData = ref({
+  name: 'Peace of Cake',
+  powerOrigin: 'self',
+  stamina: 5000,
+  power: 9000,
+  roleModel: 'Thor Odinson',
+})
 </script>
 
 <template>
   <div>
-    <button @click="showStyling = !showStyling" style="margin-bottom: 1rem">
+    <button style="margin-bottom: 1rem" @click="showStyling = !showStyling">
       Toggle Custom Styling
     </button>
 
     <BlitzForm
+      v-model="formData"
       :class="showStyling ? 'raw-form-data-style' : ''"
       labelPosition="left"
       :schema="schema"
       mode="raw"
-      v-model="formData"
       gridGap="0"
     />
   </div>

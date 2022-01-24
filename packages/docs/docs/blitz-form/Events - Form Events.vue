@@ -1,4 +1,5 @@
-<script>
+<script setup>
+import { ref } from 'vue'
 import { showToast } from '../../components/toasts'
 
 const schema = [
@@ -24,29 +25,23 @@ const schema = [
   },
 ]
 
-export default {
-  data() {
-    return { schema, formData: {} }
-  },
-  methods: {
-    logupdateField(eventPayload) {
-      showToast('@updateField', eventPayload)
-    },
-    logFormInput(eventPayload, origin) {
-      showToast('@update:modelValue', eventPayload, origin)
-    },
-  },
+function logupdateField(eventPayload) {
+  showToast('@updateField', eventPayload)
 }
+function logFormInput(eventPayload, origin) {
+  showToast('@update:modelValue', eventPayload, origin)
+}
+const formData = ref({})
 </script>
 
 <template>
   <div>
     <BlitzForm
-      :schema="schema"
       v-model="formData"
+      :columnCount="2"
+      :schema="schema"
       @updateField="logupdateField"
       @update:modelValue="logFormInput"
-      :columnCount="2"
     />
 
     <CodeBlock :content="`// formData\n${JSON.stringify(formData, undefined, 2)}`" />

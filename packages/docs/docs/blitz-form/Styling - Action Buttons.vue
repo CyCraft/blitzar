@@ -35,7 +35,10 @@ const schema = [
   },
 ]
 
-const showStyling = ref(true)
+const actionButtonsPosition = ref('top')
+
+const actionButtons = ['delete', 'edit', 'cancel', 'save']
+
 const formData = reactive({
   name: 'Peace of Cake',
   powerOrigin: 'self',
@@ -47,30 +50,18 @@ const formData = reactive({
 
 <template>
   <div>
-    <button style="margin-bottom: 1rem" @click="showStyling = !showStyling">
-      Toggle Custom Styling
-    </button>
+    <select v-model="actionButtonsPosition" style="margin-bottom: 1rem">
+      <option value="top">top</option>
+      <option value="bottom">bottom</option>
+      <option value="right">right</option>
+      <option value="left">left</option>
+    </select>
 
     <BlitzForm
       v-model="formData"
-      :class="showStyling ? 'left-labels-example' : ''"
-      labelPosition="left"
+      :actionButtonsPosition="actionButtonsPosition"
       :schema="schema"
+      :actionButtons="actionButtons"
     />
   </div>
 </template>
-
-<style lang="scss">
-.left-labels-example {
-  /** Either set a minimum or fixed width like so: */
-  .blitz-field__label,
-  .blitz-field__sub-label {
-    width: 150px;
-  }
-
-  /** OR set the width of the columns like so: */
-  .blitz-field {
-    grid-template-columns: 150px 1fr;
-  }
-}
-</style>

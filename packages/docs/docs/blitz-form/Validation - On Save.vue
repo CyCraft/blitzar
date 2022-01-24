@@ -1,4 +1,5 @@
-<script>
+<script setup>
+import { ref } from 'vue'
 const schema = [
   {
     id: 'name',
@@ -26,20 +27,17 @@ const schema = [
   },
 ]
 
-export default {
-  data() {
-    return { showErrorsOn: 'save', schema, formData: {} }
-  },
-}
+const showErrorsOn = ref('save')
+const formData = ref({})
 </script>
 
 <template>
   <div>
     showErrorsOn:
     <select
-      name="showErrorsOn"
       id="showErrorsOn"
       v-model="showErrorsOn"
+      name="showErrorsOn"
       style="margin-bottom: 1rem"
     >
       <option value="interaction">interaction</option>
@@ -50,9 +48,9 @@ export default {
     </select>
 
     <BlitzForm
+      v-model="formData"
       :showErrorsOn="showErrorsOn"
       :schema="schema"
-      v-model="formData"
       :actionButtons="['cancel', 'edit', 'save']"
       :columnCount="3"
     />
