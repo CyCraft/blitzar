@@ -683,7 +683,7 @@ export default defineComponent({
   >
     <!-- navigation buttons row (save, edit, ...) -->
     <div
-      v-if="isFullString(formErrorMsg) || actionButtonsSchema.length"
+      v-if="isFullString(formErrorMsg) || actionButtonsSchema.length || $slots.nav()"
       :class="`blitz-form__nav-row blitz-form__nav-row--${actionButtonsPosition}`"
     >
       <div v-if="isFullString(formErrorMsg)" class="blitz-form__validation-error text-negative">
