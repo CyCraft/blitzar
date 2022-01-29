@@ -55,6 +55,7 @@
     "npm": ">= 7.14.0"
   },
   "author": "Luca Ban - Mesqueeb",
+  "funding": "https://github.com/sponsors/mesqueeb",
   "license": "MIT",
   "homepage": "https://github.com/cycraft/blitzar#readme",
   "bugs": {
