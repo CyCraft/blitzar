@@ -2,11 +2,12 @@
   "name": "blitzar-monorepo",
   "private": true,
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "example-projects/*"
   ],
   "scripts": {
     "dev": "concurrently -n 'docs,components,form,table,utils' -c 'green,yellow,blue,purple,gray' 'npm run dev -w=docs' 'npm run dev -w=@blitzar/components' 'npm run dev -w=@blitzar/form' 'npm run dev -w=@blitzar/table' 'npm run dev -w=@blitzar/utils'",
-    "dev:docs-vuetify": "npm run dev -w docs-vuetify",
+    "dev:quasar": "npm run dev -w example-quasar",
     "lint": "lerna run lint",
     "test": "lerna run test",
     "build": "lerna run build",
