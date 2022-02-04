@@ -29,8 +29,8 @@
     "dev": "vite build --watch"
   },
   "dependencies": {
-    "@blitzar/components": "^1.1.4",
-    "@blitzar/types": "^1.1.4",
+    "@blitzar/components": "^1.1.5",
+    "@blitzar/types": "^1.1.5",
     "@blitzar/utils": "^1.1.4"
   },
   "homepage": "https://github.com/cycraft/blitzar#readme",
