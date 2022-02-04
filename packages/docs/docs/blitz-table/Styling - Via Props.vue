@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from 'vue'
+
 const rows = [
   { id: 'e', nameFirst: 'Eleanor', nameLast: 'Shellstrop', teamColor: '' },
   { id: 'c', nameFirst: 'Chidi', nameLast: 'Anagonye', teamColor: '' },

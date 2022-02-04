@@ -35,9 +35,8 @@ const rows = ref([
   // other rows loaded asynchronously
 ])
 
+import users from './users.json'
 onMounted(async () => {
-  const _module = await import('./users.json')
-  const users = _module.default
   rows.value = users
 })
 </script>

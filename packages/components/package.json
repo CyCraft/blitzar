@@ -21,17 +21,24 @@
     "dist"
   ],
   "scripts": {
+    "build": "npm run lint && rimraf dist && vite build && npm run gen:types:ts && npm run gen:types:vetur",
+    "dev": "vite",
     "lint": "eslint ./src/**.*",
     "gen:types:vetur": "vue-int -i src -r -o dist/vetur",
-    "gen:types:ts": "vue-tsc --declaration --emitDeclarationOnly",
-    "build": "npm run lint && rimraf dist && vite build && npm run gen:types:ts && npm run gen:types:vetur",
-    "dev": "vite build --watch"
+    "gen:types:ts": "vue-tsc --declaration --emitDeclarationOnly"
   },
   "dependencies": {
     "@blitzar/types": "^1.1.4",
+    "case-anything": "^2.1.10",
+    "copy-anything": "^3.0.2",
+    "filter-anything": "^3.0.2",
     "flatten-anything": "^2.0.4",
     "is-what": "^3.14.1",
+    "map-anything": "^2.0.2",
+    "merge-anything": "^5.0.2",
+    "nestify-anything": "^2.0.2",
     "path-to-prop": "^1.0.0",
+    "snarkdown": "^2.0.0",
     "vue-pepicons": "^1.0.9"
   },
   "license": "MIT",

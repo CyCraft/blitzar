@@ -4,6 +4,6 @@
     "outDir": "dist",
     "baseUrl": "."
   },
-  "include": ["src/index.ts", "./src/**/*.ts", "./src/**/*.vue", "./shims.d.ts"],
-  "exclude": ["./dist", "node_modules"]
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
+  "exclude": ["dist", "node_modules"]
 }

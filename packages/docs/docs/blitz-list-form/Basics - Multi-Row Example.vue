@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from 'vue'
+
 const schema = [
   // the `deleteRow` function and `rowIndex` props used below are only available in schemas of a BlitzListForm!
   {

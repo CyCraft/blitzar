@@ -1,15 +1,19 @@
 {
   "compilerOptions": {
-    "target": "ES2018",
-    "lib": ["ESNext", "DOM"],
-    "baseUrl": ".",
-    "strict": true,
     "allowJs": true,
-    "moduleResolution": "node",
     "esModuleInterop": true,
     "isolatedModules": true,
+    "jsx": "preserve",
+    "lib": ["esnext", "dom"],
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
     "skipLibCheck": true,
-    "types": ["node", "fs-extra"]
+    "sourceMap": true,
+    "strict": true,
+    "target": "esnext",
+    "types": ["node", "fs-extra"],
+    "useDefineForClassFields": true
   },
-  "exclude": ["/dist", "node_modules"]
+  "exclude": ["dist", "node_modules"]
 }

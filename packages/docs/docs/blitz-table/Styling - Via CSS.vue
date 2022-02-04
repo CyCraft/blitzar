@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from 'vue'
+
 const rows = [
   { nameFirst: 'Eleanor', nameLast: 'Shellstrop' },
   { nameFirst: 'Chidi', nameLast: 'Anagonye' },
@@ -37,7 +38,7 @@ const grid = ref(false)
       :schemaColumns="schemaColumns"
       :schemaGrid="schemaColumns"
       :rows="rows"
-      :grid="grid"
+      :isGrid="grid"
       flat
       bordered
       title="Styled Table"

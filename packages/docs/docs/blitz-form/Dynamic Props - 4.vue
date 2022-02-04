@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from 'vue'
+
 const carData = [
   { year: '2015', make: 'Audi', model: 'A3', trim: '2.0' },
   { year: '2015', make: 'Audi', model: 'A3', trim: '1.8' },
