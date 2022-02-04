@@ -46,3 +46,12 @@ main p > a:not([aria-hidden="true"])[href^='https://']:after {
 main p > a:not([aria-hidden="true"])[href^='https://']:hover:after {
   opacity: 0.9;
 }
+
+.nav-bar-title {
+  display: flex;
+  align-items: center;
+}
+
+ul.dialog {
+  border: thin solid white;
+}
