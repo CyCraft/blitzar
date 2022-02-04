@@ -31,7 +31,7 @@
   "dependencies": {
     "@blitzar/components": "^1.1.5",
     "@blitzar/types": "^1.1.5",
-    "@blitzar/utils": "^1.1.4"
+    "@blitzar/utils": "^1.1.5"
   },
   "homepage": "https://github.com/cycraft/blitzar#readme",
   "keywords": [

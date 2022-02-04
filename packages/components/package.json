@@ -29,6 +29,7 @@
   },
   "dependencies": {
     "@blitzar/types": "^1.1.5",
+    "@blitzar/utils": "^1.1.5",
     "case-anything": "^2.1.10",
     "copy-anything": "^3.0.2",
     "filter-anything": "^3.0.2",
