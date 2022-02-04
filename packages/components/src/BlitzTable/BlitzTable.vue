@@ -1,19 +1,11 @@
 <script lang="ts">
-import { watch, ref, defineComponent, computed, PropType, watchEffect } from 'vue'
+import { ref, defineComponent, computed, PropType, watchEffect } from 'vue'
 import { merge } from 'merge-anything'
 import { isFunction, isFullArray, isBoolean, isFullString, isPlainObject, isArray } from 'is-what'
-import { getProp } from 'path-to-prop'
 import { getBlitzFieldOverwrites } from '../helpersForm'
 import type { BlitzFieldProps, Mode, UpdateModelValueOrigin } from '@blitzar/types'
 import { ROW_SELECTION_ID } from '@blitzar/types'
-import type {
-  BlitzColumn,
-  BlitzColumnProps,
-  DsSearchAs,
-  DsSortAs,
-  DsSortby,
-  SortState,
-} from '../typesTable'
+import type { BlitzColumn, ParseValueDic, SortState } from '../typesTable'
 import BlitzTableOuter from '../BlitzTableOuter/BlitzTableOuter.vue'
 import BlitzTableInner from '../BlitzTableInner/BlitzTableInner.vue'
 
@@ -248,6 +240,7 @@ export default defineComponent({
 
     /** SORT related state */
     const sortState = ref<SortState>({ id: null, direction: 'none' })
+    const sortStateArr = computed<SortState[]>(() => [sortState.value])
 
     // apply default `sortable` to columns && add special behaviour for Selection
     const schemaColumnsComputed = computed<BlitzColumn[] | undefined>(() => {
@@ -269,67 +262,15 @@ export default defineComponent({
       })
     })
 
-    /**
-     * Provides Dataset's `dsSearchAs` prop with a special functions for columns with `parseValue`
-     */
-    const dsSearchAsComputed = (schemaColumnsComputed.value || []).reduce<DsSearchAs>(
-      (searchAsDic, column) => {
-        if (!column.id) return searchAsDic
-        if (!isFunction(column.parseValue)) return searchAsDic
-
-        const searchFn = (
-          cellValue: any,
-          searchString: string,
-          rowData: Record<string, any>
-        ): boolean => {
-          const actualCellValue = getProp(rowData, column.id)
-          const searchStr = String(searchString).toLowerCase()
-
-          try {
-            const parsedValue = column.parseValue(cellValue, { formData: rowData })
-            const checkParsed = String(parsedValue).toLowerCase().indexOf(searchStr) >= 0
-            if (checkParsed === true) {
-              return true
-            }
-          } catch (error) {
-            /** error */
-          }
-          // as fallback also check the non-parsed value
-          return String(actualCellValue).toLowerCase().indexOf(searchStr) >= 0
+    const parseValueDic = (schemaColumnsComputed.value || []).reduce<ParseValueDic>(
+      (dic, column) => {
+        if (column.id && isFunction(column.parseValue)) {
+          dic[column.id] = column.parseValue
         }
-
-        searchAsDic[column.id] = searchFn
-
-        return searchAsDic
+        return dic
       },
       {}
     )
-
-    /**
-     * Provides Dataset's `dsSortAs` prop with a special functions for columns with `parseValue`
-     */
-    const dsSortAsComputed = (schemaColumnsComputed.value || []).reduce<DsSortAs>(
-      (sortAsDic, column) => {
-        if (!column.id) return sortAsDic
-        if (!column.sortable) return sortAsDic
-        if (!isFunction(column.parseValue)) return sortAsDic
-
-        const sortAsFn = (cellValue: any, rowData: Record<string, any>): any => {
-          const parsedValue = column.parseValue(cellValue, { formData: rowData })
-          return parsedValue
-        }
-
-        sortAsDic[column.id] = sortAsFn
-        return sortAsDic
-      },
-      {}
-    )
-
-    const dsSortbyComputed = computed<DsSortby>(() => {
-      if (!sortState.value.id) return []
-      if (sortState.value.direction === 'desc') return [`-${sortState.value.id}`]
-      return [sortState.value.id]
-    })
 
     // function evaluate(propValue, rowProps) {
     //   if (!isFunction(propValue)) return propValue || ''
@@ -395,11 +336,10 @@ export default defineComponent({
     }
 
     return {
-      dsSearchAsComputed,
-      dsSortAsComputed,
+      parseValueDic,
       selectedRowsComputed,
       sortState,
-      dsSortbyComputed,
+      sortStateArr,
       applyBlitzFieldOverwrites,
       isGridInner,
       schemaColumnsComputed,
@@ -418,19 +358,18 @@ export default defineComponent({
 <template>
   <div class="blitz-table" v-bind="$attrs">
     <BlitzTableOuter
-      v-slot="{ ds }"
-      :dsData="rows"
-      :dsSortby="dsSortbyComputed"
-      :dsFilterFields="{}"
-      :dsSearchIn="[]"
-      :dsSearchAs="dsSearchAsComputed"
-      :dsSortAs="dsSortAsComputed"
+      v-slot="{ tableMeta }"
+      :rows="rows"
+      :sortStateArr="sortStateArr"
+      :filterFns="{}"
+      :searchablePropIds="[]"
+      :parseValueDic="parseValueDic"
     >
       <BlitzTableInner
         v-model:isGrid="isGridInner"
         v-model:selectedRows="selectedRowsComputed"
         v-model:sortState="sortState"
-        :ds="ds"
+        :tableMeta="tableMeta"
         :schemaColumns="schemaColumnsComputed"
         :schemaGrid="schemaGridComputed"
         :gridBlitzFormOptions="gridBlitzFormOptions"

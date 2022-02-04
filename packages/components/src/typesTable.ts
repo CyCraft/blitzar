@@ -1,4 +1,3 @@
-import type { Ref, ComputedRef } from 'vue'
 import type { BlitzFieldProps } from '@blitzar/types'
 
 export type BlitzColumnProps = {
@@ -12,83 +11,78 @@ export type BlitzColumn = BlitzFieldProps & BlitzColumnProps
 
 export type SortState = { id: null | string; direction: 'asc' | 'desc' | 'none' }
 
-/**
- * @see https://next--vue-dataset-demo.netlify.app/components/#props
- */
-export type DsScope = {
-  /** The "rows" object array that contains all the data */
-  dsData: { [id in string]: any }[]
+export type TableMeta = {
   /**
    * All the indexes of the rows make up the filtered/sorted data
    *
    * (inside of BlitzTableOuter uses `Ref<number[]>`)
    */
-  dsIndexes: number[]
+  currentIndexes: number[]
   /**
    * The visible row indexes of the current page
    *
    * (inside of BlitzTableOuter uses `ComputedRef<number[]>`)
    */
-  dsRows: number[]
+  shownRows: number[]
   /**
    * The array used to create pagination links
    *
    * (inside of BlitzTableOuter uses `ComputedRef<(number | '...')[]>`)
    */
-  dsPages: (number | '...')[]
+  shownPageIndexes: (number | '...')[]
   /**
    * The number of rows currently displaying
    *
    * (inside of BlitzTableOuter uses `ComputedRef<number>`)
    */
-  dsResultsNumber: number
+  currentResultsCount: number
   /**
    * The number of pagination pages
    *
    * (inside of BlitzTableOuter uses `ComputedRef<number>`)
    */
-  dsPagecount: number
+  currentPageCount: number
   /**
    * The amount of rows per page you want to show
    *
    * (inside of BlitzTableOuter uses `Ref<number>`)
    */
-  dsShowEntries: number
+  rowsPerPage: number
   /**
    * The item "from" of paginated items currently displaying
    *
    * (inside of BlitzTableOuter uses `ComputedRef<number>`)
    */
-  dsFrom: number
+  shownFrom: number
   /**
    * The item "to" of paginated items currently displaying
    *
    * (inside of BlitzTableOuter uses `ComputedRef<number>`)
    */
-  dsTo: number
+  shownTo: number
   /**
    * The number of the current page in pagination
    *
    * (inside of BlitzTableOuter uses `Ref<number>`)
    */
-  dsPage: number
+  currentPageNr: number
   /** Execute on text input in the search field */
   search: (val: string) => void
   /** Execute to change the amount of visible rows */
-  showEntries: (val: number) => Promise<void>
+  setRowsPerPage: (val: number) => Promise<void>
   /** Execute to change the current opened page */
-  setActive: (val: number) => void
+  setPageNr: (val: number) => void
 }
 
-export type DsData = Record<string, any>[]
-export type DsFilterFields = {
+export type FilterFns = {
   [colId in string]: (cellValue: any, rowData: Record<string, any>) => boolean | any
 }
-export type DsSortby = string[]
-export type DsSearchIn = string[]
-export type DsSearchAs = {
-  [id in string]: (cellValue: any, searchString: string, rowData: Record<string, any>) => boolean
-}
-export type DsSortAs = {
+
+export type SearchablePropIds = string[]
+
+/**
+ * `parseValue` dic per column ID. Only used for sorting.
+ */
+export type ParseValueDic = {
   [id in string]: (cellValue: any, rowData: Record<string, any>) => any
 }

@@ -1,18 +1,9 @@
 <script lang="ts">
-import { ref, computed, watch, nextTick, PropType, defineComponent, unref } from 'vue'
+import { ref, computed, watch, nextTick, PropType, defineComponent } from 'vue'
 import { flattenObject } from 'flatten-anything'
 import { isEmptyObject } from 'is-what'
-import { createPagingRange, fieldSorter, filterRow, findAny } from '../helpersTable'
-import type {
-  BlitzColumnProps,
-  DsData,
-  DsFilterFields,
-  DsSortby,
-  DsSearchIn,
-  DsSearchAs,
-  DsSortAs,
-  DsScope,
-} from '../typesTable'
+import { createPagingRange, sortFactory, filterRow, isRowSearchHit } from '../helpersTable'
+import type { FilterFns, SearchablePropIds, ParseValueDic, SortState } from '../typesTable'
 
 /**
  * A renderless component that calculates and only provides the scope required to create data tables and grids
@@ -20,77 +11,74 @@ import type {
 export default defineComponent({
   name: 'BlitzTableOuter',
   props: {
-    dsData: { type: Array as PropType<DsData>, default: () => [] },
-    dsFilterFields: { type: Object as PropType<DsFilterFields>, default: () => ({}) },
-    dsSortby: { type: Array as PropType<DsSortby>, default: () => [] },
-    dsSearchIn: { type: Array as PropType<DsSearchIn>, default: () => [] },
-    dsSearchAs: { type: Object as PropType<DsSearchAs>, default: () => ({}) },
-    dsSortAs: { type: Object as PropType<DsSortAs>, default: () => ({}) },
+    rows: { type: Array as PropType<Record<string, any>[]>, default: () => [] },
+    filterFns: { type: Object as PropType<FilterFns>, default: () => ({}) },
+    sortStateArr: { type: Array as PropType<SortState[]>, default: () => [] },
+    searchablePropIds: { type: Array as PropType<SearchablePropIds>, default: () => [] },
+    parseValueDic: { type: Object as PropType<ParseValueDic>, default: () => ({}) },
   },
   setup(props) {
-    const dsPage = ref(1)
-    const dsSearch = ref('')
-    const dsShowEntries = ref(10)
+    const currentPageNr = ref(1)
+    const searchString = ref('')
+    const rowsPerPage = ref(10)
     const indexes = ref<number[]>([])
 
     const search = (value: string) => {
-      dsSearch.value = value
+      searchString.value = value
     }
 
-    const showEntries = async (value: number) => {
-      const pagesBeforeChange = dsPages.value
-      dsShowEntries.value = value
+    const setRowsPerPage = async (value: number) => {
+      const pagesBeforeChange = shownPageIndexes.value
+      rowsPerPage.value = value
       await nextTick()
-      const pagesAfterChange = dsPages.value
+      const pagesAfterChange = shownPageIndexes.value
       if (pagesAfterChange.length < pagesBeforeChange.length) {
-        setActive(pagesAfterChange[pagesAfterChange.length - 1] as number)
+        setPageNr(pagesAfterChange[pagesAfterChange.length - 1] as number)
       }
     }
 
-    const setActive = (value: number) => {
-      dsPage.value = value
+    const setPageNr = (value: number) => {
+      currentPageNr.value = value
     }
 
     const whenChanged = computed(() => {
-      /* eslint-disable no-unused-expressions */
-      props.dsData
-      dsSearch.value
-      props.dsSortby
-      props.dsFilterFields
-      props.dsSearchIn
-      props.dsSearchAs
-      props.dsSortAs
-      dsShowEntries.value
+      props.rows
+      searchString.value
+      props.sortStateArr
+      props.filterFns
+      props.searchablePropIds
+      props.parseValueDic
+      rowsPerPage.value
       return Date.now()
     })
 
-    const dsRows = computed(() => {
-      return indexes.value.slice(dsFrom.value, dsTo.value)
+    const shownRows = computed(() => {
+      return indexes.value.slice(shownFrom.value, shownTo.value)
     })
 
-    const dsPages = computed(() => {
-      return createPagingRange(dsPagecount.value, dsPage.value)
+    const shownPageIndexes = computed(() => {
+      return createPagingRange(currentPageCount.value, currentPageNr.value)
     })
 
-    const dsResultsNumber = computed(() => {
+    const currentResultsCount = computed(() => {
       return indexes.value.length
     })
 
-    const dsPagecount = computed(() => {
-      return Math.ceil(dsResultsNumber.value / dsShowEntries.value)
+    const currentPageCount = computed(() => {
+      return Math.ceil(currentResultsCount.value / rowsPerPage.value)
     })
 
-    const dsFrom = computed(() => {
-      return (dsPage.value - 1) * dsShowEntries.value
+    const shownFrom = computed(() => {
+      return (currentPageNr.value - 1) * rowsPerPage.value
     })
 
-    const dsTo = computed(() => {
-      return dsPage.value * dsShowEntries.value
+    const shownTo = computed(() => {
+      return currentPageNr.value * rowsPerPage.value
     })
 
-    watch(dsResultsNumber, (val, oldVal) => {
+    watch(currentResultsCount, (val, oldVal) => {
       // Reset active page when results change
-      setActive(1)
+      setPageNr(1)
     })
 
     watch(
@@ -98,12 +86,12 @@ export default defineComponent({
       (val, oldVal) => {
         let result = []
 
-        if (!dsSearch.value && !props.dsSortby.length && isEmptyObject(props.dsFilterFields)) {
+        if (!searchString.value && !props.sortStateArr.length && isEmptyObject(props.filterFns)) {
           // Skip processing and just get the indexes
-          result = props.dsData.map((val, i) => i)
+          result = props.rows.map((val, i) => i)
         } else {
           // Index it and prepare flattened data
-          result = props.dsData.map((val, i) => ({
+          result = props.rows.map((val, i) => ({
             rowIndex: i,
             rowData: val,
             rowDataFlat: flattenObject(val),
@@ -112,15 +100,20 @@ export default defineComponent({
           result = result.filter((row) => {
             return (
               // Filter it by field
-              filterRow(row, props.dsFilterFields) &&
+              filterRow(row, props.filterFns) &&
               // Search it
-              findAny(props.dsSearchIn, props.dsSearchAs, row, dsSearch.value)
+              isRowSearchHit({
+                searchStr: searchString.value,
+                row,
+                searchablePropIds: props.searchablePropIds,
+                parseValueDic: props.parseValueDic,
+              })
             )
           })
 
           // Sort it
-          if (props.dsSortby.length) {
-            result.sort(fieldSorter(props.dsSortby, props.dsSortAs))
+          if (props.sortStateArr.length) {
+            result.sort(sortFactory(props.sortStateArr, props.parseValueDic))
           }
 
           // We need only the indexes
@@ -134,18 +127,18 @@ export default defineComponent({
     )
 
     return {
-      dsIndexes: indexes,
-      dsShowEntries,
-      dsResultsNumber,
-      dsPage,
-      dsPagecount,
-      dsFrom,
-      dsTo,
-      dsRows,
-      dsPages,
+      currentIndexes: indexes,
+      rowsPerPage,
+      currentResultsCount,
+      currentPageNr,
+      currentPageCount,
+      shownFrom,
+      shownTo,
+      shownRows,
+      shownPageIndexes,
       search,
-      showEntries,
-      setActive,
+      setRowsPerPage,
+      setPageNr,
     }
   },
 })
@@ -153,20 +146,19 @@ export default defineComponent({
 
 <template>
   <slot
-    :ds="{
-      dsData,
-      dsIndexes,
-      dsRows,
-      dsShowEntries,
-      dsResultsNumber,
-      dsPage,
-      dsPagecount,
-      dsFrom,
-      dsTo,
-      dsPages,
+    :tableMeta="{
+      currentIndexes,
+      shownRows,
+      rowsPerPage,
+      currentResultsCount,
+      currentPageNr,
+      currentPageCount,
+      shownFrom,
+      shownTo,
+      shownPageIndexes,
       search,
-      showEntries,
-      setActive,
+      setRowsPerPage,
+      setPageNr,
     }"
   ></slot>
 </template>

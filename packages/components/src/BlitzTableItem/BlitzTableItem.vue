@@ -1,19 +1,19 @@
 <script lang="ts">
 import { computed, defineComponent, PropType } from 'vue'
-import { DsScope } from '../typesTable'
+import { TableMeta } from '../typesTable'
 
 export default defineComponent({
   name: 'BlitzTableItem',
   props: {
-    dsFrom: { type: Number, required: true },
-    dsTo: { type: Number, required: true },
-    dsData: { type: Array as PropType<Record<string, any>[]>, required: true },
-    dsRows: { type: Array as PropType<number[]>, required: true },
+    rows: { type: Array as PropType<Record<string, any>[]>, required: true },
+    shownFrom: { type: Number, required: true },
+    shownTo: { type: Number, required: true },
+    shownRows: { type: Array as PropType<number[]>, required: true },
   },
   setup(props) {
     const visibleIndexes = computed(() => {
       const arr = []
-      for (let i = props.dsFrom; i < props.dsTo; i++) {
+      for (let i = props.shownFrom; i < props.shownTo; i++) {
         arr.push(i)
       }
       return arr
@@ -27,9 +27,9 @@ export default defineComponent({
 </script>
 
 <template>
-  <template v-for="(rowIndex, i) in dsRows">
-    <slot :row="dsData[rowIndex]" :rowIndex="rowIndex" :index="visibleIndexes[i]"></slot>
+  <template v-for="(rowIndex, i) in shownRows">
+    <slot :row="rows[rowIndex]" :rowIndex="rowIndex" :index="visibleIndexes[i]"></slot>
   </template>
 
-  <slot v-if="!dsRows.length" name="noDataFound"></slot>
+  <slot v-if="!shownRows.length" name="noDataFound"></slot>
 </template>

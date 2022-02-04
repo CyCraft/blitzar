@@ -7,7 +7,7 @@ import type { BlitzFieldProps, FormContext, Mode, UpdateModelValueOrigin } from 
 import { ROW_SELECTION_ID } from '@blitzar/types'
 import BlitzTh from '../BlitzTh/BlitzTh.vue'
 import BlitzTableItem from '../BlitzTableItem/BlitzTableItem.vue'
-import type { DsScope, BlitzColumnProps, SortState, BlitzColumn } from '../typesTable'
+import type { TableMeta, BlitzColumnProps, SortState, BlitzColumn } from '../typesTable'
 
 /**
  * An implementation of a Datatable and Datagrid compatible with BlitzTableOuter
@@ -17,10 +17,10 @@ export default defineComponent({
   components: { BlitzForm, BlitzField, BlitzTh, BlitzTableItem },
   inheritAttrs: false,
   props: {
-    ds: { type: Object as PropType<DsScope>, required: true },
+    rows: { type: Array as PropType<Record<string, any>[]>, required: true },
+    tableMeta: { type: Object as PropType<TableMeta>, required: true },
     schemaColumns: { type: Array as PropType<BlitzColumn[]>, default: undefined },
     schemaGrid: { type: Array as PropType<BlitzColumn[]>, default: undefined },
-    rows: { type: Array as PropType<Record<string, any>>, required: true },
     isGrid: { type: Boolean as PropType<boolean>, required: true },
     gridBlitzFormOptions: { type: Object as PropType<Record<string, any>>, default: () => ({}) },
     selectedRows: { type: Array as PropType<Record<string, any>[]>, default: () => [] },
@@ -74,7 +74,7 @@ export default defineComponent({
               if (wasSelected) {
                 emit(
                   'update:selectedRows',
-                  props.ds.dsIndexes.map((rowIndex) => props.ds.dsData[rowIndex])
+                  props.tableMeta.currentIndexes.map((rowIndex) => props.rows[rowIndex])
                 )
                 return
               }
@@ -130,7 +130,7 @@ export default defineComponent({
       },
       set(val: string) {
         searchTextInner.value = val
-        props.ds.search(val)
+        props.tableMeta.search(val)
       },
     })
 
@@ -147,32 +147,32 @@ export default defineComponent({
     /** PAGINATION */
     const currentPage = computed<number>({
       get() {
-        return props.ds.dsPage
+        return props.tableMeta.currentPageNr
       },
       set(val) {
-        props.ds.setActive(Number(val))
+        props.tableMeta.setPageNr(Number(val))
       },
     })
     const paginationFieldProps = computed(() => ({
-      pageCount: props.ds.dsPagecount,
-      pagesShown: props.ds.dsPages,
+      pageCount: props.tableMeta.currentPageCount,
+      pagesShown: props.tableMeta.shownPageIndexes,
     }))
 
     /** ROWS PER PAGE FIELD */
     const rowsPerPageInner = computed<number>({
       get() {
-        return props.ds.dsShowEntries
+        return props.tableMeta.rowsPerPage
       },
       set(val) {
-        props.ds.showEntries(Number(val))
+        props.tableMeta.setRowsPerPage(Number(val))
       },
     })
     // if there is no paginationField provided
     onBeforeMount(() => {
       if (!props.paginationField) {
         // then set the amount of rows per page to the total row count:
-        rowsPerPageInner.value = props.ds.dsData.length
-        watchEffect(() => (rowsPerPageInner.value = props.ds.dsData.length))
+        rowsPerPageInner.value = props.rows.length
+        watchEffect(() => (rowsPerPageInner.value = props.rows.length))
       } else {
         rowsPerPageInner.value = props.rowsPerPage
       }
@@ -180,12 +180,14 @@ export default defineComponent({
 
     /** SHOWN ROWS INFO FIELD */
     const showingFrom = computed<number>(() =>
-      props.ds.dsResultsNumber !== 0 ? props.ds.dsFrom + 1 : 0
+      props.tableMeta.currentResultsCount !== 0 ? props.tableMeta.shownFrom + 1 : 0
     )
     const showingTo = computed<number>(() =>
-      props.ds.dsTo >= props.ds.dsResultsNumber ? props.ds.dsResultsNumber : props.ds.dsTo
+      props.tableMeta.shownTo >= props.tableMeta.currentResultsCount
+        ? props.tableMeta.currentResultsCount
+        : props.tableMeta.shownTo
     )
-    const rowCountFiltered = computed<number>(() => props.ds.dsResultsNumber)
+    const rowCountFiltered = computed<number>(() => props.tableMeta.currentResultsCount)
     const shownRowsInfoText = computed<string>(
       () => `${showingFrom.value} - ${showingTo.value} / ${rowCountFiltered.value}`
     )
@@ -193,7 +195,7 @@ export default defineComponent({
       showingFrom: showingFrom.value,
       showingTo: showingTo.value,
       rowCountFiltered: rowCountFiltered.value,
-      rowCountTotal: props.ds.dsData.length,
+      rowCountTotal: props.rows.length,
       slots: { default: shownRowsInfoText.value },
     }))
 
@@ -281,7 +283,12 @@ export default defineComponent({
       </tr>
     </thead>
     <tbody v-if="!isGridMode && schemaColumnsComputed">
-      <BlitzTableItem :dsFrom="ds.dsFrom" :dsTo="ds.dsTo" :dsData="ds.dsData" :dsRows="ds.dsRows">
+      <BlitzTableItem
+        :shownFrom="tableMeta.shownFrom"
+        :shownTo="tableMeta.shownTo"
+        :rows="rows"
+        :shownRows="tableMeta.shownRows"
+      >
         <template #default="{ row, rowIndex }">
           <BlitzForm
             :id="row.id"
@@ -336,7 +343,12 @@ export default defineComponent({
       </BlitzTableItem>
     </tbody>
     <div v-if="isGridMode && schemaGridComputed" class="blitz-table--grid">
-      <BlitzTableItem :dsFrom="ds.dsFrom" :dsTo="ds.dsTo" :dsData="ds.dsData" :dsRows="ds.dsRows">
+      <BlitzTableItem
+        :shownFrom="tableMeta.shownFrom"
+        :shownTo="tableMeta.shownTo"
+        :rows="rows"
+        :shownRows="tableMeta.shownRows"
+      >
         <template #default="{ row, rowIndex }">
           <BlitzForm
             :id="row.id"

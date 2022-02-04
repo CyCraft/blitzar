@@ -1,6 +1,7 @@
 import { getProp } from 'path-to-prop'
 import { MORE_PAGES } from '@blitzar/types'
-import type { DsFilterFields, DsSortby, DsSearchIn, DsSearchAs, DsSortAs } from './typesTable'
+import type { FilterFns, SearchablePropIds, ParseValueDic, SortState } from './typesTable'
+import { isFullArray } from 'is-what'
 
 export function createPagingRange(nrOfPages: number, currentPage: number) {
   const delta = 2
@@ -38,21 +39,18 @@ export function createPagingRange(nrOfPages: number, currentPage: number) {
 /**
  * @returns a function that can be plugged into `.sort()`
  */
-export function fieldSorter(
-  dsSortby: DsSortby,
-  dsSortAs: DsSortAs = {}
+export function sortFactory(
+  sortStateArr: SortState[],
+  parseValueDic: ParseValueDic = {}
 ): (a: any, b: any) => number {
-  const dir: number[] = []
   let i
-  const length = dsSortby.length
-  dsSortby = dsSortby.map(function (colId, i) {
-    if (colId[0] === '-') {
-      dir[i] = -1
-      colId = colId.substring(1)
+  const length = sortStateArr.length
+  const dir: number[] = sortStateArr.map(function (sortState, i) {
+    if (sortState.direction === 'desc') {
+      return -1
     } else {
-      dir[i] = 1
+      return 1
     }
-    return colId
   })
 
   return function (
@@ -63,10 +61,10 @@ export function fieldSorter(
     const rowDataB = rowB.rowData
 
     for (i = 0; i < length; i++) {
-      const colId = dsSortby[i]
+      const colId = sortStateArr[i].id || ''
       const valueA = getProp(rowDataA, colId)
       const valueB = getProp(rowDataB, colId)
-      const sortAsFn = dsSortAs[colId]
+      const sortAsFn = parseValueDic[colId]
       const aVal = sortAsFn ? sortAsFn(valueA, rowDataA) : valueA
       const bVal = sortAsFn ? sortAsFn(valueB, rowDataB) : valueB
       if (aVal > bVal) {
@@ -82,11 +80,11 @@ export function fieldSorter(
 
 export function filterRow(
   row: { rowIndex: number; rowData: Record<string, any>; rowDataFlat: Record<string, any> },
-  dsFilterFields: DsFilterFields
+  filterFns: FilterFns
 ): boolean {
   const { rowData } = row
 
-  const filterResults = Object.entries(dsFilterFields).map(([colId, filterValueOrFn]) => {
+  const filterResults = Object.entries(filterFns).map(([colId, filterValueOrFn]) => {
     // get the (nested) value
     const cellValue = getProp(rowData, colId)
 
@@ -100,41 +98,58 @@ export function filterRow(
   return filterResults.every((r) => r === true)
 }
 
+function checkColumn(payload: {
+  searchStr: string
+  colId: string
+  rowData: Record<string, any>
+  parseValueDic: ParseValueDic
+}): boolean {
+  const { searchStr, colId, rowData, parseValueDic } = payload
+  // get the (nested) value
+  const cellValue = getProp(rowData, colId)
+
+  // check the non-parsed value
+  const resNonParsed = String(cellValue).toLowerCase().indexOf(searchStr) >= 0
+  if (resNonParsed) return true
+
+  // do we have a parseValue function?
+  const parseValue = parseValueDic[colId]
+  if (!parseValue) return false
+
+  // check the parsed value
+  try {
+    const parsedValue = parseValue(cellValue, { formData: rowData })
+    const resParsed = String(parsedValue).toLowerCase().indexOf(searchStr) >= 0
+    if (resParsed) return true
+  } catch (error) {
+    return false
+  }
+  return false
+}
+
 /**
  * Search method that also takes into account transformations needed
  */
-export function findAny(
-  dsSearchIn: DsSearchIn,
-  dsSearchAs: DsSearchAs,
-  row: { rowIndex: number; rowData: Record<string, any>; rowDataFlat: Record<string, any> },
+export function isRowSearchHit(payload: {
   searchStr: string
-): boolean {
+  row: { rowIndex: number; rowData: Record<string, any>; rowDataFlat: Record<string, any> }
+  searchablePropIds: SearchablePropIds
+  parseValueDic: ParseValueDic
+}): boolean {
+  const { searchStr, row, searchablePropIds, parseValueDic } = payload
   const { rowData, rowDataFlat } = row
 
-  // first check the dsSearchAs functions:
-  for (const [colId, searchAsFn] of Object.entries(dsSearchAs)) {
-    const notASearchableColId = dsSearchIn.length && !dsSearchIn.includes(colId)
-    if (notASearchableColId) continue
-
-    // get the (nested) value
-    const cellValue = getProp(rowData, colId)
-
-    if (searchAsFn(cellValue, searchStr, rowData) === true) {
-      return true
-    }
-  }
-  // Search didn't hit yet, so let's finally check the entire flat object:
-
-  searchStr = String(searchStr).toLowerCase()
-
-  for (const [key, value] of Object.entries(rowDataFlat)) {
-    // check which keys to skip
-    const notASearchableKey = dsSearchIn.length && !dsSearchIn.includes(key)
-    if (notASearchableKey) continue
-
-    const valueAsStr = String(value).toLowerCase()
-    // If it doesn't return from above we perform a simple search
-    if (valueAsStr.indexOf(searchStr) >= 0) {
+  // define in which columns/props we will need to search
+  const colIds = isFullArray(searchablePropIds) ? searchablePropIds : Object.keys(rowDataFlat)
+  // limit search only to these IDS
+  for (const colId of colIds) {
+    const result = checkColumn({
+      searchStr: String(searchStr).toLowerCase(),
+      colId,
+      rowData,
+      parseValueDic,
+    })
+    if (result === true) {
       return true
     }
   }
