@@ -40,7 +40,7 @@ dynamicProps: ['subLabel'],
 subLabel: val => val === 'purple' ? 'nice!' : 'choose a color'
 ```
 
-<CodeBlockComponent filename="blitz-form/Dynamic Props - 1" />
+<CodeBlockComponent :importFn="() => import('../blitz-form/Dynamic Props - 1.vue')" :importFnRaw="() => import('../blitz-form/Dynamic Props - 1.vue?raw')" />
 
 ### A Prop Based on the modelValue of "Another" Field
 
@@ -51,7 +51,7 @@ dynamicProps: ['disabled'],
 disabled: (val, { formData }) => !formData.under18
 ```
 
-<CodeBlockComponent filename="blitz-form/Dynamic Props - 2" />
+<CodeBlockComponent :importFn="() => import('../blitz-form/Dynamic Props - 2.vue')" :importFnRaw="() => import('../blitz-form/Dynamic Props - 2.vue?raw')" />
 
 ### Show or Hide a Field Based on Another Field
 
@@ -64,7 +64,7 @@ showCondition: (val, { formData }) => formData.car
 
 Try checking the checkbox and see what happens.
 
-<CodeBlockComponent filename="blitz-form/Dynamic Props - 3" />
+<CodeBlockComponent :importFn="() => import('../blitz-form/Dynamic Props - 3.vue')" :importFnRaw="() => import('../blitz-form/Dynamic Props - 3.vue?raw')" />
 
 ### Calculated "Options" of a Select-Field
 
@@ -72,7 +72,7 @@ Here we show how to automatically render select options based on data from a dat
 
 We then also conditionally show different select options based on the `modelValue` of the _**other selected fields**_.
 
-<CodeBlockComponent filename="blitz-form/Dynamic Props - 4" />
+<CodeBlockComponent :importFn="() => import('../blitz-form/Dynamic Props - 4.vue')" :importFnRaw="() => import('../blitz-form/Dynamic Props - 4.vue?raw')" />
 
 ### Show Content Based on Another Field
 
@@ -86,7 +86,7 @@ Here we show how to show the `modelValue` of one field as the `slot` content of 
 }
 ```
 
-<CodeBlockComponent filename="blitz-form/Dynamic Props - 5" />
+<CodeBlockComponent :importFn="() => import('../blitz-form/Dynamic Props - 5.vue')" :importFnRaw="() => import('../blitz-form/Dynamic Props - 5.vue?raw')" />
 
 ## Computed Field Values
 
@@ -117,7 +117,7 @@ So even though the field `fullName` has no `value` at all, it will always stay i
 
 When implementing a Computed Field Value this way however, `fullName` will never have that computed value emitted. This means that it won't be included in the BlitzForm events: `@update:modelValue`, `@updateField` and `@save`. So it's difficult to capture and save this calculated value alongside your other data. See the next section for another method.
 
-<CodeBlockComponent filename="blitz-form/Computed Field Values - 1" />
+<CodeBlockComponent :importFn="() => import('../blitz-form/Computed Field Values - 1.vue')" :importFnRaw="() => import('../blitz-form/Computed Field Values - 1.vue?raw')" />
 
 ### Update via `updateField`
 
@@ -156,7 +156,7 @@ This method has pro's and con's though:
 - CON: when your database already has data, you cannot use this without manually updating what's already in your database
 - CON: if you want to save the Computed Field Value to your database, you have to include this Computed Field Value in all forms the user can edit this data
 
-<CodeBlockComponent filename="blitz-form/Computed Field Values - 2" />
+<CodeBlockComponent :importFn="() => import('../blitz-form/Computed Field Values - 2.vue')" :importFnRaw="() => import('../blitz-form/Computed Field Values - 2.vue?raw')" />
 
 ### Combine `parseValue` & `updateField`
 
@@ -196,7 +196,7 @@ However, keep in mind that also this method has its own pro's and con's:
 
 Hint: add `showCondition: false` if you want to hide the field but still have it save its content in the formData.
 
-<CodeBlockComponent filename="blitz-form/Computed Field Values - 3" />
+<CodeBlockComponent :importFn="() => import('../blitz-form/Computed Field Values - 3.vue')" :importFnRaw="() => import('../blitz-form/Computed Field Values - 3.vue?raw')" />
 
 ## Using Locally Registered Components
 
@@ -219,4 +219,4 @@ const schema = [
 
 The example below uses this method:
 
-<CodeBlockComponent filename="advanced/Using Locally Registered Components" />
+<CodeBlockComponent :importFn="() => import('./Using Locally Registered Components.vue')" :importFnRaw="() => import('./Using Locally Registered Components.vue?raw')" />
