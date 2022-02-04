@@ -7,7 +7,7 @@ import type { BlitzFieldProps, FormContext, Mode, UpdateModelValueOrigin } from 
 import { ROW_SELECTION_ID } from '@blitzar/types'
 import BlitzTh from '../BlitzTh/BlitzTh.vue'
 import BlitzTableItem from '../BlitzTableItem/BlitzTableItem.vue'
-import type { TableMeta, BlitzColumnProps, SortState, BlitzColumn } from '../typesTable'
+import type { TableMeta, SortState, BlitzColumn } from '../typesTable'
 
 /**
  * An implementation of a Datatable and Datagrid compatible with BlitzTableOuter
