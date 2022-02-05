@@ -633,8 +633,19 @@ export default defineComponent({
       const { evalPropOrAttr } = this
       const component = evalPropOrAttr('component')
       if (isString(component)) return component
-      const { name } = component || {}
-      return name
+
+      // Check if the name exists in the object
+      // If yes, return it
+      if (component.name) {
+        return component.name
+        // Check if the object is a component
+        // If yes, return true
+      } else if (component && typeof component.render === 'function'){
+        return true
+        // If neither is true, return undefined
+      } else {
+        return null
+      }
     },
     usesInternalLabels(): boolean {
       const { evalPropOrAttr, componentName } = this
