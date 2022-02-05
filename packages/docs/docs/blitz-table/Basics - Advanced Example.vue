@@ -80,7 +80,6 @@ onMounted(async () => {
       :shownRowsInfoField="{ component: 'div' }"
     />
   </div>
-  poop
 </template>
 
 <style scoped>
