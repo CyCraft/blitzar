@@ -629,28 +629,9 @@ export default defineComponent({
       if (isPlainObject(slots)) return slots.default
       return undefined
     },
-    componentName(): any {
-      const { evalPropOrAttr } = this
-      const component = evalPropOrAttr('component')
-      if (isString(component)) return component
-
-      // Check if the name exists in the object
-      // If yes, return it
-      if (component.name) {
-        return component.name
-        // Check if the object is a component
-        // If yes, return true
-      } else if (component && typeof component.render === 'function'){
-        return true
-        // If neither is true, return undefined
-      } else {
-        return null
-      }
-    },
     usesInternalLabels(): boolean {
-      const { evalPropOrAttr, componentName } = this
-      const internalLabels = evalPropOrAttr('internalLabels')
-      return internalLabels && !isNullOrUndefined(componentName)
+      const { evalPropOrAttr } = this
+      return Boolean(evalPropOrAttr('internalLabels') && evalPropOrAttr('component'))
     },
     langCalculated(): Lang {
       const { evalPropOrAttr } = this
@@ -854,12 +835,11 @@ export default defineComponent({
     :class="[
       'blitz-field',
       `blitz-field--${evalPropOrAttr('mode')}`,
-      `blitz-field--${componentName}`,
       `blitz-field--label-${labelPosition}`,
       {
         'blitz-field--no-label': !labelUsedHere,
         'blitz-field--no-sub-label': !subLabelHtmlUsedHere,
-        'blitz-field--no-component': !componentName,
+        'blitz-field--no-component': !evalPropOrAttr('component'),
       },
       evalPropOrAttr('fieldClasses'),
       $attrs.class,
