@@ -5,7 +5,7 @@ module.exports = {
     browser: true,
     es2021: true,
     node: true,
-    'vue/setup-compiler-macros': true, // enables `<script setup>`
+    'vue/setup-compiler-macros': true, // required for `<script setup>`
   },
   parser: 'vue-eslint-parser',
   parserOptions: {
@@ -24,7 +24,7 @@ module.exports = {
   ],
   // add your custom rules here
   rules: {
-    'vue/script-setup-uses-vars': 'error', // enables `<script setup>`
+    'vue/script-setup-uses-vars': 'error', // required for `<script setup>`
     '@typescript-eslint/no-unused-vars': 'off',
     '@typescript-eslint/array-type': ['error', { default: 'array' }],
     '@typescript-eslint/no-explicit-any': 'off',
@@ -35,7 +35,7 @@ module.exports = {
     'vue/v-on-event-hyphenation': ['error', 'never'],
   },
   globals: {
-    defineProps: 'readonly',
-    defineEmits: 'readonly',
+    defineProps: 'readonly', // required for `<script setup>`
+    defineEmits: 'readonly', // required for `<script setup>`
   },
 }
