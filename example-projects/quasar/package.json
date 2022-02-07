@@ -14,7 +14,7 @@
     "blitzar": "^1.1.6",
     "core-js": "^3.6.5",
     "quasar": "^2.0.0",
-    "vue": "^3.0.0",
+    "vue": "^3.2.29",
     "vue-router": "^4.0.0"
   },
   "devDependencies": {

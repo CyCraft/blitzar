@@ -1,7 +1,6 @@
 import { getProp } from 'path-to-prop'
-import { MORE_PAGES } from '@blitzar/types'
-import type { FilterFns, SearchablePropIds, ParseValueDic, SortState } from './typesTable'
 import { isFullArray } from 'is-what'
+import { MORE_PAGES, FilterFns, SearchablePropIds, ParseValueDic, SortState } from '@blitzar/types'
 
 export function createPagingRange(nrOfPages: number, currentPage: number) {
   const delta = 2
@@ -40,7 +39,7 @@ export function createPagingRange(nrOfPages: number, currentPage: number) {
  * @returns a function that can be plugged into `.sort()`
  */
 export function sortFactory(
-  sortStateArr: SortState[],
+  sortStateArr: SortState,
   parseValueDic: ParseValueDic = {}
 ): (a: any, b: any) => number {
   let i
@@ -57,16 +56,23 @@ export function sortFactory(
     rowA: { rowIndex: number; rowData: Record<string, any>; rowDataFlat: Record<string, any> },
     rowB: { rowIndex: number; rowData: Record<string, any>; rowDataFlat: Record<string, any> }
   ) {
-    const rowDataA = rowA.rowData
-    const rowDataB = rowB.rowData
-
     for (i = 0; i < length; i++) {
       const colId = sortStateArr[i].id || ''
-      const valueA = getProp(rowDataA, colId)
-      const valueB = getProp(rowDataB, colId)
-      const sortAsFn = parseValueDic[colId]
-      const aVal = sortAsFn ? sortAsFn(valueA, rowDataA) : valueA
-      const bVal = sortAsFn ? sortAsFn(valueB, rowDataB) : valueB
+      const valueA: any = getProp(rowA.rowData, colId)
+      const valueB: any = getProp(rowB.rowData, colId)
+      const parseFn = parseValueDic[colId]
+      let aVal = valueA
+      let bVal = valueB
+      if (parseFn) {
+        try {
+          // TODO: make sure that the proper FormContext is passed here
+          aVal = parseFn(valueA, { formData: rowA.rowData, formDataFlat: rowA.rowDataFlat } as any)
+        } catch (e) {/** */} // prettier-ignore
+        try {
+          // TODO: make sure that the proper FormContext is passed here
+          bVal = parseFn(valueB, { formData: rowB.rowData, formDataFlat: rowB.rowDataFlat } as any)
+        } catch (e) {/** */} // prettier-ignore
+      }
       if (aVal > bVal) {
         return dir[i]
       }
@@ -101,12 +107,12 @@ export function filterRow(
 function checkColumn(payload: {
   searchStr: string
   colId: string
-  rowData: Record<string, any>
+  row: { rowIndex: number; rowData: Record<string, any>; rowDataFlat: Record<string, any> }
   parseValueDic: ParseValueDic
 }): boolean {
-  const { searchStr, colId, rowData, parseValueDic } = payload
+  const { searchStr, colId, row, parseValueDic } = payload
   // get the (nested) value
-  const cellValue = getProp(rowData, colId)
+  const cellValue = getProp(row.rowData, colId)
 
   // check the non-parsed value
   const resNonParsed = String(cellValue).toLowerCase().indexOf(searchStr) >= 0
@@ -118,7 +124,11 @@ function checkColumn(payload: {
 
   // check the parsed value
   try {
-    const parsedValue = parseValue(cellValue, { formData: rowData })
+    // TODO: properly pass FormContext here!!!
+    const parsedValue = parseValue(cellValue, {
+      formData: row.rowData,
+      formDataFlat: row.rowDataFlat,
+    } as any)
     const resParsed = String(parsedValue).toLowerCase().indexOf(searchStr) >= 0
     if (resParsed) return true
   } catch (error) {
@@ -137,16 +147,15 @@ export function isRowSearchHit(payload: {
   parseValueDic: ParseValueDic
 }): boolean {
   const { searchStr, row, searchablePropIds, parseValueDic } = payload
-  const { rowData, rowDataFlat } = row
 
   // define in which columns/props we will need to search
-  const colIds = isFullArray(searchablePropIds) ? searchablePropIds : Object.keys(rowDataFlat)
+  const colIds = isFullArray(searchablePropIds) ? searchablePropIds : Object.keys(row.rowDataFlat)
   // limit search only to these IDS
   for (const colId of colIds) {
     const result = checkColumn({
       searchStr: String(searchStr).toLowerCase(),
       colId,
-      rowData,
+      row,
       parseValueDic,
     })
     if (result === true) {

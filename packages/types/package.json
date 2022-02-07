@@ -1,25 +1,21 @@
 {
   "name": "@blitzar/types",
   "version": "1.1.7",
+  "type": "module",
   "author": "Luca Ban - Mesqueeb",
   "funding": "https://github.com/sponsors/mesqueeb",
   "description": "Blitzar types",
-  "module": "./dist/index.es.js",
-  "main": "./dist/index.umd.js",
-  "types": "./dist/types/index.d.ts",
+  "main": "./src/index.ts",
   "exports": {
     ".": {
-      "import": "./dist/index.es.js",
-      "require": "./dist/index.umd.js",
-      "types": "./dist/types/index.d.ts"
+      "import": "./src/index.ts"
     }
   },
   "files": [
     "dist"
   ],
-  "scripts": {
-    "build": "rimraf dist && rollup -c ./build.js",
-    "dev": "rollup -c ./build.js --watch"
+  "dependencies": {
+    "type-fest": "^2.11.1"
   },
   "keywords": [
     "blitzar",

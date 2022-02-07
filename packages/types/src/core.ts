@@ -1,8 +1,20 @@
+export type Lang = {
+  archive: string
+  delete: string
+  cancel: string
+  edit: string
+  save: string
+  requiredField: string
+  formValidationError: string
+}
+
+export type Mode = 'edit' | 'readonly' | 'disabled' | 'raw'
+
 export type FormContext = {
   formData: Record<string, any>
   formDataFlat: Record<string, any>
-  formMode: 'edit' | 'readonly' | 'disabled' | 'raw'
-  mode: 'edit' | 'readonly' | 'disabled' | 'raw'
+  formMode: Mode
+  mode: Mode
   updateField: (payload: { id: string; value: any }) => void
   lang: Lang
   /** Only available in BlitzListForm */
@@ -16,33 +28,9 @@ export type FormContext = {
   [key: string]: any
 }
 
-export type DynamicProp<T> = (val: any, formContext: FormContext) => T
-
-/**
- * TODO: This is actually just the type of the props of a BlitzField.vue
- *       must find a better way to auto type this
- */
-export type BlitzFieldProps = {
-  error?: (val: any, formContext: FormContext) => null | string
-  required?: boolean
-  [key: string]: any
-}
-
-export type Schema = BlitzFieldProps[]
-
-export type Mode = 'edit' | 'readonly' | 'disabled' | 'raw'
+export type DynamicProp<T> = T | ((val: any, formContext: FormContext) => T)
 
 export type ShowErrorsOn = 'interaction' | 'save' | 'save-focus' | 'never' | 'always'
-
-export type Lang = {
-  archive: string
-  delete: string
-  cancel: string
-  edit: string
-  save: string
-  requiredField: string
-  formValidationError: string
-}
 
 /**
  * the 'origin' param explains the reason `@update:modelValue` was emitted from a field:
