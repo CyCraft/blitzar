@@ -1,5 +1,6 @@
 import { ComputedRef, Ref, WritableComputedRef } from 'vue'
 import { FormContext } from './core'
+import { AnyRef } from './VueExternalProps'
 
 export const ROW_SELECTION_ID = 'BLITZ-TABLE-ROW-SELECTION' as const
 
@@ -29,6 +30,10 @@ export type FiltersState = { [fieldId in string]: Map<string | number | boolean 
 export type SortState = { id: string; direction: 'asc' | 'desc' }[]
 
 export type TableMeta = {
+  /**
+   * The BlitzTable lang object from the props. Defaults to an empty object.
+   */
+  lang: AnyRef<Record<string, string>>
   /**
    * The sort state
    */
@@ -77,10 +82,6 @@ export type TableMeta = {
    * The item "to" of paginated items for the current filtered/sorted data
    */
   toIndex: ComputedRef<number>
-}
-
-export type FilterFns = {
-  [colId in string]: (cellValue: any, rowData: Record<string, any>) => boolean | any
 }
 
 export type SearchablePropIds = string[]

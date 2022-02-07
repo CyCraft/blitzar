@@ -20,6 +20,8 @@ export type FilterOption = {
   defaultValue?: boolean
 }
 
+export type BlitzFilterOptions = { [fieldId in string]: FilterOption[] }
+
 export const blitzTableProps = {
   /**
    * The schema for the columns you want to generate. (BlitzForm schema format)
@@ -110,10 +112,6 @@ export const blitzTableProps = {
    * By default the rows show just the raw data without showing field components. If you set `mode: 'edit'` your entire table will show the actual (editable) component as per your schema.
    */
   mode: { type: String as PropType<Mode>, default: 'raw' },
-  filters: {
-    type: Object as PropType<{ [fieldId in string]: FilterOption[] }>,
-    default: (): { [fieldId in string]: FilterOption[] } => ({}),
-  },
   /**
    * Can be used with v-model:filtersState
    * @example
@@ -166,12 +164,21 @@ export const blitzTableProps = {
   /**
    * An input field as per BlitzField syntax.
    *
-   * - It must be compatible with `v-model` and accept a String as `modelValue`
+   * - It must be compatible with `v-model` and accept a `string` as `modelValue`
    * - Will receive `.blitz-table--search` as class
    *
    * TODO: add @example
    */
   searchField: { type: Object as PropType<BlitzFieldProps>, default: undefined },
+  /**
+   * A special field that shows checkboxes as per BlitzField syntax.
+   *
+   * - It must be compatible with `v-model` and accept a `FiltersState` as `modelValue`
+   * - Will receive `.blitz-table--filters` as class
+   *
+   * TODO: add @example
+   */
+  filtersField: { type: Object as PropType<BlitzFieldProps>, default: undefined },
   /**
    * A toggle field as per BlitzField syntax.
    *

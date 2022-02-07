@@ -2,18 +2,22 @@ import { ref, computed, watch, nextTick, Ref, ComputedRef, WritableComputedRef }
 import { flattenObject } from 'flatten-anything'
 import { isEmptyObject } from 'is-what'
 import type {
-  FilterFns,
   SearchablePropIds,
   ParseValueDic,
   SortState,
   BlitzTableProps,
   TableMeta,
   FiltersState,
+  AnyRef,
 } from '@blitzar/types'
-import { createPagingRange, sortFactory, filterRow, isRowSearchHit } from '../helpersTable'
+import {
+  createPagingRange,
+  sortFactory,
+  isRowFilterHit,
+  isRowSearchHit,
+  shouldFilterRows,
+} from '../helpersTable'
 import { propToWriteableComputed } from '../helpersVue'
-
-type AnyRef<T> = Ref<T> | ComputedRef<T>
 
 export function useTableMeta(payload: {
   emit: {
@@ -26,6 +30,7 @@ export function useTableMeta(payload: {
   }
   currentRowIndexes: Ref<number[]>
   rows: AnyRef<BlitzTableProps['rows']>
+  lang: AnyRef<Record<string, string>>
   sortState: SortState
   filtersState: FiltersState
   rowsPerPage: number
@@ -34,7 +39,7 @@ export function useTableMeta(payload: {
   searchablePropIds: AnyRef<SearchablePropIds>
   parseValueDic: AnyRef<ParseValueDic>
 }): TableMeta {
-  const { emit, rows, currentRowIndexes, searchablePropIds, parseValueDic } = payload
+  const { emit, rows, lang, currentRowIndexes, searchablePropIds, parseValueDic } = payload
 
   const sortState = propToWriteableComputed(payload.sortState, (newVal) =>
     emit('update:sortState', newVal)
@@ -59,15 +64,12 @@ export function useTableMeta(payload: {
 
   const rowsFlat = computed(() => rows.value.map((row) => flattenObject(row)))
 
-  const filterFns = ref<FilterFns>({})
-
   const shouldCalculateRows = computed(() => {
     console.log(`shouldCalculateRows!`)
     rows.value
     sortState.value
-    filtersState.value
     searchValue.value
-    filterFns.value
+    Object.values(filtersState.value).map((map) => map.values())
     searchablePropIds.value
     parseValueDic.value
     rowsPerPage.value
@@ -100,7 +102,10 @@ export function useTableMeta(payload: {
     (_) => {
       let result = []
 
-      if (!searchValue.value && !sortState.value.length && isEmptyObject(filterFns)) {
+      const searchingOrFiltering = !!searchValue.value || shouldFilterRows(filtersState.value)
+      const sorting = sortState.value.length > 0
+
+      if (!searchingOrFiltering && !sorting) {
         // Skip processing and just get the currentRowIndexes
         result = rows.value.map((val, i) => i)
       } else {
@@ -111,22 +116,29 @@ export function useTableMeta(payload: {
           rowDataFlat: rowsFlat.value[i],
         }))
 
-        result = result.filter((row) => {
-          return (
+        if (searchingOrFiltering) {
+          result = result.filter((row) => {
             // Filter it by field
-            filterRow(row, filterFns.value) &&
+            const filterHit = isRowFilterHit({
+              filtersState: filtersState.value,
+              row,
+              parseValueDic: parseValueDic.value,
+            })
+            if (!filterHit) return false
+
             // Search it
-            isRowSearchHit({
+            const searchHit = isRowSearchHit({
               searchStr: searchValue.value,
               row,
               searchablePropIds: searchablePropIds.value,
               parseValueDic: parseValueDic.value,
             })
-          )
-        })
+            return searchHit
+          })
+        }
 
         // Sort it
-        if (sortState.value.length) {
+        if (sorting) {
           result.sort(sortFactory(sortState.value, parseValueDic.value))
         }
 
@@ -141,6 +153,7 @@ export function useTableMeta(payload: {
   )
 
   return {
+    lang,
     sortState,
     filtersState,
     searchValue,

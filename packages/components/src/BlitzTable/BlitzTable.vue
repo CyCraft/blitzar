@@ -14,7 +14,6 @@ import type {
   FiltersState,
   ParseValueDic,
   SortState,
-  BlitzPaginationProps,
 } from '@blitzar/types'
 import { FormContext, ROW_SELECTION_ID, blitzTableProps } from '@blitzar/types'
 import { useTableMeta } from './tableMeta'
@@ -142,6 +141,7 @@ const tableMeta = useTableMeta({
   emit,
   currentRowIndexes,
   rows: computed(() => props.rows),
+  lang: computed(() => props.lang || {}),
   sortState: props.sortState,
   filtersState: props.filtersState,
   rowsPerPage: props.rowsPerPage,
@@ -157,11 +157,9 @@ const {
   pageNr,
   searchValue,
   rowCount,
-  pageCount,
   fromIndex,
   toIndex,
   pageRowIndexes,
-  pageLinks,
 } = tableMeta
 
 // if there is no paginationField provided
@@ -247,6 +245,7 @@ function applyFieldDefaults(field?: BlitzFieldProps): BlitzFieldProps | undefine
 
 const fTitle = computed(() => applyFieldDefaults(props.titleField))
 const fSearch = computed(() => applyFieldDefaults(props.searchField))
+const fFilters = computed(() => applyFieldDefaults(props.filtersField))
 const fGridToggle = computed(() => applyFieldDefaults(props.gridToggleField))
 const fPagination = computed(() => applyFieldDefaults(props.paginationField))
 const fShownRowsInfo = computed(() => {
@@ -264,6 +263,13 @@ const fRowsPerPage = applyFieldDefaults(props.rowsPerPageField)
 <template>
   <div class="blitz-table" v-bind="$attrs">
     <BlitzField class="blitz-table--title" v-bind="fTitle" />
+
+    <BlitzField
+      v-if="fFilters"
+      v-model="filtersState"
+      v-bind="fFilters"
+      class="blitz-table--filters"
+    />
 
     <BlitzField v-if="fSearch" v-model="searchValue" v-bind="fSearch" class="blitz-table--search" />
 
@@ -429,6 +435,7 @@ const fRowsPerPage = applyFieldDefaults(props.rowsPerPageField)
   grid-gap: 1rem;
   grid-template-areas:
     'title title'
+    'filters filters'
     'search grid-toggle'
     'content content'
     'pagination pagination'
@@ -436,6 +443,9 @@ const fRowsPerPage = applyFieldDefaults(props.rowsPerPageField)
 }
 .blitz-table--title {
   grid-area: title;
+}
+.blitz-table--filters {
+  grid-area: filters;
 }
 .blitz-table--search {
   grid-area: search;

@@ -1,6 +1,12 @@
 import { getProp } from 'path-to-prop'
 import { isFullArray } from 'is-what'
-import { MORE_PAGES, FilterFns, SearchablePropIds, ParseValueDic, SortState } from '@blitzar/types'
+import {
+  MORE_PAGES,
+  SearchablePropIds,
+  ParseValueDic,
+  SortState,
+  FiltersState,
+} from '@blitzar/types'
 
 export function createPagingRange(nrOfPages: number, currentPage: number) {
   const delta = 2
@@ -33,6 +39,10 @@ export function createPagingRange(nrOfPages: number, currentPage: number) {
     length = range[i]
   }
   return rangeWithDots
+}
+
+export function shouldFilterRows(filtersState: FiltersState): boolean {
+  return Object.values(filtersState).some((map) => [...map.values()].includes(false))
 }
 
 /**
@@ -84,27 +94,52 @@ export function sortFactory(
   }
 }
 
-export function filterRow(
-  row: { rowIndex: number; rowData: Record<string, any>; rowDataFlat: Record<string, any> },
-  filterFns: FilterFns
-): boolean {
-  const { rowData } = row
+export function isRowFilterHit(payload: {
+  filtersState: FiltersState
+  row: { rowIndex: number; rowData: Record<string, any>; rowDataFlat: Record<string, any> }
+  parseValueDic: ParseValueDic
+}): boolean {
+  const { filtersState, row, parseValueDic } = payload
 
-  const filterResults = Object.entries(filterFns).map(([colId, filterValueOrFn]) => {
-    // get the (nested) value
-    const cellValue = getProp(rowData, colId)
+  return Object.entries(filtersState).every(([fieldId, filtersMap]) => {
+    return [...filtersMap.entries()].every(([expectedValue, shouldInclude], i) => {
+      // get the (nested) value
+      const cellValue = getProp(row.rowData, fieldId)
 
-    if (typeof filterValueOrFn === 'function') {
-      return filterValueOrFn(cellValue, rowData)
-    }
-    return cellValue === filterValueOrFn
+      // the cellValue matches the expectedValue
+      if (cellValue === expectedValue) {
+        // return true if we should include this row, or false if not
+        return shouldInclude
+      }
+
+      // do we have a parseValue function?
+      const parseValue = parseValueDic[fieldId]
+      if (!parseValue) {
+        // no more checking so we know for sure this expectedValue is not the cellValue
+        // so we don't need to check wether or not to include this row, so let's include it:
+        return true
+      }
+
+      try {
+          // TODO: properly pass FormContext here!!!
+        const cellValueParsed: any = parseValue(cellValue, {
+          formData: row.rowData,
+          formDataFlat: row.rowDataFlat,
+        } as any)
+        // we successfully got the parsedValue
+        // the cellValueParsed matches the expectedValue
+        if (cellValueParsed === expectedValue) {
+          // return true if we should include this row, or false if not
+          return shouldInclude
+        }
+      } catch (e) {/***/} // prettier-ignore
+      // if we didn't get the cellValueParsed we can just include the row for this check
+      return true
+    })
   })
-
-  // the filters currently are chained with `AND`, so check with `.every`
-  return filterResults.every((r) => r === true)
 }
 
-function checkColumn(payload: {
+function isColumnSearchHit(payload: {
   searchStr: string
   colId: string
   row: { rowIndex: number; rowData: Record<string, any>; rowDataFlat: Record<string, any> }
@@ -152,7 +187,7 @@ export function isRowSearchHit(payload: {
   const colIds = isFullArray(searchablePropIds) ? searchablePropIds : Object.keys(row.rowDataFlat)
   // limit search only to these IDS
   for (const colId of colIds) {
-    const result = checkColumn({
+    const result = isColumnSearchHit({
       searchStr: String(searchStr).toLowerCase(),
       colId,
       row,
