@@ -16,11 +16,13 @@ export type BlitzColumn = BlitzFieldProps & BlitzColumnProps
 export type FilterOption = {
   label: string
   value: string | number | boolean | null
-  detectValues?: boolean
   defaultValue?: boolean
 }
+export type FilterOptionAuto = {
+  detectValues: true
+}
 
-export type BlitzFilterOptions = { [fieldId in string]: FilterOption[] }
+export type BlitzFilterOptions = { [fieldId in string]: (FilterOption | FilterOptionAuto)[] }
 
 export const blitzTableProps = {
   /**

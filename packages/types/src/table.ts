@@ -31,6 +31,10 @@ export type SortState = { id: string; direction: 'asc' | 'desc' }[]
 
 export type TableMeta = {
   /**
+   * The original BlitzTable rows as passed to BlitzTable. Non-sorted/filtered/searched.
+   */
+  rows: AnyRef<Record<string, unknown>[]>
+  /**
    * The BlitzTable lang object from the props. Defaults to an empty object.
    */
   lang: AnyRef<Record<string, string>>

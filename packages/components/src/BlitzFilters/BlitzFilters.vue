@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { computed, nextTick, watch } from 'vue'
 import { FiltersState, FilterOption, TableMeta, BlitzFilterOptions } from '@blitzar/types'
+import { getProp } from 'path-to-prop'
 
 const props = defineProps<{
   /**
@@ -20,11 +21,23 @@ const filterOptions = computed<{ fieldId: string; filterLabel: string; options: 
     return Object.entries(props.filterOptions || {}).map(([fieldId, filterOptions]) => {
       const filterLabel = props.tableMeta.lang.value[fieldId] || fieldId
 
-      let options = filterOptions
+      let options: FilterOption[] = filterOptions.filter(
+        (o): o is FilterOption => !('detectValues' in o) || !o.detectValues
+      )
+      const filterOptionsAuto = filterOptions.filter(
+        (o): o is FilterOption => 'detectValues' in o && o.detectValues
+      )
 
-      const autoDetectOption = filterOptions.find((o) => o.detectValues)
-      if (autoDetectOption) {
-        //
+      if (filterOptionsAuto.length) {
+        // add options based on the rows
+        const rowCellValues = new Set<any>()
+        for (const row of props.tableMeta.rows.value) {
+          const cellValue = getProp(row, fieldId)
+          rowCellValues.add(cellValue)
+        }
+        rowCellValues.forEach((value) => {
+          options.push({ label: `${value}`, value: value })
+        })
       }
 
       options = options.map((o) => ({
@@ -33,28 +46,6 @@ const filterOptions = computed<{ fieldId: string; filterLabel: string; options: 
       }))
 
       return { fieldId, filterLabel, options }
-
-      // const map = new Map<any, { value: string; count: number }>()
-      // const rows = [...tableInfo.db.data.values()]
-
-      // for (const row of rows) {
-      //   // grab value
-      //   const value: any = getProp(row, fieldId)
-      //   // set map
-      //   if (!map.has(value)) map.set(value, { value, count: 0 })
-      //   // increment map count
-      //   const rowInfo = map.get(value) || { count: 0 }
-      //   rowInfo.count++
-      // }
-
-      // return [...map.values()].reduce<FilterOption[]>((carry, info) => {
-      //   const { count, value } = info
-      //   if (count < 10) return carry
-      //   const label = labelDic[value] || value || '未設定'
-      //   carry.push({ label, value })
-      //   return carry
-      // }, [])
-      // return { fieldId, filterLabel, options }
     })
   }
 )

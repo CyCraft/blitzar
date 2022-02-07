@@ -153,6 +153,7 @@ export function useTableMeta(payload: {
   )
 
   return {
+    rows,
     lang,
     sortState,
     filtersState,
