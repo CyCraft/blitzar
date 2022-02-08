@@ -1,7 +1,8 @@
 <script lang="ts" setup>
-import { BlitzTableProps, FiltersState } from '@blitzar/types'
 import { ref } from 'vue'
 import BlitzFilters from '../BlitzFilters.vue'
+import { BlitzFilterOptions, FiltersState } from '@blitzar/types'
+import { useTableMeta } from '../../BlitzTable/tableMeta'
 
 const lang = ref<Record<string, string>>({
   color: 'color 🌈',
@@ -9,22 +10,38 @@ const lang = ref<Record<string, string>>({
   blue: 'blue 🦕',
   yellow: 'yellow 🧀',
 })
+
 const filtersState = ref<FiltersState>({
   color: new Map([
-    ['blue', false],
-    ['red', true],
-    ['yellow', false],
+    ['blue', '!=='],
+    ['red', '==='],
+    ['yellow', '!=='],
   ]),
 })
-const filters = ref<BlitzTableProps['filters']>({
+
+const filterOptions = ref<BlitzFilterOptions>({
   color: [
     { label: '!blue', value: 'blue' },
     { label: '!red', value: 'red' },
     { label: '!yellow', value: 'yellow' },
   ],
 })
+
+const tableMeta = useTableMeta({
+  emit: () => {},
+  currentRowIndexes: ref([]),
+  rows: ref([]),
+  lang,
+  sortState: [],
+  filtersState: filtersState.value,
+  rowsPerPage: 0,
+  pageNr: 1,
+  searchValue: '',
+  searchablePropIds: ref([]),
+  parseValueDic: ref({}),
+})
 </script>
 
 <template>
-  <BlitzFilters v-model:filtersState="filtersState" :lang="lang" :filters="filters" />
+  <BlitzFilters v-model="filtersState" :tableMeta="tableMeta" :filterOptions="filterOptions" />
 </template>

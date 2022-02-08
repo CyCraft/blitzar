@@ -1,7 +1,7 @@
 import { PropType } from 'vue'
 import { BlitzFieldProps } from './BlitzFieldProps'
 import { Mode } from './core'
-import { FiltersState, SortState } from './table'
+import { FiltersState, FilterValue, SortState } from './table'
 import { ExternalProps } from './VueExternalProps'
 
 export type BlitzColumnProps = {
@@ -15,8 +15,8 @@ export type BlitzColumn = BlitzFieldProps & BlitzColumnProps
 
 export type FilterOption = {
   label: string
-  value: string | number | boolean | null
-  defaultValue?: boolean
+  value: FilterValue
+  op?: '===' | '!==' | '<' | '>'
 }
 export type FilterOptionAuto = {
   detectValues: true

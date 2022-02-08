@@ -1,7 +1,15 @@
 <script lang="ts" setup>
-import { computed, nextTick, watch } from 'vue'
-import { FiltersState, FilterOption, TableMeta, BlitzFilterOptions } from '@blitzar/types'
+import { isNumber, isDate, isMap } from 'is-what'
+import { computed, nextTick, ref, watch } from 'vue'
+import {
+  FiltersState,
+  FilterOption,
+  TableMeta,
+  BlitzFilterOptions,
+  FilterValue,
+} from '@blitzar/types'
 import { getProp } from 'path-to-prop'
+import { copy } from 'copy-anything'
 
 const props = defineProps<{
   /**
@@ -16,9 +24,11 @@ const emit = defineEmits<{
   (e: 'update:modelValue', payload: FiltersState): void
 }>()
 
+const filterOptionsCopy = ref(copy(props.filterOptions) || {})
+
 const filterOptions = computed<{ fieldId: string; filterLabel: string; options: FilterOption[] }[]>(
   () => {
-    return Object.entries(props.filterOptions || {}).map(([fieldId, filterOptions]) => {
+    return Object.entries(filterOptionsCopy.value).map(([fieldId, filterOptions]) => {
       const filterLabel = props.tableMeta.lang.value[fieldId] || fieldId
 
       let options: FilterOption[] = filterOptions.filter(
@@ -71,19 +81,19 @@ watch(
       for (const option of options) {
         if (map.has(option.value)) continue
 
-        const defaultValue = 'defaultValue' in option ? !!option.defaultValue : true
-        map.set(option.value, defaultValue)
+        const defaultOperation = option.op || '==='
+        map.set(option.value, defaultOperation)
       }
     })
   },
   { immediate: true }
 )
 
-/** // TODO: make it so the setFilter function is debounced per 100ms? At least to detect double-clicks and not emit 3 events in the meantime. */
-async function setFilter(
+/** // TODO: make it so the setInclusionFilter function is debounced per 100ms? At least to detect double-clicks and not emit 3 events in the meantime. */
+async function setInclusionFilter(
   fieldId: string,
-  optionValue: string | number | boolean | null,
-  setTo: boolean,
+  optionValue: FilterValue,
+  setTo: '===' | '!==' | '<' | '>',
   option = ''
 ): Promise<void> {
   await nextTick()
@@ -94,20 +104,38 @@ async function setFilter(
     )
     if (optionAlreadySingleSelection) {
       map.forEach((_, key) => {
-        map.set(key, true)
+        map.set(key, '===')
       })
     } else {
       map.forEach((_, key) => {
-        map.set(key, false)
+        map.set(key, '!==')
       })
     }
   }
   map.set(optionValue, setTo)
 }
+
+async function setRangeFilter(
+  fieldId: string,
+  oldValue: FilterValue,
+  newValue: FilterValue,
+  op: '<' | '>'
+): Promise<void> {
+  await nextTick()
+  const map = props.modelValue[fieldId]
+  map.set(newValue, op)
+  map.delete(oldValue)
+  // we actually also need to update the `filterOptionsCopy` in this case!
+  const filterOption = filterOptionsCopy.value[fieldId]
+  const oldOption: any = filterOption.find((o) => 'value' in o && o.value === oldValue)
+  if (oldOption) (oldOption as any).value = newValue
+}
 </script>
 
 <template>
   <div class="blitz-filters">
+    <!-- <pre>{{ filterOptions }}</pre>
+    <pre>{{ modelValue }}</pre> -->
     <template v-for="f in filterOptions" :key="f.fieldId">
       <div style="padding-right: 1rem">
         <div class="text-caption c-font-medium">
@@ -116,17 +144,26 @@ async function setFilter(
         <template v-for="option in f.options" :key="option">
           <label
             style="margin-right: 0.5rem"
-            @dblclick="() => setFilter(f.fieldId, option.value, true, 'single')"
+            @dblclick="() => setInclusionFilter(f.fieldId, option.value, '===', 'single')"
           >
-            <input
-              v-if="modelValue[f.fieldId]"
-              style="margin-right: 0.25rem"
-              type="checkbox"
-              :checked="modelValue[f.fieldId].get(option.value) || false"
-              @change="(e) => setFilter(f.fieldId, option.value, (e.target as HTMLInputElement)?.checked)"
-            />
-            <span style="user-select: none">{{ option.label }}</span>
-            <!-- ({{ filterCounts[f.fieldId].get(option.value) }}) -->
+            <template v-if="modelValue[f.fieldId]">
+              <input
+                v-if="['===', '!=='].includes(modelValue[f.fieldId].get(option.value) as any)"
+                style="margin-right: 0.25rem"
+                type="checkbox"
+                :checked="modelValue[f.fieldId].get(option.value) === '===' || false"
+                @change="(e) => setInclusionFilter(f.fieldId, option.value, (e.target as HTMLInputElement)?.checked ? '===' : '!==')"
+              />
+              <span style="user-select: none">{{ option.label }}</span>
+              <input
+                v-if="['<', '>'].includes(modelValue[f.fieldId].get(option.value) as any)"
+                style="margin-left: 0.25rem"
+                :type="isNumber(option.value) ? 'number' : isDate(option.value) ? 'date' : 'text'"
+                :value="option.value"
+                @input="(e) => setRangeFilter(f.fieldId, option.value, (e.target as HTMLInputElement)?.value, modelValue[f.fieldId].get(option.value) as any)"
+              />
+              <!-- ({{ filterCounts[f.fieldId].get(option.value) }}) -->
+            </template>
           </label>
         </template>
       </div>

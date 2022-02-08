@@ -7,25 +7,44 @@ export const ROW_SELECTION_ID = 'BLITZ-TABLE-ROW-SELECTION' as const
 export const MORE_PAGES = '...' as const
 
 /**
+ * The possible values that can be filtered on
+ */
+export type FilterValue = string | number | boolean | null | undefined | Date
+
+/**
  * Represents a filter. An object of maps:
  * - Object key — the field ID you want to filter
- * - Map key — the value you want to filter this field by
- * - Map value (boolean) — `true` if we want to filter by this value
+ * - Map key — the value you want to filter this field by or a logic operation
+ *   - `string | number | boolean | null | undefined | Date` if we want to filter by this specific value
+ *   - you can also pass in something you want to check against < or >
+ * - Map value — the operator to put the value through `'===' | '!==' | '<' | '>'`
  *
  * @example
  * ```js
  * // filter all with gender 'female'
  * {
  *   gender: Map([
- *     ['female', true],
- *     ['male', false],
- *     ['other', false],
- *     [null, false],
+ *     ['female', '==='],
+ *     ['male', '!=='],
+ *     ['other', '!=='],
+ *     [null, '!=='],
+ *   ])
+ * }
+ * ```
+ * @example
+ * ```js
+ * // filter all rows with a balance between 100 and 200
+ * {
+ *   balance: Map([
+ *     [100, '>'], // this checks: `value > 100`
+ *     [200, '<'],
  *   ])
  * }
  * ```
  */
-export type FiltersState = { [fieldId in string]: Map<string | number | boolean | null, boolean> }
+export type FiltersState = {
+  [fieldId in string]: Map<FilterValue, '===' | '!==' | '<' | '>'>
+}
 
 export type SortState = { id: string; direction: 'asc' | 'desc' }[]
 

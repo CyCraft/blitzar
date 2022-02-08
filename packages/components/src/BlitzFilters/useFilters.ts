@@ -1,9 +1,10 @@
 import { computed, ref, ComputedRef, Ref, watch } from 'vue'
 import 'blitzar/dist/style.css'
 import { getProp } from 'path-to-prop'
+import { FilterValue } from '@blitzar/types'
 // import { FilterOption, TableInfo } from '../../dbschemas/helpers/tableInfo'
 
-// export type WhereQuery = [string, 'in', (string | number | boolean | null)[]]
+// export type WhereQuery = [string, 'in', (FilterValue)[]]
 
 /**
  * Represents the row counts per filter & value. An object of maps:
@@ -24,14 +25,7 @@ import { getProp } from 'path-to-prop'
  * }
  * ```
  */
-export type FilterCounts = { [fieldId in string]: Map<string | number | boolean | null, number> }
-
-export type SetFilter = (
-  fieldId: string,
-  optionValue: string | number | boolean | null,
-  setTo: boolean,
-  option?: string
-) => void
+export type FilterCounts = { [fieldId in string]: Map<FilterValue, number> }
 
 export function useFilters(tableInfo: any): {
   // whereArrays: ComputedRef<WhereQuery[]>
@@ -56,7 +50,7 @@ export function useFilters(tableInfo: any): {
   // const filterCounts = computed<FilterCounts>(() => {
   //   return filterOptions.value.reduce<FilterCounts>((carry, filterOption) => {
   //     const { fieldId, options } = filterOption
-  //     const countsMap = new Map<string | number | boolean | null, number>()
+  //     const countsMap = new Map<FilterValue, number>()
 
   //     for (const option of options) {
   //       const query = tableInfo.db.where(fieldId, '==', option.value)

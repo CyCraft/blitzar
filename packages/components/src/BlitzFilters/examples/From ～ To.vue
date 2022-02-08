@@ -7,10 +7,13 @@ import { useTableMeta } from '../../BlitzTable/tableMeta'
 const filtersState = ref<FiltersState>({})
 
 const filterOptions = ref<BlitzFilterOptions>({
-  color: [
-    { label: 'Blue', value: 'blue' },
-    { label: 'Red', value: 'red', op: '!==' },
-    { label: 'Yellow', value: 'yellow' },
+  balance: [
+    { label: '', value: 100, op: '>' },
+    { label: '', value: 200, op: '<' },
+  ],
+  birthdate: [
+    { label: '', value: new Date(1945, 0, 1), op: '>' },
+    { label: '', value: new Date(1955, 11, 31), op: '<' },
   ],
 })
 
