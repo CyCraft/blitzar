@@ -1,11 +1,13 @@
 import { getProp } from 'path-to-prop'
-import { isDate, isFullArray } from 'is-what'
+import { isDate, isFullArray, isNumber, isPositiveNumber, isSet, isString } from 'is-what'
 import {
   MORE_PAGES,
   SearchablePropIds,
   ParseValueDic,
   SortState,
   FiltersState,
+  FilterValue,
+  getFilterEntries,
 } from '@blitzar/types'
 
 export function createPagingRange(nrOfPages: number, currentPage: number) {
@@ -42,7 +44,10 @@ export function createPagingRange(nrOfPages: number, currentPage: number) {
 }
 
 export function shouldFilterRows(filtersState: FiltersState): boolean {
-  return Object.values(filtersState).some((map) => !![...map.values()].find((op) => op !== '==='))
+  return Object.values(filtersState).some(
+    (info) =>
+      isPositiveNumber(info['not-in']?.size) || info['>'] !== undefined || info['<'] !== undefined
+  )
 }
 
 /**
@@ -94,12 +99,32 @@ export function sortFactory(
   }
 }
 
-function compare(a: any, op: '===' | '!==' | '<' | '>', b: any): boolean {
+function compare(
+  a: any,
+  op: 'in' | 'not-in' | '<' | '>',
+  b: FilterValue | Set<FilterValue>
+): boolean {
+  if (op === 'in') {
+    if (!isSet(b) || b.size === 0) return true
+    return b.has(a as any)
+  }
+  if (op === 'not-in') {
+    if (!isSet(b) || b.size === 0) return true
+    return !b.has(a as any)
+  }
+
   if (isDate(b)) a = new Date(a)
-  if (op === '===') return a === b
-  if (op === '!==') return a !== b
-  if (op === '<') return a < b
-  if (op === '>') return a > b
+  if (isNumber(b)) a = Number(a)
+  if (isString(b)) a = String(a)
+
+  if (op === '>') {
+    if (!isString(b) && !isNumber(b) && !isDate(b)) return true
+    return (a as any) > b
+  }
+  if (op === '<') {
+    if (!isString(b) && !isNumber(b) && !isDate(b)) return true
+    return (a as any) < b
+  }
   return false
 }
 
@@ -110,33 +135,30 @@ export function isRowFilterHit(payload: {
 }): boolean {
   const { filtersState, row, parseValueDic } = payload
 
-  return Object.entries(filtersState).every(([fieldId, filtersMap]) => {
+  return Object.entries(filtersState).every(([fieldId, info]) => {
     console.log(`========\nfieldId → `, fieldId, '\n========')
 
-    return [...filtersMap.entries()].every(([expectedValue, op]) => {
+    return getFilterEntries(info).every(([op, expectedValue]) => {
       // get the (nested) value
       const cellValue = getProp(row.rowData, fieldId)
 
       // the cellValue matches the expectedValue
-      console.log(`cellValue → `, cellValue)
-      console.log(`op → `, op)
-      console.log(`expectedValue → `, expectedValue)
-      console.log(`compare(cellValue, op, expectedValue) → `, compare(cellValue, op, expectedValue))
+      const passes = compare(cellValue, op, expectedValue)
 
-      if (cellValue === expectedValue) {
-        // return true if we should include this row, or false if not
-        return op === '==='
-      }
-      if ((op === '<' || op === '>') && compare(cellValue, op, expectedValue)) {
-        return true
-      }
+      console.log(`cellValue → `, cellValue, `| isDate → `, isDate(cellValue))
+      console.log(`op → `, op)
+      console.log(`expectedValue → `, expectedValue, `| isDate → `, isDate(expectedValue))
+
+      console.log(`passes → `, passes)
+
+      if (passes) return true
 
       // do we have a parseValue function?
       const parseValue = parseValueDic[fieldId]
       if (!parseValue) {
         // no more checking so we know for sure this expectedValue is not the cellValue
-        // so we don't need to check wether or not to include this row, so let's include it:
-        return true
+        // so we don't need to check wether or not to include this row, so let's include if it passed:
+        return passes
       }
 
       try {
@@ -145,18 +167,12 @@ export function isRowFilterHit(payload: {
           formData: row.rowData,
           formDataFlat: row.rowDataFlat,
         } as any)
-        // we successfully got the parsedValue
-        // the cellValueParsed matches the expectedValue
-        if (cellValueParsed === expectedValue) {
-          // return true if we should include this row, or false if not
-          return op === '==='
-        }
-        if (op === '<' || op === '>') {
-          return compare(cellValueParsed, op, expectedValue)
-        }
+        // we successfully got the parsedValue, let's compare again
+        return compare(cellValueParsed, op, expectedValue)
       } catch (e) {/***/} // prettier-ignore
-      // if we didn't get the cellValueParsed we can just include the row for this check
-      return true
+
+      // if we didn't get the cellValueParsed we can just fall back to the original passed result
+      return passes
     })
   })
 }

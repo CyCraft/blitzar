@@ -16,7 +16,7 @@
     "@meforma/vue-toaster": "^1.3.0",
     "@planetar/code-block": "^1.0.2",
     "blitzar": "^1.1.7",
-    "is-what": "^3.14.1",
+    "is-what": "^4.1.7",
     "vue-final-modal": "^3.4.3",
     "vue-pepicons": "^1.0.9"
   },

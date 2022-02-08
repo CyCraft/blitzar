@@ -2,36 +2,29 @@
 import { ref } from 'vue'
 import BlitzFilters from '../BlitzFilters.vue'
 import { BlitzFilterOptions, FiltersState } from '@blitzar/types'
-import { useTableMeta } from '../../BlitzTable/tableMeta'
+import { tableMetaExamplePayload, useTableMeta } from '../../BlitzTable/tableMeta'
 
 const filtersState = ref<FiltersState>({})
 
 const filterOptions = ref<BlitzFilterOptions>({
   balance: [
-    { label: '', value: 100, op: '>' },
-    { label: '', value: 200, op: '<' },
+    { value: 100, op: '>' },
+    { value: 200, op: '<' },
   ],
   birthdate: [
-    { label: '', value: new Date(1945, 0, 1), op: '>' },
-    { label: '', value: new Date(1955, 11, 31), op: '<' },
+    { value: new Date(1945, 0, 1), op: '>' },
+    { value: Date, op: '<' },
   ],
 })
 
-const tableMeta = useTableMeta({
-  emit: () => {},
-  currentRowIndexes: ref([]),
-  rows: ref([]),
-  lang: ref({}),
-  sortState: [],
-  filtersState: filtersState.value,
-  rowsPerPage: 0,
-  pageNr: 1,
-  searchValue: '',
-  searchablePropIds: ref([]),
-  parseValueDic: ref({}),
-})
+const tableMeta = useTableMeta(tableMetaExamplePayload({ filtersState: filtersState.value }))
 </script>
 
 <template>
   <BlitzFilters v-model="filtersState" :tableMeta="tableMeta" :filterOptions="filterOptions" />
+
+  <details style="margin-top: 1rem">
+    <summary>modelValue</summary>
+    <pre>{{ filtersState }}</pre>
+  </details>
 </template>

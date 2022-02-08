@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import BlitzFilters from '../BlitzFilters.vue'
 import { BlitzFilterOptions, FiltersState } from '@blitzar/types'
-import { useTableMeta } from '../../BlitzTable/tableMeta'
+import { tableMetaExamplePayload, useTableMeta } from '../../BlitzTable/tableMeta'
 
 const filtersState = ref<FiltersState>({})
 
@@ -14,21 +14,14 @@ const filterOptions = ref<BlitzFilterOptions>({
   ],
 })
 
-const tableMeta = useTableMeta({
-  emit: () => {},
-  currentRowIndexes: ref([]),
-  rows: ref([]),
-  lang: ref({}),
-  sortState: [],
-  filtersState: filtersState.value,
-  rowsPerPage: 0,
-  pageNr: 1,
-  searchValue: '',
-  searchablePropIds: ref([]),
-  parseValueDic: ref({}),
-})
+const tableMeta = useTableMeta(tableMetaExamplePayload({ filtersState: filtersState.value }))
 </script>
 
 <template>
   <BlitzFilters v-model="filtersState" :tableMeta="tableMeta" :filterOptions="filterOptions" />
+
+  <details style="margin-top: 1rem">
+    <summary>modelValue</summary>
+    <pre>{{ filtersState }}</pre>
+  </details>
 </template>

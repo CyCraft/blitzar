@@ -14,8 +14,29 @@ export type BlitzColumnProps = {
 export type BlitzColumn = BlitzFieldProps & BlitzColumnProps
 
 export type FilterOption = {
-  label: string
+  /**
+   * Defaults to the value stringified
+   */
+  label?: string
+  /**
+   * The value representing the what needs to be filtered for
+   */
   value: FilterValue
+  /**
+   * - `'===' | '!=='`
+   *   - This will show the filter as checkboxes
+   *   - Checking or unchecking filters in/out the value provided
+   * - `'<' | '>'` will show
+   *   - This will show the filter as input field(s)
+   *   - The input field(s) will allow filtering for greater / lesser than (or higher / lower than)
+   *   - The value provided will be the initial value in the rendered input
+   *   - Depending on the value type, the input field will change accordingly
+   *     - a `Date` value will render `<input type="date" />`
+   *     - a `number` value will render `<input type="number" />`
+   *     - anything else will render `<input type="text" />`
+   *
+   * @default '==='
+   */
   op?: '===' | '!==' | '<' | '>'
 }
 export type FilterOptionAuto = {

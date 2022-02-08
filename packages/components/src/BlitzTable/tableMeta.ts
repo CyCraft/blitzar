@@ -1,6 +1,6 @@
-import { ref, computed, watch, nextTick, Ref, ComputedRef, WritableComputedRef } from 'vue'
+import { ref, computed, watch, nextTick, Ref } from 'vue'
 import { flattenObject } from 'flatten-anything'
-import { isEmptyObject } from 'is-what'
+import { isSet } from 'is-what'
 import type {
   SearchablePropIds,
   ParseValueDic,
@@ -19,7 +19,7 @@ import {
 } from '../helpersTable'
 import { propToWriteableComputed } from '../helpersVue'
 
-export function useTableMeta(payload: {
+type UseTableMetaPayload = {
   emit: {
     (e: 'update:selectedRows', payload: Record<string, any>[]): void
     (e: 'update:filtersState', payload: FiltersState): void
@@ -38,7 +38,9 @@ export function useTableMeta(payload: {
   searchValue: string
   searchablePropIds: AnyRef<SearchablePropIds>
   parseValueDic: AnyRef<ParseValueDic>
-}): TableMeta {
+}
+
+export function useTableMeta(payload: UseTableMetaPayload): TableMeta {
   const { emit, rows, lang, currentRowIndexes, searchablePropIds, parseValueDic } = payload
 
   const sortState = propToWriteableComputed(payload.sortState, (newVal) =>
@@ -69,7 +71,9 @@ export function useTableMeta(payload: {
     rows.value
     sortState.value
     searchValue.value
-    Object.values(filtersState.value).map((map) => map.values())
+    Object.values(filtersState.value).map((info) =>
+      Object.values(info).map((v) => (isSet(v) ? v.size : v))
+    )
     searchablePropIds.value
     parseValueDic.value
     rowsPerPage.value
@@ -167,5 +171,24 @@ export function useTableMeta(payload: {
     pageCount,
     fromIndex,
     toIndex,
+  }
+}
+
+export function tableMetaExamplePayload(
+  partial: Partial<UseTableMetaPayload>
+): UseTableMetaPayload {
+  return {
+    emit: () => {},
+    currentRowIndexes: ref([]),
+    rows: ref([]),
+    lang: ref({}),
+    sortState: [],
+    filtersState: {},
+    rowsPerPage: 0,
+    pageNr: 1,
+    searchValue: '',
+    searchablePropIds: ref([]),
+    parseValueDic: ref({}),
+    ...partial,
   }
 }
