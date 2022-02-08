@@ -67,7 +67,7 @@ export function useTableMeta(payload: UseTableMetaPayload): TableMeta {
   const rowsFlat = computed(() => rows.value.map((row) => flattenObject(row)))
 
   const shouldCalculateRows = computed(() => {
-    console.log(`shouldCalculateRows!`)
+    // console.log(`shouldCalculateRows!`)
     rows.value
     sortState.value
     searchValue.value

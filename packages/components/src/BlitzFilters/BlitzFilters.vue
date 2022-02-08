@@ -84,7 +84,7 @@ for (const [fieldId, options] of Object.entries(props.filterOptions)) {
  * A watcher to detect new options for {@link FilterOptionAuto}
  */
 watch(
-  props.tableMeta.rows.value,
+  props.tableMeta.rows,
   (newRows) => {
     const fieldIds = Object.keys(fieldIdValuesDic.value)
     if (!fieldIds.length) return
@@ -233,7 +233,11 @@ async function setRangeFilter(payload: {
   info[op] = newVal
 }
 
-const lang = computed(() => props.tableMeta.lang.value || {})
+function t(payload: any, fallback?: any): string {
+  const _payload = props.tableMeta.lang.value[`${payload}`] || (payload ? `${payload}` : '')
+  const _fallback = props.tableMeta.lang.value[`${fallback}`] || `${fallback}` || ''
+  return _payload || _fallback
+}
 </script>
 
 <template>
@@ -241,7 +245,7 @@ const lang = computed(() => props.tableMeta.lang.value || {})
     <template v-for="fieldId in combinedFieldIds" :key="fieldId">
       <div class="blitz-filters__section">
         <div class="blitz-filters__field-label" style="">
-          {{ lang[fieldId] || fieldId }}
+          {{ t(fieldId) }}
         </div>
         <div v-if="modelValue[fieldId]" class="blitz-filters__controls">
           <!-- checkboxes -->
@@ -255,13 +259,13 @@ const lang = computed(() => props.tableMeta.lang.value || {})
                 :checked="modelValue[fieldId].in?.has(option.value)"
                 @change="(e) => setCheckbox(fieldId, option.value)"
               />
-              <span v-if="option.label">{{ option.label }}</span>
+              <span v-if="t(option.label, option.value)">{{ t(option.label, option.value) }}</span>
             </label>
           </template>
           <!-- ranges -->
           <template v-for="option in ranges[fieldId] || []" :key="option">
             <label class="blitz-filters__option">
-              <span v-if="option.label">{{ option.label }}</span>
+              <span v-if="t(option.label, option.value)">{{ t(option.label, option.value) }}</span>
               <BlitzField
                 v-bind="fInput"
                 :type="option.type"

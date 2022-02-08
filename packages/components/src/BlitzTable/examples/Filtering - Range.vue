@@ -73,7 +73,7 @@ const filterOptions: BlitzFilterOptions = {
 }
 
 onMounted(async () => {
-  rows.value = users.slice(0, 3)
+  rows.value = users
 })
 </script>
 

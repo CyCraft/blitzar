@@ -136,7 +136,7 @@ export function isRowFilterHit(payload: {
   const { filtersState, row, parseValueDic } = payload
 
   return Object.entries(filtersState).every(([fieldId, info]) => {
-    console.log(`========\nfieldId → `, fieldId, '\n========')
+    // console.log(`========\nfieldId → `, fieldId, '\n========')
 
     return getFilterEntries(info).every(([op, expectedValue]) => {
       // get the (nested) value
@@ -145,11 +145,10 @@ export function isRowFilterHit(payload: {
       // the cellValue matches the expectedValue
       const passes = compare(cellValue, op, expectedValue)
 
-      console.log(`cellValue → `, cellValue, `| isDate → `, isDate(cellValue))
-      console.log(`op → `, op)
-      console.log(`expectedValue → `, expectedValue, `| isDate → `, isDate(expectedValue))
-
-      console.log(`passes → `, passes)
+      // console.log(`cellValue → `, cellValue, `| isDate → `, isDate(cellValue))
+      // console.log(`op → `, op)
+      // console.log(`expectedValue → `, expectedValue, `| isDate → `, isDate(expectedValue))
+      // console.log(`passes → `, passes)
 
       if (passes) return true
 
