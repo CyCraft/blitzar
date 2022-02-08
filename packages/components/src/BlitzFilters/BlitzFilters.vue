@@ -233,10 +233,8 @@ async function setRangeFilter(payload: {
   info[op] = newVal
 }
 
-function t(payload: any, fallback?: any): string {
-  const _payload = props.tableMeta.lang.value[`${payload}`] || (payload ? `${payload}` : '')
-  const _fallback = props.tableMeta.lang.value[`${fallback}`] || `${fallback}` || ''
-  return _payload || _fallback
+function t(payload: any): string {
+  return props.tableMeta.lang.value[`${payload}`] || (payload ? `${payload}` : '')
 }
 </script>
 
@@ -259,13 +257,15 @@ function t(payload: any, fallback?: any): string {
                 :checked="modelValue[fieldId].in?.has(option.value)"
                 @change="(e) => setCheckbox(fieldId, option.value)"
               />
-              <span v-if="t(option.label, option.value)">{{ t(option.label, option.value) }}</span>
+              <span v-if="t(option.label) || t(option.value)">{{
+                t(option.label) || t(option.value)
+              }}</span>
             </label>
           </template>
           <!-- ranges -->
           <template v-for="option in ranges[fieldId] || []" :key="option">
             <label class="blitz-filters__option">
-              <span v-if="t(option.label, option.value)">{{ t(option.label, option.value) }}</span>
+              <span v-if="t(option.label)">{{ t(option.label) }}</span>
               <BlitzField
                 v-bind="fInput"
                 :type="option.type"
