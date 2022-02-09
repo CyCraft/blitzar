@@ -49,8 +49,12 @@ const combinedFieldIds = computed<string[]>(() => {
 })
 /**
  * a Set for unique row values detected so far per fieldId
+ *
+ * `Map<any, number>` represents
+ * - `any` — the value found
+ * - `number` — the amount of times it is present
  */
-const fieldIdValuesDic = ref<{ [fieldId in string]: Set<any> }>({})
+const fieldIdInfoDic = ref<{ [fieldId in string]: Map<any, number> }>({})
 
 const isCheckbox = (o: FilterOption | FilterOptionAuto | Checkbox): o is Checkbox =>
   !('detectValues' in o) && (!o.op || o.op === '===' || o.op === '!==')
@@ -64,18 +68,23 @@ const isAuto = (o: FilterOption | FilterOptionAuto): o is FilterOptionAuto =>
 for (const [fieldId, options] of Object.entries(props.filterOptions)) {
   for (const option of options) {
     if (isCheckbox(option)) {
+      // setup
       if (!checkboxes.value[fieldId]) checkboxes.value[fieldId] = []
+      if (!fieldIdInfoDic.value[fieldId]) fieldIdInfoDic.value[fieldId] = new Map()
+      // add option
       checkboxes.value[fieldId].push({ ...option, op: option.op || '===' })
+      fieldIdInfoDic.value[fieldId].set(option.value, 0)
     }
     if (isRange(option)) {
+      // setup
       if (!ranges.value[fieldId]) ranges.value[fieldId] = []
+      // add option
       const label = option.op === '<' && !option.label ? '～' : option.label
       ranges.value[fieldId].push({ ...option, type: getOptionType(option.value), label })
     }
     if (isAuto(option)) {
-      if (!fieldIdValuesDic.value[fieldId]) {
-        fieldIdValuesDic.value[fieldId] = new Set()
-      }
+      // setup
+      if (!fieldIdInfoDic.value[fieldId]) fieldIdInfoDic.value[fieldId] = new Map()
     }
   }
 }
@@ -86,38 +95,23 @@ for (const [fieldId, options] of Object.entries(props.filterOptions)) {
 watch(
   props.tableMeta.rows,
   (newRows) => {
-    const fieldIds = Object.keys(fieldIdValuesDic.value)
-    if (!fieldIds.length) return
+    const fieldIds = Object.keys(fieldIdInfoDic.value)
 
-    // a Set for unique row values per fieldId
-    const newValuesDic = fieldIds.reduce<Record<string, Set<any>>>(
-      (dic, fieldId) => ({ ...dic, [fieldId]: new Set() }),
-      {}
-    )
-
-    // go through the rows once to build out `newValuesDic`
+    // go through the rows once to build out `fieldIdInfoDic`
     for (const row of newRows) {
       for (const fieldId of fieldIds) {
-        newValuesDic[fieldId].add(getProp(row, fieldId))
-      }
-    }
-
-    for (const [fieldId, rowCellValues] of Object.entries(newValuesDic)) {
-      // set new sets in fieldIdValuesDic
-      let existingSet = fieldIdValuesDic.value[fieldId]
-      if (!existingSet) {
-        existingSet = new Set()
-        fieldIdValuesDic.value[fieldId] = existingSet
-      }
-      // go through the new values
-      for (const newValue of rowCellValues) {
-        // do nothing if it already exists
-        if (existingSet.has(newValue)) continue
-        // add only those that didn't exist yet
-        existingSet.add(newValue)
-        // add new values to checkboxes
-        if (!checkboxes.value[fieldId]) checkboxes.value[fieldId] = []
-        checkboxes.value[fieldId].push({ value: newValue, op: '===' })
+        const foundValue: any = getProp(row, fieldId)
+        let count: undefined | number = fieldIdInfoDic.value[fieldId].get(foundValue)
+        // is it a new value?
+        if (!isNumber(count)) {
+          fieldIdInfoDic.value[fieldId].set(foundValue, 0)
+          count = 0
+          // add new values to checkboxes
+          if (!checkboxes.value[fieldId]) checkboxes.value[fieldId] = []
+          checkboxes.value[fieldId].push({ value: foundValue, op: '===' })
+        }
+        // increment the count!
+        fieldIdInfoDic.value[fieldId].set(foundValue, count + 1)
       }
     }
   },
@@ -257,15 +251,18 @@ function t(payload: any): string {
                 :checked="modelValue[fieldId].in?.has(option.value)"
                 @change="(e) => setCheckbox(fieldId, option.value)"
               />
-              <span v-if="t(option.label) || t(option.value)">{{
-                t(option.label) || t(option.value)
-              }}</span>
+              <span v-if="t(option.label) || t(option.value)" class="_label"
+                >{{ t(option.label) || t(option.value)
+                }}<span v-if="fieldIdInfoDic[fieldId]?.get(option.value)" class="_count"
+                  >({{ fieldIdInfoDic[fieldId]?.get(option.value) }})</span
+                ></span
+              >
             </label>
           </template>
           <!-- ranges -->
           <template v-for="option in ranges[fieldId] || []" :key="option">
             <label class="blitz-filters__option">
-              <span v-if="t(option.label)">{{ t(option.label) }}</span>
+              <span v-if="t(option.label)" class="_label">{{ t(option.label) }}</span>
               <BlitzField
                 v-bind="fInput"
                 :type="option.type"
@@ -274,7 +271,6 @@ function t(payload: any): string {
               />
             </label>
           </template>
-          <!-- ({{ filterCounts[fieldId].get(option.value) }}) -->
         </div>
       </div>
     </template>
@@ -292,18 +288,22 @@ function t(payload: any): string {
 }
 .blitz-filters__controls {
   display: flex;
+  flex-wrap: wrap;
 }
 .blitz-filters__option {
   display: flex;
   align-items: center;
   margin-right: 0.5rem;
 }
-.blitz-filters__option span:first-child {
+.blitz-filters__option ._label:first-child {
   user-select: none;
   margin-right: 0.5rem;
 }
-.blitz-filters__option span:last-child {
+.blitz-filters__option ._label:last-child {
   user-select: none;
   margin-left: 0.25rem;
+}
+.blitz-filters__option ._label ._count {
+  margin-left: 0.4rem;
 }
 </style>
