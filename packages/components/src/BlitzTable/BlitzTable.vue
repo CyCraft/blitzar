@@ -1,27 +1,23 @@
-<script lang="ts">
-import { ref, defineComponent, computed, PropType, watchEffect } from 'vue'
+<script lang="ts" setup>
+import { ref, computed, watchEffect, onBeforeMount } from 'vue'
 import { merge } from 'merge-anything'
-import { isFunction, isFullArray, isBoolean, isFullString, isPlainObject, isArray } from 'is-what'
+import { isFunction, isFullArray, isBoolean, isFullString } from 'is-what'
 import { getBlitzFieldOverwrites } from '../helpersForm'
-import type { BlitzFieldProps, Mode, UpdateModelValueOrigin } from '@blitzar/types'
-import { ROW_SELECTION_ID } from '@blitzar/types'
-import type { BlitzColumn, ParseValueDic, SortState } from '../typesTable'
-import BlitzTableOuter from '../BlitzTableOuter/BlitzTableOuter.vue'
-import BlitzTableInner from '../BlitzTableInner/BlitzTableInner.vue'
-
-/**
- * @typedef GridCardProps
- * @type {object}
- * @property {any} key - Row's key
- * @property {object} row - Row object
- * @property {number} rowIndex - Row's index (0 based) in the filtered and sorted table
- * @property {number} pageIndex - Row's index (0 based) in the current page of the filtered and sorted table
- * @property {object} cols - Column definitions
- * @property {object} colsMap - Column mapping (key is column name, value is column object)
- * @property {boolean} selected - (reactive prop) Is row selected? Can directly be assigned new Boolean value which changes selection state"
- * @property {boolean} expand - (reactive prop) Is row expanded? Can directly be assigned new Boolean value which changes expanded state"
- * @property {string} __trClass - Internal prop passed down to QTr (if used)
- */
+import BlitzForm from '../BlitzForm/BlitzForm.vue'
+import BlitzField from '../BlitzField/BlitzField.vue'
+import BlitzTh from '../BlitzTh/BlitzTh.vue'
+import BlitzTableItem from '../BlitzTableItem/BlitzTableItem.vue'
+import type {
+  BlitzFieldProps,
+  UpdateModelValueOrigin,
+  BlitzColumn,
+  FiltersState,
+  ParseValueDic,
+  SortState,
+} from '@blitzar/types'
+import { FormContext, ROW_SELECTION_ID, blitzTableProps } from '@blitzar/types'
+import { useTableMeta } from './tableMeta'
+import { propToWriteableComputed } from '../helpersVue'
 
 function getSortableProps(col?: BlitzColumn): { sortable: boolean } | undefined {
   if (!isBoolean(col?.sortable) && isFullString(col?.id)) {
@@ -30,367 +26,394 @@ function getSortableProps(col?: BlitzColumn): { sortable: boolean } | undefined 
   return undefined
 }
 
-export default defineComponent({
-  name: 'BlitzTable',
-  components: { BlitzTableInner, BlitzTableOuter },
-  props: {
-    /**
-     * The schema for the columns you want to generate. (BlitzForm schema format)
-     * @example [{ id: 'nameFirst', label: 'First Name', component: 'input' }, { id: 'nameLast', label: 'Last Name', component: 'input' }]
-     * @category column
-     */
-    schemaColumns: {
-      type: Array as PropType<BlitzColumn[]>,
-      default: undefined,
-    },
-    /**
-     * The schema for the grid cards you want to generate. (BlitzForm schema format)
-     * @example [{ id: 'nameFirst', label: 'First Name', component: 'input' }, { id: 'nameLast', label: 'Last Name', component: 'input' }]
-     * @category column
-     */
-    schemaGrid: {
-      type: Array as PropType<BlitzColumn[]>,
-      default: undefined,
-    },
-    /**
-     * Rows of data to display. Use `rows` instead of the QTables `data`. Renamed for clarity.
-     * @example [{ nameFirst: 'Eleanor', nameLast: 'Shellstrop' }, { nameFirst: 'Chidi', nameLast: 'Anagonye' }]
-     * @category model
-     */
-    rows: {
-      type: Array as PropType<Record<string, any>[]>,
-      required: true,
-    },
-    /**
-     * Defaults to `false` (table-view) if `schemaColumns` is provided
-     * Defaults to `true` (grid-view) if `schemaGrid` is provided (and no `schemaColumns`)
-     */
-    isGrid: { type: Boolean, default: undefined },
-    /**
-     * The BlitzForm options you want to use for the grid cards. Eg. You can pass `{ actionButtons: [] }` here to include some action buttons on each grid card.
-     *
-     * Please note:
-     * - The `schema` for the grid cards should be set via the `schemaGrid` prop instead of passing it here as `schema`.
-     * - The BlitzForm used for each grid card will automatically get the row data.
-     * - See the documentation of BlitzForm for more information on the props you can set.
-     * @category column
-     */
-    gridBlitzFormOptions: {
-      type: Object as PropType<Record<string, any>>,
-      default: (): Record<string, any> => ({}),
-    },
-    // /**
-    //  * Custom styling to be applied to each row. Applied like so `:style="rowStyle"`
-    //  * @example 'padding: 1em;'
-    //  * @category style
-    //  */
-    // rowStyle: { type: [Object, Array, String, Function] },
-    // /**
-    //  * Custom classes to be applied to each row. Applied like so `:class="rowClasses"`
-    //  * @example ['dark-theme']
-    //  * @category style
-    //  */
-    // rowClasses: { type: [Object, Array, String, Function] },
-    // /**
-    //  * An object that represents the checkbox when the table is in "selection" mode. You can tell BlitzTable to use a custom checkbox component instead of the default.
-    //  * Defaults to a regular HTML5 checkbox.
-    //  * @example { component: 'MyCheckbox', class: 'table-checkbox' }
-    //  */
-    // selectionComponentProps: {
-    //   type: Object,
-    //   default: () => ({
-    //     component: 'input',
-    //     type: 'checkbox',
-    //   }),
-    // },
-    /**
-     * MUST be used with `v-model:selectedRows="mySelection"`
-     */
-    selectedRows: {
-      type: Array as PropType<Record<string, any>[]>,
-      default: (): Record<string, any>[] => [],
-    },
-    // /**
-    //  * CSS classes to apply to the card (when in grid mode).
-    //  * You can pass a function which will be evaluated just like an Dynamic Prop. The first param passed will be the entire row data. The second is `item` scoped slot object from a QTable.
-    //  * @type {(rowData: Record<string, any>, gridCardProps: GridCardProps, BlitzTableContext: any) => string | Record<string, any> | (string | Record<string, any>)[]}
-    //  * @example 'special-class'
-    //  * @example :card-class="{ 'my-special-class': [Boolean condition] }"
-    //  * @category inherited prop
-    //  */
-    // cardClass: { type: [Function, String, Array, Object] },
-    // /**
-    //  * CSS style to apply to the card (when in grid mode).
-    //  * You can pass a function which will be evaluated just like an Dynamic Prop. The first param passed will be the entire row data. The second is `item` scoped slot object from a QTable.
-    //  * @type {(rowData: Record<string, any>, gridCardProps: GridCardProps, BlitzTableContext: any) => string | Record<string, any> | (string | Record<string, any>)[]}
-    //  * @example 'background-color: #fff'
-    //  * @example :card-style="{ backgroundColor: '#fff' }"
-    //  * @category inherited prop
-    //  */
-    // cardStyle: { type: [Function, String, Array, Object] },
-    /**
-     * By default the rows show just the raw data without showing field components. If you set `mode: 'edit'` your entire table will show the actual (editable) component as per your schema.
-     */
-    mode: { type: String as PropType<Mode>, default: 'raw' },
-    rowsPerPage: { type: Number, default: 10 },
-    /**
-     * A field as per BlitzField syntax.
-     *
-     * Anything you pass here will just be added as title element and receive `.blitz-table--title` as class.
-     *
-     * TODO: add @example
-     */
-    titleField: { type: Object as PropType<BlitzFieldProps>, default: undefined },
-    /**
-     * An input field as per BlitzField syntax.
-     *
-     * It must be compatible with `v-model` and accept a String as `modelValue`.
-     *
-     * Will receive `.blitz-table--search` as class.
-     *
-     * TODO: add @example
-     */
-    searchField: { type: Object as PropType<BlitzFieldProps>, default: undefined },
-    /**
-     * A toggle field as per BlitzField syntax.
-     *
-     * It must be compatible with `v-model` and accept a Boolean as `modelValue`:
-     * - `false` will be interpreted as the table view `isGrid: false` (the default)
-     * - `true` will be interpreted as the grid view `isGrid: true`
-     *
-     * Will receive `.blitz-table--grid-toggle` as class.
-     *
-     * TODO: add @example
-     */
-    gridToggleField: { type: Object as PropType<BlitzFieldProps>, default: undefined },
-    /**
-     * A select or input field as per BlitzField syntax.
-     *
-     * It must be compatible with `v-model` and accept a Number as `modelValue`.
-     *
-     * Other props it receives and can be used are:
-     *
-     * - `showingFrom: Number` — eg. `1` when showing from row 1 to 5
-     * - `showingTo: Number` — eg. `5` when showing from row 1 to 5
-     * - `rowCount: Number` — eg. `100` when there are 100 rows visible, this can differ from the total row count because the rows might be searched/filtered
-     *
-     * Will receive `.blitz-table--rows-per-page` as class.
-     *
-     * TODO: add @example
-     */
-    rowsPerPageField: { type: Object as PropType<BlitzFieldProps>, default: undefined },
-    shownRowsInfoField: { type: Object as PropType<BlitzFieldProps>, default: undefined },
-    paginationField: { type: Object as PropType<BlitzFieldProps>, default: undefined },
-    lang: {
-      type: Object as PropType<Record<string, string>>,
-      default: (): Record<string, string> => ({}),
-    },
-  },
-  emits: {
-    rowClick: (e: MouseEvent, rowData: Record<string, any>) => isPlainObject(rowData),
-    rowDblclick: (e: MouseEvent, rowData: Record<string, any>) => isPlainObject(rowData),
-    cellClick: (e: MouseEvent, rowData: Record<string, any>, colId: string) =>
-      isPlainObject(rowData),
-    cellDblclick: (e: MouseEvent, rowData: Record<string, any>, colId: string) =>
-      isPlainObject(rowData),
-    updateCell: ({
-      rowId,
-      colId,
-      value,
-      origin,
-    }: {
-      rowId: string
-      colId: string
-      value: any
-      origin?: UpdateModelValueOrigin
-    }) => true,
-    'update:isGrid': (payload: boolean) => isBoolean(payload),
-    'update:selectedRows': (payload: Record<string, any>[]) => isArray(payload),
-  },
-  setup(props, { emit }) {
-    const hasColumns = isFullArray(props.schemaColumns)
-    const hasGrid = isFullArray(props.schemaGrid)
+const props = defineProps(blitzTableProps)
 
-    const isGridInner = ref(isBoolean(props.isGrid) ? props.isGrid : !hasColumns && hasGrid)
-    watchEffect(() => emit('update:isGrid', isGridInner.value))
-    watchEffect(() => (isGridInner.value = Boolean(props.isGrid)))
+const emit = defineEmits<{
+  (e: 'rowClick', payload: MouseEvent, rowData: Record<string, any>): void
+  (e: 'rowDblclick', payload: MouseEvent, rowData: Record<string, any>): void
+  (e: 'cellClick', payload: MouseEvent, rowData: Record<string, any>, colId: string): void
+  (e: 'cellDblclick', payload: MouseEvent, rowData: Record<string, any>, colId: string): void
+  (
+    e: 'updateCell',
+    payload: { rowId: string; colId: string; value: any; origin?: UpdateModelValueOrigin }
+  ): void
+  (e: 'update:isGrid', payload: boolean): void
+  (e: 'update:selectedRows', payload: Record<string, any>[]): void
+  (e: 'update:filtersState', payload: FiltersState): void
+  (e: 'update:sortState', payload: SortState): void
+  (e: 'update:rowsPerPage', payload: number): void
+  (e: 'update:pageNr', payload: number): void
+  (e: 'update:searchValue', payload: string): void
+}>()
 
-    function applyBlitzFieldOverwrites(field?: BlitzFieldProps): BlitzFieldProps | undefined {
-      if (!field) return undefined
+const hasColumns = isFullArray(props.schemaColumns)
+const hasGrid = isFullArray(props.schemaGrid)
 
-      return merge(field, getBlitzFieldOverwrites(field, props.lang))
-    }
+const isGridInner = ref(isBoolean(props.isGrid) ? props.isGrid : !hasColumns && hasGrid)
+watchEffect(() => emit('update:isGrid', isGridInner.value))
+watchEffect(() => (isGridInner.value = Boolean(props.isGrid)))
 
-    /** SELECTION related state */
-    const selectedRowsComputed = computed({
-      get(): Record<string, any>[] {
-        return props.selectedRows
-      },
-      set(newSelectedRows: Record<string, any>[]) {
-        /**
-         * This makes it possible to sync the table's selected rows like:
-         * ```html
-         * <BlitzTable v-model:selectedRows="mySelectedRows" />
-         * ```
-         * @property {Record<string, any>[]} newSelectedRows val
-         */
-        emit('update:selectedRows', newSelectedRows)
-      },
-    })
+/**
+ * The row indexes of all the rows currently shown in the table. Sorted, filtered, searched and all.
+ */
+const currentRowIndexes = ref<number[]>([])
 
-    /** SORT related state */
-    const sortState = ref<SortState>({ id: null, direction: 'none' })
-    const sortStateArr = computed<SortState[]>(() => [sortState.value])
+/** SELECTION related state */
+const selectedRows = propToWriteableComputed(props.selectedRows, (newVal) =>
+  emit('update:selectedRows', newVal)
+)
+/**
+ * creates the required column schema props for selection
+ */
+function getSelectionProps(col?: BlitzColumn): Partial<BlitzColumn> | undefined {
+  if (col?.id !== ROW_SELECTION_ID) return
 
-    // apply default `sortable` to columns && add special behaviour for Selection
-    const schemaColumnsComputed = computed<BlitzColumn[] | undefined>(() => {
-      if (!props.schemaColumns) return undefined
-
-      return props.schemaColumns.map((col) => {
-        const sortableProps = getSortableProps(col)
-        const label = 'label' in col ? col.label : props.lang[col?.id]
-        return { ...col, label, ...sortableProps }
-      })
-    })
-    // add special behaviour for Selection
-    const schemaGridComputed = computed<BlitzColumn[] | undefined>(() => {
-      if (!props.schemaGrid) return undefined
-
-      return props.schemaGrid.map((col) => {
-        const label = 'label' in col ? col.label : props.lang[col?.id]
-        return { ...col, label }
-      })
-    })
-
-    const parseValueDic = (schemaColumnsComputed.value || []).reduce<ParseValueDic>(
-      (dic, column) => {
-        if (column.id && isFunction(column.parseValue)) {
-          dic[column.id] = column.parseValue
+  return {
+    // in the BlitzTableInner we will add logic for actual selection
+    events: {
+      ...col.events,
+      ['update:modelValue']: (wasSelected: boolean, { formData }: FormContext) => {
+        const isSelectAllHeader = formData === undefined
+        if (isSelectAllHeader) {
+          if (wasSelected) {
+            selectedRows.value = currentRowIndexes.value.map((rowIndex) => props.rows[rowIndex])
+            return
+          }
+          selectedRows.value = []
+          return
         }
-        return dic
+        if (wasSelected) {
+          selectedRows.value = [...selectedRows.value, formData]
+          return
+        }
+        selectedRows.value = selectedRows.value.filter((row) => row.id !== formData.id)
+        return
       },
-      {}
-    )
+    },
+    mode: 'edit',
+    sortable: false,
+    parseValue: (val: any, { formData }: FormContext) => {
+      const isSelectAllHeader = formData === undefined
+      return isSelectAllHeader
+        ? selectedRows.value.length === props.rows.length
+        : !!selectedRows.value.find((s) => s.id === formData?.id)
+    },
+  }
+}
 
-    // function evaluate(propValue, rowProps) {
-    //   if (!isFunction(propValue)) return propValue || ''
-    //   return propValue(rowProps.row, rowProps, this) || ''
-    // }
+const schemaColumnsComputed = computed<BlitzColumn[] | undefined>(() => {
+  if (!props.schemaColumns) return undefined
 
-    function onRowClick(e: MouseEvent, rowData: Record<string, any>): void {
-      // const { selectionMode } = this
-      // if (origin === 'grid' && selectionMode) {
-      //   gridItemProps.selected = !gridItemProps.selected
-      // }
-      /**
-       * Emitted when user clicks/taps on a row.
-       * @property {MouseEvent} e the mouse e that occured
-       * @property {Record<string, any>} payload the rowData
-       */
-      emit('rowClick', e, rowData)
-    }
-    function onRowDblclick(e: MouseEvent, rowData: Record<string, any>): void {
-      /**
-       * Emitted when user quickly double clicks/taps on a row.
-       * @property {MouseEvent} e the mouse e that occured
-       * @property {Record<string, any>} payload the rowData
-       */
-      emit('rowDblclick', e, rowData)
-    }
-    function onCellClick(e: MouseEvent, rowData: Record<string, any>, colId: string): void {
-      /**
-       * Emitted when user clicks/taps on a cell.
-       * @property {MouseEvent} e the mouse e that occured
-       * @property {Record<string, any>} payload the rowData
-       * @property {string} colId the column ID, this is what you have set as `id` in the schema
-       */
-      emit('cellClick', e, rowData, colId)
-    }
-    function onCellDblclick(e: MouseEvent, rowData: Record<string, any>, colId: string): void {
-      /**
-       * Emitted when user quickly double clicks/taps on a cell.
-       * @property {MouseEvent} e the mouse e that occured
-       * @property {Record<string, any>} payload the rowData
-       * @property {string} colId the column ID, this is what you have set as `id` in the schema
-       */
-      emit('cellDblclick', e, rowData, colId)
-    }
-    function onUpdateCell({
-      rowId,
-      colId,
-      value,
-      origin,
-    }: {
-      rowId: string
-      colId: string
-      value: any
-      origin?: UpdateModelValueOrigin
-    }): void {
-      if (colId === ROW_SELECTION_ID) return
-
-      /**
-       * Emitted when the user updates the cell, if rendered as editable by setting `mode: 'edit'` in the schema.
-       * @property {{ rowId: string, colId: string, value: any, origin?: string }} payload
-       */
-      emit('updateCell', { rowId, colId, value, origin })
-    }
-
-    return {
-      parseValueDic,
-      selectedRowsComputed,
-      sortState,
-      sortStateArr,
-      applyBlitzFieldOverwrites,
-      isGridInner,
-      schemaColumnsComputed,
-      schemaGridComputed,
-      // evaluate,
-      onRowClick,
-      onRowDblclick,
-      onCellClick,
-      onCellDblclick,
-      onUpdateCell,
-    }
-  },
+  return props.schemaColumns.map((col) => {
+    // add special behaviour for selection
+    const selectionProps = getSelectionProps(col)
+    // add special behaviour for sorting
+    const sortableProps = getSortableProps(col)
+    // translate column headers
+    const label = 'label' in col ? col.label : props.lang[col?.id || '']
+    return { ...col, label, ...sortableProps, ...selectionProps }
+  })
 })
+
+const schemaGridComputed = computed<BlitzColumn[] | undefined>(() => {
+  if (!props.schemaGrid) return undefined
+
+  return props.schemaGrid.map((col) => {
+    // add special behaviour for selection
+    const selectionProps = getSelectionProps(col)
+    // add special behaviour for sorting... no?
+    // translate column headers
+    const label = 'label' in col ? col.label : props.lang[col?.id || '']
+    return { ...col, label, ...selectionProps }
+  })
+})
+
+const parseValueDic = computed<ParseValueDic>(() =>
+  (schemaColumnsComputed.value || []).reduce<ParseValueDic>((dic, col) => {
+    if (col.id && isFunction(col.parseValue)) {
+      dic[col.id] = col.parseValue
+    }
+    return dic
+  }, {})
+)
+
+const tableMeta = useTableMeta({
+  emit,
+  currentRowIndexes,
+  rows: computed(() => props.rows),
+  lang: computed(() => props.lang || {}),
+  sortState: props.sortState,
+  filtersState: props.filtersState,
+  rowsPerPage: props.rowsPerPage,
+  pageNr: props.pageNr,
+  searchValue: props.searchValue,
+  searchablePropIds: ref([]),
+  parseValueDic: parseValueDic,
+})
+const {
+  sortState,
+  filtersState,
+  rowsPerPage,
+  pageNr,
+  searchValue,
+  rowCount,
+  fromIndex,
+  toIndex,
+  pageRowIndexes,
+} = tableMeta
+
+// if there is no paginationField provided
+onBeforeMount(() => {
+  if (!props.paginationField) {
+    // then set the amount of rows per page to the total row count:
+    rowsPerPage.value = props.rows.length
+    watchEffect(() => (rowsPerPage.value = props.rows.length))
+  } else {
+    rowsPerPage.value = props.rowsPerPage
+  }
+})
+
+// // MUST USE ARROW FUNCTION for `this` access
+// const evaluate = (propValue: any, rowProps: Record<string, any>): any => {
+//   if (!isFunction(propValue)) return propValue || ''
+//   return propValue(rowProps.row, rowProps, this as any) || ''
+// }
+
+function onRowClick(e: MouseEvent, rowData: Record<string, any>): void {
+  // const { selectionMode } = this
+  // if (origin === 'grid' && selectionMode) {
+  //   gridItemProps.selected = !gridItemProps.selected
+  // }
+  /**
+   * Emitted when user clicks/taps on a row.
+   * @property {MouseEvent} e the mouse e that occured
+   * @property {Record<string, any>} payload the rowData
+   */
+  emit('rowClick', e, rowData)
+}
+function onRowDblclick(e: MouseEvent, rowData: Record<string, any>): void {
+  /**
+   * Emitted when user quickly double clicks/taps on a row.
+   * @property {MouseEvent} e the mouse e that occured
+   * @property {Record<string, any>} payload the rowData
+   */
+  emit('rowDblclick', e, rowData)
+}
+function onCellClick(e: MouseEvent, rowData: Record<string, any>, colId: string): void {
+  /**
+   * Emitted when user clicks/taps on a cell.
+   * @property {MouseEvent} e the mouse e that occured
+   * @property {Record<string, any>} payload the rowData
+   * @property {string} colId the column ID, this is what you have set as `id` in the schema
+   */
+  emit('cellClick', e, rowData, colId)
+}
+function onCellDblclick(e: MouseEvent, rowData: Record<string, any>, colId: string): void {
+  /**
+   * Emitted when user quickly double clicks/taps on a cell.
+   * @property {MouseEvent} e the mouse e that occured
+   * @property {Record<string, any>} payload the rowData
+   * @property {string} colId the column ID, this is what you have set as `id` in the schema
+   */
+  emit('cellDblclick', e, rowData, colId)
+}
+function onUpdateCell({
+  rowId,
+  colId,
+  value,
+  origin,
+}: {
+  rowId: string
+  colId: string
+  value: any
+  origin?: UpdateModelValueOrigin
+}): void {
+  if (colId === ROW_SELECTION_ID) return
+
+  /**
+   * Emitted when the user updates the cell, if rendered as editable by setting `mode: 'edit'` in the schema.
+   * @property {{ rowId: string, colId: string, value: any, origin?: string }} payload
+   */
+  emit('updateCell', { rowId, colId, value, origin })
+}
+
+function applyFieldDefaults(field?: BlitzFieldProps): BlitzFieldProps | undefined {
+  if (!field) return undefined
+
+  return merge(field, { tableMeta }, getBlitzFieldOverwrites(field, props.lang))
+}
+
+const fTitle = computed(() => applyFieldDefaults(props.titleField))
+const fSearch = computed(() => applyFieldDefaults(props.searchField))
+const fFilters = computed(() => applyFieldDefaults(props.filtersField))
+const fGridToggle = computed(() => applyFieldDefaults(props.gridToggleField))
+const fPagination = computed(() => applyFieldDefaults(props.paginationField))
+const fShownRowsInfo = computed(() => {
+  const fromNr = rowCount.value !== 0 ? fromIndex.value + 1 : 0
+  const shownRowsInfoText = `${fromNr} - ${toIndex.value} / ${rowCount.value}`
+
+  return applyFieldDefaults({
+    ...props.shownRowsInfoField,
+    slots: { default: shownRowsInfoText },
+  })
+})
+const fRowsPerPage = applyFieldDefaults(props.rowsPerPageField)
 </script>
 
 <template>
   <div class="blitz-table" v-bind="$attrs">
-    <BlitzTableOuter
-      v-slot="{ tableMeta }"
-      :rows="rows"
-      :sortStateArr="sortStateArr"
-      :filterFns="{}"
-      :searchablePropIds="[]"
-      :parseValueDic="parseValueDic"
-    >
-      <BlitzTableInner
-        v-model:isGrid="isGridInner"
-        v-model:selectedRows="selectedRowsComputed"
-        v-model:sortState="sortState"
-        :tableMeta="tableMeta"
-        :schemaColumns="schemaColumnsComputed"
-        :schemaGrid="schemaGridComputed"
-        :gridBlitzFormOptions="gridBlitzFormOptions"
-        :rows="rows"
-        :mode="mode"
-        :rowsPerPage="rowsPerPage"
-        :titleField="applyBlitzFieldOverwrites(titleField)"
-        :searchField="applyBlitzFieldOverwrites(searchField)"
-        :gridToggleField="applyBlitzFieldOverwrites(gridToggleField)"
-        :paginationField="applyBlitzFieldOverwrites(paginationField)"
-        :rowsPerPageField="applyBlitzFieldOverwrites(rowsPerPageField)"
-        :shownRowsInfoField="applyBlitzFieldOverwrites(shownRowsInfoField)"
-        @rowClick="(e, rowData) => onRowClick(e, rowData)"
-        @rowDblclick="(e, rowData) => onRowDblclick(e, rowData)"
-        @cellClick="(e, rowData, colId) => onCellClick(e, rowData, colId)"
-        @cellDblclick="(e, rowData, colId) => onCellDblclick(e, rowData, colId)"
-        @updateCell="
-          ({ rowId, colId, value, origin }) => onUpdateCell({ rowId, colId, value, origin })
-        "
-      />
-    </BlitzTableOuter>
+    <BlitzField class="blitz-table--title" v-bind="fTitle" />
+
+    <BlitzField
+      v-if="fFilters"
+      v-model="filtersState"
+      v-bind="fFilters"
+      class="blitz-table--filters"
+    />
+
+    <BlitzField v-if="fSearch" v-model="searchValue" v-bind="fSearch" class="blitz-table--search" />
+
+    <BlitzField
+      v-if="fGridToggle"
+      v-model="isGridInner"
+      v-bind="fGridToggle"
+      class="blitz-table--grid-toggle"
+    />
+
+    <table class="blitz-table--table blitz-table--content">
+      <thead>
+        <tr>
+          <BlitzTh
+            v-for="(column, i) in schemaColumnsComputed"
+            :key="i"
+            v-model:sortState="sortState"
+            :column="column"
+            >{{ column.label || '' }}</BlitzTh
+          >
+        </tr>
+      </thead>
+      <tbody v-if="!isGridInner && schemaColumnsComputed">
+        <BlitzTableItem
+          :fromIndex="fromIndex"
+          :toIndex="toIndex"
+          :rows="rows"
+          :pageRowIndexes="pageRowIndexes"
+        >
+          <template #default="{ row, rowIndex }">
+            <BlitzForm
+              :id="row.id"
+              :key="rowIndex + JSON.stringify(row)"
+              :formComponent="'tr'"
+              :class="[
+                'blitz-table__row',
+                'blitz-row',
+                // rowProps.row.id ? `blitz-row__${rowProps.row.id}` : '',
+                // evaluate(rowClasses, rowProps),
+              ]"
+              :schema="schemaColumnsComputed"
+              :modelValue="row"
+              :mode="mode"
+              @updateField="
+                ({ id: colId, value, origin }) =>
+                  onUpdateCell({ rowId: row.id, colId, value, origin })
+              "
+              @click="(e) => onRowClick(e, row)"
+              @dblclick="(e) => onRowDblclick(e, row)"
+            >
+              <!-- :style="evaluate(rowStyle, rowProps)" -->
+              <template #default="blitzFormCtx">
+                <!-- :class="['blitz-cell', evaluate(field.cellClasses, rowProps)]" -->
+                <!-- :style="evaluate(field.cellStyle, rowProps)" -->
+                <!-- @click="(e) => onCellClick(e, rowProps.row, field.id)" -->
+                <td v-for="field in blitzFormCtx.schema" :key="field.id">
+                  <!-- :key="JSON.stringify(row)" -->
+                  <BlitzField
+                    v-bind="{
+                      ...field,
+                      span: undefined,
+                      label: undefined,
+                      subLabel: undefined,
+                      component: field.component || 'div',
+                      modelValue: blitzFormCtx.formDataFlat[field.id],
+                    }"
+                    @update:modelValue="
+                      (value, origin) => blitzFormCtx.updateField({ id: field.id, value, origin })
+                    "
+                    @click="(e) => onCellClick(e, row, field.id)"
+                    @dblclick="(e) => onCellDblclick(e, row, field.id)"
+                  />
+                </td>
+              </template>
+            </BlitzForm>
+          </template>
+          <template #noDataFound>
+            <div>
+              <p class="text-center">No results found</p>
+            </div>
+          </template>
+        </BlitzTableItem>
+      </tbody>
+      <div v-if="isGridInner && schemaGridComputed" class="blitz-table--grid">
+        <BlitzTableItem
+          :fromIndex="fromIndex"
+          :toIndex="toIndex"
+          :rows="rows"
+          :pageRowIndexes="pageRowIndexes"
+        >
+          <template #default="{ row, rowIndex }">
+            <BlitzForm
+              :id="row.id"
+              :key="rowIndex + JSON.stringify(row)"
+              class="blitz-table--grid-card"
+              :formComponent="'div'"
+              :class="[
+                // rowProps.row.id ? `blitz-row__${rowProps.row.id}` : '',
+                // evaluate(rowClasses, rowProps),
+              ]"
+              :mode="mode"
+              v-bind="gridBlitzFormOptions"
+              :modelValue="row"
+              :schema="schemaGridComputed"
+              @updateField="
+                ({ id: colId, value, origin }) =>
+                  onUpdateCell({ rowId: row.id, colId, value, origin })
+              "
+            />
+            <!--
+          :style="evaluate(rowStyle, rowProps)"
+          :key="rowProps.row.id + JSON.stringify(rowProps.row)"
+        -->
+          </template>
+          <template #noDataFound>
+            <div>
+              <p class="text-center">No results found</p>
+            </div>
+          </template>
+        </BlitzTableItem>
+      </div>
+    </table>
+
+    <BlitzField
+      v-if="fPagination"
+      v-model="pageNr"
+      labelPosition="left"
+      class="blitz-table--pagination"
+      v-bind="fPagination"
+    />
+
+    <BlitzField
+      v-if="fRowsPerPage"
+      v-model="rowsPerPage"
+      labelPosition="left"
+      class="blitz-table--rows-per-page"
+      v-bind="fRowsPerPage"
+    />
+
+    <BlitzField
+      v-if="fShownRowsInfo"
+      v-bind="fShownRowsInfo"
+      class="blitz-table--shown-rows-info"
+    />
   </div>
 </template>
 
@@ -403,5 +426,56 @@ export default defineComponent({
 .blitz-table table,
 .blitz-table ul {
   margin: 0;
+}
+
+/* GRID */
+.blitz-table {
+  display: grid;
+  align-items: center;
+  grid-gap: 1rem;
+  grid-template-areas:
+    'title title'
+    'filters filters'
+    'search grid-toggle'
+    'content content'
+    'pagination pagination'
+    'rows-per-page shown-rows-info';
+}
+.blitz-table--title {
+  grid-area: title;
+}
+.blitz-table--filters {
+  grid-area: filters;
+}
+.blitz-table--search {
+  grid-area: search;
+}
+.blitz-table--grid-toggle {
+  grid-area: grid-toggle;
+}
+.blitz-table--content {
+  grid-area: content;
+}
+.blitz-table--pagination {
+  grid-area: pagination;
+}
+.blitz-table--rows-per-page {
+  grid-area: rows-per-page;
+}
+.blitz-table--shown-rows-info {
+  grid-area: shown-rows-info;
+}
+
+.blitz-table--grid {
+  margin-top: 1rem;
+  display: grid;
+  grid-gap: 1rem;
+  justify-items: center;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+}
+.blitz-table--grid > * {
+  width: 100%;
+  max-width: 207px;
+  padding: 0.5rem;
 }
 </style>

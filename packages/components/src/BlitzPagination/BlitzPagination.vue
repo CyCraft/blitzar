@@ -1,41 +1,24 @@
-<script lang="ts">
-import { isNumber } from 'is-what'
-import { computed, defineComponent, PropType } from 'vue'
+<script lang="ts" setup>
+import { computed } from 'vue'
 import { Pepicon } from 'vue-pepicons'
-import { MORE_PAGES } from '@blitzar/types'
+import { MORE_PAGES, blitzPaginationProps } from '@blitzar/types'
 
-export default defineComponent({
-  name: 'BlitzPagination',
-  components: { Pepicon },
-  props: {
-    /** Represents the current open page */
-    modelValue: { type: Number, required: true },
-    /** Represents the total count of pages */
-    pageCount: { type: Number, required: true },
-    pagesShown: { type: Array as PropType<(number | typeof MORE_PAGES)[]>, required: true },
-  },
-  emits: {
-    /** Updates the current open page */
-    'update:modelValue': (val: number) => isNumber(val),
-  },
-  setup(props, { emit }) {
-    const disabledPrevious = computed(() => props.modelValue === 1)
-    const disabledNext = computed(
-      () => props.modelValue === props.pageCount || props.pageCount === 0
-    )
+const props = defineProps(blitzPaginationProps)
 
-    function setPage(val: number) {
-      emit('update:modelValue', val)
-    }
+const emit = defineEmits<{
+  /** Updates the current open page */
+  (e: 'update:modelValue', payload: number): void
+}>()
 
-    return {
-      setPage,
-      MORE_PAGES,
-      disabledPrevious,
-      disabledNext,
-    }
-  },
-})
+const pageCount = computed(() => props.tableMeta.pageCount.value)
+const pageLinks = computed(() => props.tableMeta.pageLinks.value)
+
+const disabledPrevious = computed(() => props.modelValue === 1)
+const disabledNext = computed(() => props.modelValue === pageCount.value || pageCount.value === 0)
+
+function setPage(val: number) {
+  emit('update:modelValue', val)
+}
 </script>
 
 <template>
@@ -53,7 +36,7 @@ export default defineComponent({
         <Pepicon type="pop" name="arrow-left" />
       </a>
     </li>
-    <template v-for="(item, index) in pagesShown" :key="index">
+    <template v-for="(item, index) in pageLinks" :key="index">
       <li
         :class="['_page-item', item === modelValue && 'active', item === MORE_PAGES && 'disabled']"
       >

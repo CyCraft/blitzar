@@ -1,44 +1,42 @@
-<script lang="ts">
-import { defineComponent, PropType } from 'vue'
+<script lang="ts" setup>
 import { ROW_SELECTION_ID } from '@blitzar/types'
+import type { BlitzColumn, SortState } from '@blitzar/types'
 import BlitzField from '../BlitzField/BlitzField.vue'
-import type { BlitzColumn, SortState } from '../typesTable'
 
-export default defineComponent({
-  name: 'BlitzTh',
-  components: { BlitzField },
-  props: {
-    /**
-     * The BlitzField object used for the columns
-     */
-    column: { type: Object as PropType<BlitzColumn>, required: true },
-    sortState: { type: Object as PropType<SortState>, required: true },
-  },
-  emits: ['update:sortState'],
-  setup(props, { emit }) {
-    function onClick(e: MouseEvent) {
-      if (!props.column.sortable) return
+const props = defineProps<{
+  /**
+   * The BlitzField object used for the columns
+   */
+  column: BlitzColumn
+  /**
+   * Currently only compatible with 1 column sorted
+   */
+  sortState: SortState
+}>()
 
-      e.stopPropagation()
-      const id = props.column.id
+const emit = defineEmits<{
+  (e: 'update:sortState', payload: SortState): void
+}>()
 
-      if (props.sortState.id !== id) {
-        return emit('update:sortState', { id, direction: 'asc' })
-      }
-      if (props.sortState.id === id) {
-        if (props.sortState.direction === 'asc') {
-          return emit('update:sortState', { id, direction: 'desc' })
-        } else {
-          return emit('update:sortState', { id: null, direction: 'none' })
-        }
-      }
+function onClick(e: MouseEvent) {
+  const { id, sortable } = props.column
+  if (!sortable || !id) return
+
+  e.stopPropagation()
+
+  if (props.sortState[0]?.id !== id) {
+    return emit('update:sortState', [{ id, direction: 'asc' }])
+  }
+  if (props.sortState[0]?.id === id) {
+    if (props.sortState[0]?.direction === 'asc') {
+      return emit('update:sortState', [{ id, direction: 'desc' }])
+    } else {
+      return emit('update:sortState', [])
     }
+  }
+}
 
-    const isSelectionCol = props.column.id === ROW_SELECTION_ID
-
-    return { onClick, isSelectionCol }
-  },
-})
+const isSelectionCol = props.column.id === ROW_SELECTION_ID
 </script>
 
 <template>
@@ -47,7 +45,7 @@ export default defineComponent({
     :class="[
       'blitz-field-th',
       column.sortable === true ? '_sortable' : '',
-      column.id === sortState.id ? `_${sortState.direction}` : '',
+      column.id === sortState[0]?.id ? `_${sortState[0]?.direction}` : '',
     ]"
     @click="(e) => onClick(e)"
   >

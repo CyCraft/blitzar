@@ -25,7 +25,7 @@
   "dependencies": {
     "commafy-anything": "^2.1.0",
     "flatten-anything": "^2.0.4",
-    "is-what": "^3.14.1"
+    "is-what": "^4.1.7"
   },
   "keywords": [
     "blitzar"

@@ -1,40 +1,41 @@
-<script setup>
+<script lang="ts" setup>
+import { BlitzFilterOptions, BlitzColumn } from '@blitzar/types'
 import { markRaw, onMounted, ref } from 'vue'
-import { BlitzInput, BlitzGridToggle, BlitzPagination, BlitzFilters } from 'blitzar'
-import 'blitzar/dist/style.css'
+import BlitzTable from '../BlitzTable.vue'
+import BlitzPagination from '../../BlitzPagination/BlitzPagination.vue'
+import BlitzFilters from '../../BlitzFilters/BlitzFilters.vue'
+import users from './users.json'
 
-const blitzInput = markRaw(BlitzInput)
-const blitzGridToggle = markRaw(BlitzGridToggle)
 const blitzPagination = markRaw(BlitzPagination)
 const blitzFilters = markRaw(BlitzFilters)
 
-const schemaColumnsAndGrid = [
+const schemaColumnsAndGrid: BlitzColumn[] = [
   {
     id: 'avatarUrl',
     label: 'Avatar',
     component: 'img',
     mode: 'edit',
-    src: (val) => val,
+    src: (val: any) => val,
     dynamicProps: ['src'],
   },
   { id: 'firstName', label: 'First Name' },
   {
     id: 'birthdate',
     label: 'Birthdate',
-    parseValue: (val) =>
+    parseValue: (val: any) =>
       new Date(val).toLocaleDateString(undefined, {
         year: 'numeric',
         month: 'long',
         day: 'numeric',
       }),
   },
-  { id: 'balance', label: 'Balance', parseValue: (val) => val.toLocaleString() },
-  { id: 'isActive', label: 'Online', parseValue: (val) => (val ? '🟢' : '🔴') },
+  { id: 'balance', label: 'Balance', parseValue: (val: any) => val.toLocaleString() },
+  { id: 'isActive', label: 'Online', parseValue: (val: any) => (val ? '🟢' : '🔴') },
   {
     id: 'favoriteAnimal',
     label: 'Animal',
     style: 'font-size: 2.5em',
-    parseValue: (val) => {
+    parseValue: (val: any) => {
       if (val === 'cat') return '🐱'
       if (val === 'chicken') return '🐔'
       if (val === 'cow') return '🐮'
@@ -60,25 +61,17 @@ const rows = ref([
   // other rows loaded asynchronously
 ])
 
-const filterOptions = {
-  isActive: [
-    { label: '🟢', value: true },
-    { label: '🔴', value: false },
+const filterOptions: BlitzFilterOptions = {
+  balance: [
+    { label: '', value: 60000, op: '>' },
+    { label: '', value: 70000, op: '<' },
   ],
-  favoriteAnimal: [
-    { label: 'Cat', value: 'cat' },
-    { label: 'Chicken', value: 'chicken' },
-    { label: 'Cow', value: 'cow' },
-    { label: 'Dog', value: 'dog' },
-    { label: 'Duck', value: 'duck' },
-    { label: 'Horse', value: 'horse' },
-    { label: 'Owl', value: 'owl' },
-    { label: 'Pig', value: 'pig' },
-    { label: 'Rabbit', value: 'rabbit' },
+  birthdate: [
+    { label: '', value: new Date(1945, 0, 1), op: '>' },
+    { label: '', value: new Date(1955, 11, 31), op: '<' },
   ],
 }
 
-import users from './users.json'
 onMounted(async () => {
   rows.value = users
 })
@@ -91,28 +84,9 @@ onMounted(async () => {
       :schemaGrid="schemaColumnsAndGrid"
       :rows="rows"
       :rowsPerPage="5"
-      :titleField="{ component: 'h3', slot: 'Users' }"
       :filtersField="{ component: blitzFilters, filterOptions }"
-      :searchField="{
-        component: blitzInput,
-        placeholder: 'Search...',
-        debounce: 300,
-        clearable: true,
-      }"
-      :gridToggleField="{ component: blitzGridToggle }"
       :paginationField="{ component: blitzPagination }"
-      :rowsPerPageField="{
-        label: 'Rows per page:',
-        component: blitzInput,
-        type: 'select',
-        options: [
-          { value: 5, label: '5' },
-          { value: 10, label: '10' },
-          { value: 20, label: '20' },
-          { value: 50, label: '50' },
-          { value: 100, label: '100' },
-        ],
-      }"
+      :rowsPerPageField="{ label: 'Rows per page:', component: 'input', type: 'number' }"
       :shownRowsInfoField="{ component: 'div' }"
     />
   </div>

@@ -28,6 +28,9 @@
     "build": "rimraf dist && vite build && npm run gen:types:ts && npm run gen:styles && npm run gen:types:vetur",
     "dev": "vite build --watch"
   },
+  "peerDependencies": {
+    "vue": "^3.2.29"
+  },
   "dependencies": {
     "@blitzar/components": "^1.1.7",
     "@blitzar/types": "^1.1.7",
