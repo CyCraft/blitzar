@@ -90,38 +90,44 @@ for (const [fieldId, options] of Object.entries(props.filterOptions)) {
   }
 }
 
+function calculateCheckboxesAndCounts() {
+  const fieldIds = Object.keys(fieldIdInfoDic.value)
+
+  // we will go through all the rows again so reset the counts once
+  for (const fieldId of fieldIds) {
+    for (const [foundValue] of fieldIdInfoDic.value[fieldId]) {
+      fieldIdInfoDic.value[fieldId].set(foundValue, 0)
+    }
+  }
+
+  // go through the rows once to build out `fieldIdInfoDic`
+  for (const row of props.tableMeta.rows.value) {
+    for (const fieldId of fieldIds) {
+      const foundValue: any = getProp(row, fieldId)
+      let count: undefined | number = fieldIdInfoDic.value[fieldId].get(foundValue)
+      // is it a new value?
+      if (!isNumber(count)) {
+        fieldIdInfoDic.value[fieldId].set(foundValue, 0)
+        count = 0
+        // add new values to checkboxes
+        if (!checkboxes.value[fieldId]) checkboxes.value[fieldId] = []
+        checkboxes.value[fieldId].push({ value: foundValue, op: '===' })
+      }
+      // increment the count!
+      fieldIdInfoDic.value[fieldId].set(foundValue, count + 1)
+    }
+  }
+}
+
+const debounce = ref<ReturnType<typeof setTimeout>>(setTimeout(() => {}, 0))
 /**
  * A watcher to detect new options for {@link FilterOptionAuto}
  */
 watch(
   props.tableMeta.rows,
-  (newRows) => {
-    const fieldIds = Object.keys(fieldIdInfoDic.value)
-
-    // we will go through all the rows again so reset the counts once
-    for (const fieldId of fieldIds) {
-      for (const [foundValue] of fieldIdInfoDic.value[fieldId]) {
-        fieldIdInfoDic.value[fieldId].set(foundValue, 0)
-      }
-    }
-
-    // go through the rows once to build out `fieldIdInfoDic`
-    for (const row of newRows) {
-      for (const fieldId of fieldIds) {
-        const foundValue: any = getProp(row, fieldId)
-        let count: undefined | number = fieldIdInfoDic.value[fieldId].get(foundValue)
-        // is it a new value?
-        if (!isNumber(count)) {
-          fieldIdInfoDic.value[fieldId].set(foundValue, 0)
-          count = 0
-          // add new values to checkboxes
-          if (!checkboxes.value[fieldId]) checkboxes.value[fieldId] = []
-          checkboxes.value[fieldId].push({ value: foundValue, op: '===' })
-        }
-        // increment the count!
-        fieldIdInfoDic.value[fieldId].set(foundValue, count + 1)
-      }
-    }
+  () => {
+    clearTimeout(debounce.value)
+    debounce.value = setTimeout(calculateCheckboxesAndCounts, 1000)
   },
   { immediate: true }
 )
