@@ -14,7 +14,12 @@ export default defineConfig({
     lib: {
       entry: path.resolve(__dirname, 'src/index.ts'),
       name: namePascal,
-      fileName: (format) => `index.${format}.js`,
+      formats: ['es', 'cjs'],
+      fileName: (format) =>
+        ({
+          es: 'index.es.js',
+          cjs: 'index.cjs',
+        }[format]),
     },
     rollupOptions: {
       // make sure to externalize deps that shouldn't be bundled
