@@ -138,41 +138,34 @@ watch(
 async function updateModelValueFilterState(
   checkboxesOrRanges: { [fieldId in string]: Checkbox[] } | { [fieldId in string]: Range[] }
 ) {
-  const newFieldIds = Object.keys(checkboxesOrRanges).filter(
-    (fieldId) => !props.modelValue[fieldId]
-  )
-  // set empty maps for new fieldIds
-  if (newFieldIds.length) {
-    const newMaps = newFieldIds.reduce<FiltersState>(
-      (dic, fieldId) => ({
-        ...dic,
-        [fieldId]: { in: new Set(), 'not-in': new Set(), '>': undefined, '<': undefined },
-      }),
-      {}
-    )
-    emit('update:modelValue', { ...props.modelValue, ...newMaps })
-    await nextTick()
-  }
   // fill modelValue's fieldId with new values
   for (const [fieldId, options] of Object.entries(checkboxesOrRanges)) {
-    for (const o of options) {
-      const info = props.modelValue[fieldId]
-      if (!info.in) info.in = new Set()
-      if (!info['not-in']) info['not-in'] = new Set()
+    let info = props.modelValue[fieldId]
+    // setup the modelValue
+    if (!info) {
+      info = { in: new Set(), 'not-in': new Set(), '>': undefined, '<': undefined }
+      emit('update:modelValue', { ...props.modelValue, [fieldId]: info })
+    }
+    if (!info['in']) info['in'] = new Set()
+    if (!info['not-in']) info['not-in'] = new Set()
 
+    // add checkboxes and ranges to modelValue
+    for (const o of options) {
+      // add checkboxes
       if (isCheckbox(o)) {
         // don't update if it already exists
-        if (info.in.has(o.value) || info['not-in'].has(o.value)) continue
+        if (info['in'].has(o.value) || info['not-in'].has(o.value)) continue
 
         if (o.op === '===') {
-          info.in.add(o.value)
+          info['in'].add(o.value)
           info['not-in'].delete(o.value)
         }
         if (o.op === '!==') {
-          info.in.delete(o.value)
+          info['in'].delete(o.value)
           info['not-in'].add(o.value)
         }
       }
+      // add ranges
       if (isRange(o)) {
         // don't update if it already exists
         if (info[o.op] !== undefined) continue
@@ -199,16 +192,16 @@ async function setCheckbox(
   option?: 'uncheck-others'
 ): Promise<void> {
   const info = props.modelValue[fieldId]
-  if (!info.in) info.in = new Set()
+  if (!info['in']) info['in'] = new Set()
   if (!info['not-in']) info['not-in'] = new Set()
 
   if (option === 'uncheck-others') {
     const allValues = checkboxes.value[fieldId].map((checkbox) => checkbox.value)
-    const optionAlreadySingleSelection = info.in.has(optionValue) && info.in.size === 1
+    const optionAlreadySingleSelection = info['in'].has(optionValue) && info['in'].size === 1
     if (optionAlreadySingleSelection) {
       // let's select everything
       for (const value of allValues) {
-        info.in.add(value)
+        info['in'].add(value)
       }
       info['not-in'].clear()
     } else {
@@ -216,17 +209,17 @@ async function setCheckbox(
       for (const value of allValues) {
         if (value !== optionValue) info['not-in'].add(value)
       }
-      info.in.clear()
-      info.in.add(optionValue)
+      info['in'].clear()
+      info['in'].add(optionValue)
     }
     return
   }
-  const wasSelected = info.in.has(optionValue)
+  const wasSelected = info['in'].has(optionValue)
   if (wasSelected) {
-    info.in.delete(optionValue)
+    info['in'].delete(optionValue)
     info['not-in'].add(optionValue)
   } else {
-    info.in.add(optionValue)
+    info['in'].add(optionValue)
     info['not-in'].delete(optionValue)
   }
 }
@@ -262,7 +255,7 @@ function t(payload: any): string {
             >
               <input
                 type="checkbox"
-                :checked="modelValue[fieldId].in?.has(option.value)"
+                :checked="modelValue[fieldId]['in']?.has(option.value)"
                 @change="(e) => setCheckbox(fieldId, option.value)"
               />
               <span v-if="t(option.label) || t(option.value)" class="_label"
