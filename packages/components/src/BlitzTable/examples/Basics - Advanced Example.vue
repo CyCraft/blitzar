@@ -83,6 +83,11 @@ const filterOptions: BlitzFilterOptions = {
   ],
 }
 
+// @ts-ignore
+window.rows = rows
+// @ts-ignore
+window.users = users
+
 onMounted(async () => {
   rows.value = users
 })
