@@ -15,7 +15,7 @@
     "dist"
   ],
   "dependencies": {
-    "type-fest": "^2.11.1"
+    "ts-toolbelt": "^9.6.0"
   },
   "keywords": [
     "blitzar",

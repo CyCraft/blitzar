@@ -1,10 +1,8 @@
 import { ExtractPropTypes, ExtractDefaultPropTypes, Ref, ComputedRef } from 'vue'
-import { SetOptional } from 'type-fest'
+import { A, O } from 'ts-toolbelt'
 
-// eslint-disable-next-line @typescript-eslint/ban-types
-export type ExternalProps<T extends Record<string | number | symbol, {}>> = SetOptional<
+export type ExternalProps<T extends Record<string | number | symbol, any>> = O.Optional<
   ExtractPropTypes<T>,
-  // @ts-ignore
   keyof ExtractDefaultPropTypes<T>
 >
 

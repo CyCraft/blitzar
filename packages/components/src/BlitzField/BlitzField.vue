@@ -186,7 +186,6 @@ export default defineComponent({
     parsedFieldValue(): any {
       const { cValue, evalPropOrAttr } = this
       const blueprint = {
-        valueType: evalPropOrAttr('valueType'),
         type: evalPropOrAttr('type'),
         dateFormat: evalPropOrAttr('dateFormat'),
         suffix: evalPropOrAttr('suffix'),

@@ -1,5 +1,5 @@
 import { PropType } from 'vue'
-import { DynamicProp, FormContext, Lang, Mode, ShowErrorsOn } from './core'
+import { DynamicProp, EvaluateDynamicProps, FormContext, Lang, Mode, ShowErrorsOn } from './core'
 import { ExternalProps } from './VueExternalProps'
 
 export const blitzFieldProps = {
@@ -471,3 +471,6 @@ export const blitzFieldProps = {
 } as const
 
 export type BlitzFieldProps = ExternalProps<typeof blitzFieldProps> & { [key in string]: unknown }
+
+/** the same type as `BlitzFieldProps` but with all DynamicProps evaluated */
+export type BlitzFieldPropsEvaluated = EvaluateDynamicProps<BlitzFieldProps>

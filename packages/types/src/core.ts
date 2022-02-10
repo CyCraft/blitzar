@@ -30,6 +30,14 @@ export type FormContext = {
 
 export type DynamicProp<T> = T | ((val: any, formContext: FormContext) => T)
 
+/** Extracts the payload out of a DynamicProp<T> */
+type ExtractPayload<T> = T extends (val: any, formContext: FormContext) => infer R ? R : T
+
+/** Use on eg. `BlitzFieldProps` to get the same type but with all DynamicProps evaluated */
+export type EvaluateDynamicProps<T> = {
+  [K in keyof T]: ExtractPayload<T[K]>
+}
+
 export type ShowErrorsOn = 'interaction' | 'save' | 'save-focus' | 'never' | 'always'
 
 /**

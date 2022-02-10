@@ -2,15 +2,20 @@
   background-color: var(--c-nasa-light);
 }
 
-.code-block {
-  margin-top: 2rem !important;
-  margin-bottom: 0 !important;
-}
-
 .c-toast--default {
   background-color: var(--c-code-space) !important;
   white-space: pre-line;
   word-break: break-word;
+}
+
+p {
+  margin-top: 0;
+}
+h3 {
+  margin-bottom: 0.6em;
+}
+.code-block-component {
+  margin-bottom: 1rem;
 }
 
 /* Internal Links */

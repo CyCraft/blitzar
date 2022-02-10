@@ -40,7 +40,7 @@
     "nestify-anything": "^2.0.2",
     "path-to-prop": "^1.0.0",
     "snarkdown": "^2.0.0",
-    "type-fest": "^2.11.1",
+    "ts-toolbelt": "^9.6.0",
     "vue-pepicons": "^1.0.9"
   },
   "license": "MIT",

@@ -30,12 +30,14 @@ By default
 This is a more advanced example that includes...
 
 - a title
+- filters
 - a search input field
 - a grid/table view toggle
 - pagination features
 - an image rendered with `<img />`
 - dates are shown with `toLocaleDateString()`
 - numbers are shown with `toLocaleString()`
+- Online and Animal columns show text data as emoji
 
 <CodeBlockComponent :importFn="() => import('./Basics - Advanced Example.vue')" :importFnRaw="() => import('./Basics - Advanced Example.vue?raw')" />
 
@@ -166,6 +168,16 @@ It's possible to show a modal with a BlitzForm to edit data on the click of a bu
 This is an example of how you could set up a button that shows a BlitzForm to add new data to the table.
 
 <CodeBlockComponent :importFn="() => import('./Editing - Adding a New Row.vue')" :importFnRaw="() => import('./Editing - Adding a New Row.vue?raw')" />
+
+## Filters
+
+### Filters that Auto-Detect Values
+
+<CodeBlockComponent :importFn="() => import('./Filtering - Auto Detect Filter Values.vue')" :importFnRaw="() => import('./Filtering - Auto Detect Filter Values.vue?raw')" />
+
+### Range Filters
+
+<CodeBlockComponent :importFn="() => import('./Filtering - Range.vue')" :importFnRaw="() => import('./Filtering - Range.vue?raw')" />
 
 ## Selection
 

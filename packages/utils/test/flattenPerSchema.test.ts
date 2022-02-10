@@ -1,9 +1,9 @@
-import test from 'ava'
-import { flattenPerSchema } from '../src/'
+import { SchemaField } from '@blitzar/types'
+import { test, expect } from 'vitest'
+import { flattenPerSchema } from '../src/flattenPerSchema'
 
-test('flattenPerSchema', (t) => {
-  let res, target, schema
-  target = {
+test('flattenPerSchema', () => {
+  const target = {
     payAsYouGoPrice: [],
     price: 0,
     timeFee: { d: 23, m: 0, n: 12.97 },
@@ -14,99 +14,70 @@ test('flattenPerSchema', (t) => {
       n: { from: -2, to: 8 },
     },
   }
-  schema = {
-    payAsYouGoPrice: {
+  const schema: SchemaField[] = [
+    {
       id: 'payAsYouGoPrice',
       label: '使用料別電気単価',
-      valueType: 'array',
       schema: [
         {
           id: 'to',
           label: '電気量範囲',
-          valueType: 'number',
           prefix: 'kWh以上～',
           suffix: 'kWh未満',
         },
         {
           id: 'price',
           label: '電気単価',
-          valueType: 'number',
           suffix: '円/kWh',
         },
       ],
-      showCondition: [['planType', '===', 'payAsYouGo']],
     },
-    'timeFee.d': {
+    {
       id: 'timeFee.d',
       label: '昼間の電気単価',
-      valueType: 'number',
       suffix: '円/kW',
-      showCondition: [['planType', '===', 'allElecPlan']],
     },
-    'timeFeeBreakdown.d': {
+    {
       id: 'timeFeeBreakdown.d',
       label: '昼間の適用時間帯',
-      valueType: 'object',
-      showCondition: [['planType', '===', 'allElecPlan']],
       min: 0,
       max: 24,
     },
-    'timeFee.n': {
+    {
       id: 'timeFee.n',
       label: '夜間の電気単価',
-      valueType: 'number',
       suffix: '円/kW',
-      showCondition: [['planType', '===', 'allElecPlan']],
     },
-    'timeFeeBreakdown.n': {
+    {
       id: 'timeFeeBreakdown.n',
       label: '夜間の適用時間帯',
-      valueType: 'object',
-      showCondition: [['planType', '===', 'allElecPlan']],
       min: -12,
       max: 12,
     },
-    hasMorningFee: {
+    {
       id: 'hasMorningFee',
       label: '朝夕間の電気料金の有無',
-      valueType: 'boolean',
-      showCondition: [['planType', '===', 'allElecPlan']],
     },
-    'timeFeeBreakdown.m': {
+    {
       id: 'timeFeeBreakdown.m',
       label: '朝の適用時間帯',
-      valueType: 'object',
-      showCondition: [
-        ['planType', '===', 'allElecPlan'],
-        ['hasMorningFee', '===', true],
-      ],
       min: 0,
       max: 24,
     },
-    'timeFee.m': {
+    {
       id: 'timeFee.m',
       label: '朝夕間の電気単価',
-      valueType: 'number',
       suffix: '円/kW',
-      showCondition: [
-        ['planType', '===', 'allElecPlan'],
-        ['hasMorningFee', '===', true],
-      ],
     },
-    'timeFeeBreakdown.e': {
+    {
       id: 'timeFeeBreakdown.e',
       label: '夕方の適用時間帯',
-      valueType: 'object',
-      showCondition: [
-        ['planType', '===', 'allElecPlan'],
-        ['hasMorningFee', '===', true],
-      ],
       min: 0,
       max: 24,
     },
-  }
-  res = flattenPerSchema(target, schema)
-  t.deepEqual(res, {
+  ]
+  const res = flattenPerSchema(target, schema)
+  expect(res).toEqual({
     payAsYouGoPrice: [],
     price: 0,
     timeFee: {},

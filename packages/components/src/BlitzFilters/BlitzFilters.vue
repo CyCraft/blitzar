@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { Merge } from 'type-fest'
+import { O } from 'ts-toolbelt'
 import { isNumber, isDate } from 'is-what'
 import { computed, markRaw, nextTick, ref, watch } from 'vue'
 import {
@@ -38,8 +38,8 @@ function getOptionType(payload: any): 'number' | 'date' | 'text' {
   return 'text'
 }
 
-type Checkbox = Merge<FilterOption, { op: '===' | '!==' }>
-type Range = Merge<FilterOption, { op: '>' | '<'; type: 'number' | 'date' | 'text' }>
+type Checkbox = O.Assign<FilterOption, [{ op: '===' | '!==' }]>
+type Range = O.Assign<FilterOption, [{ op: '>' | '<'; type: 'number' | 'date' | 'text' }]>
 
 // local state
 const checkboxes = ref<{ [fieldId in string]: Checkbox[] }>({})
