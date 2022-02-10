@@ -1,21 +1,13 @@
 <script setup>
 import { ref } from 'vue'
-import { showToast } from '../../components/toasts'
+import { showToast } from '../.vitepress/theme/toasts'
 
 const schema = [
-  {
-    id: 'enableLogging',
-    component: 'input',
-    type: 'checkbox',
-    label: 'Enable logging',
-    subLabel: 'shows hidden action button',
-  },
   {
     id: 'name',
     component: 'input',
     label: 'Superhero name',
     subLabel: 'Think of something cool.',
-    span: 2,
   },
   {
     id: 'powerOrigin',
@@ -30,24 +22,15 @@ const schema = [
       { component: 'option', value: 'item', slot: 'Magic item' },
       { component: 'option', value: 'gear', slot: 'Gear' },
     ],
-    span: 2,
   },
 ]
 
-const actionButtons = [
-  'cancel',
-  'edit',
-  'save',
-  {
-    component: 'button',
-    type: 'button',
-    slot: 'log the data',
-    showCondition: (_, { formData }) => formData.enableLogging,
-    events: {
-      click: (event, { formData }) => showToast('formData', formData),
-    },
-  },
-]
+function logupdateField(eventPayload) {
+  showToast('@updateField', eventPayload)
+}
+function logFormInput(eventPayload, origin) {
+  showToast('@update:modelValue', eventPayload, origin)
+}
 const formData = ref({})
 </script>
 
@@ -55,9 +38,12 @@ const formData = ref({})
   <div>
     <BlitzForm
       v-model="formData"
-      :actionButtons="actionButtons"
+      :columnCount="2"
       :schema="schema"
-      :columnCount="5"
+      @updateField="logupdateField"
+      @update:modelValue="logFormInput"
     />
+
+    <CodeBlock :content="`// formData\n${JSON.stringify(formData, undefined, 2)}`" />
   </div>
 </template>

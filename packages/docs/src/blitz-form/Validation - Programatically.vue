@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import { validateFormPerSchema } from 'blitzar'
 import 'blitzar/dist/style.css'
-import { showToast } from '../../components/toasts'
+import { showToast } from '../.vitepress/theme/toasts'
 
 const schema = [
   {

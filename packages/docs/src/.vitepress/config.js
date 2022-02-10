@@ -1,4 +1,6 @@
-module.exports = {
+import { defineConfig } from 'vitepress'
+
+export default defineConfig({
   lang: 'en-US',
   title: 'Blitzar Docs',
   description: 'Blitzar Vue 3 Form & Table Generator Documentation',
@@ -36,4 +38,4 @@ module.exports = {
       },
     ],
   },
-}
+})

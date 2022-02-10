@@ -4,7 +4,7 @@ import { ref } from 'vue'
 const schema = [
   {
     id: 'username',
-    component: 'BaseInput',
+    component: 'BlitzInput',
     label: 'Email',
     // component props:
     placeholder: 'you@email.com',
@@ -12,7 +12,7 @@ const schema = [
   },
   {
     id: 'password',
-    component: 'BaseInput',
+    component: 'BlitzInput',
     label: 'Password',
     // component props:
     type: 'password',

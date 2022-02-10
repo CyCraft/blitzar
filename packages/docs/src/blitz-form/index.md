@@ -90,12 +90,12 @@ const schema = [
   {
     id: 'name',
     label: 'Name',
-    component: 'BaseInput',
+    component: 'MyInput',
   },
 ]
 ```
 
-In the example below we actually render a form using our custom component `BaseInput`. If you are interested in the source code of BaseInput, [you can find it here](https://github.com/CyCraft/blitzar/tree/production/packages/docs/components/BaseInput.vue).
+In the example below we actually render a form using our custom component `BlitzInput`. If you are interested in the source code of BlitzInput, [you can find it here](https://github.com/CyCraft/blitzar/tree/production/packages/components/src/BlitzInput/BlitzInput.vue).
 
 <CodeBlockComponent :importFn="() => import('./Basics - Custom Components - Basic.vue')" :importFnRaw="() => import('./Basics - Custom Components - Basic.vue?raw')" />
 

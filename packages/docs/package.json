@@ -1,15 +1,15 @@
 {
   "name": "docs",
   "private": true,
+  "type": "module",
   "version": "1.1.7",
   "description": "Blitzar Docs",
   "author": "Luca Ban - Mesqueeb",
   "funding": "https://github.com/sponsors/mesqueeb",
-  "main": "index.js",
   "scripts": {
-    "dev": "vitepress dev docs",
-    "build": "vitepress build docs",
-    "serve": "vitepress serve docs"
+    "dev": "vitepress dev src",
+    "build": "vitepress build src",
+    "serve": "vitepress serve src"
   },
   "dependencies": {
     "@adamdehaven/vue-custom-tooltip": "^2.6.0",

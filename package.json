@@ -7,7 +7,7 @@
   ],
   "scripts": {
     "dev": "npm run dev -w=@blitzar/components",
-    "dev:docs": "concurrently -n 'docs,components,utils' -c 'green,blue,gray' 'npm run dev -w=docs' 'npm run dev -w=@blitzar/components' 'npm run dev -w=@blitzar/utils'",
+    "dev:docs": "concurrently -n 'docs,components,types,utils' -c 'green,blue,yellow,gray' 'npm run dev -w=docs' 'npm run dev -w=@blitzar/components' 'npm run dev -w=@blitzar/types' 'npm run dev -w=@blitzar/utils'",
     "dev:quasar": "npm run dev -w example-quasar",
     "build": "lerna run build",
     "publish": "lerna publish && npm run _deploy:post",

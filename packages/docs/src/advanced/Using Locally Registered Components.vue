@@ -1,17 +1,18 @@
 <script setup>
-import { ref } from 'vue'
+import { markRaw, ref } from 'vue'
+import { BlitzInput } from 'blitzar'
 
 const schema = [
   {
     id: 'name',
-    component: 'BaseInput',
+    component: markRaw(BlitzInput),
     label: 'Nickname',
     // component props:
     icon: 'person',
   },
   {
     id: 'height',
-    component: 'BaseInput',
+    component: markRaw(BlitzInput),
     label: 'Height',
     // component props:
     suffix: 'cm',
@@ -19,7 +20,7 @@ const schema = [
   },
   {
     id: 'description',
-    component: 'BaseInput',
+    component: markRaw(BlitzInput),
     label: 'Write something about yourself',
     span: 2,
     // component props:

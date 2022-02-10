@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue'
-import { showToast } from '../../components/toasts'
+import { showToast } from '../.vitepress/theme/toasts'
 
 const schema = [
   {
@@ -25,21 +25,6 @@ const schema = [
   },
 ]
 
-const actionButtonDefaults = {
-  // you can pass a class to adjust the look of the button:
-  edit: { slot: `✏️ Edit`, componentClasses: 'my-button-class' },
-  // you can also directly adjust the style:
-  cancel: { componentStyle: 'background: none; border: none;' },
-  save: {
-    slot: `💾 Save`,
-    componentStyle: 'background: none; border: thin solid green; color: green',
-  },
-  delete: {
-    componentStyle: 'background: none; border: none; color: crimson',
-    showCondition: (_, { mode }) => mode !== 'edit',
-  },
-}
-
 function onSave({ newData, oldData, formData }) {
   showToast('@save `newData`', newData) // an object with only the updated fields
   showToast('@save `oldData`', oldData) // the original object with all the field values
@@ -53,11 +38,10 @@ const formData = ref({})
 </script>
 
 <template>
-  <div class="example-action-buttons-overwrite-style">
+  <div>
     <BlitzForm
       v-model="formData"
       :actionButtons="['edit', 'cancel', 'save', 'delete']"
-      :actionButtonDefaults="actionButtonDefaults"
       :columnCount="2"
       :schema="schema"
       @save="(payload) => onSave(payload)"
@@ -65,11 +49,3 @@ const formData = ref({})
     />
   </div>
 </template>
-
-<style scoped>
-.example-action-buttons-overwrite-style .my-button-class {
-  border: none;
-  background: none;
-  font-weight: 700;
-}
-</style>

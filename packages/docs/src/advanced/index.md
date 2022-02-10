@@ -206,13 +206,13 @@ However, if you still prefer to use locally registered components you can do so 
 
 ```js
 import { markRaw } from 'vue'
-import BaseInput from './BaseInput.vue'
+import MyInput from './MyInput.vue'
 
 const schema = [
   {
     id: 'name',
     label: 'Name',
-    component: markRaw(BaseInput),
+    component: markRaw(MyInput),
   },
 ]
 ```

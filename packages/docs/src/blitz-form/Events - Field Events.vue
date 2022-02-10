@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue'
-import { showToast } from '../../components/toasts'
+import { showToast } from '../.vitepress/theme/toasts'
 
 const schema = [
   {
