@@ -10,7 +10,7 @@
     "dev:docs": "concurrently -n 'docs,components,types,utils' -c 'green,blue,yellow,gray' 'npm run dev -w=docs' 'npm run dev -w=@blitzar/components' 'npm run dev -w=@blitzar/types' 'npm run dev -w=@blitzar/utils'",
     "dev:quasar": "npm run dev -w example-quasar",
     "build": "lerna run build",
-    "publish": "lerna publish && npm run _deploy:post",
+    "publish": "lerna publish --force-publish && npm run _deploy:post",
     "deploy:docs": "firebase deploy --only hosting:blitzar && npm run _deploy:post",
     "_deploy:post": "git add -A && git commit -m \"chore: deploy\" && git push",
     "dep:update-all": "ncu --target minor -u && lerna exec 'ncu --target minor -u' && npm i",
