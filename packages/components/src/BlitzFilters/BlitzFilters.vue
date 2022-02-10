@@ -84,6 +84,7 @@ for (const [fieldId, options] of Object.entries(props.filterOptions)) {
     }
     if (isAuto(option)) {
       // setup
+      if (!checkboxes.value[fieldId]) checkboxes.value[fieldId] = []
       if (!fieldIdInfoDic.value[fieldId]) fieldIdInfoDic.value[fieldId] = new Map()
     }
   }
