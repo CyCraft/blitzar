@@ -3,7 +3,7 @@ import { defineComponent, PropType } from 'vue'
 import { merge } from 'merge-anything'
 import { copy } from 'copy-anything'
 import { isNumber } from 'is-what'
-import type { Schema, UpdateModelValueOrigin } from '@blitzar/types'
+import type { BlitzFieldProps, SchemaField, UpdateModelValueOrigin } from '@blitzar/types'
 import BlitzField from '../BlitzField/BlitzField.vue'
 
 /**
@@ -32,7 +32,7 @@ export default defineComponent({
      * @category content
      */
     schema: {
-      type: Array as PropType<Schema>,
+      type: Array as PropType<SchemaField[]>,
       default: () => [{ component: 'input' }],
     },
     /**
@@ -75,7 +75,7 @@ export default defineComponent({
     cValue: {
       get(): any {
         const { modelValue, schema, disabled, readonly, maxRows } = this
-        const emptyRow = schema.reduce((carry, { id }) => ({ ...carry, [id]: undefined }), {})
+        const emptyRow = schema.reduce((carry, { id }) => ({ ...carry, [`${id}`]: undefined }), {})
         if (!disabled && !readonly && (!isNumber(maxRows) || maxRows > modelValue.length)) {
           return modelValue.concat([emptyRow])
         }
@@ -96,7 +96,7 @@ export default defineComponent({
       }
       return attrs
     },
-    cSchema(): Schema {
+    cSchema(): BlitzFieldProps[] {
       const { schema, disabled, readonly, listFormAttrsToPass } = this
       // slot, class, style are 3 prop names we cannot directly pass via `v-bind`.
       // - slot: we pass as `slots: { default: ... }`
@@ -209,7 +209,7 @@ export default defineComponent({
         :rowData="cValue[rowIndex]"
         :updateRow="(params) => setSubFieldValue({ id: params.id, value: params.value, rowIndex })"
         :deleteRow="() => deleteRow(rowIndex)"
-        :modelValue="cValue[rowIndex][subfield.id]"
+        :modelValue="cValue[rowIndex][`${subfield.id}`]"
         @update:modelValue="
           (val, origin) => setSubFieldValue({ id: subfield.id, value: val, rowIndex }, origin)
         "

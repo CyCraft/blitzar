@@ -1,6 +1,6 @@
 import { flattenPerSchema } from '@blitzar/utils'
 import { isFullString, isFunction, isArray } from 'is-what'
-import type { BlitzFieldProps, FormContext, Lang, Schema } from '@blitzar/types'
+import type { BlitzFieldProps, FormContext, Lang, SchemaField } from '@blitzar/types'
 import { defaultLang } from './lang'
 
 /**
@@ -55,18 +55,21 @@ export function validateFieldPerSchema(
  */
 export function validateFormPerSchema(
   formData: Record<string, any>,
-  schema: Schema,
+  schema: SchemaField[],
   lang: Lang
 ): {
   [fieldId in string]: ReturnType<typeof validateFieldPerSchema>
 } {
-  const schemaObject = schema.reduce((carry, blueprint) => {
-    carry[blueprint.id] = blueprint
+  const schemaObject = schema.reduce<Record<string, SchemaField>>((carry, blueprint) => {
+    carry[`${blueprint.id}`] = blueprint
     return carry
   }, {})
+
   const formDataFlatEmpty = Object.keys(schemaObject)
     .reduce((carry, key) => ({ ...carry, [key]: null }), {}) // prettier-ignore
+
   const formDataFlatCurrent = flattenPerSchema(formData, schema)
+
   const formDataFlat = { ...formDataFlatEmpty, ...formDataFlatCurrent }
 
   const resultPerField = Object.entries(formDataFlat).reduce<{

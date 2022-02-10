@@ -5,7 +5,14 @@ import { copy } from 'copy-anything'
 import { isFunction, isFullString, isPlainObject, isString, isBoolean, isFullArray } from 'is-what'
 import { nestifyObject } from 'nestify-anything'
 import { flattenPerSchema } from '@blitzar/utils'
-import type { Lang, Mode, Schema, ShowErrorsOn, UpdateModelValueOrigin } from '@blitzar/types'
+import type {
+  BlitzFieldProps,
+  Lang,
+  Mode,
+  SchemaField,
+  ShowErrorsOn,
+  UpdateModelValueOrigin,
+} from '@blitzar/types'
 import BlitzField from '../BlitzField/BlitzField.vue'
 import { defaultLang } from '../lang'
 import { getBlitzFieldOverwrites } from '../helpersForm'
@@ -51,7 +58,7 @@ export default defineComponent({
      * @category model
      */
     schema: {
-      type: Array as PropType<Record<string, any>[]>,
+      type: Array as PropType<SchemaField[]>,
       required: true,
     },
     /**
@@ -357,7 +364,7 @@ export default defineComponent({
         formMode: innerMode,
       }
     },
-    cSchema(): Schema {
+    cSchema(): BlitzFieldProps[] {
       // slot, class, style are 3 prop names we cannot directly pass via `v-bind`.
       // - slot: we pass as `slots: { default: ... }`
       // - class: we pass as `fieldClasses`
@@ -567,7 +574,7 @@ export default defineComponent({
       value,
       origin,
     }: {
-      id: string
+      id: string | undefined
       value: any
       origin?: UpdateModelValueOrigin
     }): void {
@@ -711,7 +718,7 @@ export default defineComponent({
           :key="`${field.id}-${i}`"
           :ref="`ref-field-${i}`"
           v-bind="{ ...field, span: undefined }"
-          :modelValue="formDataFlat[field.id]"
+          :modelValue="formDataFlat[`${field.id}`]"
           :style="
             field.span
               ? `grid-column: ${field.span === true ? '1 / -1' : `span ${field.span}`}`

@@ -8,6 +8,7 @@ import BlitzField from '../BlitzField/BlitzField.vue'
 import BlitzTh from '../BlitzTh/BlitzTh.vue'
 import BlitzTableItem from '../BlitzTableItem/BlitzTableItem.vue'
 import type {
+  SchemaField,
   BlitzFieldProps,
   UpdateModelValueOrigin,
   BlitzColumn,
@@ -31,8 +32,8 @@ const props = defineProps(blitzTableProps)
 const emit = defineEmits<{
   (e: 'rowClick', payload: MouseEvent, rowData: Record<string, any>): void
   (e: 'rowDblclick', payload: MouseEvent, rowData: Record<string, any>): void
-  (e: 'cellClick', payload: MouseEvent, rowData: Record<string, any>, colId: string): void
-  (e: 'cellDblclick', payload: MouseEvent, rowData: Record<string, any>, colId: string): void
+  (e: 'cellClick', payload: MouseEvent, rowData: Record<string, any>, colId?: string): void
+  (e: 'cellDblclick', payload: MouseEvent, rowData: Record<string, any>, colId?: string): void
   (
     e: 'updateCell',
     payload: { rowId: string; colId: string; value: any; origin?: UpdateModelValueOrigin }
@@ -101,7 +102,7 @@ function getSelectionProps(col?: BlitzColumn): Partial<BlitzColumn> | undefined 
   }
 }
 
-const schemaColumnsComputed = computed<BlitzColumn[] | undefined>(() => {
+const schemaColumnsComputed = computed<SchemaField[] | undefined>(() => {
   if (!props.schemaColumns) return undefined
 
   return props.schemaColumns.map((col) => {
@@ -115,7 +116,7 @@ const schemaColumnsComputed = computed<BlitzColumn[] | undefined>(() => {
   })
 })
 
-const schemaGridComputed = computed<BlitzColumn[] | undefined>(() => {
+const schemaGridComputed = computed<SchemaField[] | undefined>(() => {
   if (!props.schemaGrid) return undefined
 
   return props.schemaGrid.map((col) => {
@@ -199,7 +200,7 @@ function onRowDblclick(e: MouseEvent, rowData: Record<string, any>): void {
    */
   emit('rowDblclick', e, rowData)
 }
-function onCellClick(e: MouseEvent, rowData: Record<string, any>, colId: string): void {
+function onCellClick(e: MouseEvent, rowData: Record<string, any>, colId?: string): void {
   /**
    * Emitted when user clicks/taps on a cell.
    * @property {MouseEvent} e the mouse e that occured
@@ -208,7 +209,7 @@ function onCellClick(e: MouseEvent, rowData: Record<string, any>, colId: string)
    */
   emit('cellClick', e, rowData, colId)
 }
-function onCellDblclick(e: MouseEvent, rowData: Record<string, any>, colId: string): void {
+function onCellDblclick(e: MouseEvent, rowData: Record<string, any>, colId?: string): void {
   /**
    * Emitted when user quickly double clicks/taps on a cell.
    * @property {MouseEvent} e the mouse e that occured
@@ -334,7 +335,7 @@ const fRowsPerPage = applyFieldDefaults(props.rowsPerPageField)
                       label: undefined,
                       subLabel: undefined,
                       component: field.component || 'div',
-                      modelValue: blitzFormCtx.formDataFlat[field.id],
+                      modelValue: blitzFormCtx.formDataFlat[`${field.id}`],
                     }"
                     @update:modelValue="
                       (value, origin) => blitzFormCtx.updateField({ id: field.id, value, origin })

@@ -227,7 +227,6 @@ export const blitzFieldProps = {
    */
   internalLabels: {
     type: [Boolean, undefined] as PropType<DynamicProp<boolean | undefined>>,
-    required: false,
     default: undefined,
   },
   /**
@@ -238,7 +237,6 @@ export const blitzFieldProps = {
    */
   internalErrors: {
     type: [Boolean, undefined] as PropType<DynamicProp<boolean | undefined>>,
-    required: false,
     default: undefined,
   },
   /**
