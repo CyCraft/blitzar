@@ -2,7 +2,7 @@
   "hosting": [
     {
       "target": "blitzar",
-      "public": "packages/docs/docs/.vitepress/dist",
+      "public": "packages/docs/src/.vitepress/dist",
       "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
       "rewrites": [
         {
