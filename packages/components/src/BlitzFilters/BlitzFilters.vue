@@ -145,6 +145,7 @@ async function updateModelValueFilterState(
     if (!info) {
       info = { in: new Set(), 'not-in': new Set(), '>': undefined, '<': undefined }
       emit('update:modelValue', { ...props.modelValue, [fieldId]: info })
+      await nextTick() // required to prevent emitting incorrect modelValue
     }
     if (!info['in']) info['in'] = new Set()
     if (!info['not-in']) info['not-in'] = new Set()
@@ -183,7 +184,9 @@ async function updateModelValueFilterState(
 /** A watcher to set the initial values based on the `checkboxes` */
 watch(checkboxes, updateModelValueFilterState, { immediate: true })
 /** A watcher to set the initial values based on the `ranges` */
-watch(ranges, updateModelValueFilterState, { immediate: true })
+watch(ranges, (newRanges) => setTimeout(() => updateModelValueFilterState(newRanges), 1), {
+  immediate: true,
+}) // delay one to prevent incorrect emit('update:modelValue')
 
 /** // TODO: make it so the setCheckbox function is debounced per 100ms? At least to detect double-clicks and not emit 3 events in the meantime. */
 async function setCheckbox(
