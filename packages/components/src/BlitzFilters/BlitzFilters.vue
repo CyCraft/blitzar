@@ -97,6 +97,13 @@ watch(
   (newRows) => {
     const fieldIds = Object.keys(fieldIdInfoDic.value)
 
+    // we will go through all the rows again so reset the counts once
+    for (const fieldId of fieldIds) {
+      for (const [foundValue] of fieldIdInfoDic.value[fieldId]) {
+        fieldIdInfoDic.value[fieldId].set(foundValue, 0)
+      }
+    }
+
     // go through the rows once to build out `fieldIdInfoDic`
     for (const row of newRows) {
       for (const fieldId of fieldIds) {
