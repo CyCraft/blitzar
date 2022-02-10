@@ -285,12 +285,12 @@ const fRowsPerPage = applyFieldDefaults(props.rowsPerPageField)
       <thead>
         <tr>
           <BlitzTh
-            v-for="(column, i) in schemaColumnsComputed"
+            v-for="(col, i) in schemaColumnsComputed"
             :key="i"
             v-model:sortState="sortState"
-            :column="column"
-            >{{ column.label || '' }}</BlitzTh
-          >
+            :column="col"
+            :lang="lang"
+          />
         </tr>
       </thead>
       <tbody v-if="!isGridInner && schemaColumnsComputed">

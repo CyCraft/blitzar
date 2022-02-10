@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import { computed } from 'vue'
+import { isFullString } from 'is-what'
 import { ROW_SELECTION_ID } from '@blitzar/types'
 import type { BlitzColumn, SortState } from '@blitzar/types'
 import BlitzField from '../BlitzField/BlitzField.vue'
@@ -12,6 +14,7 @@ const props = defineProps<{
    * Currently only compatible with 1 column sorted
    */
   sortState: SortState
+  lang: Record<string, string>
 }>()
 
 const emit = defineEmits<{
@@ -36,6 +39,13 @@ function onClick(e: MouseEvent) {
   }
 }
 
+const label = computed<string>(() => {
+  const { label, id } = props.column
+  if (isFullString(label)) return props.lang[label] || label
+  if (isFullString(id)) return props.lang[id] || id
+  return ''
+})
+
 const isSelectionCol = props.column.id === ROW_SELECTION_ID
 </script>
 
@@ -49,7 +59,7 @@ const isSelectionCol = props.column.id === ROW_SELECTION_ID
     ]"
     @click="(e) => onClick(e)"
   >
-    <slot />
+    {{ label }}
     <i v-if="column.sortable === true" class="_sort-arrows"></i>
     <BlitzField v-if="isSelectionCol" v-bind="column" :label="undefined" />
   </th>

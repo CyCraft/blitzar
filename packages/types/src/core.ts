@@ -6,6 +6,7 @@ export type Lang = {
   save: string
   requiredField: string
   formValidationError: string
+  [key: string]: string
 }
 
 export type Mode = 'edit' | 'readonly' | 'disabled' | 'raw'
