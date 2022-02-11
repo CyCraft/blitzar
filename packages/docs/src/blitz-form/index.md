@@ -271,6 +271,10 @@ Being able to show/hide these button based on the `formData` can be very powerfu
 
 ## Form Data
 
+### parseValue & parseInput
+
+TODO: write a short section on `parseValue` & `parseInput`
+
 ### Clearing the Form
 
 In order to _**clear**_ the form data _or_ to _**load new data**_ into the form, you will need to re-mount the form vue component!

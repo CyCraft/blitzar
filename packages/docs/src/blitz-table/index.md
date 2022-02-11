@@ -167,7 +167,32 @@ It's possible to show a modal with a BlitzForm to edit data on the click of a bu
 
 This is an example of how you could set up a button that shows a BlitzForm to add new data to the table.
 
+Adding a new object to your rows array will be detected by BlitzTable.
+
+- `.unshift()` an object to your rows array & it will appear as the first row.
+- `.push()` an object to your rows array & it will appear as the last row.
+
 <CodeBlockComponent :importFn="() => import('./Editing - Adding a New Row.vue')" :importFnRaw="() => import('./Editing - Adding a New Row.vue?raw')" />
+
+### Deleting From Parent
+
+There are a couple ways you can add _delete row_ logic. No way in particular is the _"best"_ way, so check the code of these examples and feel free to use any method.
+
+Here we show an example where the delete logic is handled directly from the parent where you define the `schemaColumns` logic.
+
+<CodeBlockComponent :importFn="() => import('./Editing - Delete a Row From Parent.vue')" :importFnRaw="() => import('./Editing - Delete a Row From Parent.vue?raw')" />
+
+### Deleting via `@rowDeleted`
+
+This example uses the `@rowDeleted` event to then remove the row via index from the rows array.
+
+<CodeBlockComponent :importFn="() => import('./Editing - Delete via row-deleted.vue')" :importFnRaw="() => import('./Editing - Delete via row-deleted.vue?raw')" />
+
+### Deleting via `v-model:rows`
+
+This example uses `v-model:rows` to keep rows in sync when deleting a row.
+
+<CodeBlockComponent :importFn="() => import('./Editing - Delete via update-rows.vue')" :importFnRaw="() => import('./Editing - Delete via update-rows.vue?raw')" />
 
 ## Filters
 
@@ -209,3 +234,9 @@ When you search something and then click the _select all_ checkbox in the header
 ## Styling
 
 TODO: Styling section will be re-written soon.
+
+### Show Row Numbers
+
+This example uses [`parseValue`](/blitz-form/#parsevalue-parseinput) to show row numbers.
+
+<CodeBlockComponent :importFn="() => import('./Styling - Show Row Numbers.vue')" :importFnRaw="() => import('./Styling - Show Row Numbers.vue?raw')" />
