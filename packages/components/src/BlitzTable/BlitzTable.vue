@@ -38,6 +38,18 @@ const emit = defineEmits<{
     e: 'updateCell',
     payload: { rowId: string; colId: string; value: any; origin?: UpdateModelValueOrigin }
   ): void
+  /**
+   * This is triggered when a row is internally deleted. You MUST do either of the following to handle row deletion.
+   * - pass rows like `v-model:rows="rows"`
+   * - listen to the `rowDeleted` event and handle the row deletion in the parent yourself
+   */
+  (e: 'rowDeleted', rowIndex: number): void
+  /**
+   * This is triggered when a row is internally deleted. You MUST do either of the following to handle row deletion.
+   * - pass rows like `v-model:rows="rows"`
+   * - listen to the `rowDeleted` event and handle the row deletion in the parent yourself
+   */
+  (e: 'update:rows', payload: Record<string, any>[]): void
   (e: 'update:isGrid', payload: boolean): void
   (e: 'update:selectedRows', payload: Record<string, any>[]): void
   (e: 'update:filtersState', payload: FiltersState): void
@@ -238,6 +250,13 @@ function onUpdateCell({
   emit('updateCell', { rowId, colId, value, origin })
 }
 
+function deleteRow(rowIndex: number): void {
+  emit('rowDeleted', rowIndex)
+  const newRows = [...props.rows]
+  newRows.splice(rowIndex, 1)
+  emit('update:rows', newRows)
+}
+
 function applyFieldDefaults(field?: BlitzFieldProps): BlitzFieldProps | undefined {
   if (!field) return undefined
 
@@ -336,6 +355,9 @@ const fRowsPerPage = applyFieldDefaults(props.rowsPerPageField)
                       subLabel: undefined,
                       component: field.component || 'div',
                       modelValue: blitzFormCtx.formDataFlat[`${field.id}`],
+                      rowIndex,
+                      rowData: row,
+                      deleteRow: () => deleteRow(rowIndex),
                     }"
                     @update:modelValue="
                       (value, origin) => blitzFormCtx.updateField({ id: field.id, value, origin })
