@@ -434,37 +434,26 @@ export const blitzFieldProps = {
     default: undefined,
   },
   /**
-   * (only present in BlitzListForm!)
-   * The `updateRow` function of BlitzForm. Is passed so it can be used in events. Eg.: `events: { '@update:modelValue': (value, { updateRow } => updateRow({ id: 'otherFieldInRow', value }))}`
-   *
-   * It's not something you can pass via the schema, but something that BlitzListForm will automatically pass to each of its fields so you can use it in Dynamic Props.
-   * @category readonly
-   */
-  updateRow: {
-    type: Function as PropType<(payload: { id: string; value: any }) => void>,
-    default: undefined,
-  },
-  /**
-   * (only present in BlitzListForm!)
+   * (only present in BlitzTable & BlitzListForm!)
    * The current row index of this field.
    *
-   * It's not something you can pass via the schema, but something that BlitzListForm will automatically pass to each of its fields so you can use it in Dynamic Props.
+   * It's not something you can pass via the schema, but something that BlitzTable/BlitzListForm will automatically pass to each of its fields so you can use it in Dynamic Props.
    * @category readonly
    */
   rowIndex: { type: Number as PropType<number>, default: undefined },
   /**
-   * (only present in BlitzListForm!)
+   * (only present in BlitzTable & BlitzListForm!)
    * This is the *nested* data of all the fields of the row.
    *
-   * It's not something you can pass via the schema, but something that BlitzListForm will automatically pass to each of its fields so you can use it in Dynamic Props.
+   * It's not something you can pass via the schema, but something that BlitzTable/BlitzListForm will automatically pass to each of its fields so you can use it in Dynamic Props.
    * @category readonly
    */
   rowData: { type: Object as PropType<Record<string, any>>, default: undefined },
   /**
-   * (only present in BlitzListForm!)
+   * (only present in BlitzTable & BlitzListForm!)
    * This is a function that you can call to delete the row.
    *
-   * It's not something you can pass via the schema, but something that BlitzListForm will automatically pass to each of its fields so you can use it in Dynamic Props.
+   * It's not something you can pass via the schema, but something that BlitzTable/BlitzListForm will automatically pass to each of its fields so you can use it in Dynamic Props.
    * @category readonly
    */
   deleteRow: { type: Function as PropType<() => void>, default: undefined },

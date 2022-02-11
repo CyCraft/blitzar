@@ -207,7 +207,9 @@ export default defineComponent({
         class="blitz-list-form__sub-field"
         :rowIndex="rowIndex"
         :rowData="cValue[rowIndex]"
-        :updateRow="(params) => setSubFieldValue({ id: params.id, value: params.value, rowIndex })"
+        :updateField="
+          (params) => setSubFieldValue({ id: params.id, value: params.value, rowIndex })
+        "
         :deleteRow="() => deleteRow(rowIndex)"
         :modelValue="cValue[rowIndex][`${subfield.id}`]"
         @update:modelValue="

@@ -18,13 +18,11 @@ export type FormContext = {
   mode: Mode
   updateField: (payload: { id: string; value: any }) => void
   lang: Lang
-  /** Only available in BlitzListForm */
+  /** Only available in BlitzTable & BlitzListForm */
   rowData?: Record<string, any>
-  /** Only available in BlitzListForm */
-  updateRow?: (payload: { id: string; value: any }) => void
-  /** Only available in BlitzListForm */
+  /** Only available in BlitzTable & BlitzListForm */
   deleteRow?: () => void
-  /** Only available in BlitzListForm */
+  /** Only available in BlitzTable & BlitzListForm */
   rowIndex?: number
   [key: string]: any
 }
