@@ -8,6 +8,7 @@ import {
   FiltersState,
   FilterValue,
   getFilterEntries,
+  CompareFn,
 } from '@blitzar/types'
 
 export function createPagingRange(nrOfPages: number, currentPage: number) {
@@ -128,6 +129,16 @@ function compare(
   return false
 }
 
+function compareFns(
+  expectedValue: Map<CompareFn, any>,
+  cellValue: any,
+  rowData: Record<string, any>
+): boolean {
+  return [...expectedValue.entries()].every(([compareFn, userInput]) => {
+    return compareFn(userInput, cellValue, rowData)
+  })
+}
+
 export function isRowFilterHit(payload: {
   filtersState: FiltersState
   row: { rowIndex: number; rowData: Record<string, any>; rowDataFlat: Record<string, any> }
@@ -143,7 +154,12 @@ export function isRowFilterHit(payload: {
       const cellValue = getProp(row.rowData, fieldId)
 
       // the cellValue matches the expectedValue
-      const passes = compare(cellValue, op, expectedValue)
+      const passes =
+        op === 'custom'
+          ? // TODO: why do i need to do as any here?
+            compareFns(expectedValue as any, cellValue, row.rowData)
+          : // TODO: why do i need to do as any here?
+            compare(cellValue, op, expectedValue as any)
 
       // console.log(`cellValue → `, cellValue, `| isDate → `, isDate(cellValue))
       // console.log(`op → `, op)
@@ -167,7 +183,11 @@ export function isRowFilterHit(payload: {
           formDataFlat: row.rowDataFlat,
         } as any)
         // we successfully got the parsedValue, let's compare again
-        return compare(cellValueParsed, op, expectedValue)
+        return op === 'custom'
+          // TODO: why do i need to do as any here?
+          ? compareFns(expectedValue as any, cellValueParsed, row.rowData)
+          // TODO: why do i need to do as any here?
+          : compare(cellValueParsed, op, expectedValue as any)
       } catch (e) {/***/} // prettier-ignore
 
       // if we didn't get the cellValueParsed we can just fall back to the original passed result

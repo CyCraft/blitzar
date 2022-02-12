@@ -1,15 +1,20 @@
 <script lang="ts" setup>
-import { O } from 'ts-toolbelt'
 import { isNumber, isDate } from 'is-what'
 import { computed, markRaw, nextTick, ref, watch } from 'vue'
 import {
   FiltersState,
-  FilterOption,
   TableMeta,
   BlitzFilterOptions,
   FilterValue,
-  FilterOptionAuto,
   BlitzFieldProps,
+  isCheckbox,
+  isRange,
+  isAuto,
+  isAdvanced,
+  Checkbox,
+  Range,
+  FilterOptionAdvanced,
+  CompareFn,
 } from '@blitzar/types'
 import { getProp } from 'path-to-prop'
 import BlitzField from '../BlitzField/BlitzField.vue'
@@ -38,14 +43,18 @@ function getOptionType(payload: any): 'number' | 'date' | 'text' {
   return 'text'
 }
 
-type Checkbox = O.Assign<FilterOption, [{ op: '===' | '!==' }]>
-type Range = O.Assign<FilterOption, [{ op: '>' | '<'; type: 'number' | 'date' | 'text' }]>
-
 // local state
 const checkboxes = ref<{ [fieldId in string]: Checkbox[] }>({})
 const ranges = ref<{ [fieldId in string]: Range[] }>({})
+const advanced = ref<{ [fieldId in string]: FilterOptionAdvanced[] }>({})
 const combinedFieldIds = computed<string[]>(() => {
-  return [...new Set([...Object.keys(checkboxes.value), ...Object.keys(ranges.value)])]
+  return [
+    ...new Set([
+      ...Object.keys(checkboxes.value),
+      ...Object.keys(ranges.value),
+      ...Object.keys(advanced.value),
+    ]),
+  ]
 })
 /**
  * a Set for unique row values detected so far per fieldId
@@ -56,17 +65,22 @@ const combinedFieldIds = computed<string[]>(() => {
  */
 const fieldIdInfoDic = ref<{ [fieldId in string]: Map<any, number> }>({})
 
-const isCheckbox = (o: FilterOption | FilterOptionAuto | Checkbox): o is Checkbox =>
-  !('detectValues' in o) && (!o.op || o.op === '===' || o.op === '!==')
-const isRange = (o: FilterOption | FilterOptionAuto): o is Range =>
-  !('detectValues' in o) && (o.op === '>' || o.op === '<')
-const isAuto = (o: FilterOption | FilterOptionAuto): o is FilterOptionAuto =>
-  'detectValues' in o && o.detectValues
-
 // grab options to render locally
 // this is important so we don't constantly need to re-render the filters!
 for (const [fieldId, options] of Object.entries(props.filterOptions)) {
   for (const option of options) {
+    if (isAuto(option)) {
+      // setup
+      if (!checkboxes.value[fieldId]) checkboxes.value[fieldId] = []
+      if (!fieldIdInfoDic.value[fieldId]) fieldIdInfoDic.value[fieldId] = new Map()
+      continue
+    }
+    if (isAdvanced(option)) {
+      if (!advanced.value[fieldId]) advanced.value[fieldId] = []
+      advanced.value[fieldId].push(option)
+      // setup
+      continue
+    }
     if (isCheckbox(option)) {
       // setup
       if (!checkboxes.value[fieldId]) checkboxes.value[fieldId] = []
@@ -74,6 +88,7 @@ for (const [fieldId, options] of Object.entries(props.filterOptions)) {
       // add option
       checkboxes.value[fieldId].push({ ...option, op: option.op || '===' })
       fieldIdInfoDic.value[fieldId].set(option.value, 0)
+      continue
     }
     if (isRange(option)) {
       // setup
@@ -81,11 +96,7 @@ for (const [fieldId, options] of Object.entries(props.filterOptions)) {
       // add option
       const label = option.op === '<' && !option.label ? '～' : option.label
       ranges.value[fieldId].push({ ...option, type: getOptionType(option.value), label })
-    }
-    if (isAuto(option)) {
-      // setup
-      if (!checkboxes.value[fieldId]) checkboxes.value[fieldId] = []
-      if (!fieldIdInfoDic.value[fieldId]) fieldIdInfoDic.value[fieldId] = new Map()
+      continue
     }
   }
 }
@@ -136,19 +147,29 @@ watch(
  * This function will update the `modelValue` ({@link FilterState}) based on new local checkboxes or ranges.
  */
 async function updateModelValueFilterState(
-  checkboxesOrRanges: { [fieldId in string]: Checkbox[] } | { [fieldId in string]: Range[] }
+  checkboxesOrRanges:
+    | { [fieldId in string]: Checkbox[] }
+    | { [fieldId in string]: Range[] }
+    | { [fieldId in string]: FilterOptionAdvanced[] }
 ) {
   // fill modelValue's fieldId with new values
   for (const [fieldId, options] of Object.entries(checkboxesOrRanges)) {
     let info = props.modelValue[fieldId]
     // setup the modelValue
     if (!info) {
-      info = { in: new Set(), 'not-in': new Set(), '>': undefined, '<': undefined }
+      info = {
+        in: new Set(),
+        'not-in': new Set(),
+        '>': undefined,
+        '<': undefined,
+        custom: new Map(),
+      }
       emit('update:modelValue', { ...props.modelValue, [fieldId]: info })
       await nextTick() // required to prevent emitting incorrect modelValue
     }
     if (!info['in']) info['in'] = new Set()
     if (!info['not-in']) info['not-in'] = new Set()
+    if (!info.custom) info.custom = new Map()
 
     // add checkboxes and ranges to modelValue
     for (const o of options) {
@@ -177,6 +198,13 @@ async function updateModelValueFilterState(
           info[o.op] = o.value
         }
       }
+      // add advanced
+      if (isAdvanced(o)) {
+        // don't update if it already exists
+        if (info.custom.has(o.compareFn)) continue
+
+        info.custom.set(o.compareFn, o.defaultValue)
+      }
     }
   }
 }
@@ -187,6 +215,12 @@ watch(checkboxes, updateModelValueFilterState, { immediate: true })
 watch(ranges, (newRanges) => setTimeout(() => updateModelValueFilterState(newRanges), 1), {
   immediate: true,
 }) // delay one to prevent incorrect emit('update:modelValue')
+/** A watcher to set the initial values based on the `advanced` */
+watch(
+  advanced,
+  (newComponents) => setTimeout(() => updateModelValueFilterState(newComponents), 2),
+  { immediate: true }
+) // delay one to prevent incorrect emit('update:modelValue')
 
 /** // TODO: make it so the setCheckbox function is debounced per 100ms? At least to detect double-clicks and not emit 3 events in the meantime. */
 async function setCheckbox(
@@ -237,6 +271,18 @@ async function setRangeFilter(payload: {
   info[op] = newVal
 }
 
+async function setAdvancedFilter(payload: {
+  fieldId: string
+  newVal: any
+  compareFn: CompareFn
+}): Promise<void> {
+  const { fieldId, newVal, compareFn } = payload
+  const info = props.modelValue[fieldId]['custom']
+  if (info) {
+    info.set(compareFn, newVal)
+  }
+}
+
 function t(payload: any): string {
   return props.tableMeta.lang.value[`${payload}`] || (payload ? `${payload}` : '')
 }
@@ -278,6 +324,18 @@ function t(payload: any): string {
                 :type="option.type"
                 :modelValue="modelValue[fieldId][option.op]"
                 @update:modelValue="(newVal: any) => setRangeFilter({ fieldId, newVal, op: option.op })"
+              />
+            </label>
+          </template>
+          <!-- advanced -->
+          <template v-for="(field, i) in advanced[fieldId] || []" :key="i">
+            <label class="blitz-filters__option">
+              <span v-if="t(field.label)" class="_label">{{ t(field.label) }}</span>
+              <BlitzField
+                v-bind="field"
+                :label="undefined"
+                :modelValue="modelValue[fieldId]['custom']?.get(field.compareFn)"
+                @update:modelValue="(newVal: any) => setAdvancedFilter({ fieldId, newVal, compareFn: field.compareFn })"
               />
             </label>
           </template>

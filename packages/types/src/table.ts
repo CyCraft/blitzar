@@ -7,6 +7,11 @@ export const ROW_SELECTION_ID = 'BLITZ-TABLE-ROW-SELECTION' as const
 export const MORE_PAGES = '...' as const
 
 /**
+ * The compare function to be executed to know wether a row is included or not.
+ */
+export type CompareFn = (userInput: any, cellValue: any, rowData: Record<string, any>) => boolean
+
+/**
  * The possible values that can be filtered on
  */
 export type FilterValue =
@@ -24,6 +29,7 @@ export type FilterInfo = {
   'not-in'?: Set<FilterValue>
   '>'?: FilterValue
   '<'?: FilterValue
+  custom?: Map<CompareFn, any>
 }
 
 export function getFilterEntries(
@@ -33,6 +39,7 @@ export function getFilterEntries(
   | ['not-in', Set<FilterValue> | undefined]
   | ['>', FilterValue]
   | ['<', FilterValue]
+  | ['custom', Map<CompareFn, any> | undefined]
 )[] {
   return Object.entries(info) as any
 }

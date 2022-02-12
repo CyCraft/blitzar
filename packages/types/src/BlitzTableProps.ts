@@ -1,8 +1,10 @@
 import { PropType } from 'vue'
-import { BlitzFieldProps } from './BlitzFieldProps'
+import { O } from 'ts-toolbelt'
+import { BlitzFieldProps, BlitzFieldPropsEvaluated } from './BlitzFieldProps'
 import { Mode } from './core'
 import { FiltersState, FilterValue, SortState } from './table'
 import { ExternalProps } from './VueExternalProps'
+import { SchemaField } from './BlitzFormProps'
 
 export type BlitzColumnProps = {
   /**
@@ -39,11 +41,43 @@ export type FilterOption = {
    */
   op?: '===' | '!==' | '<' | '>'
 }
+
+export type FilterOptionAdvanced = {
+  /**
+   * The compare function to be executed to know wether a row is included or not.
+   */
+  compareFn: (userInput: any, cellValue: any, rowData: Record<string, any>) => boolean
+} & O.Compulsory<BlitzFieldPropsEvaluated, 'component'>
+
 export type FilterOptionAuto = {
   detectValues: true
 }
 
-export type BlitzFilterOptions = { [fieldId in string]: (FilterOption | FilterOptionAuto)[] }
+export type BlitzFilterOptions = {
+  [fieldId in string]: (FilterOption | FilterOptionAuto | FilterOptionAdvanced)[]
+}
+
+export type Checkbox = O.Assign<FilterOption, [{ op: '===' | '!==' }]>
+export type Range = O.Assign<FilterOption, [{ op: '>' | '<'; type: 'number' | 'date' | 'text' }]>
+
+export function isAuto(
+  o: FilterOption | FilterOptionAuto | FilterOptionAdvanced
+): o is FilterOptionAuto {
+  return 'detectValues' in o && o.detectValues === true
+}
+export function isAdvanced(
+  o: FilterOption | FilterOptionAuto | FilterOptionAdvanced
+): o is FilterOptionAdvanced {
+  return 'component' in o
+}
+export function isCheckbox(
+  o: FilterOption | FilterOptionAuto | FilterOptionAdvanced
+): o is Checkbox {
+  return !isAuto(o) && !isAdvanced(o) && (!o.op || o.op === '===' || o.op === '!==')
+}
+export function isRange(o: FilterOption | FilterOptionAuto | FilterOptionAdvanced): o is Range {
+  return !isAuto(o) && !isAdvanced(o) && (o.op === '>' || o.op === '<')
+}
 
 export const blitzTableProps = {
   /**
