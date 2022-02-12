@@ -27,7 +27,9 @@ export type FilterValue =
 export type FilterInfo = {
   in?: Set<FilterValue>
   'not-in'?: Set<FilterValue>
+  /** @deprecated */
   '>'?: FilterValue
+  /** @deprecated */
   '<'?: FilterValue
   custom?: Map<CompareFn, any>
 }
@@ -62,8 +64,10 @@ export function getFilterEntries(
  * // filter all rows with a balance between 100 and 200
  * {
  *   balance: {
- *     '>': 100, // this checks: `value > 100`
- *     '<': 100, // this checks: `value < 200`
+ *     custom: new Map<[
+ *       [(userInput, cellVal) => userInput > cellVal, 100],
+ *       [(userInput, cellVal) => userInput < cellVal, 200],
+ *     ]>
  *   }
  * }
  * ```

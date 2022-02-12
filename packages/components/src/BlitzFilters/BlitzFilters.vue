@@ -362,6 +362,7 @@ function t(payload: any): string {
   display: flex;
   align-items: center;
   margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
 }
 .blitz-filters__option ._label:first-child {
   user-select: none;

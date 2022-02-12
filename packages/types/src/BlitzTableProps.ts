@@ -4,7 +4,6 @@ import { BlitzFieldProps, BlitzFieldPropsEvaluated } from './BlitzFieldProps'
 import { Mode } from './core'
 import { FiltersState, FilterValue, SortState } from './table'
 import { ExternalProps } from './VueExternalProps'
-import { SchemaField } from './BlitzFormProps'
 
 export type BlitzColumnProps = {
   /**
@@ -28,14 +27,8 @@ export type FilterOption = {
    * - `'===' | '!=='`
    *   - This will show the filter as checkboxes
    *   - Checking or unchecking filters in/out the value provided
-   * - `'<' | '>'` will show
-   *   - This will show the filter as input field(s)
-   *   - The input field(s) will allow filtering for greater / lesser than (or higher / lower than)
-   *   - The value provided will be the initial value in the rendered input
-   *   - Depending on the value type, the input field will change accordingly
-   *     - a `Date` value will render `<input type="date" />`
-   *     - a `number` value will render `<input type="number" />`
-   *     - anything else will render `<input type="text" />`
+   *
+   * DO NOT USE '<' or '>', these are deprecated!!
    *
    * @default '==='
    */
@@ -58,6 +51,7 @@ export type BlitzFilterOptions = {
 }
 
 export type Checkbox = O.Assign<FilterOption, [{ op: '===' | '!==' }]>
+/** @deprecated */
 export type Range = O.Assign<FilterOption, [{ op: '>' | '<'; type: 'number' | 'date' | 'text' }]>
 
 export function isAuto(

@@ -23,6 +23,7 @@
   ],
   "scripts": {
     "build": "npm run lint && rimraf dist && vite build && npm run gen:types:ts && npm run gen:types:vetur",
+    "watch": "vite build -c=./vite.config.ts --watch",
     "dev": "vite",
     "lint": "eslint ./src/**.*",
     "gen:types:vetur": "vue-int -i src -r -o dist/vetur",

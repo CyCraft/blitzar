@@ -47,7 +47,10 @@ export function createPagingRange(nrOfPages: number, currentPage: number) {
 export function shouldFilterRows(filtersState: FiltersState): boolean {
   return Object.values(filtersState).some(
     (info) =>
-      isPositiveNumber(info['not-in']?.size) || info['>'] !== undefined || info['<'] !== undefined
+      isPositiveNumber(info['not-in']?.size) ||
+      info['>'] !== undefined ||
+      info['<'] !== undefined ||
+      [...(info.custom?.values() || [])].some((v) => v !== undefined)
   )
 }
 
@@ -160,11 +163,6 @@ export function isRowFilterHit(payload: {
             compareFns(expectedValue as any, cellValue, row.rowData)
           : // TODO: why do i need to do as any here?
             compare(cellValue, op, expectedValue as any)
-
-      // console.log(`cellValue → `, cellValue, `| isDate → `, isDate(cellValue))
-      // console.log(`op → `, op)
-      // console.log(`expectedValue → `, expectedValue, `| isDate → `, isDate(expectedValue))
-      // console.log(`passes → `, passes)
 
       if (passes) return true
 

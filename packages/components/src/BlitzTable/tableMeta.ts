@@ -1,6 +1,6 @@
 import { ref, computed, watch, nextTick, Ref } from 'vue'
 import { flattenObject } from 'flatten-anything'
-import { isSet } from 'is-what'
+import { isMap, isSet } from 'is-what'
 import type {
   SearchablePropIds,
   ParseValueDic,
@@ -72,7 +72,11 @@ export function useTableMeta(payload: UseTableMetaPayload): TableMeta {
     sortState.value
     searchValue.value
     Object.values(filtersState.value).map((info) =>
-      Object.values(info).map((v) => (isSet(v) ? v.size : v))
+      Object.values(info).map((v) => {
+        if (isSet(v)) return v.size
+        if (isMap(v)) return [...v.values()]
+        return v
+      })
     )
     searchablePropIds.value
     parseValueDic.value
