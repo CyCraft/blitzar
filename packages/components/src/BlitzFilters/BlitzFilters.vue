@@ -345,7 +345,11 @@ function t(payload: any): string {
   </div>
 </template>
 
-<style>
+<style scoped>
+.blitz-filters {
+  display: flex;
+  flex-wrap: wrap;
+}
 .blitz-filters__section {
   padding-right: 1rem;
   padding-bottom: 1rem;
