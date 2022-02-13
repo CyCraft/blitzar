@@ -200,11 +200,19 @@ This example uses `v-model:rows` to keep rows in sync when deleting a row.
 
 <CodeBlockComponent :importFn="() => import('./Filtering - Auto Detect Filter Values.vue')" :importFnRaw="() => import('./Filtering - Auto Detect Filter Values.vue?raw')" />
 
+### Range Filters
+
+<!-- TODO: add link to `SchemaField` type information -->
+
+If you need more complex filters, you can also pass a custom component (just like a `SchemaField`) alongside your own `compareFn` which will compare all rows against the user input of that component.
+
+This example passes input fields alongside a `compareFn` to achieve _range filters_; > (greater than) and < (less than).
+
+<CodeBlockComponent :importFn="() => import('./Filtering - Range.vue')" :importFnRaw="() => import('./Filtering - Range.vue?raw')" />
+
 ### Advanced Filters
 
-It's also possible to completely control how rows get filtered via advanced filters. Here is an example where we provide a `compareFn` which parses a certain field as a `Date` and then compares the year/month and compare that to the user input in the filter field.
-
-With advanced filters besides the `compareFn` you can just pass a `SchemaField` like you can with schemas in blitzar.
+Here is an example where we provide a `compareFn` which parses a certain field as a `Date` and then compares the year/month and compare that to the user input in the filter field.
 
 <CodeBlockComponent :importFn="() => import('./Filtering - Advanced.vue')" :importFnRaw="() => import('./Filtering - Advanced.vue?raw')" />
 

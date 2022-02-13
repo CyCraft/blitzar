@@ -4,10 +4,12 @@ import { markRaw, onMounted, ref } from 'vue'
 import BlitzTable from '../BlitzTable.vue'
 import BlitzPagination from '../../BlitzPagination/BlitzPagination.vue'
 import BlitzFilters from '../../BlitzFilters/BlitzFilters.vue'
+import BlitzInput from '../../BlitzInput/BlitzInput.vue'
 import users from './users.json'
 
 const blitzPagination = markRaw(BlitzPagination)
 const blitzFilters = markRaw(BlitzFilters)
+const blitzInput = markRaw(BlitzInput)
 
 const schemaColumnsAndGrid: BlitzColumn[] = [
   {
@@ -63,12 +65,38 @@ const rows = ref([
 
 const filterOptions: BlitzFilterOptions = {
   balance: [
-    { label: '', value: 60000, op: '>' },
-    { label: '', value: 70000, op: '<' },
+    { value: 60000, op: '>' },
+    { value: 70000, op: '<' },
+    {
+      component: blitzInput,
+      defaultValue: 60000,
+      type: 'number',
+      compareFn: (userInput, cellVal) => cellVal > userInput,
+    },
+    {
+      label: '～',
+      component: blitzInput,
+      defaultValue: 70000,
+      type: 'number',
+      compareFn: (userInput, cellVal) => cellVal < userInput,
+    },
   ],
   birthdate: [
-    { label: '', value: new Date(1945, 0, 1), op: '>' },
-    { label: '', value: new Date(1955, 11, 31), op: '<' },
+    { value: new Date(1945, 0, 1), op: '>' },
+    { value: new Date(1955, 11, 31), op: '<' },
+    {
+      component: blitzInput,
+      defaultValue: new Date(1945, 0, 1),
+      type: 'date',
+      compareFn: (userInput, cellVal) => new Date(cellVal) > userInput,
+    },
+    {
+      label: '～',
+      component: blitzInput,
+      defaultValue: new Date(1955, 11, 31),
+      type: 'date',
+      compareFn: (userInput, cellVal) => new Date(cellVal) < userInput,
+    },
   ],
 }
 
