@@ -18,6 +18,12 @@ export default defineConfig({
     editLinkText: 'Edit this page on GitHub',
     lastUpdated: 'Last Updated',
 
+    algolia: {
+      apiKey: '1b5e1dd4493f0b4a4a9ae28417ae673a',
+      appId: 'CCLSMKFSNF',
+      indexName: 'blitzar-cycraft',
+    },
+
     nav: [
       {
         text: 'Components',

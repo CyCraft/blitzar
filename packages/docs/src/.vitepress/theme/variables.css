@@ -53,3 +53,20 @@
   --c-border: var(--c-divider-light) !important;
   background: white;
 }
+
+.DocSearch {
+  --docsearch-primary-color: var(--c-nasa) !important;
+  --docsearch-highlight-color: var(--c-nasa-light) !important;
+  --docsearch-searchbox-shadow: inset 0 0 0 2px var(--docsearch-primary-color) !important;
+  --docsearch-text-color: var(--c-code-space) !important;
+  --docsearch-muted-color: var(--c-code-space-light) !important;
+  --docsearch-searchbox-background: #f2f2f2 !important;
+}
+.DocSearch-Button-Key,
+.DocSearch-Commands-Key {
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  border: thin solid var(--c-divider-light) !important;
+  padding-top: 2px;
+}
