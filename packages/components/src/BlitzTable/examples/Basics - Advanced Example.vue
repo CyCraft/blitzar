@@ -6,7 +6,6 @@ import BlitzInput from '../../BlitzInput/BlitzInput.vue'
 import BlitzGridToggle from '../../BlitzGridToggle/BlitzGridToggle.vue'
 import BlitzPagination from '../../BlitzPagination/BlitzPagination.vue'
 import BlitzFilters from '../../BlitzFilters/BlitzFilters.vue'
-import users from './users.json'
 
 const blitzInput = markRaw(BlitzInput)
 const blitzGridToggle = markRaw(BlitzGridToggle)
@@ -83,13 +82,8 @@ const filterOptions: BlitzFilterOptions = {
   ],
 }
 
-// @ts-ignore
-window.rows = rows
-// @ts-ignore
-window.users = users
-
 onMounted(async () => {
-  rows.value = users
+  rows.value = (await import('./users.json')).default
 })
 </script>
 

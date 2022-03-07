@@ -4,7 +4,6 @@ import { markRaw, onMounted, ref } from 'vue'
 import BlitzTable from '../BlitzTable.vue'
 import BlitzPagination from '../../BlitzPagination/BlitzPagination.vue'
 import BlitzFilters from '../../BlitzFilters/BlitzFilters.vue'
-import users from './users.json'
 
 const blitzPagination = markRaw(BlitzPagination)
 const blitzFilters = markRaw(BlitzFilters)
@@ -70,7 +69,7 @@ const filterOptions: BlitzFilterOptions = {
 }
 
 onMounted(async () => {
-  rows.value = users
+  rows.value = (await import('./users.json')).default
 })
 </script>
 

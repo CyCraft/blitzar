@@ -78,9 +78,8 @@ const filterOptions = {
   ],
 }
 
-import users from './users.json'
 onMounted(async () => {
-  rows.value = users
+  rows.value = (await import('./users.json')).default
 })
 </script>
 

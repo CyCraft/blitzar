@@ -1,7 +1,6 @@
 <script setup>
 import { BlitzTable, BlitzPagination, BlitzFilters, BlitzInput } from 'blitzar'
 import { markRaw, onMounted, ref } from 'vue'
-import users from './users.json'
 
 const blitzPagination = markRaw(BlitzPagination)
 const blitzFilters = markRaw(BlitzFilters)
@@ -87,7 +86,7 @@ const filterOptions = {
 }
 
 onMounted(async () => {
-  rows.value = users
+  rows.value = (await import('./users.json')).default
 })
 </script>
 

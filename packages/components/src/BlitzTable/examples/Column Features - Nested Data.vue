@@ -20,9 +20,7 @@ const rows = ref([
 ])
 
 onMounted(async () => {
-  const _module = await import('./users-nested.json')
-  const users = _module.default
-  rows.value = users
+  rows.value = (await import('./users.json')).default
 })
 </script>
 
