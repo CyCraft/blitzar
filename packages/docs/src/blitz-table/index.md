@@ -252,3 +252,9 @@ TODO: Styling section will be re-written soon.
 This example uses [`parseValue`](/blitz-form/#parsevalue-parseinput) to show row numbers.
 
 <CodeBlockComponent :importFn="() => import('./Styling - Show Row Numbers.vue')" :importFnRaw="() => import('./Styling - Show Row Numbers.vue?raw')" />
+
+### Extra Components via Slots
+
+You can add custom components and elements via the default slot. By default it will show up above the table.
+
+<CodeBlockComponent :importFn="() => import('./Styling - Extra Components via Slots.vue')" :importFnRaw="() => import('./Styling - Extra Components via Slots.vue?raw')" />

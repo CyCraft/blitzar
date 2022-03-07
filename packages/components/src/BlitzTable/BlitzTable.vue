@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, computed, watchEffect, onBeforeMount } from 'vue'
+import { ref, computed, watchEffect, onBeforeMount, useSlots } from 'vue'
 import { merge } from 'merge-anything'
 import { isFunction, isFullArray, isBoolean, isFullString } from 'is-what'
 import { getBlitzFieldOverwrites } from '../helpersForm'
@@ -269,6 +269,8 @@ const fFilters = computed(() => applyFieldDefaults(props.filtersField))
 const fGridToggle = computed(() => applyFieldDefaults(props.gridToggleField))
 const fPagination = computed(() => applyFieldDefaults(props.paginationField))
 const fShownRowsInfo = computed(() => {
+  if (!props.shownRowsInfoField) return
+
   const fromNr = rowCount.value !== 0 ? fromIndex.value + 1 : 0
   const shownRowsInfoText = `${fromNr} - ${toIndex.value} / ${rowCount.value}`
 
@@ -277,12 +279,28 @@ const fShownRowsInfo = computed(() => {
     slots: { default: shownRowsInfoText },
   })
 })
-const fRowsPerPage = applyFieldDefaults(props.rowsPerPageField)
+const fRowsPerPage = computed(() => applyFieldDefaults(props.rowsPerPageField))
+
+const slots = useSlots()
+
+const gridTemplateAreas = computed(
+  () => `${fTitle.value ? `'title title'` : ''}
+  ${fFilters.value ? `'filters filters'` : ''}
+  ${fSearch.value && fGridToggle.value ? `'search grid-toggle'` : ''}
+  ${fSearch.value && !fGridToggle.value ? `'search search'` : ''}
+  ${!fSearch.value && fGridToggle.value ? `'grid-toggle grid-toggle'` : ''}
+  ${slots.default ? `'slot slot'` : ''}
+  'content content'
+  ${fPagination.value ? `'pagination pagination'` : ''}
+  ${fRowsPerPage.value && fShownRowsInfo.value ? `'rows-per-page shown-rows-info'` : ''}
+  ${fRowsPerPage.value && !fShownRowsInfo.value ? `'rows-per-page rows-per-page'` : ''}
+  ${!fRowsPerPage.value && fShownRowsInfo.value ? `'shown-rows-info shown-rows-info'` : ''}`
+)
 </script>
 
 <template>
   <div class="blitz-table" v-bind="$attrs">
-    <BlitzField class="blitz-table--title" v-bind="fTitle" />
+    <BlitzField v-if="fTitle" class="blitz-table--title" v-bind="fTitle" />
 
     <BlitzField
       v-if="fFilters"
@@ -299,6 +317,10 @@ const fRowsPerPage = applyFieldDefaults(props.rowsPerPageField)
       v-bind="fGridToggle"
       class="blitz-table--grid-toggle"
     />
+
+    <div v-if="slots.default" class="blitz-table--slot">
+      <slot />
+    </div>
 
     <table class="blitz-table--table blitz-table--content">
       <thead>
@@ -456,13 +478,7 @@ const fRowsPerPage = applyFieldDefaults(props.rowsPerPageField)
   display: grid;
   align-items: center;
   grid-gap: 1rem;
-  grid-template-areas:
-    'title title'
-    'filters filters'
-    'search grid-toggle'
-    'content content'
-    'pagination pagination'
-    'rows-per-page shown-rows-info';
+  grid-template-areas: v-bind('gridTemplateAreas');
 }
 .blitz-table--title {
   grid-area: title;
@@ -475,6 +491,9 @@ const fRowsPerPage = applyFieldDefaults(props.rowsPerPageField)
 }
 .blitz-table--grid-toggle {
   grid-area: grid-toggle;
+}
+.blitz-table--slot {
+  grid-area: slot;
 }
 .blitz-table--content {
   grid-area: content;
