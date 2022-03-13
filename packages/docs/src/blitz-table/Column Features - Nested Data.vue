@@ -18,7 +18,7 @@ const rows = ref([
 ])
 
 onMounted(async () => {
-  rows.value = (await import('./users.json')).default
+  rows.value = (await import('./users-nested.json')).default
 })
 </script>
 

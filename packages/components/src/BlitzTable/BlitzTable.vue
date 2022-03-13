@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, computed, watchEffect, onBeforeMount, useSlots } from 'vue'
+import { ref, computed, watchEffect, onBeforeMount, useSlots, defineComponent } from 'vue'
 import { merge } from 'merge-anything'
 import { isFunction, isFullArray, isBoolean, isFullString } from 'is-what'
 import { getBlitzFieldOverwrites } from '../helpersForm'
@@ -19,12 +19,7 @@ import { FormContext, ROW_SELECTION_ID, blitzTableProps } from '@blitzar/types'
 import { useTableMeta } from './tableMeta'
 import { propToWriteableComputed } from '../helpersVue'
 
-function getSortableProps(col?: BlitzColumn): { sortable: boolean } | undefined {
-  if (!isBoolean(col?.sortable) && isFullString(col?.id)) {
-    return { sortable: true }
-  }
-  return undefined
-}
+defineComponent({ name: 'BlitzTable' })
 
 const props = defineProps(blitzTableProps)
 
@@ -57,6 +52,13 @@ const emit = defineEmits<{
   (e: 'update:pageNr', payload: number): void
   (e: 'update:searchValue', payload: string): void
 }>()
+
+function getSortableProps(col?: BlitzColumn): { sortable: boolean } | undefined {
+  if (!isBoolean(col?.sortable) && isFullString(col?.id)) {
+    return { sortable: true }
+  }
+  return undefined
+}
 
 const hasColumns = isFullArray(props.schemaColumns)
 const hasGrid = isFullArray(props.schemaGrid)
@@ -266,7 +268,10 @@ const fTitle = computed(() => applyFieldDefaults(props.titleField))
 const fSearch = computed(() => applyFieldDefaults(props.searchField))
 const fFilters = computed(() => applyFieldDefaults(props.filtersField))
 const fGridToggle = computed(() => applyFieldDefaults(props.gridToggleField))
-const fPagination = computed(() => applyFieldDefaults(props.paginationField))
+const fPagination = computed(() => ({
+  ...applyFieldDefaults(props.paginationField),
+  pageCount: tableMeta.pageCount.value,
+}))
 const fShownRowsInfo = computed(() => {
   if (!props.shownRowsInfoField) return
 
@@ -368,7 +373,7 @@ const gridTemplateAreas = computed(
             @dblclick="(e) => onRowDblclick(e, rows[rowIndex])"
           >
             <!-- :style="evaluate(rowStyle, rowProps)" -->
-            <template #default="blitzFormCtx">
+            <template v-if="!isGridInner" #default="blitzFormCtx">
               <!-- :class="['blitz-cell', evaluate(field.cellClasses, rowProps)]" -->
               <!-- :style="evaluate(field.cellStyle, rowProps)" -->
               <!-- @click="(e) => onCellClick(e, rowProps.rows[rowIndex], field.id)" -->

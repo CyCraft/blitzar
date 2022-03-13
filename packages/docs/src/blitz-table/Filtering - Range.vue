@@ -15,6 +15,7 @@ const schemaColumnsAndGrid = [
     mode: 'edit',
     src: (val) => val,
     dynamicProps: ['src'],
+    style: 'min-height: 50px; min-width: 50px', // to prevent UI bounce before images are loaded
   },
   { id: 'firstName', label: 'First Name' },
   {
@@ -49,7 +50,7 @@ const schemaColumnsAndGrid = [
 ]
 const rows = ref([
   {
-    avatarUrl: 'https://gravatar.com/avatar/8aa5e7a6220f2a87684a9f4e6286e343?s=100&d=robohash&r=x',
+    avatarUrl: 'https://gravatar.com/avatar/8aa5e7a6220f2a87684a9f4e6286e343?s=50&d=robohash&r=x',
     firstName: 'Harper',
     birthdate: '1946-07-22',
     balance: 93683,

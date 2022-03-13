@@ -1,11 +1,10 @@
-import { PropType } from 'vue'
 import { ExternalProps } from './VueExternalProps'
-import { TableMeta } from './table'
 
 export const blitzPaginationProps = {
   /** Represents the current open page */
   modelValue: { type: Number, required: true },
-  tableMeta: { type: Object as PropType<TableMeta>, required: true },
+  /** The total page count for the currently filtered pages based on the `rowsPerPage` */
+  pageCount: { type: Number, required: true },
 } as const
 
 export type BlitzPaginationProps = ExternalProps<typeof blitzPaginationProps>

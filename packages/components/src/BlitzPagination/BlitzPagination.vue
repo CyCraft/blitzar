@@ -48,13 +48,11 @@ function createPagingRange(nrOfPages: number, currentPage: number): (number | ty
   return rangeWithDots
 }
 
-const pageCount = computed(() => props.tableMeta.pageCount.value)
+const pageCount = computed(() => props.pageCount)
 /**
  * The array used to create pagination links
  */
-const pageLinks = computed(() =>
-  createPagingRange(props.tableMeta.pageCount.value, props.modelValue)
-)
+const pageLinks = computed(() => createPagingRange(props.pageCount, props.modelValue))
 
 const disabledPrevious = computed(() => props.modelValue === 1)
 const disabledNext = computed(() => props.modelValue === pageCount.value || pageCount.value === 0)
