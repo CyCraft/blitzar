@@ -8,12 +8,12 @@ const pageNrC = ref(1)
 </script>
 
 <template>
-  pageNrA: <code>{{ pageNrA }}</code>
+  modelValue: <code>{{ pageNrA }}</code>
   <BlitzPagination v-model="pageNrA" :pageCount="3" />
 
-  pageNrB: <code>{{ pageNrB }}</code>
+  modelValue: <code>{{ pageNrB }}</code>
   <BlitzPagination v-model="pageNrB" :pageCount="9" />
 
-  pageNrC: <code>{{ pageNrC }}</code>
+  modelValue: <code>{{ pageNrC }}</code>
   <BlitzPagination v-model="pageNrC" :pageCount="100" />
 </template>
