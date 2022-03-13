@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
 import { Pepicon } from 'vue-pepicons'
-import { MORE_PAGES, blitzPaginationProps } from '@blitzar/types'
+import { blitzPaginationProps } from '@blitzar/types'
 
 const props = defineProps(blitzPaginationProps)
 
@@ -10,8 +10,51 @@ const emit = defineEmits<{
   (e: 'update:modelValue', payload: number): void
 }>()
 
+const MORE_PAGES = '...' as const
+
+/**
+ * Creates the array used to create pagination links
+ */
+function createPagingRange(nrOfPages: number, currentPage: number): (number | typeof MORE_PAGES)[] {
+  const delta = 2
+  const range = []
+  const rangeWithDots: (number | typeof MORE_PAGES)[] = []
+  let length
+
+  range.push(1)
+
+  if (nrOfPages <= 1) {
+    return range
+  }
+
+  for (let i = currentPage - delta; i <= currentPage + delta; i++) {
+    if (i < nrOfPages && i > 1) {
+      range.push(i)
+    }
+  }
+  range.push(nrOfPages)
+
+  for (let i = 0; i < range.length; i++) {
+    if (length) {
+      if (range[i] - length === 2) {
+        rangeWithDots.push(length + 1)
+      } else if (range[i] - length !== 1) {
+        rangeWithDots.push(MORE_PAGES)
+      }
+    }
+    rangeWithDots.push(range[i])
+    length = range[i]
+  }
+  return rangeWithDots
+}
+
 const pageCount = computed(() => props.tableMeta.pageCount.value)
-const pageLinks = computed(() => props.tableMeta.pageLinks.value)
+/**
+ * The array used to create pagination links
+ */
+const pageLinks = computed(() =>
+  createPagingRange(props.tableMeta.pageCount.value, props.modelValue)
+)
 
 const disabledPrevious = computed(() => props.modelValue === 1)
 const disabledNext = computed(() => props.modelValue === pageCount.value || pageCount.value === 0)

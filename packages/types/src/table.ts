@@ -4,8 +4,6 @@ import { AnyRef } from './VueExternalProps'
 
 export const ROW_SELECTION_ID = 'BLITZ-TABLE-ROW-SELECTION' as const
 
-export const MORE_PAGES = '...' as const
-
 /**
  * The compare function to be executed to know wether a row is included or not.
  */
@@ -111,10 +109,6 @@ export type TableMeta = {
    * The visible row indexes of the current page
    */
   pageRowIndexes: ComputedRef<number[]>
-  /**
-   * The array used to create pagination links
-   */
-  pageLinks: ComputedRef<(number | '...')[]>
   /**
    * The total number of rows, not filtered data
    */

@@ -1,7 +1,6 @@
 import { getProp } from 'path-to-prop'
 import { isDate, isFullArray, isNumber, isPositiveNumber, isSet, isString } from 'is-what'
 import {
-  MORE_PAGES,
   SearchablePropIds,
   ParseValueDic,
   SortState,
@@ -10,39 +9,6 @@ import {
   getFilterEntries,
   CompareFn,
 } from '@blitzar/types'
-
-export function createPagingRange(nrOfPages: number, currentPage: number) {
-  const delta = 2
-  const range = []
-  const rangeWithDots: (number | typeof MORE_PAGES)[] = []
-  let length
-
-  range.push(1)
-
-  if (nrOfPages <= 1) {
-    return range
-  }
-
-  for (let i = currentPage - delta; i <= currentPage + delta; i++) {
-    if (i < nrOfPages && i > 1) {
-      range.push(i)
-    }
-  }
-  range.push(nrOfPages)
-
-  for (let i = 0; i < range.length; i++) {
-    if (length) {
-      if (range[i] - length === 2) {
-        rangeWithDots.push(length + 1)
-      } else if (range[i] - length !== 1) {
-        rangeWithDots.push(MORE_PAGES)
-      }
-    }
-    rangeWithDots.push(range[i])
-    length = range[i]
-  }
-  return rangeWithDots
-}
 
 export function shouldFilterRows(filtersState: FiltersState): boolean {
   return Object.values(filtersState).some(

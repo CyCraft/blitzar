@@ -6,7 +6,6 @@ import { getBlitzFieldOverwrites } from '../helpersForm'
 import BlitzForm from '../BlitzForm/BlitzForm.vue'
 import BlitzField from '../BlitzField/BlitzField.vue'
 import BlitzTh from '../BlitzTh/BlitzTh.vue'
-import BlitzTableItem from '../BlitzTableItem/BlitzTableItem.vue'
 import type {
   SchemaField,
   BlitzFieldProps,
@@ -334,108 +333,70 @@ const gridTemplateAreas = computed(
           />
         </tr>
       </thead>
-      <tbody v-if="!isGridInner && schemaColumnsComputed">
-        <BlitzTableItem
-          :fromIndex="fromIndex"
-          :toIndex="toIndex"
-          :rows="rows"
-          :pageRowIndexes="pageRowIndexes"
+      <component
+        :is="isGridInner ? 'div' : 'tbody'"
+        v-if="(isGridInner && schemaGridComputed) || (!isGridInner && schemaColumnsComputed)"
+        :class="isGridInner ? 'blitz-table--grid' : ''"
+      >
+        <slot v-if="!pageRowIndexes.length" name="noDataFound">
+          <div>
+            <p class="text-center">No results found</p>
+          </div>
+        </slot>
+
+        <template
+          v-for="rowIndex in pageRowIndexes"
+          :key="rowIndex + JSON.stringify(rows[rowIndex])"
         >
-          <template #default="{ row, rowIndex }">
-            <BlitzForm
-              :id="row.id"
-              :key="rowIndex + JSON.stringify(row)"
-              :formComponent="'tr'"
-              :class="[
-                'blitz-table__row',
-                'blitz-row',
-                // rowProps.row.id ? `blitz-row__${rowProps.row.id}` : '',
-                // evaluate(rowClasses, rowProps),
-              ]"
-              :schema="schemaColumnsComputed"
-              :modelValue="row"
-              :mode="mode"
-              @updateField="
-                ({ id: colId, value, origin }) =>
-                  onUpdateCell({ rowId: row.id, colId, value, origin })
-              "
-              @click="(e) => onRowClick(e, row)"
-              @dblclick="(e) => onRowDblclick(e, row)"
-            >
-              <!-- :style="evaluate(rowStyle, rowProps)" -->
-              <template #default="blitzFormCtx">
-                <!-- :class="['blitz-cell', evaluate(field.cellClasses, rowProps)]" -->
-                <!-- :style="evaluate(field.cellStyle, rowProps)" -->
-                <!-- @click="(e) => onCellClick(e, rowProps.row, field.id)" -->
-                <td v-for="field in blitzFormCtx.schema" :key="field.id">
-                  <!-- :key="JSON.stringify(row)" -->
-                  <BlitzField
-                    v-bind="{
-                      ...field,
-                      span: undefined,
-                      label: undefined,
-                      subLabel: undefined,
-                      component: field.component || 'div',
-                      modelValue: blitzFormCtx.formDataFlat[`${field.id}`],
-                      rowIndex,
-                      rowData: row,
-                      deleteRow: () => deleteRow(rowIndex),
-                    }"
-                    @update:modelValue="
-                      (value, origin) => blitzFormCtx.updateField({ id: field.id, value, origin })
-                    "
-                    @click="(e) => onCellClick(e, row, field.id)"
-                    @dblclick="(e) => onCellDblclick(e, row, field.id)"
-                  />
-                </td>
-              </template>
-            </BlitzForm>
-          </template>
-          <template #noDataFound>
-            <div>
-              <p class="text-center">No results found</p>
-            </div>
-          </template>
-        </BlitzTableItem>
-      </tbody>
-      <div v-if="isGridInner && schemaGridComputed" class="blitz-table--grid">
-        <BlitzTableItem
-          :fromIndex="fromIndex"
-          :toIndex="toIndex"
-          :rows="rows"
-          :pageRowIndexes="pageRowIndexes"
-        >
-          <template #default="{ row, rowIndex }">
-            <BlitzForm
-              :id="row.id"
-              :key="rowIndex + JSON.stringify(row)"
-              class="blitz-table--grid-card"
-              :formComponent="'div'"
-              :class="[
-                // rowProps.row.id ? `blitz-row__${rowProps.row.id}` : '',
-                // evaluate(rowClasses, rowProps),
-              ]"
-              :mode="mode"
-              v-bind="gridBlitzFormOptions"
-              :modelValue="row"
-              :schema="schemaGridComputed"
-              @updateField="
-                ({ id: colId, value, origin }) =>
-                  onUpdateCell({ rowId: row.id, colId, value, origin })
-              "
-            />
-            <!--
-          :style="evaluate(rowStyle, rowProps)"
-          :key="rowProps.row.id + JSON.stringify(rowProps.row)"
-        -->
-          </template>
-          <template #noDataFound>
-            <div>
-              <p class="text-center">No results found</p>
-            </div>
-          </template>
-        </BlitzTableItem>
-      </div>
+          <BlitzForm
+            v-bind="isGridInner ? gridBlitzFormOptions : {}"
+            :id="rows[rowIndex].id"
+            :formComponent="isGridInner ? 'div' : 'tr'"
+            :class="[
+              isGridInner ? 'blitz-table--grid-card' : 'blitz-table__row blitz-row',
+              // rowProps.row.id ? `blitz-row__${rowProps.rows[rowIndex].id}` : '',
+              // evaluate(rowClasses, rowProps),
+            ]"
+            :schema="isGridInner ? schemaGridComputed || [] : schemaColumnsComputed || []"
+            :modelValue="rows[rowIndex]"
+            :mode="mode"
+            @updateField="
+              ({ id: colId, value, origin }) =>
+                onUpdateCell({ rowId: rows[rowIndex].id, colId, value, origin })
+            "
+            @click="(e) => onRowClick(e, rows[rowIndex])"
+            @dblclick="(e) => onRowDblclick(e, rows[rowIndex])"
+          >
+            <!-- :style="evaluate(rowStyle, rowProps)" -->
+            <template #default="blitzFormCtx">
+              <!-- :class="['blitz-cell', evaluate(field.cellClasses, rowProps)]" -->
+              <!-- :style="evaluate(field.cellStyle, rowProps)" -->
+              <!-- @click="(e) => onCellClick(e, rowProps.rows[rowIndex], field.id)" -->
+              <td v-for="field in blitzFormCtx.schema" :key="field.id">
+                <!-- :key="JSON.stringify(rows[rowIndex])" -->
+                <BlitzField
+                  v-bind="{
+                    ...field,
+                    span: undefined,
+                    label: undefined,
+                    subLabel: undefined,
+                    component: field.component || 'div',
+                    modelValue: blitzFormCtx.formDataFlat[`${field.id}`],
+                    rowIndex,
+                    rowData: rows[rowIndex],
+                    deleteRow: () => deleteRow(rowIndex),
+                  }"
+                  @update:modelValue="
+                    (value, origin) => blitzFormCtx.updateField({ id: field.id, value, origin })
+                  "
+                  @click="(e) => onCellClick(e, rows[rowIndex], field.id)"
+                  @dblclick="(e) => onCellDblclick(e, rows[rowIndex], field.id)"
+                />
+              </td>
+            </template>
+          </BlitzForm>
+        </template>
+      </component>
     </table>
 
     <BlitzField

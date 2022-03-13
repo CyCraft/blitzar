@@ -1,4 +1,4 @@
-import { ref, computed, watch, nextTick, Ref } from 'vue'
+import { ref, computed, watch, Ref } from 'vue'
 import { flattenObject } from 'flatten-anything'
 import { isMap, isSet } from 'is-what'
 import type {
@@ -10,18 +10,16 @@ import type {
   FiltersState,
   AnyRef,
 } from '@blitzar/types'
-import {
-  createPagingRange,
-  sortFactory,
-  isRowFilterHit,
-  isRowSearchHit,
-  shouldFilterRows,
-} from '../helpersTable'
+import { sortFactory, isRowFilterHit, isRowSearchHit, shouldFilterRows } from './tableMetaHelpers'
 import { propToWriteableComputed } from '../helpersVue'
 
 type UseTableMetaPayload = {
+  /**
+   * You can pass an emit function if you want to know of the internal changes in the BlitzTable.
+   *
+   * This is purely for informative purposes, in case you don't need to know about these events you can pass an empty arrow function.
+   */
   emit: {
-    (e: 'update:selectedRows', payload: Record<string, any>[]): void
     (e: 'update:filtersState', payload: FiltersState): void
     (e: 'update:sortState', payload: SortState): void
     (e: 'update:rowsPerPage', payload: number): void
@@ -40,6 +38,10 @@ type UseTableMetaPayload = {
   parseValueDic: AnyRef<ParseValueDic>
 }
 
+/**
+ * useTableMeta is the heart of the BlitzTable which takes care of its internal state via refs that represent the data, current page, filtered state, etc.
+ * It also exposes a number of computed props with information on the table used throughout the table and default components.
+ */
 export function useTableMeta(payload: UseTableMetaPayload): TableMeta {
   const { emit, rows, lang, currentRowIndexes, searchablePropIds, parseValueDic } = payload
 
@@ -53,16 +55,26 @@ export function useTableMeta(payload: UseTableMetaPayload): TableMeta {
   const searchValue = propToWriteableComputed(payload.searchValue, (newVal) =>
     emit('update:searchValue', newVal)
   )
-  const rowsPerPage = propToWriteableComputed(payload.rowsPerPage, (newVal) => {
-    emit('update:rowsPerPage', newVal)
-    const pagesBeforeChange = pageLinks.value
-    nextTick().then(() => {
-      const pagesAfterChange = pageLinks.value
-      if (pagesAfterChange.length < pagesBeforeChange.length) {
-        pageNr.value = pagesAfterChange[pagesAfterChange.length - 1] as number
+  const rowsPerPage = propToWriteableComputed(
+    payload.rowsPerPage,
+    (newRowsPerPage, oldRowsPerPage) => {
+      emit('update:rowsPerPage', newRowsPerPage)
+      const oldTopRowIndex = (pageNr.value - 1) * oldRowsPerPage
+      // TODO: figure out a way to do this without a while loop
+      if (oldTopRowIndex) {
+        let lookingAtPageIndex = 0
+        while (lookingAtPageIndex < currentRowIndexes.value.length) {
+          const topRowIndex = lookingAtPageIndex * newRowsPerPage
+          if (topRowIndex > oldTopRowIndex) {
+            pageNr.value = Math.max(1, lookingAtPageIndex) // at least page 1
+            lookingAtPageIndex = currentRowIndexes.value.length
+          } else {
+            lookingAtPageIndex++
+          }
+        }
       }
-    })
-  })
+    }
+  )
 
   const rowsFlat = computed(() => rows.value.map((row) => flattenObject(row)))
 
@@ -87,8 +99,6 @@ export function useTableMeta(payload: UseTableMetaPayload): TableMeta {
   const pageRowIndexes = computed(() =>
     currentRowIndexes.value.slice(fromIndex.value, toIndex.value)
   )
-
-  const pageLinks = computed(() => createPagingRange(pageCount.value, pageNr.value))
 
   const totalRowCount = computed(() => rows.value.length)
 
@@ -169,7 +179,6 @@ export function useTableMeta(payload: UseTableMetaPayload): TableMeta {
     rowsPerPage,
     pageNr,
     pageRowIndexes,
-    pageLinks,
     totalRowCount,
     rowCount,
     pageCount,
