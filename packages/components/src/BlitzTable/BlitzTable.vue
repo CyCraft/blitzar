@@ -303,7 +303,7 @@ const gridTemplateAreas = computed(
 </script>
 
 <template>
-  <div class="blitz-table" v-bind="$attrs">
+  <div :class="`blitz-table ${!pageRowIndexes.length ? '_no-data-found' : ''}`" v-bind="$attrs">
     <BlitzField v-if="fTitle" class="blitz-table--title" v-bind="fTitle" />
 
     <BlitzField
