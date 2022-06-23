@@ -55,7 +55,7 @@ const schema = [
 
 The "component" of a field in your schema can be any Vue component you have globally registered or any HTML5 tag.
 
-Besides `id`, `label` and `component` there are many more props you can pass: `subLabel` `required` `labelPosition` `fieldClasses` `componentClasses` `parseValue` `parseInput` `events` and many more.
+Besides `id`, `label` and `component` there's also: `subLabel` `required` `labelPosition` `fieldClasses` `componentClasses` `parseValue` `parseInput` `events` and many more props you can pass. [See the source for a full list.](https://github.com/CyCraft/blitzar/blob/production/packages/types/src/BlitzFieldProps.ts)
 
 ### Basic Example
 
