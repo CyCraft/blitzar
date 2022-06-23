@@ -21,13 +21,13 @@ You must import Blitzar components locally wherever you want to use them, as per
 
 ```js
 // import what you need
-import { BlitzTable, BlitzListForm, BlitzTable } from 'blitzar'
+import { BlitzForm, BlitzListForm, BlitzTable } from 'blitzar'
 // include Blitzar's CSS (kept at minimal and doesn't pollute global scope)
 import 'blitzar/dist/style.css'
 
 // add to local components where you use it:
 export default {
-  components: { BlitzTable, BlitzListForm, BlitzTable },
+  components: { BlitzForm, BlitzListForm, BlitzTable },
 }
 ```
 
