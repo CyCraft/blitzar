@@ -42,6 +42,7 @@ function onClick(e: MouseEvent) {
 const label = computed<string>(() => {
   const { label, id } = props.column
   if (isFullString(label)) return props.lang[label] || label
+  if (id === ROW_SELECTION_ID) return ''
   if (isFullString(id)) return props.lang[id] || id
   return ''
 })

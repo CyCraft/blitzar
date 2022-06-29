@@ -278,6 +278,7 @@ export const blitzTableProps = {
   rowsPerPageField: { type: Object as PropType<BlitzFieldProps>, default: undefined },
   shownRowsInfoField: { type: Object as PropType<BlitzFieldProps>, default: undefined },
   paginationField: { type: Object as PropType<BlitzFieldProps>, default: undefined },
+  thField: { type: Object as PropType<BlitzFieldProps>, default: undefined },
   lang: {
     type: Object as PropType<Record<string, string>>,
     default: (): Record<string, string> => ({}),

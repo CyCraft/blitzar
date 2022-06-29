@@ -284,6 +284,7 @@ const fShownRowsInfo = computed(() => {
   })
 })
 const fRowsPerPage = computed(() => applyFieldDefaults(props.rowsPerPageField))
+const fTh = computed(() => applyFieldDefaults(props.thField))
 
 const slots = useSlots()
 
@@ -329,13 +330,27 @@ const gridTemplateAreas = computed(
     <table class="blitz-table--table blitz-table--content">
       <thead>
         <tr>
-          <BlitzTh
-            v-for="(col, i) in schemaColumnsComputed"
-            :key="i"
-            v-model:sortState="sortState"
-            :column="col"
-            :lang="lang"
-          />
+          <template v-if="fTh">
+            <component
+              :is="fTh.component"
+              v-for="(col, i) in schemaColumnsComputed"
+              :key="i"
+              v-model:sortState="sortState"
+              :class="fTh.componentClasses"
+              :style="fTh.componentStyle"
+              :column="col"
+              :lang="lang"
+            />
+          </template>
+          <template v-if="!fTh">
+            <BlitzTh
+              v-for="(col, i) in schemaColumnsComputed"
+              :key="i"
+              v-model:sortState="sortState"
+              :column="col"
+              :lang="lang"
+            />
+          </template>
         </tr>
       </thead>
       <component
