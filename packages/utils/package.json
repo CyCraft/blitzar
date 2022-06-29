@@ -1,6 +1,6 @@
 {
   "name": "@blitzar/utils",
-  "version": "1.1.25",
+  "version": "1.2.0",
   "type": "module",
   "author": "Luca Ban - Mesqueeb",
   "funding": "https://github.com/sponsors/mesqueeb",
@@ -24,7 +24,7 @@
     "dev": "rollup -c ./build.js --watch"
   },
   "dependencies": {
-    "@blitzar/types": "^1.1.25",
+    "@blitzar/types": "^1.2.0",
     "commafy-anything": "^2.1.2",
     "flatten-anything": "^2.0.7",
     "is-what": "^4.1.7"
