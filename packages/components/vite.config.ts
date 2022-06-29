@@ -11,13 +11,13 @@ const dependencies = Object.keys(pkg.dependencies || [])
 export default defineConfig({
   plugins: [
     vue(),
-    viteplay({
-      // Path to extract components from to create dev pages for
-      components: './src/*/*.vue',
-      // Path to extract component examples from to put on each dev page
-      componentExamples: './src/*/examples/*.vue',
-      base: '/dev',
-    }),
+    // viteplay({
+    //   // Path to extract components from to create dev pages for
+    //   components: './src/*/*.vue',
+    //   // Path to extract component examples from to put on each dev page
+    //   componentExamples: './src/*/examples/*.vue',
+    //   base: '/dev',
+    // }),
   ],
   build: {
     minify: false,
