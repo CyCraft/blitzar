@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { defineComponent, defineProps, PropType } from 'vue'
-import { Pepicon } from 'vue-pepicons'
+import { Pepicon } from '@pepicons/vue'
 import BlitzSpinner from '../BlitzSpinner/BlitzSpinner.vue'
 
 type Kind = 'synced' | 'error' | 'loading'

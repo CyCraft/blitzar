@@ -32,6 +32,7 @@
   "dependencies": {
     "@blitzar/types": "^1.2.1",
     "@blitzar/utils": "^1.2.1",
+    "@pepicons/vue": "^1.1.2",
     "case-anything": "^2.1.10",
     "copy-anything": "^3.0.2",
     "filter-anything": "^3.0.3",
@@ -42,8 +43,7 @@
     "nestify-anything": "^2.0.2",
     "path-to-prop": "^1.0.2",
     "snarkdown": "^2.0.0",
-    "ts-toolbelt": "^9.6.0",
-    "vue-pepicons": "^1.0.9"
+    "ts-toolbelt": "^9.6.0"
   },
   "license": "MIT",
   "keywords": [

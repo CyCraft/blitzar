@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
-import { Pepicon } from 'vue-pepicons'
+import { Pepicon } from '@pepicons/vue'
 import { blitzPaginationProps } from '@blitzar/types'
 
 const props = defineProps(blitzPaginationProps)

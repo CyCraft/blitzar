@@ -1,7 +1,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from 'vue'
-import type { PepiconName } from 'vue-pepicons'
-import { Pepicon, pepiconArray } from 'vue-pepicons'
+import type { PepiconName } from '@pepicons/vue'
+import { Pepicon, pepiconArray } from '@pepicons/vue'
 import { isFullString, isNumber, isDate } from 'is-what'
 import BlitzIcon from '../BlitzIcon/BlitzIcon.vue'
 
