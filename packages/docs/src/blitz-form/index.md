@@ -167,6 +167,16 @@ Click on your favorite framework to see an example:
 
 **All the frameworks above are compatible!** But the examples for these conflict with my documentation website. So creating live examples is a little bit of work! Coming soon!
 
+For the time being you can check the quasar example at:
+https://github.com/CyCraft/blitzar/tree/production/example-projects/quasar
+
+```zsh
+# first clone the repo
+# then execute:
+npm i
+npm run dev:quasar
+```
+
 ## Modes
 
 ### Edit/Readonly/Disabled/Raw Modes
