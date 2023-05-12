@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { pages } from '@viteplay/vue/client'
+import '@viteplay/vue/dist/style.css'
 
 console.log(`%c 🛣`, 'font-size: 2rem', `VitePlay generated routes → `, pages)
 

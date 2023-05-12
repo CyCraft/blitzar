@@ -19,7 +19,7 @@ export default defineConfig((ctx) => {
           // Path to extract components from to create dev pages for
           components: './src/*/*.vue',
           // Path to extract component examples from to put on each dev page
-          componentExamples: './src/*/examples/*.vue',
+          componentExamples: './examples/*.vue',
           base: '/dev',
         }),
     ],
