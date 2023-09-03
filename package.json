@@ -37,7 +37,7 @@
     "esm": "^3.2.25",
     "fs-extra": "^10.1.0",
     "lerna": "^5.1.8",
-    "npm-check-updates": "^12.5.12",
+    "npm-check-updates": "^16.7.4",
     "postcss": "^8.4.14",
     "prettier": "^2.6.2",
     "replace-in-files-cli": "^2.0.0",
