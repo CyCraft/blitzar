@@ -95,7 +95,7 @@ const schema = [
 ]
 ```
 
-In the example below we actually render a form using our custom component `BlitzInput`. If you are interested in the source code of BlitzInput, [you can find it here](https://github.com/CyCraft/blitzar/tree/production/packages/components/src/BlitzInput/BlitzInput.vue).
+In the example below we actually render a form using our custom component `BlitzInput`. If you are interested in the source code of BlitzInput, [you can find it here](https://github.com/CyCraft/blitzar/tree/main/packages/components/src/BlitzInput/BlitzInput.vue).
 
 <CodeBlockComponent :importFn="() => import('./Basics - Custom Components - Basic.vue')" :importFnRaw="() => import('./Basics - Custom Components - Basic.vue?raw')" />
 
@@ -168,7 +168,7 @@ Click on your favorite framework to see an example:
 **All the frameworks above are compatible!** But the examples for these conflict with my documentation website. So creating live examples is a little bit of work! Coming soon!
 
 For the time being you can check the quasar example at:
-https://github.com/CyCraft/blitzar/tree/production/example-projects/quasar
+https://github.com/CyCraft/blitzar/tree/main/example-projects/quasar
 
 ```zsh
 # first clone the repo

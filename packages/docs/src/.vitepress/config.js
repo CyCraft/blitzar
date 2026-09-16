@@ -13,7 +13,7 @@ export default defineConfig({
     repo: 'cycraft/blitzar',
 
     docsDir: 'packages/docs/docs',
-    docsBranch: 'production',
+    docsBranch: 'main',
     editLinks: true,
     editLinkText: 'Edit this page on GitHub',
     lastUpdated: 'Last Updated',
