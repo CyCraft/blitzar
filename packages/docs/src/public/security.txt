@@ -1,0 +1,3 @@
+Contact: mailto:security@cycraft.co
+Expires: 2027-11-01T00:00:00Z
+Preferred-Languages: en
